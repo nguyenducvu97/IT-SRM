@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết yêu cầu #{request_id} - IT Service Request Management</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Loading Screen -->
+        <div id="loadingScreen" class="screen active">
+            <div class="loading-container">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Đang kiểm tra authentication...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Login Screen -->
+        <div id="loginScreen" class="screen">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <h1><i class="fas fa-cogs"></i> IT Service Request</h1>
+                        <p>Hệ thống quản lý yêu cầu dịch vụ CNTT</p>
+                    </div>
+                    
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Tên đăng nhập / Email</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Mật khẩu</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                        </button>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p>Chưa có tài khoản? <a href="#" id="showRegister">Đăng ký</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Screen -->
+        <div id="registerScreen" class="screen">
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <h1><i class="fas fa-user-plus"></i> Đăng ký tài khoản</h1>
+                    </div>
+                    
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="regUsername">Tên đăng nhập</label>
+                            <input type="text" id="regUsername" name="username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regFullName">Họ và tên</label>
+                            <input type="text" id="regFullName" name="full_name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regDepartment">Phòng ban</label>
+                            <input type="text" id="regDepartment" name="department">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regPhone">Điện thoại</label>
+                            <input type="tel" id="regPhone" name="phone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="regPassword">Mật khẩu</label>
+                            <input type="password" id="regPassword" name="password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-user-plus"></i> Đăng ký
+                        </button>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p>Đã có tài khoản? <a href="#" id="showLogin">Đăng nhập</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboardScreen" class="screen">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1><i class="fas fa-cogs"></i> IT Service Request</h1>
+                </div>
+                <div class="header-right">
+                    <span id="userInfo" class="user-info"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </button>
+                </div>
+            </header>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <ul>
+                        <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="index.html?page=requests" class="nav-link"><i class="fas fa-list"></i> Yêu cầu</a></li>
+                        <li id="newRequestMenu" style="display: none;"><a href="index.html?page=new-request" class="nav-link"><i class="fas fa-plus"></i> Tạo yêu cầu</a></li>
+                        <li><a href="index.html?page=categories" class="nav-link"><i class="fas fa-tags"></i> Danh mục</a></li>
+                        <li id="adminMenu" style="display: none;"><a href="index.html?page=users" class="nav-link"><i class="fas fa-users"></i> Người dùng</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Request Detail Page -->
+                <div id="requestDetailPage" class="page active">
+                    <div class="page-header">
+                        <div class="page-header-left">
+                            <button class="btn btn-secondary" onclick="history.back()">
+                                <i class="fas fa-arrow-left"></i> Quay lại
+                            </button>
+                            <h2>Chi tiết yêu cầu #<span id="requestId"></span></h2>
+                        </div>
+                    </div>
+                    
+                    <div id="requestDetails" class="request-detail-container">
+                        <!-- Request details will be loaded here -->
+                    </div>
+                    
+                    <div class="comments-section">
+                        <h4>Bình luận</h4>
+                        <div id="commentsList">
+                            <!-- Comments will be loaded here -->
+                        </div>
+                        
+                        <div class="add-comment">
+                            <textarea id="commentText" placeholder="Thêm bình luận..."></textarea>
+                            <button id="addCommentBtn" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Gửi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Resolve Request Modal -->
+        <div id="resolveModal" class="modal">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-check-circle"></i> Đã giải quyết yêu cầu</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="resolveForm">
+                        <input type="hidden" id="resolveRequestId">
+                        
+                        <div class="form-section">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Thông tin lỗi</h4>
+                            
+                            <div class="form-group">
+                                <label for="errorDescription">Mô tả lỗi *</label>
+                                <textarea id="errorDescription" name="error_description" rows="4" required 
+                                          placeholder="Mô tả chi tiết về lỗi đã xảy ra..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="errorType">Loại lỗi *</label>
+                                <select id="errorType" name="error_type" required>
+                                    <option value="">Chọn loại lỗi</option>
+                                    <option value="hardware">Lỗi phần cứng</option>
+                                    <option value="software">Lỗi phần mềm</option>
+                                    <option value="network">Lỗi mạng</option>
+                                    <option value="security">Lỗi bảo mật</option>
+                                    <option value="user_error">Lỗi người dùng</option>
+                                    <option value="configuration">Lỗi cấu hình</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h4><i class="fas fa-tools"></i> Cách khắc phục</h4>
+                            
+                            <div class="form-group">
+                                <label for="replacementMaterials">Yêu cầu vật tư thay thế</label>
+                                <textarea id="replacementMaterials" name="replacement_materials" rows="3" 
+                                          placeholder="Liệt kê các vật tư, thiết bị cần thay thế (nếu có)..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="solutionMethod">Cách sửa lỗi *</label>
+                                <textarea id="solutionMethod" name="solution_method" rows="4" required 
+                                          placeholder="Mô tả chi tiết các bước đã thực hiện để khắc phục lỗi..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check"></i> Xác nhận giải quyết
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="app.closeResolveModal()">
+                                <i class="fas fa-times"></i> Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <!-- Need Support Modal -->
+        <div id="needSupportModal" class="modal">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-hands-helping"></i> Yêu cầu hỗ trợ</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="needSupportForm">
+                        <input type="hidden" id="supportRequestId">
+                        
+                        <div class="form-section">
+                            <h4><i class="fas fa-info-circle"></i> Thông tin yêu cầu hỗ trợ</h4>
+                            
+                            <div class="form-group">
+                                <label for="supportType">Loại hỗ trợ cần *</label>
+                                <select id="supportType" name="support_type" required>
+                                    <option value="">Chọn loại hỗ trợ</option>
+                                    <option value="equipment">Thiết bị</option>
+                                    <option value="person">Nhân sự</option>
+                                    <option value="department">Bộ phận khác</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supportDetails">Yêu cầu thiết bị hoặc người hoặc bộ phận khác hỗ trợ *</label>
+                                <textarea id="supportDetails" name="support_details" rows="4" required 
+                                          placeholder="Mô tả chi tiết về thiết bị/nhân sự/bộ phận cần hỗ trợ..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="supportReason">Lý do cần hỗ trợ *</label>
+                                <textarea id="supportReason" name="support_reason" rows="4" required 
+                                          placeholder="Giải thích lý do tại sao cần sự hỗ trợ này..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-paper-plane"></i> Gửi yêu cầu hỗ trợ
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="app.closeNeedSupportModal()">
+                                <i class="fas fa-times"></i> Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Support Request Modal -->
+        <div id="adminSupportModal" class="modal">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h3><i class="fas fa-user-shield"></i> Xử lý yêu cầu hỗ trợ</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div id="supportRequestDetails">
+                        <!-- Support request details will be loaded here -->
+                    </div>
+                    
+                    <form id="adminSupportForm">
+                        <input type="hidden" id="adminSupportId">
+                        
+                        <div class="form-section">
+                            <h4><i class="fas fa-gavel"></i> Quyết định</h4>
+                            
+                            <div class="form-group">
+                                <label for="adminDecision">Quyết định *</label>
+                                <select id="adminDecision" name="decision" required>
+                                    <option value="">Chọn quyết định</option>
+                                    <option value="approved">Phê duyệt</option>
+                                    <option value="rejected">Từ chối</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="adminReason">Lý do *</label>
+                                <textarea id="adminReason" name="reason" rows="4" required 
+                                          placeholder="Nhập lý do phê duyệt hoặc từ chối..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check"></i> Xác nhận quyết định
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="app.closeAdminSupportModal()">
+                                <i class="fas fa-times"></i> Đóng
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Close Request Modal -->
+    <div id="closeRequestModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-times-circle"></i> Đóng lại yêu cầu</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="closeRequestForm">
+                    <input type="hidden" id="closeRequestId">
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-clipboard-list"></i> Công việc đã thực hiện</h4>
+                        <div id="workPerformedList" class="work-performed-list">
+                            <!-- Work performed items will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-star"></i> Đánh giá chất lượng dịch vụ</h4>
+                        
+                        <div class="form-group">
+                            <label for="rating">Đánh giá chung *</label>
+                            <div class="rating-stars">
+                                <input type="radio" id="star5" name="rating" value="5" required>
+                                <label for="star5" class="star">★</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4" class="star">★</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3" class="star">★</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2" class="star">★</label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1" class="star">★</label>
+                            </div>
+                            <div class="rating-labels">
+                                <span>Rất không hài lòng</span>
+                                <span>Bình thường</span>
+                                <span>Rất hài lòng</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="feedback">Nhận xét và góp ý</label>
+                            <textarea id="feedback" name="feedback" rows="4" 
+                                      placeholder="Vui lòng chia sẻ nhận xét của bạn về dịch vụ..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="wouldRecommend">Bạn có sẵn lòng giới thiệu dịch vụ của chúng tôi không?</label>
+                            <div class="recommendation-options">
+                                <label class="radio-option">
+                                    <input type="radio" name="would_recommend" value="yes">
+                                    <span>Có</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="would_recommend" value="no">
+                                    <span>Không</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="would_recommend" value="maybe">
+                                    <span>Chắc chắn</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Đóng yêu cầu
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="app.closeCloseRequestModal()">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Request Modal -->
+    <div id="rejectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-times"></i> Từ chối yêu cầu</h3>
+                <button class="close-btn" onclick="app.closeRejectModal()">&times;</button>
+            </div>
+            <form id="rejectForm" onsubmit="app.handleRejectSubmit(event)">
+                <div class="form-group">
+                    <label for="rejectReason">Lý do từ chối *</label>
+                    <textarea id="rejectReason" name="reject_reason" rows="4" required placeholder="Vui lòng nhập lý do từ chối yêu cầu này..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="rejectDetails">Chi tiết bổ sung</label>
+                    <textarea id="rejectDetails" name="reject_details" rows="3" placeholder="Thông tin bổ sung về lý do từ chối..."></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Gửi yêu cầu từ chối
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="app.closeRejectModal()">
+                        <i class="fas fa-arrow-left"></i> Hủy
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Reject Request Modal -->
+    <div id="adminRejectModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-gavel"></i> Xử lý yêu cầu từ chối</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div id="adminRejectRequestDetails">
+                    <!-- Reject request details will be loaded here -->
+                </div>
+                
+                <form id="adminRejectForm">
+                    <input type="hidden" id="adminRejectId">
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-gavel"></i> Quyết định</h4>
+                        
+                        <div class="form-group">
+                            <label for="adminRejectDecision">Quyết định *</label>
+                            <select id="adminRejectDecision" name="decision" required>
+                                <option value="">Chọn quyết định</option>
+                                <option value="approved">Đồng ý từ chối</option>
+                                <option value="rejected">Từ chối yêu cầu từ chối</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="adminRejectReason">Lý do xử lý *</label>
+                            <textarea id="adminRejectReason" name="admin_reason" rows="4" required 
+                                      placeholder="Nhập lý do đồng ý hoặc từ chối yêu cầu từ chối..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check"></i> Xác nhận quyết định
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="app.closeAdminRejectModal()">
+                            <i class="fas fa-times"></i> Đóng
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/request-detail.js"></script>
+</body>
+</html>
