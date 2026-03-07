@@ -66,7 +66,8 @@ class PHPMailerEmailHelper {
                 <p><strong>Ưu tiên:</strong> " . htmlspecialchars($request_data['priority']) . "</p>
                 <p><strong>Mô tả:</strong> " . nl2br(htmlspecialchars($request_data['description'])) . "</p>
                 <hr>
-                <p>Vui lòng đăng nhập hệ thống để xem chi tiết và xử lý: <a href='http://localhost/it-service-request/'>http://localhost/it-service-request/</a></p>
+                <p>Vui lòng đăng nhập hệ thống để xem chi tiết và xử lý: </p>
+                <a href='http://localhost/it-service-request/'>http://localhost/it-service-request/</a>
                 <p><em>IT Service Request System</em></p>";
         
         $success_count = 0;
