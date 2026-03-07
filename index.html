@@ -77,7 +77,9 @@
                         
                         <div class="form-group">
                             <label for="regDepartment">Phòng ban</label>
-                            <input type="text" id="regDepartment" name="department">
+                            <select id="regDepartment" name="department" required>
+                                <option value="">Chọn phòng ban</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
@@ -126,6 +128,7 @@
                         <li id="newRequestMenu" style="display: none;"><a href="#" class="nav-link" data-page="new-request"><i class="fas fa-plus"></i> Tạo yêu cầu</a></li>
                         <li><a href="#" class="nav-link" data-page="categories"><i class="fas fa-tags"></i> Danh mục</a></li>
                         <li id="adminMenu" style="display: none;"><a href="#" class="nav-link" data-page="users"><i class="fas fa-users"></i> Người dùng</a></li>
+                        <li id="adminDepartmentMenu" style="display: none;"><a href="#" class="nav-link" data-page="departments"><i class="fas fa-building"></i> Phòng ban</a></li>
                         <li id="adminSupportMenu" style="display: none;"><a href="#" class="nav-link" data-page="support-requests"><i class="fas fa-hands-helping"></i> Yêu cầu hỗ trợ</a></li>
                         <li id="adminRejectMenu" style="display: none;"><a href="#" class="nav-link" data-page="reject-requests"><i class="fas fa-times-circle"></i> Yêu cầu từ chối</a></li>
                         <li><a href="#" class="nav-link" data-page="profile"><i class="fas fa-user"></i> Thông tin cá nhân</a></li>
@@ -303,7 +306,25 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="department">Phòng ban</label>
-                                    <input type="text" id="department" name="department" class="form-control">
+                                    <select id="department" name="department" class="form-control" required>
+                                        <option value="">Chọn phòng ban</option>
+                                        <option value="Ban Giám đốc">Ban Giám đốc</option>
+                                        <option value="Phòng Kế hoạch">Phòng Kế hoạch</option>
+                                        <option value="Phòng Tài chính - Kế toán">Phòng Tài chính - Kế toán</option>
+                                        <option value="Phòng Nhân sự">Phòng Nhân sự</option>
+                                        <option value="Phòng Kinh doanh">Phòng Kinh doanh</option>
+                                        <option value="Phòng Marketing">Phòng Marketing</option>
+                                        <option value="Phòng Kỹ thuật">Phòng Kỹ thuật</option>
+                                        <option value="Phòng Nghiên cứu và Phát triển">Phòng Nghiên cứu và Phát triển</option>
+                                        <option value="Phòng Mua hàng">Phòng Mua hàng</option>
+                                        <option value="Phòng Chất lượng">Phòng Chất lượng</option>
+                                        <option value="Phòng Pháp chế">Phòng Pháp chế</option>
+                                        <option value="Phòng Hành chính">Phòng Hành chính</option>
+                                        <option value="Phòng An ninh">Phòng An ninh</option>
+                                        <option value="Kho">Kho</option>
+                                        <option value="Bảo trì">Bảo trì</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-actions">
@@ -440,6 +461,24 @@
                     </div>
                 </div>
 
+                <!-- Departments Page (Admin only) -->
+                <div id="departmentsPage" class="page">
+                    <div class="page-header">
+                        <h2><i class="fas fa-building"></i> Quản lý phòng ban</h2>
+                        <div class="page-actions">
+                            <button id="addDepartmentBtn" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Thêm phòng ban
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="departments-container">
+                        <div class="departments-grid" id="departmentsList">
+                            <!-- Departments will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Support Requests Page (Admin only) -->
                 <div id="support-requestsPage" class="page">
                     <div class="page-header">
@@ -535,6 +574,40 @@
             </div>
         </div>
 
+        <!-- Department Management Modal -->
+        <div id="departmentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="departmentModalTitle">Thêm phòng ban</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="departmentForm">
+                        <input type="hidden" id="departmentId">
+                        <div class="form-group">
+                            <label for="departmentName">Tên phòng ban *</label>
+                            <input type="text" id="departmentName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="departmentDescription">Mô tả</label>
+                            <textarea id="departmentDescription" name="description" rows="3"></textarea>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label" for="departmentIsActive">
+                                <input type="checkbox" id="departmentIsActive" name="is_active" checked>
+                                <span class="checkmark"></span>
+                                Kích hoạt
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <button type="button" class="btn btn-secondary cancel-department">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- User Management Modal -->
         <div id="userModal" class="modal">
             <div class="modal-content">
@@ -570,7 +643,25 @@
                         </div>
                         <div class="form-group">
                             <label for="userDepartment">Phòng ban</label>
-                            <input type="text" id="userDepartment" name="department">
+                            <select id="userDepartment" name="department" required>
+                                <option value="">Chọn phòng ban</option>
+                                <option value="Ban Giám đốc">Ban Giám đốc</option>
+                                <option value="Phòng Kế hoạch">Phòng Kế hoạch</option>
+                                <option value="Phòng Tài chính - Kế toán">Phòng Tài chính - Kế toán</option>
+                                <option value="Phòng Nhân sự">Phòng Nhân sự</option>
+                                <option value="Phòng Kinh doanh">Phòng Kinh doanh</option>
+                                <option value="Phòng Marketing">Phòng Marketing</option>
+                                <option value="Phòng Kỹ thuật">Phòng Kỹ thuật</option>
+                                <option value="Phòng Nghiên cứu và Phát triển">Phòng Nghiên cứu và Phát triển</option>
+                                <option value="Phòng Mua hàng">Phòng Mua hàng</option>
+                                <option value="Phòng Chất lượng">Phòng Chất lượng</option>
+                                <option value="Phòng Pháp chế">Phòng Pháp chế</option>
+                                <option value="Phòng Hành chính">Phòng Hành chính</option>
+                                <option value="Phòng An ninh">Phòng An ninh</option>
+                                <option value="Kho">Kho</option>
+                                <option value="Bảo trì">Bảo trì</option>
+                                <option value="Khác">Khác</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="userPhone">Điện thoại</label>
@@ -797,5 +888,9 @@
     </div>
 
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/support-reject-manager.js"></script>
+    <script src="assets/js/support-reject-patch.js"></script>
+    <script src="assets/js/department-helper.js"></script>
+    <script src="assets/js/departments-manager.js"></script>
 </body>
 </html>

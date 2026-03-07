@@ -104,7 +104,7 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
                             </div>
                             <div class="form-group">
                                 <label for="department">Phòng ban</label>
-                                <input type="text" id="department" name="department" class="form-control">
+                                <input type="text" id="department" name="department" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="form-actions">
@@ -192,7 +192,11 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
     </div>
 
     <script src="assets/js/profile.js"></script>
-    <script>
+    <script src="assets/js/department-helper.js"></script>
+</body>
+</html>
+
+<script>
         // Pass current user data to JavaScript
         window.currentUser = {
             id: <?php echo $current_user_id; ?>,

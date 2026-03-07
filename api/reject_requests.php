@@ -14,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require_once '../config/database.php';
 require_once '../config/session.php';
 
+// Start session for authentication
+startSession();
+
 if (!isLoggedIn()) {
     http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
@@ -64,6 +67,9 @@ try {
             break;
         case 'PUT':
             handlePut($db, $current_user);
+            break;
+        case 'DELETE':
+            handleDelete($db, $current_user);
             break;
         default:
             http_response_code(405);
@@ -210,6 +216,55 @@ function handlePut($db, $current_user) {
         return;
     }
     
+    // Check if this is an update operation
+    if (isset($input['action']) && $input['action'] === 'update') {
+        // Update reject request (admin only)
+        $reject_id = $input['id'] ?? null;
+        $reject_reason = $input['reject_reason'] ?? null;
+        $reject_details = $input['reject_details'] ?? null;
+        
+        if (!$reject_id || !$reject_reason) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Reject request ID and reason are required']);
+            return;
+        }
+        
+        // Check if reject request exists
+        $stmt = $db->prepare("
+            SELECT id, status FROM reject_requests 
+            WHERE id = ?
+        ");
+        $stmt->execute([$reject_id]);
+        $reject_request = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$reject_request) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Reject request not found']);
+            return;
+        }
+        
+        // Update reject request
+        $stmt = $db->prepare("
+            UPDATE reject_requests 
+            SET reject_reason = ?, reject_details = ?
+            WHERE id = ?
+        ");
+        
+        $result = $stmt->execute([$reject_reason, $reject_details, $reject_id]);
+        
+        if ($result) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Reject request updated successfully'
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Failed to update reject request']);
+        }
+        return;
+    }
+    
+    // Original processing logic
     $reject_id = $input['reject_id'] ?? null;
     $decision = $input['decision'] ?? null;
     $admin_reason = $input['admin_reason'] ?? null;
@@ -271,6 +326,61 @@ function handlePut($db, $current_user) {
     } else {
         http_response_code(500);
         echo json_encode(['success' => false, 'message' => 'Failed to process reject request']);
+    }
+}
+
+function handleDelete($db, $current_user) {
+    // Only admin can delete reject requests
+    $reject_id = $_GET['id'] ?? null;
+    
+    if (!$reject_id) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Reject request ID is required']);
+        return;
+    }
+    
+    try {
+        // Check if reject request exists
+        $stmt = $db->prepare("
+            SELECT rr.*, sr.title as request_title 
+            FROM reject_requests rr
+            JOIN service_requests sr ON rr.service_request_id = sr.id
+            WHERE rr.id = ?
+        ");
+        $stmt->execute([$reject_id]);
+        $reject_request = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$reject_request) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Reject request not found']);
+            return;
+        }
+        
+        // Check if reject request is processed - if so, don't allow deletion
+        if ($reject_request['status'] !== 'pending') {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Không thể xóa yêu cầu từ chối này vì đã được xử lý. Trạng thái: ' . $reject_request['status']
+            ]);
+            return;
+        }
+        
+        // Delete reject request
+        $stmt = $db->prepare("DELETE FROM reject_requests WHERE id = ?");
+        $result = $stmt->execute([$reject_id]);
+        
+        if ($result) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Reject request deleted successfully'
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Failed to delete reject request']);
+        }
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
 }
 ?>

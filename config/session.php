@@ -1,15 +1,17 @@
 <?php
 // Session management for IT Service Request System
 
-// Start session if not already started with proper cookie settings
-if (session_status() == PHP_SESSION_NONE) {
-    session_start([
-        'cookie_lifetime' => 86400,
-        'cookie_httponly' => true,
-        'cookie_samesite' => 'Lax',
-        'cookie_path' => '/',
-        'cookie_domain' => 'localhost'
-    ]);
+// Function to start session if not already started
+function startSession() {
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start([
+            'cookie_lifetime' => 86400,
+            'cookie_httponly' => true,
+            'cookie_samesite' => 'Lax',
+            'cookie_path' => '/',
+            'cookie_domain' => 'localhost'
+        ]);
+    }
 }
 
 // Function to check if user is logged in

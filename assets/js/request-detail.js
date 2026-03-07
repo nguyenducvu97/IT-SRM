@@ -1020,7 +1020,8 @@ class RequestDetailApp {
             'in_progress': 'Đang xử lý',
             'resolved': 'Đã giải quyết',
             'closed': 'Đã đóng',
-            'cancelled': 'Đã hủy'
+            'cancelled': 'Đã hủy',
+            'request_support': 'Yêu cầu hỗ trợ'
         };
         return statuses[status] || status;
     }

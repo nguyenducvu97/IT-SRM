@@ -42,6 +42,18 @@ function sanitizeInput($data) {
     return $data;
 }
 
+function jsonResponse($success, $message, $data = null) {
+    header('Content-Type: application/json');
+    $response = [
+        'success' => $success,
+        'message' => $message
+    ];
+    if ($data !== null) {
+        $response['data'] = $data;
+    }
+    echo json_encode($response);
+}
+
 function validateEmail($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
@@ -56,14 +68,5 @@ function hashPassword($password) {
 
 function verifyPassword($password, $hashedPassword) {
     return password_verify($password, $hashedPassword);
-}
-
-function jsonResponse($success, $message, $data = null) {
-    header('Content-Type: application/json');
-    echo json_encode([
-        'success' => $success,
-        'message' => $message,
-        'data' => $data
-    ]);
 }
 ?>

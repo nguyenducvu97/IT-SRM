@@ -1,0 +1,77 @@
+[2026-03-07 01:58:31] EMAIL_SENT | To: ndvu@sgitech.com.vn | Subject: Yêu cầu dịch vụ mới #123 | File: email_2026-03-07_01-58-31.eml
+[2026-03-07 02:15:43] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #124
+[2026-03-07 02:15:45] FAILED | To: ndvu@sgitech.com.vn | Subject: 📝 Cập nhật trạng thái yêu cầu #124
+[2026-03-07 02:15:47] FAILED | To: ndvu@sgitech.com.vn | Subject: 💬 Bình luận mới cho yêu cầu #124
+[2026-03-07 02:15:49] FAILED | To: ndvu@sgitech.com.vn | Subject: ✅ Yêu cầu #124 đã được giải quyết
+[2026-03-07 05:23:48] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #11
+[2026-03-07 05:23:50] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #12
+[2026-03-07 05:24:20] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #13
+[2026-03-07 07:33:06] FAILED | To: ndvu@sgitech.com.vn | Subject: 🧪 Test Email from IT Service System
+[2026-03-07 07:33:08] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-07 07:37:13] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #888
+[2026-03-07 07:52:42] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #14
+[2026-03-07 08:25:57] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🧪 Test Email from IT Service System
+[2026-03-07 08:25:57] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-07 08:26:09] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #1000
+[2026-03-07 08:30:08] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #1001
+[2026-03-07 08:32:05] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #15
+[2026-03-07 08:44:02] FAILED | To: nguyenducvu561@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #15
+[2026-03-07 08:47:28] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #17
+[2026-03-07 09:01:56] FAILED | To: nguyenducvu561@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #16
+[2026-03-07 09:03:39] SENT_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #999
+[2026-03-07 09:04:04] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #18
+[2026-03-07 09:05:32] SENT_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #18
+[2026-03-07 09:11:36] SENT_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #19
+[2026-03-07 09:13:18] SENT_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #19
+[2026-03-07 09:13:51] SENT_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-07 09:15:45] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-07 09:15:57] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: Test Email 09:15:57
+[2026-03-07 09:21:42] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #20
+[2026-03-07 09:29:35] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #TEST-1772872175
+[2026-03-07 09:29:35] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #TEST-1772872175
+[2026-03-07 09:29:35] SENT to 2/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #TEST-1772872175
+[2026-03-07 09:32:23] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #21
+[2026-03-07 09:35:49] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔍 Admin Email Test - 2026-03-07 09:35:49
+[2026-03-07 09:35:49] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #ADMIN-TEST-1772872549
+[2026-03-07 09:35:49] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #ADMIN-TEST-1772872549
+[2026-03-07 09:35:49] SENT to 2/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #ADMIN-TEST-1772872549
+[2026-03-07 09:37:52] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #22
+[2026-03-07 09:37:52] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #22
+[2026-03-07 09:37:52] SENT to 2/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #22
+[2026-03-07 09:40:30] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #FINAL-TEST-1772872830
+[2026-03-07 09:40:30] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #FINAL-TEST-1772872830
+[2026-03-07 09:40:30] SENT to 2/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #FINAL-TEST-1772872830
+[2026-03-07 09:40:30] SENT_PHPMAILER - Success:  | To: test@example.com | Subject: 📝 Cập nhật trạng thái yêu cầu #FINAL-TEST-1772872830
+[2026-03-07 09:46:36] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🧪 Test After sendmail.ini Fix - 2026-03-07 09:46:36
+[2026-03-07 09:49:57] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔧 FIXED SMTP Test - 2026-03-07 09:49:57
+[2026-03-07 09:49:57] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔧 FIXED SMTP Test - 2026-03-07 09:49:57
+[2026-03-07 09:50:47] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #23
+[2026-03-07 09:50:47] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #23
+[2026-03-07 09:50:47] SENT to 2/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #23
+[2026-03-07 09:52:58] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔄 ORIGINAL CONFIG Test - 2026-03-07 09:52:58
+[2026-03-07 09:52:58] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #ORIG-1772873578
+[2026-03-07 09:52:58] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #ORIG-1772873578
+[2026-03-07 09:52:58] SENT to 2/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #ORIG-1772873578
+[2026-03-07 09:54:40] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: ✅ STARTTLS FIXED - 2026-03-07 09:54:40
+[2026-03-07 09:54:40] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: ✅ STARTTLS FIXED - 2026-03-07 09:54:40
+[2026-03-07 09:54:40] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #FIXED-1772873680
+[2026-03-07 09:54:40] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #FIXED-1772873680
+[2026-03-07 09:54:40] SENT to 2/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #FIXED-1772873680
+[2026-03-07 09:56:00] SENT_PHPMAILER - Success:  | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #24
+[2026-03-07 09:56:00] SENT_PHPMAILER - Success:  | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #24
+[2026-03-07 09:56:00] SENT to 2/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #24
+[2026-03-07 10:04:22] SENT_INTERNAL | To: ndvu@sgitech.com.vn | Subject: 🧪 MODIFIED HELPER TEST - 2026-03-07 10:04:20
+[2026-03-07 10:04:24] FAILED_INTERNAL | To: nguyenducvu101223@gmail.com | Subject: 🧪 MODIFIED HELPER TEST - 2026-03-07 10:04:20
+[2026-03-07 10:04:26] SENT_INTERNAL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #FINAL-1772874264
+[2026-03-07 10:04:27] FAILED_INTERNAL | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #FINAL-1772874264
+[2026-03-07 10:04:27] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #FINAL-1772874264
+[2026-03-07 10:06:32] SENT_INTERNAL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #25
+[2026-03-07 10:06:34] FAILED_INTERNAL | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #25
+[2026-03-07 10:06:34] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #25
+[2026-03-07 10:06:36] SENT_INTERNAL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #26
+[2026-03-07 10:06:37] FAILED_INTERNAL | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #26
+[2026-03-07 10:06:37] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #26
+[2026-03-07 10:07:23] SENT_INTERNAL | To: ndvu@sgitech.com.vn | Subject: =?UTF-8?B?8J+UlCBZw6p1IGPhuqd1IGThu4tjaCB24bulIG3hu5tpICNURVNULVVURjgtMTc3Mjg3NDQ0MQ==?=
+[2026-03-07 10:07:24] SENT_INTERNAL | To: ndvu@sgitech.com.vn | Subject: =?UTF-8?B?8J+UlCBZw6p1IGPhuqd1IGThu4tjaCB24bulIG3hu5tpICNVVEY4LTE3NzI4NzQ0NDM=?=
+[2026-03-07 10:07:26] FAILED_INTERNAL | To: nguyenducvu101223@gmail.com | Subject: =?UTF-8?B?8J+UlCBZw6p1IGPhuqd1IGThu4tjaCB24bulIG3hu5tpICNVVEY4LTE3NzI4NzQ0NDM=?=
+[2026-03-07 10:07:26] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #UTF8-1772874443

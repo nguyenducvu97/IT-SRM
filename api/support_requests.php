@@ -317,18 +317,81 @@ function handlePost($pdo, $action, $current_user, $user_role) {
 }
 
 function handlePut($pdo, $action, $current_user, $user_role) {
-    // Only admin can process support requests
-    if ($user_role !== 'admin') {
-        http_response_code(403);
-        echo json_encode(['success' => false, 'message' => 'Access denied']);
-        return;
-    }
-    
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!$input) {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Invalid JSON data']);
+        return;
+    }
+    
+    // Check if this is an update operation
+    if (isset($input['action']) && $input['action'] === 'update') {
+        // Update support request (admin only)
+        if ($user_role !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Access denied. Admin access required.']);
+            return;
+        }
+        
+        $support_id = $input['id'] ?? null;
+        $support_type = $input['support_type'] ?? null;
+        $support_details = $input['support_details'] ?? null;
+        $support_reason = $input['support_reason'] ?? null;
+        
+        if (!$support_id || !$support_type || !$support_details || !$support_reason) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'All fields are required']);
+            return;
+        }
+        
+        // Validate support type
+        $valid_types = ['equipment', 'person', 'department'];
+        if (!in_array($support_type, $valid_types)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Invalid support type']);
+            return;
+        }
+        
+        // Check if support request exists
+        $stmt = $pdo->prepare("
+            SELECT id, status FROM support_requests 
+            WHERE id = ?
+        ");
+        $stmt->execute([$support_id]);
+        $support_request = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$support_request) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Support request not found']);
+            return;
+        }
+        
+        // Update support request
+        $stmt = $pdo->prepare("
+            UPDATE support_requests 
+            SET support_type = ?, support_details = ?, support_reason = ?
+            WHERE id = ?
+        ");
+        
+        $result = $stmt->execute([$support_type, $support_details, $support_reason, $support_id]);
+        
+        if ($result) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'Support request updated successfully'
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Failed to update support request']);
+        }
+        return;
+    }
+    
+    // Original processing logic
+    if ($user_role !== 'admin') {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Access denied']);
         return;
     }
     
@@ -463,18 +526,56 @@ function handleDelete($pdo, $action, $current_user, $user_role) {
         return;
     }
     
-    // Delete support request
-    $stmt = $pdo->prepare("DELETE FROM support_requests WHERE id = ?");
-    $result = $stmt->execute([$support_id]);
-    
-    if ($result) {
-        echo json_encode([
-            'success' => true,
-            'message' => 'Support request deleted successfully'
-        ]);
-    } else {
+    try {
+        // Check if support request exists
+        $stmt = $pdo->prepare("
+            SELECT sr.*, srq.title as request_title 
+            FROM support_requests sr
+            JOIN service_requests srq ON sr.service_request_id = srq.id
+            WHERE sr.id = ?
+        ");
+        $stmt->execute([$support_id]);
+        $support_request = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$support_request) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Support request not found']);
+            return;
+        }
+        
+        // Check if support request is processed - if so, don't allow deletion
+        if ($support_request['status'] !== 'pending') {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Không thể xóa yêu cầu hỗ trợ này vì đã được xử lý. Trạng thái: ' . $support_request['status']
+            ]);
+            return;
+        }
+        
+        // Delete support request
+        $stmt = $pdo->prepare("DELETE FROM support_requests WHERE id = ?");
+        $result = $stmt->execute([$support_id]);
+        
+        if ($result) {
+            // Update service request status back to in_progress
+            $update_stmt = $pdo->prepare("
+                UPDATE service_requests 
+                SET status = 'in_progress' 
+                WHERE id = ?
+            ");
+            $update_result = $update_stmt->execute([$support_request['service_request_id']]);
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Support request deleted successfully'
+            ]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Failed to delete support request']);
+        }
+    } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(['success' => false, 'message' => 'Failed to delete support request']);
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
 }
 ?>

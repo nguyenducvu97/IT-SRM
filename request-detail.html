@@ -77,7 +77,25 @@
                         
                         <div class="form-group">
                             <label for="regDepartment">Phòng ban</label>
-                            <input type="text" id="regDepartment" name="department">
+                            <select id="regDepartment" name="department" required>
+                                <option value="">Chọn phòng ban</option>
+                                <option value="Ban Giám đốc">Ban Giám đốc</option>
+                                <option value="Phòng Kế hoạch">Phòng Kế hoạch</option>
+                                <option value="Phòng Tài chính - Kế toán">Phòng Tài chính - Kế toán</option>
+                                <option value="Phòng Nhân sự">Phòng Nhân sự</option>
+                                <option value="Phòng Kinh doanh">Phòng Kinh doanh</option>
+                                <option value="Phòng Marketing">Phòng Marketing</option>
+                                <option value="Phòng Kỹ thuật">Phòng Kỹ thuật</option>
+                                <option value="Phòng Nghiên cứu và Phát triển">Phòng Nghiên cứu và Phát triển</option>
+                                <option value="Phòng Mua hàng">Phòng Mua hàng</option>
+                                <option value="Phòng Chất lượng">Phòng Chất lượng</option>
+                                <option value="Phòng Pháp chế">Phòng Pháp chế</option>
+                                <option value="Phòng Hành chính">Phòng Hành chính</option>
+                                <option value="Phòng An ninh">Phòng An ninh</option>
+                                <option value="Kho">Kho</option>
+                                <option value="Bảo trì">Bảo trì</option>
+                                <option value="Khác">Khác</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
@@ -483,5 +501,6 @@
     </div>
 
     <script src="assets/js/request-detail.js"></script>
+    <script src="assets/js/department-helper.js"></script>
 </body>
 </html>

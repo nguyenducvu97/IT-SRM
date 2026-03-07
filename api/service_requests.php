@@ -13,9 +13,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once '../config/database.php';
 require_once '../config/session.php';
+require_once '../lib/ImprovedEmailHelper.php';
+require_once '../lib/PHPMailerEmailHelper.php'; // Quay lại PHPMailer
+
+// Start session for authentication
+startSession();
+
+// Helper function for JSON responses (avoid conflict with database.php)
+function serviceJsonResponse($success, $message, $data = null) {
+    header('Content-Type: application/json');
+    $response = [
+        'success' => $success,
+        'message' => $message
+    ];
+    
+    if ($data !== null) {
+        $response['data'] = $data;
+    }
+    
+    echo json_encode($response);
+    exit();
+}
+
 
 if (!isLoggedIn()) {
-    jsonResponse(false, "Unauthorized access");
+    serviceJsonResponse(false, "Unauthorized access");
     exit();
 }
 
@@ -122,7 +144,7 @@ if ($method == 'GET') {
                 $status_counts_array[$result['status']] = $result['count'];
             }
             
-            jsonResponse(true, "Service requests retrieved", [
+            serviceJsonResponse(true, "Service requests retrieved", [
                 'requests' => $requests,
                 'pagination' => [
                     'page' => $page,
@@ -133,7 +155,7 @@ if ($method == 'GET') {
                 'status_counts' => $status_counts_array
             ]);
         } else {
-            jsonResponse(false, "Failed to retrieve service requests");
+            serviceJsonResponse(false, "Failed to retrieve service requests");
         }
     }
     
@@ -141,7 +163,7 @@ if ($method == 'GET') {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         
         if ($id <= 0) {
-            jsonResponse(false, "Invalid request ID");
+            serviceJsonResponse(false, "Invalid request ID");
         }
         
         $query = "SELECT sr.*, c.name as category_name, u.full_name as requester_name, 
@@ -168,7 +190,7 @@ if ($method == 'GET') {
             
             if ($user_role != 'admin' && $user_role != 'staff' && 
                 $request['user_id'] != $user_id && $request['assigned_to'] != $user_id) {
-                jsonResponse(false, "Access denied");
+                serviceJsonResponse(false, "Access denied");
             }
             
             // Get attachments for this request
@@ -252,9 +274,9 @@ if ($method == 'GET') {
                 $request['support_request'] = null;
             }
             
-            jsonResponse(true, "Service request retrieved", $request);
+            serviceJsonResponse(true, "Service request retrieved", $request);
         } else {
-            jsonResponse(false, "Service request not found");
+            serviceJsonResponse(false, "Service request not found");
         }
     }
 }
@@ -274,7 +296,7 @@ elseif ($method == 'POST') {
         $input = json_decode(file_get_contents('php://input'), true);
         
         if (!$input) {
-            jsonResponse(false, "Invalid JSON data");
+            serviceJsonResponse(false, "Invalid JSON data");
             return;
         }
         
@@ -285,7 +307,7 @@ elseif ($method == 'POST') {
     }
     
     if (empty($title) || empty($description) || $category_id <= 0) {
-        jsonResponse(false, "Title, description, and category are required");
+        serviceJsonResponse(false, "Title, description, and category are required");
         return;
     }
     
@@ -303,6 +325,36 @@ elseif ($method == 'POST') {
         
         if ($stmt->execute()) {
             $request_id = $db->lastInsertId();
+            
+            // Get request details for email notification
+            $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, c.name as category
+                              FROM service_requests sr
+                              LEFT JOIN users u ON sr.user_id = u.id
+                              LEFT JOIN categories c ON sr.category_id = c.id
+                              WHERE sr.id = :request_id";
+            $request_stmt = $db->prepare($request_query);
+            $request_stmt->bindParam(":request_id", $request_id);
+            $request_stmt->execute();
+            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Map data to template variables
+            $email_data = array(
+                'id' => $request_data['id'],
+                'title' => $request_data['title'],
+                'requester_name' => $request_data['requester_name'],
+                'category' => $request_data['category'],
+                'priority' => $request_data['priority'],
+                'description' => $request_data['description']
+            );
+            
+            // Send email notification to staff and admin
+            try {
+                $emailHelper = new PHPMailerEmailHelper(); // Use PHPMailerEmailHelper with new notification logic
+                $emailHelper->sendNewRequestNotification($email_data);
+            } catch (Exception $e) {
+                error_log("Email notification failed: " . $e->getMessage());
+                // Continue even if email fails
+            }
             
             // Handle file uploads if any
             if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
@@ -322,26 +374,27 @@ elseif ($method == 'POST') {
                         if (move_uploaded_file($tmp_name, $upload_path)) {
                             // Insert attachment record
                             $attach_query = "INSERT INTO attachments 
-                                           (service_request_id, filename, original_name, file_size, mime_type, uploaded_at) 
-                                           VALUES (:request_id, :filename, :original_name, :file_size, :mime_type, NOW())";
+                                           (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
+                                           VALUES (:request_id, :filename, :original_name, :file_size, :mime_type, :uploaded_by, NOW())";
                             $attach_stmt = $db->prepare($attach_query);
                             $attach_stmt->bindParam(":request_id", $request_id);
                             $attach_stmt->bindParam(":filename", $new_filename);
                             $attach_stmt->bindParam(":original_name", $name);
                             $attach_stmt->bindParam(":file_size", $files['size'][$key]);
                             $attach_stmt->bindParam(":mime_type", $files['type'][$key]);
+                            $attach_stmt->bindParam(":uploaded_by", $user_id);
                             $attach_stmt->execute();
                         }
                     }
                 }
             }
             
-            jsonResponse(true, "Service request created successfully", ['id' => $request_id]);
+            serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id]);
         } else {
-            jsonResponse(false, "Failed to create service request");
+            serviceJsonResponse(false, "Failed to create service request");
         }
     } catch (Exception $e) {
-        jsonResponse(false, "Database error: " . $e->getMessage());
+        serviceJsonResponse(false, "Database error: " . $e->getMessage());
     }
 }
 
@@ -349,19 +402,90 @@ elseif ($method == 'PUT') {
     $input = json_decode(file_get_contents('php://input'), true);
     $action = isset($input['action']) ? $input['action'] : '';
     
-    if ($action == 'reject_request') {
+    if ($action == 'update') {
+        // Update service request (admin only)
+        if ($user_role != 'admin') {
+            serviceJsonResponse(false, "Access denied. Admin access required.");
+            return;
+        }
+        
+        $request_id = isset($input['id']) ? (int)$input['id'] : 0;
+        $title = isset($input['title']) ? trim($input['title']) : '';
+        $description = isset($input['description']) ? trim($input['description']) : '';
+        $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
+        $priority = isset($input['priority']) ? $input['priority'] : 'medium';
+        $status = isset($input['status']) ? $input['status'] : 'open';
+        $assigned_to = isset($input['assigned_to']) ? (int)$input['assigned_to'] : null;
+        
+        if ($request_id <= 0 || empty($title) || empty($description) || $category_id <= 0) {
+            serviceJsonResponse(false, "Request ID, title, description, and category are required");
+            return;
+        }
+        
+        try {
+            // Check if request exists
+            $check_query = "SELECT id FROM service_requests WHERE id = :request_id";
+            $check_stmt = $db->prepare($check_query);
+            $check_stmt->bindParam(":request_id", $request_id);
+            $check_stmt->execute();
+            
+            if ($check_stmt->rowCount() == 0) {
+                serviceJsonResponse(false, "Service request not found");
+                return;
+            }
+            
+            // Validate assigned_to if provided
+            if ($assigned_to && $assigned_to > 0) {
+                $user_check_query = "SELECT id FROM users WHERE id = :user_id AND role IN ('admin', 'staff')";
+                $user_check_stmt = $db->prepare($user_check_query);
+                $user_check_stmt->bindParam(":user_id", $assigned_to);
+                $user_check_stmt->execute();
+                
+                if ($user_check_stmt->rowCount() == 0) {
+                    serviceJsonResponse(false, "Invalid staff member assigned");
+                    return;
+                }
+            }
+            
+            // Update the request
+            $update_query = "UPDATE service_requests 
+                             SET title = :title, description = :description, category_id = :category_id, 
+                                 priority = :priority, status = :status, assigned_to = :assigned_to, 
+                                 updated_at = NOW() 
+                             WHERE id = :request_id";
+            
+            $update_stmt = $db->prepare($update_query);
+            $update_stmt->bindParam(":title", $title);
+            $update_stmt->bindParam(":description", $description);
+            $update_stmt->bindParam(":category_id", $category_id);
+            $update_stmt->bindParam(":priority", $priority);
+            $update_stmt->bindParam(":status", $status);
+            $update_stmt->bindParam(":assigned_to", $assigned_to, PDO::PARAM_INT);
+            $update_stmt->bindParam(":request_id", $request_id);
+            
+            if ($update_stmt->execute()) {
+                serviceJsonResponse(true, "Service request updated successfully");
+            } else {
+                serviceJsonResponse(false, "Failed to update service request");
+            }
+        } catch (Exception $e) {
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
+    
+    elseif ($action == 'reject_request') {
         $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
         $reject_reason = isset($input['reject_reason']) ? trim($input['reject_reason']) : '';
         $reject_details = isset($input['reject_details']) ? trim($input['reject_details']) : '';
         
         if ($request_id <= 0 || empty($reject_reason)) {
-            jsonResponse(false, "Request ID and reject reason are required");
+            serviceJsonResponse(false, "Request ID and reject reason are required");
             return;
         }
         
         // Only staff can reject requests
         if ($user_role != 'staff') {
-            jsonResponse(false, "Access denied");
+            serviceJsonResponse(false, "Access denied");
             return;
         }
         
@@ -375,7 +499,7 @@ elseif ($method == 'PUT') {
             $check_stmt->execute();
             
             if ($check_stmt->rowCount() == 0) {
-                jsonResponse(false, "Request not found or not assigned to you");
+                serviceJsonResponse(false, "Request not found or not assigned to you");
                 return;
             }
             
@@ -406,7 +530,7 @@ elseif ($method == 'PUT') {
             $existing_stmt->execute();
             
             if ($existing_stmt->rowCount() > 0) {
-                jsonResponse(false, "Reject request already exists for this service request");
+                serviceJsonResponse(false, "Reject request already exists for this service request");
                 return;
             }
             
@@ -421,12 +545,12 @@ elseif ($method == 'PUT') {
             $insert_stmt->bindParam(":reject_details", $reject_details);
             
             if ($insert_stmt->execute()) {
-                jsonResponse(true, "Reject request submitted successfully");
+                serviceJsonResponse(true, "Reject request submitted successfully");
             } else {
-                jsonResponse(false, "Failed to submit reject request");
+                serviceJsonResponse(false, "Failed to submit reject request");
             }
         } catch (Exception $e) {
-            jsonResponse(false, "Database error: " . $e->getMessage());
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
         }
     }
     
@@ -434,26 +558,41 @@ elseif ($method == 'PUT') {
         $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
         
         if ($request_id <= 0) {
-            jsonResponse(false, "Request ID is required");
+            serviceJsonResponse(false, "Request ID is required");
             return;
         }
         
         // Only staff can accept requests
         if ($user_role != 'staff') {
-            jsonResponse(false, "Access denied");
+            serviceJsonResponse(false, "Access denied");
             return;
         }
         
         try {
-            // Check if request exists and is open
+            // Check if request exists and is available for assignment
+            // Available statuses: 'open' or 'request_support' (when support request is rejected)
             $check_query = "SELECT id, assigned_to, status FROM service_requests 
-                           WHERE id = :request_id AND status = 'open'";
+                           WHERE id = :request_id AND (status = 'open' OR status = 'request_support') 
+                           AND (assigned_to IS NULL OR assigned_to = 0)";
             $check_stmt = $db->prepare($check_query);
             $check_stmt->bindParam(":request_id", $request_id);
             $check_stmt->execute();
             
             if ($check_stmt->rowCount() == 0) {
-                jsonResponse(false, "Request not found or not available for assignment");
+                // Get detailed info for debugging
+                $debug_query = "SELECT id, assigned_to, status FROM service_requests WHERE id = :request_id";
+                $debug_stmt = $db->prepare($debug_query);
+                $debug_stmt->bindParam(":request_id", $request_id);
+                $debug_stmt->execute();
+                $debug_info = $debug_stmt->fetch(PDO::FETCH_ASSOC);
+                
+                if ($debug_info) {
+                    $status = $debug_info['status'];
+                    $assigned = $debug_info['assigned_to'];
+                    serviceJsonResponse(false, "Request not available for assignment. Current status: '$status', Assigned to: '$assigned'");
+                } else {
+                    serviceJsonResponse(false, "Request not found with ID: $request_id");
+                }
                 return;
             }
             
@@ -466,21 +605,207 @@ elseif ($method == 'PUT') {
             $update_stmt->bindParam(":user_id", $user_id);
             
             if ($update_stmt->execute()) {
-                jsonResponse(true, "Request accepted successfully");
+                // Get request details for email notification AFTER the update
+                $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
+                                         staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
+                                  FROM service_requests sr
+                                  LEFT JOIN users u ON sr.user_id = u.id
+                                  LEFT JOIN users staff ON sr.assigned_to = staff.id
+                                  LEFT JOIN categories c ON sr.category_id = c.id
+                                  WHERE sr.id = :request_id";
+                $request_stmt = $db->prepare($request_query);
+                $request_stmt->bindParam(":request_id", $request_id);
+                $request_stmt->execute();
+                $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                
+                // Send email notification to requester about assignment
+                try {
+                    $emailHelper = new PHPMailerEmailHelper(); // Use PHPMailerEmailHelper for actual email sending
+                    $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
+                } catch (Exception $e) {
+                    error_log("Email notification failed: " . $e->getMessage());
+                    // Continue even if email fails
+                }
+                
+                serviceJsonResponse(true, "Request accepted successfully");
             } else {
-                jsonResponse(false, "Failed to accept request");
+                serviceJsonResponse(false, "Failed to accept request");
             }
         } catch (Exception $e) {
-            jsonResponse(false, "Database error: " . $e->getMessage());
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
         }
     }
     
     else {
-        jsonResponse(false, "Invalid action");
+        serviceJsonResponse(false, "Invalid action");
+    }
+}
+
+elseif ($method == 'DELETE') {
+    // Delete service request (admin only)
+    if ($user_role != 'admin') {
+        serviceJsonResponse(false, "Access denied. Admin access required.");
+        return;
+    }
+    
+    $request_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+    $force_delete = isset($_GET['force']) ? $_GET['force'] === 'true' : false;
+    
+    if ($request_id <= 0) {
+        serviceJsonResponse(false, "Request ID is required");
+        return;
+    }
+    
+    try {
+        // Check if request exists
+        $check_query = "SELECT id, title FROM service_requests WHERE id = :request_id";
+        $check_stmt = $db->prepare($check_query);
+        $check_stmt->bindParam(":request_id", $request_id);
+        $check_stmt->execute();
+        
+        if ($check_stmt->rowCount() == 0) {
+            serviceJsonResponse(false, "Service request not found");
+            return;
+        }
+        
+        $request = $check_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Check for foreign key constraints and get counts for confirmation
+        $constraints = [];
+        
+        // Check comments
+        $comments_query = "SELECT COUNT(*) as count FROM comments WHERE service_request_id = :request_id";
+        $comments_stmt = $db->prepare($comments_query);
+        $comments_stmt->bindParam(":request_id", $request_id);
+        $comments_stmt->execute();
+        $comments_count = $comments_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        if ($comments_count > 0) {
+            $constraints[] = "{$comments_count} bình luận";
+        }
+        
+        // Check attachments
+        $attachments_query = "SELECT COUNT(*) as count FROM attachments WHERE service_request_id = :request_id";
+        $attachments_stmt = $db->prepare($attachments_query);
+        $attachments_stmt->bindParam(":request_id", $request_id);
+        $attachments_stmt->execute();
+        $attachments_count = $attachments_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        if ($attachments_count > 0) {
+            $constraints[] = "{$attachments_count} tệp đính kèm";
+        }
+        
+        // Check resolutions
+        $resolutions_query = "SELECT COUNT(*) as count FROM resolutions WHERE service_request_id = :request_id";
+        $resolutions_stmt = $db->prepare($resolutions_query);
+        $resolutions_stmt->bindParam(":request_id", $request_id);
+        $resolutions_stmt->execute();
+        $resolutions_count = $resolutions_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        if ($resolutions_count > 0) {
+            $constraints[] = "{$resolutions_count} giải quyết";
+        }
+        
+        // Check support requests
+        $support_query = "SELECT COUNT(*) as count FROM support_requests WHERE service_request_id = :request_id";
+        $support_stmt = $db->prepare($support_query);
+        $support_stmt->bindParam(":request_id", $request_id);
+        $support_stmt->execute();
+        $support_count = $support_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        if ($support_count > 0) {
+            $constraints[] = "{$support_count} yêu cầu hỗ trợ";
+        }
+        
+        // Check reject requests
+        $reject_query = "SELECT COUNT(*) as count FROM reject_requests WHERE service_request_id = :request_id";
+        $reject_stmt = $db->prepare($reject_query);
+        $reject_stmt->bindParam(":request_id", $request_id);
+        $reject_stmt->execute();
+        $reject_count = $reject_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+        if ($reject_count > 0) {
+            $constraints[] = "{$reject_count} yêu cầu từ chối";
+        }
+        
+        // Show confirmation message with related data counts
+        if (!empty($constraints) && !$force_delete) {
+            $constraint_list = implode(", ", $constraints);
+            serviceJsonResponse(false, "Xóa yêu cầu '{$request['title']}' sẽ xóa cả các dữ liệu liên quan: {$constraint_list}. Bạn có chắc chắn muốn tiếp tục?", "confirm_delete");
+            return;
+        }
+        
+        // Start transaction for cascade deletion
+        $db->beginTransaction();
+        
+        try {
+            // Delete related data in correct order to respect foreign keys
+            
+            // Delete comments first
+            if ($comments_count > 0) {
+                $delete_comments = "DELETE FROM comments WHERE service_request_id = :request_id";
+                $delete_comments_stmt = $db->prepare($delete_comments);
+                $delete_comments_stmt->bindParam(":request_id", $request_id);
+                $delete_comments_stmt->execute();
+            }
+            
+            // Delete attachments
+            if ($attachments_count > 0) {
+                $delete_attachments = "DELETE FROM attachments WHERE service_request_id = :request_id";
+                $delete_attachments_stmt = $db->prepare($delete_attachments);
+                $delete_attachments_stmt->bindParam(":request_id", $request_id);
+                $delete_attachments_stmt->execute();
+            }
+            
+            // Delete resolutions
+            if ($resolutions_count > 0) {
+                $delete_resolutions = "DELETE FROM resolutions WHERE service_request_id = :request_id";
+                $delete_resolutions_stmt = $db->prepare($delete_resolutions);
+                $delete_resolutions_stmt->bindParam(":request_id", $request_id);
+                $delete_resolutions_stmt->execute();
+            }
+            
+            // Delete support requests
+            if ($support_count > 0) {
+                $delete_support = "DELETE FROM support_requests WHERE service_request_id = :request_id";
+                $delete_support_stmt = $db->prepare($delete_support);
+                $delete_support_stmt->bindParam(":request_id", $request_id);
+                $delete_support_stmt->execute();
+            }
+            
+            // Delete reject requests
+            if ($reject_count > 0) {
+                $delete_reject = "DELETE FROM reject_requests WHERE service_request_id = :request_id";
+                $delete_reject_stmt = $db->prepare($delete_reject);
+                $delete_reject_stmt->bindParam(":request_id", $request_id);
+                $delete_reject_stmt->execute();
+            }
+            
+            // Finally delete the service request
+            $delete_query = "DELETE FROM service_requests WHERE id = :request_id";
+            $delete_stmt = $db->prepare($delete_query);
+            $delete_stmt->bindParam(":request_id", $request_id);
+            
+            if ($delete_stmt->execute()) {
+                $db->commit();
+                $deleted_items = [];
+                if ($comments_count > 0) $deleted_items[] = "{$comments_count} bình luận";
+                if ($attachments_count > 0) $deleted_items[] = "{$attachments_count} tệp đính kèm";
+                if ($resolutions_count > 0) $deleted_items[] = "{$resolutions_count} giải quyết";
+                if ($support_count > 0) $deleted_items[] = "{$support_count} yêu cầu hỗ trợ";
+                if ($reject_count > 0) $deleted_items[] = "{$reject_count} yêu cầu từ chối";
+                
+                $deleted_text = !empty($deleted_items) ? " (đã xóa: " . implode(", ", $deleted_items) . ")" : "";
+                serviceJsonResponse(true, "Service request deleted successfully{$deleted_text}");
+            } else {
+                $db->rollBack();
+                serviceJsonResponse(false, "Failed to delete service request");
+            }
+        } catch (Exception $e) {
+            $db->rollBack();
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    } catch (Exception $e) {
+        serviceJsonResponse(false, "Database error: " . $e->getMessage());
     }
 }
 
 else {
-    jsonResponse(false, "Method not allowed");
+    serviceJsonResponse(false, "Method not allowed");
 }
 ?>

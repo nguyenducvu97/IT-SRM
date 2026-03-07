@@ -6,6 +6,8 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 require_once '../config/database.php';
+require_once '../config/session.php';
+
 
 $database = new Database();
 $db = $database->getConnection();
@@ -17,15 +19,19 @@ if ($method == 'OPTIONS') {
     exit();
 }
 
-session_start([
-    'cookie_lifetime' => 86400, // 24 hours
-    'cookie_httponly' => true,
-    'cookie_samesite' => 'Lax'
-]);
-
-// Allow GET requests without login for dropdown population
-if ($method != 'GET' && !isset($_SESSION['user_id'])) {
-    jsonResponse(false, "Unauthorized access");
+// Start session for authenticated requests
+if ($method != 'GET') {
+    startSession();
+    
+    // Check authentication for non-GET requests
+    if (!isLoggedIn()) {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Unauthorized access"
+        ]);
+        exit();
+    }
 }
 
 if ($method == 'GET') {
@@ -35,12 +41,23 @@ if ($method == 'GET') {
     
     $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    jsonResponse(true, "Categories retrieved", $categories);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => true,
+        'message' => "Categories retrieved",
+        'data' => $categories
+    ]);
+    exit();
 }
 
 elseif ($method == 'POST') {
-    if ($_SESSION['role'] != 'admin') {
-        jsonResponse(false, "Only administrators can create categories");
+    if (!isLoggedIn() || getCurrentUserRole() != 'admin') {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Only administrators can create categories"
+        ]);
+        exit();
     }
     
     $data = json_decode(file_get_contents("php://input"));
@@ -49,7 +66,12 @@ elseif ($method == 'POST') {
     $description = isset($data->description) ? sanitizeInput($data->description) : '';
     
     if (empty($name)) {
-        jsonResponse(false, "Category name is required");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Category name is required"
+        ]);
+        exit();
     }
     
     $check_query = "SELECT id FROM categories WHERE name = :name LIMIT 1";
@@ -58,7 +80,12 @@ elseif ($method == 'POST') {
     $check_stmt->execute();
     
     if ($check_stmt->rowCount() > 0) {
-        jsonResponse(false, "Category already exists");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Category already exists"
+        ]);
+        exit();
     }
     
     $query = "INSERT INTO categories (name, description) VALUES (:name, :description)";
@@ -68,15 +95,31 @@ elseif ($method == 'POST') {
     $stmt->bindParam(":description", $description);
     
     if ($stmt->execute()) {
-        jsonResponse(true, "Category created", ['id' => $db->lastInsertId()]);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'message' => "Category created",
+            'data' => ['id' => $db->lastInsertId()]
+        ]);
+        exit();
     } else {
-        jsonResponse(false, "Failed to create category");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Failed to create category"
+        ]);
+        exit();
     }
 }
 
 elseif ($method == 'PUT') {
-    if ($_SESSION['role'] != 'admin') {
-        jsonResponse(false, "Only administrators can update categories");
+    if (!isLoggedIn() || getCurrentUserRole() != 'admin') {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Only administrators can update categories"
+        ]);
+        exit();
     }
     
     $data = json_decode(file_get_contents("php://input"));
@@ -86,7 +129,12 @@ elseif ($method == 'PUT') {
     $description = isset($data->description) ? sanitizeInput($data->description) : '';
     
     if ($id <= 0 || empty($name)) {
-        jsonResponse(false, "Invalid input");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Invalid input"
+        ]);
+        exit();
     }
     
     $query = "UPDATE categories SET name = :name, description = :description WHERE id = :id";
@@ -97,21 +145,41 @@ elseif ($method == 'PUT') {
     $stmt->bindParam(":id", $id);
     
     if ($stmt->execute()) {
-        jsonResponse(true, "Category updated");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'message' => "Category updated"
+        ]);
+        exit();
     } else {
-        jsonResponse(false, "Failed to update category");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Failed to update category"
+        ]);
+        exit();
     }
 }
 
 elseif ($method == 'DELETE') {
-    if ($_SESSION['role'] != 'admin') {
-        jsonResponse(false, "Only administrators can delete categories");
+    if (!isLoggedIn() || getCurrentUserRole() != 'admin') {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Only administrators can delete categories"
+        ]);
+        exit();
     }
     
     $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
     
     if ($id <= 0) {
-        jsonResponse(false, "Invalid category ID");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Invalid category ID"
+        ]);
+        exit();
     }
     
     $check_query = "SELECT COUNT(*) as count FROM service_requests WHERE category_id = :id";
@@ -122,7 +190,12 @@ elseif ($method == 'DELETE') {
     $count = $check_stmt->fetch(PDO::FETCH_ASSOC)['count'];
     
     if ($count > 0) {
-        jsonResponse(false, "Cannot delete category with existing requests");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Cannot delete category with existing requests"
+        ]);
+        exit();
     }
     
     $query = "DELETE FROM categories WHERE id = :id";
@@ -130,13 +203,28 @@ elseif ($method == 'DELETE') {
     $stmt->bindParam(":id", $id);
     
     if ($stmt->execute()) {
-        jsonResponse(true, "Category deleted");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'message' => "Category deleted"
+        ]);
+        exit();
     } else {
-        jsonResponse(false, "Failed to delete category");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Failed to delete category"
+        ]);
+        exit();
     }
 }
 
 else {
-    jsonResponse(false, "Method not allowed");
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => "Method not allowed"
+    ]);
+    exit();
 }
 ?>

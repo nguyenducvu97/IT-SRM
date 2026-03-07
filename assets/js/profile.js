@@ -83,7 +83,12 @@ class ProfileManager {
         document.getElementById('email').value = user.email || '';
         document.getElementById('phone').value = user.phone || '';
         document.getElementById('role').value = this.getRoleText(user.role) || '';
-        document.getElementById('department').value = user.department || '';
+        
+        // Set department value (readonly field)
+        const deptField = document.getElementById('department');
+        if (deptField) {
+            deptField.value = user.department || '';
+        }
     }
 
     async handleProfileSubmit(e) {

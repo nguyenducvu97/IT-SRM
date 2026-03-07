@@ -293,6 +293,7 @@ class ITServiceApp {
         if (this.currentUser.role === 'admin') {
             console.log('✅ Showing admin menus');
             document.getElementById('adminMenu').style.display = 'block';
+            document.getElementById('adminDepartmentMenu').style.display = 'block';
             document.getElementById('adminSupportMenu').style.display = 'block';
             document.getElementById('adminRejectMenu').style.display = 'block';
             // Hide new request menu for admin
@@ -302,6 +303,7 @@ class ITServiceApp {
             console.log('❌ Hiding admin menus for non-admin user');
             // Ensure admin menus are hidden for non-admin users
             document.getElementById('adminMenu').style.display = 'none';
+            document.getElementById('adminDepartmentMenu').style.display = 'none';
             document.getElementById('adminSupportMenu').style.display = 'none';
             document.getElementById('adminRejectMenu').style.display = 'none';
             // Show new request menu for non-admin users
@@ -426,6 +428,17 @@ class ITServiceApp {
                     console.log('❌ User is not admin, denying access to users page');
                     this.showNotification('Chỉ admin mới có quyền truy cập quản lý người dùng', 'error');
                     // Redirect to dashboard
+                    setTimeout(() => this.showPage('dashboard'), 1000);
+                }
+                break;
+            case 'departments':
+                if (this.currentUser.role === 'admin') {
+                    if (this.departmentsManager) {
+                        this.departmentsManager.loadDepartments();
+                    }
+                } else {
+                    console.log('❌ User is not admin, denying access to departments page');
+                    this.showNotification('Chỉ admin mới có quyền truy cập quản lý phòng ban', 'error');
                     setTimeout(() => this.showPage('dashboard'), 1000);
                 }
                 break;
@@ -607,6 +620,16 @@ class ITServiceApp {
                     ${request.accepted_at ? `<span><i class="fas fa-hand-paper"></i> Đã nhận: ${this.formatDate(request.accepted_at)}</span>` : ''}
                 </div>
                 <div class="request-description">${request.description.substring(0, 150)}...</div>
+                ${this.currentUser && this.currentUser.role === 'admin' ? `
+                <div class="request-actions" onclick="event.stopPropagation()">
+                    <button class="btn btn-secondary btn-sm" onclick="app.editRequest(${request.id})">
+                        <i class="fas fa-edit"></i> Sửa
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="app.deleteRequest(${request.id})">
+                        <i class="fas fa-trash"></i> Xóa
+                    </button>
+                </div>
+                ` : ''}
             </div>
         `).join('');
     }
@@ -1617,10 +1640,17 @@ class ITServiceApp {
                 document.getElementById('userUsername').value = user.username;
                 document.getElementById('userEmail').value = user.email;
                 document.getElementById('userFullName').value = user.full_name;
-                document.getElementById('userDepartment').value = user.department || '';
                 document.getElementById('userPhone').value = user.phone || '';
                 document.getElementById('userRole').value = user.role;
                 document.getElementById('userPassword').value = ''; // Don't show password
+                
+                // Set department dropdown value
+                const deptSelect = document.getElementById('userDepartment');
+                if (deptSelect && typeof DepartmentHelper !== 'undefined') {
+                    DepartmentHelper.setDepartmentValue(deptSelect, user.department || '');
+                } else if (deptSelect) {
+                    deptSelect.value = user.department || '';
+                }
                 document.getElementById('userPassword').removeAttribute('required');
             }
         } catch (error) {
@@ -1677,6 +1707,240 @@ class ITServiceApp {
             }
         } catch (error) {
             this.showNotification('Lỗi khi xóa người dùng', 'error');
+        }
+    }
+
+    async editRequest(requestId) {
+        try {
+            // Get request details
+            const response = await this.apiCall(`api/service_requests.php?action=get&id=${requestId}`);
+            
+            if (response.success) {
+                const request = response.data;
+                this.showEditRequestModal(request);
+            } else {
+                this.showNotification(response.message || 'Lỗi khi tải thông tin yêu cầu', 'error');
+            }
+        } catch (error) {
+            this.showNotification('Lỗi khi tải thông tin yêu cầu', 'error');
+        }
+    }
+
+    async deleteRequest(requestId) {
+        // Always show confirmation dialog first
+        if (!confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')) {
+            return;
+        }
+
+        try {
+            // First attempt to delete to check for related data
+            const response = await fetch(`api/service_requests.php?id=${requestId}`, {
+                method: 'DELETE'
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                this.showNotification('Xóa yêu cầu thành công', 'success');
+                this.loadRequests();
+            } else if (data.message && data.message.includes('Bạn có chắc chắn muốn tiếp tục?')) {
+                // Show additional confirmation dialog for cascade delete
+                if (confirm(data.message)) {
+                    // Delete with force parameter
+                    const forceResponse = await fetch(`api/service_requests.php?id=${requestId}&force=true`, {
+                        method: 'DELETE'
+                    });
+                    
+                    const forceData = await forceResponse.json();
+                    
+                    if (forceData.success) {
+                        this.showNotification('Xóa yêu cầu thành công', 'success');
+                        this.loadRequests();
+                    } else {
+                        this.showNotification(forceData.message || 'Lỗi khi xóa yêu cầu', 'error');
+                    }
+                }
+            } else {
+                this.showNotification(data.message || 'Lỗi khi xóa yêu cầu', 'error');
+            }
+        } catch (error) {
+            this.showNotification('Lỗi khi xóa yêu cầu', 'error');
+        }
+    }
+
+    showEditRequestModal(request) {
+        // Create modal if it doesn't exist
+        let modal = document.getElementById('editRequestModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'editRequestModal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Chỉnh sửa yêu cầu</h3>
+                        <span class="close">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editRequestForm">
+                            <input type="hidden" id="editRequestId">
+                            <div class="form-group">
+                                <label for="editRequestTitle">Tiêu đề *</label>
+                                <input type="text" id="editRequestTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editRequestCategory">Danh mục *</label>
+                                <select id="editRequestCategory" required>
+                                    <option value="">Chọn danh mục</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editRequestPriority">Ưu tiên</label>
+                                <select id="editRequestPriority">
+                                    <option value="low">Thấp</option>
+                                    <option value="medium">Trung bình</option>
+                                    <option value="high">Cao</option>
+                                    <option value="critical">Khẩn cấp</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editRequestStatus">Trạng thái</label>
+                                <select id="editRequestStatus">
+                                    <option value="open">Mở</option>
+                                    <option value="in_progress">Đang xử lý</option>
+                                    <option value="resolved">Đã giải quyết</option>
+                                    <option value="closed">Đã đóng</option>
+                                    <option value="cancelled">Đã hủy</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editRequestAssigned">Giao cho</label>
+                                <select id="editRequestAssigned">
+                                    <option value="">Chưa giao</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editRequestDescription">Mô tả *</label>
+                                <textarea id="editRequestDescription" rows="4" required></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                <button type="button" class="btn btn-secondary cancel-edit-request">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        // Populate form with request data
+        document.getElementById('editRequestId').value = request.id;
+        document.getElementById('editRequestTitle').value = request.title;
+        document.getElementById('editRequestDescription').value = request.description;
+        document.getElementById('editRequestPriority').value = request.priority;
+        document.getElementById('editRequestStatus').value = request.status;
+
+        // Load categories
+        this.loadCategoriesForEdit(request.category_id);
+
+        // Load staff for assignment
+        this.loadStaffForEdit(request.assigned_to);
+
+        // Show modal
+        modal.style.display = 'flex';
+
+        // Bind events
+        const form = document.getElementById('editRequestForm');
+        form.onsubmit = (e) => this.handleEditRequestSubmit(e);
+
+        const cancelBtn = modal.querySelector('.cancel-edit-request');
+        cancelBtn.onclick = () => this.closeEditRequestModal();
+
+        const closeBtn = modal.querySelector('.close');
+        closeBtn.onclick = () => this.closeEditRequestModal();
+    }
+
+    async loadCategoriesForEdit(selectedCategoryId = null) {
+        try {
+            const response = await this.apiCall('api/categories.php?action=list');
+            if (response.success) {
+                const select = document.getElementById('editRequestCategory');
+                select.innerHTML = '<option value="">Chọn danh mục</option>';
+                
+                response.data.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    if (category.id == selectedCategoryId) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load categories:', error);
+        }
+    }
+
+    async loadStaffForEdit(selectedStaffId = null) {
+        try {
+            const response = await this.apiCall('api/users.php?role=staff');
+            if (response.success) {
+                const select = document.getElementById('editRequestAssigned');
+                select.innerHTML = '<option value="">Chưa giao</option>';
+                
+                response.data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = user.full_name;
+                    if (user.id == selectedStaffId) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Failed to load staff:', error);
+        }
+    }
+
+    async handleEditRequestSubmit(e) {
+        e.preventDefault();
+        
+        const formData = {
+            action: 'update',
+            id: document.getElementById('editRequestId').value,
+            title: document.getElementById('editRequestTitle').value,
+            description: document.getElementById('editRequestDescription').value,
+            category_id: document.getElementById('editRequestCategory').value,
+            priority: document.getElementById('editRequestPriority').value,
+            status: document.getElementById('editRequestStatus').value,
+            assigned_to: document.getElementById('editRequestAssigned').value || null
+        };
+
+        try {
+            const response = await this.apiCall('api/service_requests.php', {
+                method: 'PUT',
+                body: JSON.stringify(formData)
+            });
+
+            if (response.success) {
+                this.showNotification('Cập nhật yêu cầu thành công', 'success');
+                this.closeEditRequestModal();
+                this.loadRequests();
+            } else {
+                this.showNotification(response.message || 'Lỗi khi cập nhật yêu cầu', 'error');
+            }
+        } catch (error) {
+            this.showNotification('Lỗi khi cập nhật yêu cầu', 'error');
+        }
+    }
+
+    closeEditRequestModal() {
+        const modal = document.getElementById('editRequestModal');
+        if (modal) {
+            modal.style.display = 'none';
         }
     }
 
@@ -2228,7 +2492,12 @@ class ITServiceApp {
         document.getElementById('email').value = user.email || '';
         document.getElementById('phone').value = user.phone || '';
         document.getElementById('role').value = this.getRoleText(user.role) || '';
-        document.getElementById('department').value = user.department || '';
+        
+        // Set department value (readonly field)
+        const deptField = document.getElementById('department');
+        if (deptField) {
+            deptField.value = user.department || '';
+        }
     }
 
     async handleProfileSubmit(e) {

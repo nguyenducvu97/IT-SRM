@@ -6,6 +6,7 @@ header("Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 require_once '../config/database.php';
+require_once '../lib/EmailHelper.php';
 
 $database = new Database();
 $db = $database->getConnection();
@@ -65,6 +66,35 @@ if ($method == 'POST') {
     $stmt->bindParam(":comment", $comment);
     
     if ($stmt->execute()) {
+        // Get request details for email notification
+        $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email,
+                                 staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
+                          FROM service_requests sr
+                          LEFT JOIN users u ON sr.user_id = u.id
+                          LEFT JOIN users staff ON sr.assigned_to = staff.id
+                          LEFT JOIN categories c ON sr.category_id = c.id
+                          WHERE sr.id = :id";
+        $request_stmt = $db->prepare($request_query);
+        $request_stmt->bindParam(":id", $service_request_id);
+        $request_stmt->execute();
+        $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Get commenter info
+        $commenter_query = "SELECT full_name, email FROM users WHERE id = :user_id";
+        $commenter_stmt = $db->prepare($commenter_query);
+        $commenter_stmt->bindParam(":user_id", $user_id);
+        $commenter_stmt->execute();
+        $commenter_data = $commenter_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Send email notification
+        try {
+            $emailHelper = new EmailHelper();
+            $emailHelper->sendNewCommentNotification($request_data, $comment, $commenter_data);
+        } catch (Exception $e) {
+            error_log("Email notification failed: " . $e->getMessage());
+            // Continue even if email fails
+        }
+        
         jsonResponse(true, "Comment added", ['id' => $db->lastInsertId()]);
     } else {
         jsonResponse(false, "Failed to add comment");

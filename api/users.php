@@ -14,6 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require_once '../config/database.php';
 require_once '../config/session.php';
 
+// Start session for authentication
+startSession();
+
 if (!isLoggedIn()) {
     jsonResponse(false, "Unauthorized access");
     exit();
@@ -242,6 +245,78 @@ function deleteUser($db, $id) {
         jsonResponse(false, "Cannot delete your own account");
     }
     
+    // Check if user exists
+    $check_query = "SELECT id, username FROM users WHERE id = :id";
+    $check_stmt = $db->prepare($check_query);
+    $check_stmt->bindParam(":id", $id);
+    $check_stmt->execute();
+    
+    if ($check_stmt->rowCount() === 0) {
+        jsonResponse(false, "User not found");
+    }
+    
+    $user = $check_stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Check for foreign key constraints
+    $constraints = [];
+    
+    // Check service requests created by this user
+    $sr_query = "SELECT COUNT(*) as count FROM service_requests WHERE user_id = :id";
+    $sr_stmt = $db->prepare($sr_query);
+    $sr_stmt->bindParam(":id", $id);
+    $sr_stmt->execute();
+    $sr_count = $sr_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+    if ($sr_count > 0) {
+        $constraints[] = "{$sr_count} yêu cầu dịch vụ";
+    }
+    
+    // Check service requests assigned to this user
+    $assigned_query = "SELECT COUNT(*) as count FROM service_requests WHERE assigned_to = :id";
+    $assigned_stmt = $db->prepare($assigned_query);
+    $assigned_stmt->bindParam(":id", $id);
+    $assigned_stmt->execute();
+    $assigned_count = $assigned_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+    if ($assigned_count > 0) {
+        $constraints[] = "{$assigned_count} yêu cầu được giao";
+    }
+    
+    // Check comments by this user
+    $comments_query = "SELECT COUNT(*) as count FROM comments WHERE user_id = :id";
+    $comments_stmt = $db->prepare($comments_query);
+    $comments_stmt->bindParam(":id", $id);
+    $comments_stmt->execute();
+    $comments_count = $comments_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+    if ($comments_count > 0) {
+        $constraints[] = "{$comments_count} bình luận";
+    }
+    
+    // Check attachments uploaded by this user
+    $attachments_query = "SELECT COUNT(*) as count FROM attachments WHERE uploaded_by = :id";
+    $attachments_stmt = $db->prepare($attachments_query);
+    $attachments_stmt->bindParam(":id", $id);
+    $attachments_stmt->execute();
+    $attachments_count = $attachments_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+    if ($attachments_count > 0) {
+        $constraints[] = "{$attachments_count} tệp đính kèm";
+    }
+    
+    // Check resolutions by this user
+    $resolutions_query = "SELECT COUNT(*) as count FROM resolutions WHERE resolved_by = :id";
+    $resolutions_stmt = $db->prepare($resolutions_query);
+    $resolutions_stmt->bindParam(":id", $id);
+    $resolutions_stmt->execute();
+    $resolutions_count = $resolutions_stmt->fetch(PDO::FETCH_ASSOC)['count'];
+    if ($resolutions_count > 0) {
+        $constraints[] = "{$resolutions_count} giải quyết";
+    }
+    
+    // If there are constraints, don't delete and show detailed error
+    if (!empty($constraints)) {
+        $constraint_list = implode(", ", $constraints);
+        jsonResponse(false, "Không thể xóa người dùng '{$user['username']}' vì có dữ liệu liên quan: {$constraint_list}. Vui lòng xóa hoặc chuyển dữ liệu liên quan trước.");
+    }
+    
+    // If no constraints, proceed with deletion
     $query = "DELETE FROM users WHERE id = :id";
     $stmt = $db->prepare($query);
     $stmt->bindParam(":id", $id);

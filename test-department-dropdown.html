@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Department Dropdown</title>
+</head>
+<body>
+    <h1>Test Department Dropdown</h1>
+    
+    <form>
+        <div class="form-group">
+            <label for="regDepartment">Phòng ban</label>
+            <select id="regDepartment" name="department" required>
+                <option value="">Chọn phòng ban</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="regPhone">Điện thoại</label>
+            <input type="tel" id="regPhone" name="phone">
+        </div>
+    </form>
+    
+    <div id="console-output"></div>
+    
+    <script src="assets/js/department-helper.js"></script>
+    <script>
+        // Log console output to page
+        const originalLog = console.log;
+        const originalError = console.error;
+        const output = document.getElementById('console-output');
+        
+        function addToOutput(message, type = 'log') {
+            const div = document.createElement('div');
+            div.style.color = type === 'error' ? 'red' : 'black';
+            div.style.marginBottom = '5px';
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            output.appendChild(div);
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToOutput(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToOutput(args.join(' '), 'error');
+        };
+        
+        // Test department loading
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, testing department dropdown...');
+            
+            // Test the API directly
+            fetch('api/departments.php?action=dropdown')
+                .then(response => {
+                    console.log('API Response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('API Response data:', data);
+                    
+                    // Manually populate dropdown to test
+                    const select = document.getElementById('regDepartment');
+                    if (data.success && data.data) {
+                        data.data.forEach(dept => {
+                            const option = document.createElement('option');
+                            option.value = dept;
+                            option.textContent = dept;
+                            select.appendChild(option);
+                        });
+                        console.log('Dropdown populated with', data.data.length, 'departments');
+                    } else {
+                        console.error('API returned error:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('API call failed:', error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -8,8 +8,15 @@ header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+// Handle preflight OPTIONS request
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 require_once '../config/database.php';
 require_once '../config/session.php';
+
 
 $database = new Database();
 $db = $database->getConnection();
@@ -25,16 +32,8 @@ if ($method == 'GET') {
     $action = isset($_GET['action']) ? $_GET['action'] : '';
     
     if ($action == 'check_session') {
+        startSession(); // Start session for this action
         error_log("=== DEBUG CHECK SESSION ===");
-        
-        // Check if session is already started
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start([
-                'cookie_lifetime' => 86400, // 24 hours
-                'cookie_httponly' => true,
-                'cookie_samesite' => 'Lax'
-            ]);
-        }
         
         error_log("Session data: " . json_encode($_SESSION));
         
@@ -48,14 +47,45 @@ if ($method == 'GET') {
             ];
             
             error_log("User logged in: " . json_encode($user_data));
-            jsonResponse(true, "User is logged in", $user_data);
+            
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'message' => "User is logged in",
+                'data' => $user_data
+            ]);
+            exit();
         } else {
             error_log("No active session");
-            jsonResponse(false, "No active session");
+            
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "No active session"
+            ]);
+            exit();
         }
     } else {
         error_log("Invalid action: " . $action);
-        jsonResponse(false, "Invalid action");
+        
+        // Clean any previous output
+        if (ob_get_length()) {
+            ob_clean();
+        }
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Invalid action"
+        ]);
+        exit();
     }
 }
 
@@ -69,7 +99,16 @@ if ($method == 'POST') {
         $password = $data->password;
         
         if (empty($username) || empty($password)) {
-            jsonResponse(false, "Username and password are required");
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "Username and password are required"
+            ]);
+            exit();
         }
         
         $query = "SELECT id, username, full_name, password_hash, role FROM users WHERE username = :username";
@@ -81,39 +120,198 @@ if ($method == 'POST') {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if (verifyPassword($password, $row['password_hash'])) {
-                session_start([
-                    'cookie_lifetime' => 86400, // 24 hours
-                    'cookie_httponly' => true,
-                    'cookie_samesite' => 'Lax'
-                ]);
+                startSession(); // Start session for login
                 
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['full_name'] = $row['full_name'];
                 $_SESSION['role'] = $row['role'];
                 
-                jsonResponse(true, "Login successful", [
-                    'id' => $row['id'],
-                    'username' => $row['username'],
-                    'full_name' => $row['full_name'],
-                    'role' => $row['role']
+                // Clean any previous output
+                if (ob_get_length()) {
+                    ob_clean();
+                }
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => true,
+                    'message' => "Login successful",
+                    'data' => [
+                        'id' => $row['id'],
+                        'username' => $row['username'],
+                        'full_name' => $row['full_name'],
+                        'role' => $row['role']
+                    ]
                 ]);
+                exit();
             } else {
-                jsonResponse(false, "Invalid password");
+                // Clean any previous output
+                if (ob_get_length()) {
+                    ob_clean();
+                }
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => false,
+                    'message' => "Invalid password"
+                ]);
+                exit();
             }
         } else {
-            jsonResponse(false, "User not found");
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "User not found"
+            ]);
+            exit();
         }
     } else if ($action == 'logout') {
-        session_start([
-            'cookie_lifetime' => 86400, // 24 hours
-            'cookie_httponly' => true,
-            'cookie_samesite' => 'Lax'
-        ]);
+        startSession(); // Start session for logout
         session_destroy();
-        jsonResponse(true, "Logout successful");
+        
+        // Clean any previous output
+        if (ob_get_length()) {
+            ob_clean();
+        }
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'message' => "Logout successful"
+        ]);
+        exit();
+    } else if ($action == 'register') {
+        $username = sanitizeInput($data->username);
+        $email = sanitizeInput($data->email);
+        $password = $data->password;
+        $full_name = sanitizeInput($data->full_name);
+        $department = sanitizeInput($data->department);
+        $phone = sanitizeInput($data->phone);
+        
+        if (empty($username) || empty($email) || empty($password) || empty($full_name) || empty($department)) {
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "Vui lòng điền đầy đủ thông tin bắt buộc"
+            ]);
+            exit();
+        }
+        
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "Email không hợp lệ"
+            ]);
+            exit();
+        }
+        
+        if (strlen($password) < 6) {
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "Mật khẩu phải có ít nhất 6 ký tự"
+            ]);
+            exit();
+        }
+        
+        // Check if username already exists
+        $query = "SELECT id FROM users WHERE username = :username";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':username', $username);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() > 0) {
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "Tên đăng nhập đã tồn tại"
+            ]);
+            exit();
+        }
+        
+        // Check if email already exists
+        $query = "SELECT id FROM users WHERE email = :email";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() > 0) {
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "Email đã tồn tại"
+            ]);
+            exit();
+        }
+        
+        // Create new user
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+        $query = "INSERT INTO users (username, email, password_hash, full_name, department, phone, role, created_at) 
+                  VALUES (:username, :email, :password_hash, :full_name, :department, :phone, 'user', NOW())";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password_hash', $password_hash);
+        $stmt->bindParam(':full_name', $full_name);
+        $stmt->bindParam(':department', $department);
+        $stmt->bindParam(':phone', $phone);
+        
+        if ($stmt->execute()) {
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => true,
+                'message' => "Đăng ký thành công"
+            ]);
+            exit();
+        } else {
+            // Clean any previous output
+            if (ob_get_length()) {
+                ob_clean();
+            }
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "Đăng ký thất bại"
+            ]);
+            exit();
+        }
     } else {
-        jsonResponse(false, "Invalid action");
+        // Clean any previous output
+        if (ob_get_length()) {
+            ob_clean();
+        }
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => "Invalid action"
+        ]);
+        exit();
     }
 }
 
