@@ -41,8 +41,20 @@ if ($action === 'dropdown') {
 }
 
 // Get database connection
-$db = new Database();
-$pdo = $db->getConnection();
+try {
+    $database = new Database();
+    $pdo = $database->getConnection();
+    
+    if ($pdo === null) {
+        throw new Exception('Database connection failed');
+    }
+} catch (Exception $e) {
+    error_log("Database connection error: " . $e->getMessage());
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+    exit;
+}
 
 try {
     switch ($method) {

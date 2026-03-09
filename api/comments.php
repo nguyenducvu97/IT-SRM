@@ -53,7 +53,7 @@ if ($method == 'POST') {
     $request = $check_stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($user_role != 'admin' && $user_role != 'staff' && 
-        $request['user_id'] != $user_id && $request['assigned_to'] != $user_id) {
+        $request['user_id'] != $user_id) {
         jsonResponse(false, "Access denied");
     }
     

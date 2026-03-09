@@ -287,6 +287,31 @@ body {
         align-items: flex-start;
         gap: 0.5rem;
     }
+    
+    .attachment-actions {
+        flex-direction: row;
+        gap: 0.5rem;
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .document-modal-content {
+        width: 98%;
+        height: 95vh;
+        margin: 1% auto;
+    }
+    
+    .document-modal-header {
+        padding: 15px 20px;
+    }
+    
+    .document-modal-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .document-modal-close {
+        font-size: 24px;
+    }
 }
 .search-filter {
     display: flex;
@@ -715,15 +740,34 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.header h1 {
-    color: #333;
-    font-size: 1.5rem;
+.header-left {
+    flex: 1;
+}
+
+.header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .header-right {
+    flex: 1;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     gap: 1rem;
+}
+
+.company-logo {
+    max-height: 50px;
+    max-width: 200px;
+    object-fit: contain;
+}
+
+.header h1 {
+    color: #333;
+    font-size: 1.5rem;
 }
 
 .user-info {
@@ -1346,6 +1390,15 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .company-logo {
+        max-height: 45px;
+        max-width: 180px;
+    }
+    
+    .header h1 {
+        font-size: 1.3rem;
+    }
+    
     .sidebar {
         width: 200px;
     }
@@ -1390,6 +1443,33 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 @media (max-width: 576px) {
     .header {
         padding: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .header-left,
+    .header-center,
+    .header-right {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+    
+    .header-center {
+        order: -1;
+        margin-bottom: 0.5rem;
+    }
+    
+    .header-left {
+        order: 0;
+    }
+    
+    .header-right {
+        order: 1;
+        justify-content: center;
+    }
+    
+    .company-logo {
+        max-height: 40px;
+        max-width: 150px;
     }
     
     .header h1 {
@@ -1560,6 +1640,77 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Document Modal Styles */
+.document-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    overflow: auto;
+}
+
+.document-modal-content {
+    background-color: #fefefe;
+    margin: 2% auto;
+    padding: 0;
+    border: none;
+    width: 95%;
+    max-width: 1200px;
+    height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.document-modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+}
+
+.document-modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.document-modal-close {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.document-modal-close:hover {
+    opacity: 1;
+}
+
+.document-modal-body {
+    padding: 0;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#documentViewer {
+    flex: 1;
+    overflow: auto;
+    background: #f8f9fa;
 }
 
 /* Attachment Preview Styles */

@@ -75,7 +75,7 @@ if ($method == 'GET') {
         $params = [];
         
         if ($user_role != 'admin' && $user_role != 'staff') {
-            $where_clause .= " AND (sr.user_id = :user_id OR sr.assigned_to = :user_id)";
+            $where_clause .= " AND sr.user_id = :user_id";
             $params[':user_id'] = $user_id;
         }
         
@@ -128,7 +128,7 @@ if ($method == 'GET') {
             // Calculate actual status counts
             $status_query = "SELECT status, COUNT(*) as count FROM service_requests";
             if ($user_role != 'admin' && $user_role != 'staff') {
-                $status_query .= " WHERE user_id = :user_id OR assigned_to = :user_id";
+                $status_query .= " WHERE user_id = :user_id";
             }
             $status_query .= " GROUP BY status";
             
@@ -189,7 +189,7 @@ if ($method == 'GET') {
             $request = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if ($user_role != 'admin' && $user_role != 'staff' && 
-                $request['user_id'] != $user_id && $request['assigned_to'] != $user_id) {
+                $request['user_id'] != $user_id) {
                 serviceJsonResponse(false, "Access denied");
             }
             
@@ -506,7 +506,7 @@ elseif ($method == 'PUT') {
             // Calculate actual status counts
             $status_query = "SELECT status, COUNT(*) as count FROM service_requests";
             if ($user_role != 'admin' && $user_role != 'staff') {
-                $status_query .= " WHERE user_id = :user_id OR assigned_to = :user_id";
+                $status_query .= " WHERE user_id = :user_id";
             }
             $status_query .= " GROUP BY status";
             

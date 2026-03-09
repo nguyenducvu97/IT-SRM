@@ -1,0 +1,39 @@
+# Enable directory listing and file access
+Options +Indexes
+Allow from all
+
+# Set proper content types for various file types
+AddType application/vnd.openxmlformats-officedocument.wordprocessingml.document .docx
+AddType application/vnd.openxmlformats-officedocument.spreadsheetml.sheet .xlsx
+AddType application/vnd.openxmlformats-officedocument.presentationml.presentation .pptx
+AddType application/pdf .pdf
+AddType image/jpeg .jpg .jpeg
+AddType image/png .png
+AddType text/plain .txt
+
+# Prevent execution of scripts
+<Files "*.php">
+    Deny from all
+</Files>
+
+<Files "*.phtml">
+    Deny from all
+</Files>
+
+<Files "*.php3">
+    Deny from all
+</Files>
+
+<Files "*.php4">
+    Deny from all
+</Files>
+
+<Files "*.php5">
+    Deny from all
+</Files>
+
+# Allow direct file access
+<FilesMatch "\.(docx?|xlsx?|pptx?|pdf|jpg|jpeg|png|gif|txt|zip|rar)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>

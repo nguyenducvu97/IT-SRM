@@ -1,5 +1,56 @@
 // IT Service Request Detail JavaScript
 
+// Function removed - only keeping download functionality
+
+// Function to show notifications
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        max-width: 300px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    `;
+    
+    // Set background color based on type
+    switch (type) {
+        case 'success':
+            notification.style.backgroundColor = '#28a745';
+            break;
+        case 'error':
+            notification.style.backgroundColor = '#dc3545';
+            break;
+        case 'warning':
+            notification.style.backgroundColor = '#ffc107';
+            notification.style.color = '#212529';
+            break;
+        default:
+            notification.style.backgroundColor = '#17a2b8';
+    }
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 5000);
+}
+
 class RequestDetailApp {
     constructor() {
         this.currentUser = null;
@@ -339,10 +390,18 @@ class RequestDetailApp {
                         <div class="attachments-list">
                             ${request.attachments.map(attachment => {
                                 const isImage = attachment.mime_type.startsWith('image/');
+                                const fileExt = attachment.filename.split('.').pop().toLowerCase();
+                                const isPDF = fileExt === 'pdf';
+                                const isWord = ['doc', 'docx'].includes(fileExt);
+                                const isExcel = ['xls', 'xlsx'].includes(fileExt);
+                                const isPowerPoint = ['ppt', 'pptx'].includes(fileExt);
+                                const isText = ['txt', 'md'].includes(fileExt);
+                                const isViewable = isPDF || isWord || isExcel || isPowerPoint || isText;
+                                
                                 return `
                                     <div class="attachment-item">
                                         <div class="attachment-info">
-                                            <i class="fas fa-file"></i>
+                                            <i class="fas fa-${isImage ? 'image' : isPDF ? 'file-pdf' : isWord ? 'file-word' : isExcel ? 'file-excel' : isPowerPoint ? 'file-powerpoint' : 'file'}"></i>
                                             <span class="attachment-name">${attachment.original_name}</span>
                                             <span class="attachment-size">(${formatFileSize(attachment.file_size)})</span>
                                         </div>
@@ -355,6 +414,12 @@ class RequestDetailApp {
                                                 <div class="image-overlay">
                                                     <i class="fas fa-search-plus"></i>
                                                 </div>
+                                            ` : ''}
+                                            ${isViewable ? `
+                                                <button class="btn btn-sm btn-primary" 
+                                                        onclick="app.viewDocument('uploads/requests/${attachment.filename}', '${attachment.original_name}', '${fileExt}')">
+                                                    <i class="fas fa-eye"></i> Xem
+                                                </button>
                                             ` : ''}
                                             <a href="uploads/requests/${attachment.filename}" 
                                                class="btn btn-sm btn-secondary" 
@@ -1037,6 +1102,136 @@ class RequestDetailApp {
         const sizes = ['Bytes', 'KB', 'MB', 'GB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    viewDocument(filePath, fileName, fileExt) {
+        // Create document viewer modal
+        let modal = document.getElementById('documentModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'documentModal';
+            modal.className = 'document-modal';
+            modal.innerHTML = `
+                <div class="document-modal-content">
+                    <div class="document-modal-header">
+                        <h3 id="documentModalTitle">Document Viewer</h3>
+                        <span class="document-modal-close" onclick="document.getElementById('documentModal').style.display='none'">&times;</span>
+                    </div>
+                    <div class="document-modal-body">
+                        <div id="documentViewer">
+                            <!-- Document content will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        document.getElementById('documentModalTitle').textContent = fileName;
+        const viewer = document.getElementById('documentViewer');
+        
+        // Handle different file types
+        if (fileExt === 'pdf') {
+            const directFileUrl = `../uploads/requests/${fileName}`;
+            viewer.innerHTML = `
+                <iframe src="${directFileUrl}" 
+                        style="width: 100%; height: 70vh; border: none;" 
+                        onload="this.style.display='block'" 
+                        onerror="this.parentElement.innerHTML='<div style=\\'text-align: center; padding: 50px;\\'><i class=\\'fas fa-exclamation-triangle\\' style=\\'font-size: 48px; color: #dc3545;\\'></i><p>Cannot display PDF. <a href=\\'${directFileUrl}\\' download=\\'${fileName}\\' class=\\'btn btn-primary\\'>Download PDF</a></p></div>'">
+                </iframe>
+                <div style="text-align: center; padding: 20px;">
+                    <a href="${directFileUrl}" download="${fileName}" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Download PDF
+                    </a>
+                </div>
+            `;
+        } else if (['doc', 'docx'].includes(fileExt)) {
+            const directFileUrl = `../uploads/requests/${fileName}`;
+            viewer.innerHTML = `
+                <div style="text-align: center; padding: 50px;">
+                    <i class="fas fa-file-word" style="font-size: 64px; color: #2b579a;"></i>
+                    <h4>Microsoft Word Document</h4>
+                    <p>This is a Word document. You can download it:</p>
+                    <div style="margin-top: 20px;">
+                        <a href="${directFileUrl}" download="${fileName}" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Download Word Document
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else if (['xls', 'xlsx'].includes(fileExt)) {
+            const directFileUrl = `../uploads/requests/${fileName}`;
+            viewer.innerHTML = `
+                <div style="text-align: center; padding: 50px;">
+                    <i class="fas fa-file-excel" style="font-size: 64px; color: #217346;"></i>
+                    <h4>Microsoft Excel Spreadsheet</h4>
+                    <p>This is an Excel spreadsheet. You can download it:</p>
+                    <div style="margin-top: 20px;">
+                        <a href="${directFileUrl}" download="${fileName}" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Download Excel File
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else if (['ppt', 'pptx'].includes(fileExt)) {
+            const directFileUrl = `../uploads/requests/${fileName}`;
+            viewer.innerHTML = `
+                <div style="text-align: center; padding: 50px;">
+                    <i class="fas fa-file-powerpoint" style="font-size: 64px; color: #d24726;"></i>
+                    <h4>Microsoft PowerPoint Presentation</h4>
+                    <p>This is a PowerPoint presentation. You can download it:</p>
+                    <div style="margin-top: 20px;">
+                        <a href="${directFileUrl}" download="${fileName}" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Download PowerPoint
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else if (['txt', 'md'].includes(fileExt)) {
+            // Load text file content
+            const directFileUrl = `../uploads/requests/${fileName}`;
+            fetch(directFileUrl)
+                .then(response => response.text())
+                .then(content => {
+                    viewer.innerHTML = `
+                        <div style="padding: 20px;">
+                            <pre style="background: #f8f9fa; padding: 20px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; max-height: 60vh; overflow-y: auto;">${content}</pre>
+                            <div style="text-align: center; margin-top: 20px;">
+                                <a href="${directFileUrl}" download="${fileName}" class="btn btn-secondary">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    viewer.innerHTML = `
+                        <div style="text-align: center; padding: 50px;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #dc3545;"></i>
+                            <p>Cannot load text file.</p>
+                            <a href="${directFileUrl}" download="${fileName}" class="btn btn-primary">
+                                <i class="fas fa-download"></i> Download Text File
+                            </a>
+                        </div>
+                    `;
+                });
+        } else {
+            const directFileUrl = `../uploads/requests/${fileName}`;
+            viewer.innerHTML = `
+                <div style="text-align: center; padding: 50px;">
+                    <i class="fas fa-file" style="font-size: 64px; color: #6c757d;"></i>
+                    <h4>Document</h4>
+                    <p>This document type cannot be previewed. You can download it:</p>
+                    <div style="margin-top: 20px;">
+                        <a href="${directFileUrl}" download="${fileName}" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Download File
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+        
+        modal.style.display = 'block';
     }
 
     showImageModal(imageSrc, imageName) {
