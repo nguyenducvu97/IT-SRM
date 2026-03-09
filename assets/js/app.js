@@ -1122,6 +1122,26 @@ class ITServiceApp {
     async handleNewRequest(e) {
         e.preventDefault();
         console.log('Handling new request submission...');
+        
+        // Get buttons and add loading state IMMEDIATELY
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const cancelBtn = e.target.querySelector('#cancelRequest');
+        const originalSubmitText = submitBtn.innerHTML;
+        
+        // Show loading overlay immediately
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'flex';
+        }
+        
+        // Show loading state on button
+        submitBtn.disabled = true;
+        cancelBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+        
+        // Add a small delay to ensure UI updates
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
         const formData = new FormData(e.target);
         console.log('Form data:', Object.fromEntries(formData));
         
@@ -1139,6 +1159,9 @@ class ITServiceApp {
             });
             
             console.log('Submitting with files:', this.selectedFiles);
+            
+            // Update loading text
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi yêu cầu...';
             
             const response = await fetch('api/service_requests.php', {
                 method: 'POST',
@@ -1161,6 +1184,16 @@ class ITServiceApp {
         } catch (error) {
             console.error('Create request error:', error);
             this.showNotification('Lỗi kết nối', 'error');
+        } finally {
+            // Hide loading overlay
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+            
+            // Restore button states
+            submitBtn.disabled = false;
+            cancelBtn.disabled = false;
+            submitBtn.innerHTML = originalSubmitText;
         }
     }
 
