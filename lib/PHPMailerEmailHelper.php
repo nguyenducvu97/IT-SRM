@@ -127,6 +127,38 @@ class PHPMailerEmailHelper {
         );
     }
     
+    public function sendResolutionNotification($request_data, $error_description, $solution_method) {
+        $subject = "✅ Yêu cầu đã được giải quyết #" . $request_data["id"];
+        
+        $body = "<h2>🎉 Yêu cầu đã được giải quyết</h2>
+                <p><strong>Mã yêu cầu:</strong> #" . $request_data["id"] . "</p>
+                <p><strong>Tiêu đề:</strong> " . htmlspecialchars($request_data["title"]) . "</p>
+                <p><strong>Người giải quyết:</strong> " . htmlspecialchars($request_data["staff_name"]) . "</p>
+                <p><strong>Danh mục:</strong> " . htmlspecialchars($request_data["category_name"]) . "</p>
+                
+                <h3>📝 Mô tả lỗi:</h3>
+                <p style='background-color: #f8f9fa; padding: 10px; border-left: 4px solid #dc3545;'>
+                " . nl2br(htmlspecialchars($error_description)) . "
+                </p>
+                
+                <h3>🔧 Cách khắc phục:</h3>
+                <p style='background-color: #f8f9fa; padding: 10px; border-left: 4px solid #28a745;'>
+                " . nl2br(htmlspecialchars($solution_method)) . "
+                </p>
+                
+                <hr>
+                <p style='color: #28a745; font-weight: bold;'>✅ Yêu cầu của bạn đã được giải quyết thành công!</p>
+                <p>Vui lòng đăng nhập hệ thống để xem chi tiết: <a href='http://localhost/it-service-request/'>http://localhost/it-service-request/</a></p>
+                <p><em>IT Service Request System</em></p>";
+        
+        return $this->sendEmail(
+            $request_data["requester_email"],
+            $request_data["requester_name"],
+            $subject,
+            $body
+        );
+    }
+    
     private function logEmail($to, $subject, $body, $status) {
         $log_entry = sprintf(
             "[%s] %s | To: %s | Subject: %s\n",

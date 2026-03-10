@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS service_requests (
     category_id INT,
     user_id INT,
     priority ENUM('low', 'medium', 'high', 'critical') DEFAULT 'medium',
-    status ENUM('open', 'in_progress', 'resolved', 'closed', 'cancelled') DEFAULT 'open',
+    status ENUM('open', 'in_progress', 'resolved', 'closed', 'cancelled', 'request_support', 'rejected') DEFAULT 'open',
     assigned_to INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

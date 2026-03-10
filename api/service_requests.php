@@ -636,6 +636,103 @@ elseif ($method == 'PUT') {
         }
     }
     
+    elseif ($action == 'resolve') {
+        $request_id = isset($input['id']) ? (int)$input['id'] : 0;
+        $error_description = isset($input['error_description']) ? trim($input['error_description']) : '';
+        $error_type = isset($input['error_type']) ? trim($input['error_type']) : '';
+        $replacement_materials = isset($input['replacement_materials']) ? trim($input['replacement_materials']) : '';
+        $solution_method = isset($input['solution_method']) ? trim($input['solution_method']) : '';
+        
+        if ($request_id <= 0 || empty($error_description) || empty($error_type) || empty($solution_method)) {
+            serviceJsonResponse(false, "Request ID, error description, error type, and solution method are required");
+            return;
+        }
+        
+        // Only staff can resolve requests
+        if ($user_role != 'staff') {
+            serviceJsonResponse(false, "Access denied. Staff access required.");
+            return;
+        }
+        
+        try {
+            // Check if request exists and is assigned to current user
+            $check_query = "SELECT id, assigned_to, status FROM service_requests 
+                           WHERE id = :request_id AND assigned_to = :user_id AND status = 'in_progress'";
+            $check_stmt = $db->prepare($check_query);
+            $check_stmt->bindParam(":request_id", $request_id);
+            $check_stmt->bindParam(":user_id", $user_id);
+            $check_stmt->execute();
+            
+            if ($check_stmt->rowCount() == 0) {
+                serviceJsonResponse(false, "Request not found or not assigned to you or not in progress");
+                return;
+            }
+            
+            // Start transaction
+            $db->beginTransaction();
+            
+            // Insert resolution record
+            $insert_resolution_query = "INSERT INTO resolutions 
+                                      (service_request_id, error_description, error_type, replacement_materials, solution_method, resolved_by) 
+                                      VALUES (:request_id, :error_description, :error_type, :replacement_materials, :solution_method, :resolved_by)";
+            $insert_resolution_stmt = $db->prepare($insert_resolution_query);
+            $insert_resolution_stmt->bindParam(":request_id", $request_id);
+            $insert_resolution_stmt->bindParam(":error_description", $error_description);
+            $insert_resolution_stmt->bindParam(":error_type", $error_type);
+            $insert_resolution_stmt->bindParam(":replacement_materials", $replacement_materials);
+            $insert_resolution_stmt->bindParam(":solution_method", $solution_method);
+            $insert_resolution_stmt->bindParam(":resolved_by", $user_id);
+            
+            if (!$insert_resolution_stmt->execute()) {
+                $db->rollBack();
+                serviceJsonResponse(false, "Failed to create resolution record");
+                return;
+            }
+            
+            // Update service request status to resolved
+            $update_request_query = "UPDATE service_requests 
+                                    SET status = 'resolved', updated_at = NOW() 
+                                    WHERE id = :request_id";
+            $update_request_stmt = $db->prepare($update_request_query);
+            $update_request_stmt->bindParam(":request_id", $request_id);
+            
+            if (!$update_request_stmt->execute()) {
+                $db->rollBack();
+                serviceJsonResponse(false, "Failed to update request status");
+                return;
+            }
+            
+            // Get request details for email notification
+            $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
+                                     staff.full_name as staff_name, c.name as category_name
+                              FROM service_requests sr
+                              LEFT JOIN users u ON sr.user_id = u.id
+                              LEFT JOIN users staff ON sr.assigned_to = staff.id
+                              LEFT JOIN categories c ON sr.category_id = c.id
+                              WHERE sr.id = :request_id";
+            $request_stmt = $db->prepare($request_query);
+            $request_stmt->bindParam(":request_id", $request_id);
+            $request_stmt->execute();
+            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Send email notification to requester about resolution
+            try {
+                $emailHelper = new PHPMailerEmailHelper();
+                $emailHelper->sendResolutionNotification($request_data, $error_description, $solution_method);
+            } catch (Exception $e) {
+                error_log("Email notification failed: " . $e->getMessage());
+                // Continue even if email fails
+            }
+            
+            $db->commit();
+            serviceJsonResponse(true, "Request resolved successfully");
+            
+        } catch (Exception $e) {
+            $db->rollBack();
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
+    
     else {
         serviceJsonResponse(false, "Invalid action");
     }
