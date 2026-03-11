@@ -290,6 +290,14 @@ class ITServiceApp {
         
         // Show/hide menu items based on role
         console.log('User role:', this.currentUser.role);
+        
+        // Hide all menus first
+        document.getElementById('adminMenu').style.display = 'none';
+        document.getElementById('adminDepartmentMenu').style.display = 'none';
+        document.getElementById('adminSupportMenu').style.display = 'none';
+        document.getElementById('adminRejectMenu').style.display = 'none';
+        document.getElementById('newRequestMenu').style.display = 'none';
+        
         if (this.currentUser.role === 'admin') {
             console.log('✅ Showing admin menus');
             document.getElementById('adminMenu').style.display = 'block';
@@ -299,16 +307,21 @@ class ITServiceApp {
             // Hide new request menu for admin
             document.getElementById('newRequestMenu').style.display = 'none';
             console.log('Admin user - hiding new request menu');
+        } else if (this.currentUser.role === 'staff') {
+            console.log('✅ Showing staff menus');
+            // Staff should see limited menus - NOT adminMenu
+            document.getElementById('adminMenu').style.display = 'none'; // Staff can't see full admin menu
+            document.getElementById('adminDepartmentMenu').style.display = 'none'; // Staff can't manage departments
+            document.getElementById('adminSupportMenu').style.display = 'block'; // Staff can handle support requests
+            document.getElementById('adminRejectMenu').style.display = 'block'; // Staff can handle reject requests
+            // Show new request menu for staff
+            document.getElementById('newRequestMenu').style.display = 'none'; // Staff typically handles requests, not creates new ones
+            console.log('Staff user - hiding admin and new request menus');
         } else {
-            console.log('❌ Hiding admin menus for non-admin user');
-            // Ensure admin menus are hidden for non-admin users
-            document.getElementById('adminMenu').style.display = 'none';
-            document.getElementById('adminDepartmentMenu').style.display = 'none';
-            document.getElementById('adminSupportMenu').style.display = 'none';
-            document.getElementById('adminRejectMenu').style.display = 'none';
-            // Show new request menu for non-admin users
+            console.log('✅ Showing user menus');
+            // Regular user - only new request menu
             document.getElementById('newRequestMenu').style.display = 'block';
-            console.log('Non-admin user - showing new request menu');
+            console.log('Regular user - showing new request menu');
         }
         
         // Load dashboard data
@@ -344,10 +357,18 @@ class ITServiceApp {
         // Check if this is an internal navigation (has data-page)
         if (page) {
             // Check if user is trying to access admin-only pages
-            const adminPages = ['users', 'support-requests', 'reject-requests'];
+            const adminPages = ['users', 'departments'];
+            const staffPages = ['support-requests', 'reject-requests'];
+            
             if (adminPages.includes(page) && this.currentUser.role !== 'admin') {
                 console.log('❌ Non-admin user trying to access admin page:', page);
                 this.showNotification('Chỉ admin mới có quyền truy cập trang này', 'error');
+                return;
+            }
+            
+            if (staffPages.includes(page) && !['admin', 'staff'].includes(this.currentUser.role)) {
+                console.log('❌ Non-admin/staff user trying to access staff page:', page);
+                this.showNotification('Chỉ admin và staff mới có quyền truy cập trang này', 'error');
                 return;
             }
             
@@ -438,25 +459,25 @@ class ITServiceApp {
                     }
                 } else {
                     console.log('❌ User is not admin, denying access to departments page');
-                    this.showNotification('Chỉ admin mới có quyền truy cập quản lý phòng ban', 'error');
+                    this.showNotification('Chỉ admin mới có quyền quản lý phòng ban', 'error');
                     setTimeout(() => this.showPage('dashboard'), 1000);
                 }
                 break;
             case 'support-requests':
-                if (this.currentUser.role === 'admin') {
+                if (['admin', 'staff'].includes(this.currentUser.role)) {
                     this.loadSupportRequests();
                 } else {
-                    console.log('❌ User is not admin, denying access to support requests page');
-                    this.showNotification('Chỉ admin mới có quyền truy cập yêu cầu hỗ trợ', 'error');
+                    console.log('❌ User is not admin/staff, denying access to support requests page');
+                    this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu hỗ trợ', 'error');
                     setTimeout(() => this.showPage('dashboard'), 1000);
                 }
                 break;
             case 'reject-requests':
-                if (this.currentUser.role === 'admin') {
+                if (['admin', 'staff'].includes(this.currentUser.role)) {
                     this.loadRejectRequests();
                 } else {
-                    console.log('❌ User is not admin, denying access to reject requests page');
-                    this.showNotification('Chỉ admin mới có quyền truy cập yêu cầu từ chối', 'error');
+                    console.log('❌ User is not admin/staff, denying access to reject requests page');
+                    this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu từ chối', 'error');
                     setTimeout(() => this.showPage('dashboard'), 1000);
                 }
                 break;
