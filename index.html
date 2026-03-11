@@ -123,6 +123,22 @@
                     <img src="assets/images/logo-vuit-sgi-vina.png" alt="VuIT_SGI VINA Logo" class="company-logo">
                 </div>
                 <div class="header-right">
+                    <!-- Notification Bell -->
+                    <div class="notification-container">
+                        <button id="notificationBtn" class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span id="notificationCount" class="notification-count">0</span>
+                        </button>
+                        <div id="notificationDropdown" class="notification-dropdown">
+                            <div class="notification-header">
+                                <h4>Thông báo</h4>
+                                <button id="markAllReadBtn" class="mark-all-read-btn">Đánh dấu đã đọc tất cả</button>
+                            </div>
+                            <div id="notificationList" class="notification-list">
+                                <!-- Notifications will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
                     <span id="userInfo" class="user-info"></span>
                     <button id="logoutBtn" class="btn btn-secondary">
                         <i class="fas fa-sign-out-alt"></i> Đăng xuất
@@ -903,5 +919,6 @@
     <script src="assets/js/support-reject-patch.js"></script>
     <script src="assets/js/department-helper.js"></script>
     <script src="assets/js/departments-manager.js"></script>
+    <script src="assets/js/notifications.js"></script>
 </body>
 </html>

@@ -35,6 +35,93 @@ function serviceJsonResponse($success, $message, $data = null) {
     exit();
 }
 
+// Notification helper functions
+function createNotification($pdo, $userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ");
+        return $stmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
+    } catch (Exception $e) {
+        error_log("Failed to create notification: " . $e->getMessage());
+        return false;
+    }
+}
+
+function notifyUsers($pdo, $userIds, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
+    $stmt = $pdo->prepare("
+        INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ");
+    
+    foreach ($userIds as $userId) {
+        try {
+            $stmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
+        } catch (Exception $e) {
+            error_log("Failed to notify user $userId: " . $e->getMessage());
+        }
+    }
+}
+
+function notifyRole($pdo, $role, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
+    try {
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE role = ?");
+        $stmt->execute([$role]);
+        $users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        
+        if (!empty($users)) {
+            notifyUsers($pdo, $users, $title, $message, $type, $relatedId, $relatedType);
+        }
+    } catch (Exception $e) {
+        error_log("Failed to notify role $role: " . $e->getMessage());
+    }
+}
+
+function notifyRequestParticipants($pdo, $requestId, $excludeUserId = null, $title, $message, $type = 'info') {
+    try {
+        // Get request owner and assigned staff
+        $stmt = $pdo->prepare("
+            SELECT user_id, assigned_to 
+            FROM service_requests 
+            WHERE id = ?
+        ");
+        $stmt->execute([$requestId]);
+        $request = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $notifyUsers = [];
+        
+        // Add request owner if not excluded
+        if ($request['user_id'] != $excludeUserId) {
+            $notifyUsers[] = $request['user_id'];
+        }
+        
+        // Add assigned staff if not excluded and exists
+        if ($request['assigned_to'] && $request['assigned_to'] != $excludeUserId) {
+            $notifyUsers[] = $request['assigned_to'];
+        }
+        
+        // Add all admin users
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin'");
+        $stmt->execute();
+        $admins = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        
+        foreach ($admins as $adminId) {
+            if ($adminId != $excludeUserId) {
+                $notifyUsers[] = $adminId;
+            }
+        }
+        
+        // Remove duplicates
+        $notifyUsers = array_unique($notifyUsers);
+        
+        if (!empty($notifyUsers)) {
+            notifyUsers($pdo, $notifyUsers, $title, $message, $type, $requestId, 'request');
+        }
+    } catch (Exception $e) {
+        error_log("Failed to notify request participants: " . $e->getMessage());
+    }
+}
 
 if (!isLoggedIn()) {
     serviceJsonResponse(false, "Unauthorized access");
@@ -417,6 +504,24 @@ elseif ($method == 'POST') {
                 }
             }
             
+            // Create notifications for staff and admin users
+            try {
+                // Get all staff and admin users
+                $staff_query = "SELECT id FROM users WHERE role IN ('admin', 'staff')";
+                $staff_stmt = $db->prepare($staff_query);
+                $staff_stmt->execute();
+                $staff_users = $staff_stmt->fetchAll(PDO::FETCH_COLUMN);
+                
+                // Create notifications for each staff/admin
+                $title = "Yêu cầu dịch vụ mới #" . $request_id;
+                $message = $request_data['requester_name'] . " đã tạo yêu cầu mới: " . $request_data['title'];
+                
+                notifyUsers($db, $staff_users, $title, $message, 'info', $request_id, 'request');
+            } catch (Exception $e) {
+                error_log("Failed to create notifications: " . $e->getMessage());
+                // Continue even if notification creation fails
+            }
+            
             serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id]);
         } else {
             serviceJsonResponse(false, "Failed to create service request");
@@ -492,6 +597,57 @@ elseif ($method == 'PUT') {
             $update_stmt->bindParam(":request_id", $request_id);
             
             if ($update_stmt->execute()) {
+                // Create notifications for status changes and assignments
+                try {
+                    // Get request details with user info
+                    $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email,
+                                            a.full_name as assigned_name
+                                     FROM service_requests sr
+                                     LEFT JOIN users u ON sr.user_id = u.id
+                                     LEFT JOIN users a ON sr.assigned_to = a.id
+                                     WHERE sr.id = :request_id";
+                    $request_stmt = $db->prepare($request_query);
+                    $request_stmt->bindParam(":request_id", $request_id);
+                    $request_stmt->execute();
+                    $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    // Get old status for comparison
+                    $old_status_query = "SELECT status, assigned_to FROM service_requests WHERE id = :request_id";
+                    $old_stmt = $db->prepare($old_status_query);
+                    $old_stmt->bindParam(":request_id", $request_id);
+                    $old_stmt->execute();
+                    $old_data = $old_stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    // Notify request participants about status change
+                    if ($old_data['status'] !== $status) {
+                        $status_messages = [
+                            'in_progress' => 'đang được xử lý',
+                            'resolved' => 'đã được giải quyết',
+                            'closed' => 'đã được đóng',
+                            'rejected' => 'bị từ chối'
+                        ];
+                        
+                        if (isset($status_messages[$status])) {
+                            $title = "Yêu cầu #" . $request_id . " " . $status_messages[$status];
+                            $message = "Yêu cầu '" . $request_data['title'] . "' " . $status_messages[$status];
+                            $type = $status === 'resolved' ? 'success' : 'info';
+                            
+                            notifyRequestParticipants($db, $request_id, $user_id, $title, $message, $type);
+                        }
+                    }
+                    
+                    // Notify assigned user if assignment changed
+                    if ($assigned_to && $old_data['assigned_to'] != $assigned_to) {
+                        $title = "Yêu cầu mới được giao #" . $request_id;
+                        $message = "Bạn được giao yêu cầu: " . $request_data['title'];
+                        
+                        createNotification($db, $assigned_to, $title, $message, 'info', $request_id, 'assignment');
+                    }
+                } catch (Exception $e) {
+                    error_log("Failed to create update notifications: " . $e->getMessage());
+                    // Continue even if notification creation fails
+                }
+                
                 serviceJsonResponse(true, "Service request updated successfully");
             } else {
                 serviceJsonResponse(false, "Failed to update service request");

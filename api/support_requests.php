@@ -23,6 +23,45 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+// Notification helper functions
+function createNotification($pdo, $userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ");
+        return $stmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
+    } catch (Exception $e) {
+        error_log("Failed to create notification: " . $e->getMessage());
+        return false;
+    }
+}
+
+function notifyRole($pdo, $role, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
+    try {
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE role = ?");
+        $stmt->execute([$role]);
+        $users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        
+        if (!empty($users)) {
+            $notifyStmt = $pdo->prepare("
+                INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
+            
+            foreach ($users as $userId) {
+                try {
+                    $notifyStmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
+                } catch (Exception $e) {
+                    error_log("Failed to notify user $userId: " . $e->getMessage());
+                }
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Failed to notify role $role: " . $e->getMessage());
+    }
+}
+
 // Get current user
 $current_user = $_SESSION['user_id'];
 $user_role = $_SESSION['role'] ?? 'user';
@@ -437,6 +476,63 @@ function handlePut($pdo, $action, $current_user, $user_role) {
     $result = $stmt->execute([$decision, $reason, $current_user, $support_id]);
     
     if ($result) {
+        // Create notifications for support request decision
+        try {
+            // Get support request details
+            $support_stmt = $pdo->prepare("
+                SELECT sr.*, u.full_name as requester_name 
+                FROM support_requests sr
+                LEFT JOIN users u ON sr.user_id = u.id
+                WHERE sr.id = ?
+            ");
+            $support_stmt->execute([$support_id]);
+            $support_data = $support_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Get service request ID
+            $service_req_stmt = $pdo->prepare("
+                SELECT service_request_id FROM support_requests WHERE id = ?
+            ");
+            $service_req_stmt->execute([$support_id]);
+            $service_req_data = $service_req_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($service_req_data) {
+                $service_request_id = $service_req_data['service_request_id'];
+                
+                // Notify all staff and admin about support request decision
+                $title = "Yêu cầu hỗ trợ #" . $support_id . " đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối');
+                $message = "Yêu cầu hỗ trợ từ " . $support_data['requester_name'] . " đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối') . ". Lý do: " . $reason;
+                $type = $decision === 'approved' ? 'success' : 'warning';
+                
+                notifyRole($pdo, 'staff', $title, $message, $type, $support_id, 'support_request');
+                notifyRole($pdo, 'admin', $title, $message, $type, $support_id, 'support_request');
+                
+                // Also notify original requester
+                if ($support_data['user_id'] != $current_user) {
+                    createNotification($pdo, $support_data['user_id'], $title, $message, $type, $support_id, 'support_request');
+                }
+                
+                // Update service request based on decision
+                if ($decision === 'approved') {
+                    // Assign to admin and set to in_progress
+                    $update_stmt = $pdo->prepare("
+                        UPDATE service_requests 
+                        SET assigned_to = ?, status = 'in_progress'
+                        WHERE id = ?
+                    ");
+                    $update_result = $update_stmt->execute([$current_user, $service_request_id]);
+                    
+                    // Notify about assignment if successful
+                    if ($update_result) {
+                        $assign_title = "Yêu cầu #" . $service_request_id . " đã được giao";
+                        $assign_message = "Bạn được giao yêu cầu: (Hỗ trợ) " . $support_data['requester_name'];
+                        createNotification($pdo, $current_user, $assign_title, $assign_message, 'info', $service_request_id, 'assignment');
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            error_log("Failed to create support request notifications: " . $e->getMessage());
+        }
+        
         // Get service request ID to update
         $service_req_stmt = $pdo->prepare("
             SELECT service_request_id FROM support_requests WHERE id = ?

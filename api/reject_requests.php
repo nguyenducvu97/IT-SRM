@@ -23,6 +23,45 @@ if (!isLoggedIn()) {
     exit;
 }
 
+// Notification helper functions
+function createNotification($pdo, $userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ");
+        return $stmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
+    } catch (Exception $e) {
+        error_log("Failed to create notification: " . $e->getMessage());
+        return false;
+    }
+}
+
+function notifyRole($pdo, $role, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
+    try {
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE role = ?");
+        $stmt->execute([$role]);
+        $users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        
+        if (!empty($users)) {
+            $notifyStmt = $pdo->prepare("
+                INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
+            
+            foreach ($users as $userId) {
+                try {
+                    $notifyStmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
+                } catch (Exception $e) {
+                    error_log("Failed to notify user $userId: " . $e->getMessage());
+                }
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Failed to notify role $role: " . $e->getMessage());
+    }
+}
+
 $database = new Database();
 $db = $database->getConnection();
 
@@ -295,6 +334,37 @@ function handlePut($db, $current_user) {
         http_response_code(404);
         echo json_encode(['success' => false, 'message' => 'Reject request not found or already processed']);
         return;
+    }
+    
+    // Create notifications for reject request decision
+    try {
+        // Get reject request details with user info
+        $reject_stmt = $db->prepare("
+            SELECT rr.*, u.full_name as requester_name, sr.title as request_title
+            FROM reject_requests rr
+            LEFT JOIN users u ON rr.rejected_by = u.id
+            LEFT JOIN service_requests sr ON rr.service_request_id = sr.id
+            WHERE rr.id = ?
+        ");
+        $reject_stmt->execute([$reject_id]);
+        $reject_data = $reject_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Create title and message
+        $title = "Yêu cầu từ chối #" . $reject_id . " đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối');
+        $message = "Yêu cầu từ chối từ " . $reject_data['requester_name'] . " về '" . $reject_data['request_title'] . "' đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối') . ". Lý do: " . $admin_reason;
+        $type = $decision === 'approved' ? 'success' : 'warning';
+        
+        // Notify all staff and admin about the decision
+        notifyRole($db, 'staff', $title, $message, $type, $reject_id, 'reject_request');
+        notifyRole($db, 'admin', $title, $message, $type, $reject_id, 'reject_request');
+        
+        // Also notify original requester
+        if ($reject_data['rejected_by'] != $current_user) {
+            createNotification($db, $reject_data['rejected_by'], $title, $message, $type, $reject_id, 'reject_request');
+        }
+        
+    } catch (Exception $e) {
+        error_log("Failed to create reject request notifications: " . $e->getMessage());
     }
     
     // Update reject request
