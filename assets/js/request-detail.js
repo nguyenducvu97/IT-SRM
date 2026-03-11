@@ -1033,8 +1033,12 @@ class RequestDetailApp {
         console.log('Request ID:', requestId);
         console.log('Form data:', {
             rating: formData.get('rating'),
-            feedback: formData.get('feedback'),
-            would_recommend: formData.get('would_recommend')
+            feedback_service: formData.get('feedback_service'),
+            feedback_software: formData.get('feedback_software'),
+            would_recommend: formData.get('would_recommend'),
+            ease_of_use: formData.get('ease_of_use'),
+            speed_stability: formData.get('speed_stability'),
+            requirement_meeting: formData.get('requirement_meeting')
         });
         
         try {
@@ -1044,8 +1048,12 @@ class RequestDetailApp {
                     action: 'close_request',
                     request_id: requestId,
                     rating: formData.get('rating'),
-                    feedback: formData.get('feedback'),
-                    would_recommend: formData.get('would_recommend')
+                    feedback: formData.get('feedback_service'),
+                    software_feedback: formData.get('feedback_software'),
+                    would_recommend: formData.get('would_recommend'),
+                    ease_of_use: formData.get('ease_of_use'),
+                    speed_stability: formData.get('speed_stability'),
+                    requirement_meeting: formData.get('requirement_meeting')
                 })
             });
 

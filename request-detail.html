@@ -367,48 +367,103 @@
                         <div class="form-group">
                             <label for="rating">Đánh giá chung *</label>
                             <div class="rating-stars">
-                                <input type="radio" id="star5" name="rating" value="5" required>
-                                <label for="star5" class="star">★</label>
-                                <input type="radio" id="star4" name="rating" value="4">
-                                <label for="star4" class="star">★</label>
+                                <input type="radio" id="star1" name="rating" value="5" required>
+                                <label for="star1" class="star">★</label>
+                                <input type="radio" id="star2" name="rating" value="4">
+                                <label for="star2" class="star">★</label>
                                 <input type="radio" id="star3" name="rating" value="3">
                                 <label for="star3" class="star">★</label>
-                                <input type="radio" id="star2" name="rating" value="2">
-                                <label for="star2" class="star">★</label>
-                                <input type="radio" id="star1" name="rating" value="1">
-                                <label for="star1" class="star">★</label>
-                            </div>
-                            <div class="rating-labels">
-                                <span>Rất không hài lòng</span>
-                                <span>Bình thường</span>
-                                <span>Rất hài lòng</span>
+                                <input type="radio" id="star4" name="rating" value="2">
+                                <label for="star4" class="star">★</label>
+                                <input type="radio" id="star5" name="rating" value="1">
+                                <label for="star5" class="star">★</label>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="feedback">Nhận xét và góp ý</label>
-                            <textarea id="feedback" name="feedback" rows="4" 
+                            <label for="wouldRecommend">Bạn đánh giá về xử lý yêu cầu của chúng tôi như thể nào ?</label>
+                            <div class="recommendation-options">
+                                <label class="radio-option">
+                                    <input type="radio" name="would_recommend" value="very_unsatisfied">
+                                    <span>Rất không hài lòng</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="would_recommend" value="unsatisfied">
+                                    <span>Không hài lòng</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="would_recommend" value="normal">
+                                    <span>Bình thường</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="would_recommend" value="good">
+                                    <span>Khá tốt</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="would_recommend" value="very_satisfied">
+                                    <span>Rất hài lòng</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="feedback_service">Nhận xét và góp ý về xử lý yêu cầu</label>
+                            <textarea id="feedback_service" name="feedback_service" rows="4" 
                                       placeholder="Vui lòng chia sẻ nhận xét của bạn về dịch vụ..."></textarea>
                         </div>
                         
                         <div class="form-group">
-                            <label for="wouldRecommend">Bạn có sẵn lòng giới thiệu dịch vụ của chúng tôi không?</label>
-                            <div class="recommendation-options">
-                                <label class="radio-option">
-                                    <input type="radio" name="would_recommend" value="yes">
-                                    <span>Có</span>
-                                </label>
-                                <label class="radio-option">
-                                    <input type="radio" name="would_recommend" value="no">
-                                    <span>Không</span>
-                                </label>
-                                <label class="radio-option">
-                                    <input type="radio" name="would_recommend" value="maybe">
-                                    <span>Chắc chắn</span>
-                                </label>
+                            <label>Bạn đánh giá về phần mềm IT SRM của chúng tôi như thể nào ?</label>
+        
+                            <div class="rating-stars">
+                                <label>Dễ dàng sử dụng</label>
+                                <input type="radio" id="ease1" name="ease_of_use" value="5" required>
+                                <label for="ease1" class="star">★</label>
+                                <input type="radio" id="ease2" name="ease_of_use" value="4">
+                                <label for="ease2" class="star">★</label>
+                                <input type="radio" id="ease3" name="ease_of_use" value="3">
+                                <label for="ease3" class="star">★</label>
+                                <input type="radio" id="ease4" name="ease_of_use" value="2">
+                                <label for="ease4" class="star">★</label>
+                                <input type="radio" id="ease5" name="ease_of_use" value="1">
+                                <label for="ease5" class="star">★</label>
                             </div>
+                            
+                            <div class="rating-stars">
+                                 <label>Nhanh và ổn định</label>
+                                <input type="radio" id="speed1" name="speed_stability" value="5" required>
+                                <label for="speed1" class="star">★</label>
+                                <input type="radio" id="speed2" name="speed_stability" value="4">
+                                <label for="speed2" class="star">★</label>
+                                <input type="radio" id="speed3" name="speed_stability" value="3">
+                                <label for="speed3" class="star">★</label>
+                                <input type="radio" id="speed4" name="speed_stability" value="2">
+                                <label for="speed4" class="star">★</label>
+                                <input type="radio" id="speed5" name="speed_stability" value="1">
+                                <label for="speed5" class="star">★</label>
+                            </div>
+                            
+                             <div class="rating-stars">
+                                 <label>Đáp ứng đúng yêu cầu</label>
+                                <input type="radio" id="req1" name="requirement_meeting" value="5" required>
+                                <label for="req1" class="star">★</label>
+                                <input type="radio" id="req2" name="requirement_meeting" value="4">
+                                <label for="req2" class="star">★</label>
+                                <input type="radio" id="req3" name="requirement_meeting" value="3">
+                                <label for="req3" class="star">★</label>
+                                <input type="radio" id="req4" name="requirement_meeting" value="2">
+                                <label for="req4" class="star">★</label>
+                                <input type="radio" id="req5" name="requirement_meeting" value="1">
+                                <label for="req5" class="star">★</label>
+                            </div>
+                            
                         </div>
-                    </div>
+                        
+                     <div class="form-group">
+                            <label for="feedback_software">Nhận xét và góp ý về phần mềm IT SRM</label>
+                            <textarea id="feedback_software" name="feedback_software" rows="4" 
+                                      placeholder="Vui lòng chia sẻ nhận xét của bạn về phần mềm IT SRM ..."></textarea>
+                        </div>
                     
                     <div class="form-actions">
                         <button type="submit" class="btn btn-danger">

@@ -2383,6 +2383,8 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     align-items: center;
     gap: 5px;
     margin-bottom: 10px;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
 }
 
 .rating-stars input[type="radio"] {

@@ -172,13 +172,19 @@ if ($method == 'GET') {
                         sreq.id as support_request_id, sreq.support_type, sreq.support_details, 
                         sreq.support_reason, sreq.status as support_status, sreq.admin_reason,
                         sreq.processed_by, sreq.processed_at, sreq.created_at as support_created_at,
-                        sreq_admin.full_name as support_admin_name
+                        sreq_admin.full_name as support_admin_name,
+                        r.id as resolution_id, r.error_description as resolution_error_description,
+                        r.error_type as resolution_error_type, r.replacement_materials as resolution_replacement_materials,
+                        r.solution_method as resolution_solution_method, r.resolved_by as resolution_resolved_by,
+                        r.resolved_at as resolution_resolved_at, resolver.full_name as resolver_name
                  FROM service_requests sr
                  LEFT JOIN categories c ON sr.category_id = c.id
                  LEFT JOIN users u ON sr.user_id = u.id
                  LEFT JOIN users assigned ON sr.assigned_to = assigned.id
                  LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
+                 LEFT JOIN resolutions r ON sr.id = r.service_request_id
+                 LEFT JOIN users resolver ON r.resolved_by = resolver.id
                  WHERE sr.id = :id";
         
         $stmt = $db->prepare($query);
@@ -272,6 +278,28 @@ if ($method == 'GET') {
                       $request['support_created_at'], $request['support_admin_name']);
             } else {
                 $request['support_request'] = null;
+            }
+            
+            // Format resolution data if exists
+            if ($request['resolution_id']) {
+                $request['resolution'] = [
+                    'id' => $request['resolution_id'],
+                    'error_description' => $request['resolution_error_description'],
+                    'error_type' => $request['resolution_error_type'],
+                    'replacement_materials' => $request['resolution_replacement_materials'],
+                    'solution_method' => $request['resolution_solution_method'],
+                    'resolved_by' => $request['resolution_resolved_by'],
+                    'resolved_at' => $request['resolution_resolved_at'],
+                    'resolver_name' => $request['resolver_name']
+                ];
+                
+                // Clean up the original resolution fields
+                unset($request['resolution_id'], $request['resolution_error_description'],
+                      $request['resolution_error_type'], $request['resolution_replacement_materials'],
+                      $request['resolution_solution_method'], $request['resolution_resolved_by'],
+                      $request['resolution_resolved_at'], $request['resolver_name']);
+            } else {
+                $request['resolution'] = null;
             }
             
             serviceJsonResponse(true, "Service request retrieved", $request);
@@ -726,6 +754,69 @@ elseif ($method == 'PUT') {
             
             $db->commit();
             serviceJsonResponse(true, "Request resolved successfully");
+            
+        } catch (Exception $e) {
+            $db->rollBack();
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
+    
+    elseif ($action == 'close_request') {
+        $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
+        $rating = isset($input['rating']) ? (int)$input['rating'] : null;
+        $feedback = isset($input['feedback']) ? trim($input['feedback']) : null;
+        $software_feedback = isset($input['software_feedback']) ? trim($input['software_feedback']) : null;
+        $would_recommend = isset($input['would_recommend']) ? $input['would_recommend'] : null;
+        $ease_of_use = isset($input['ease_of_use']) ? (int)$input['ease_of_use'] : null;
+        $speed_stability = isset($input['speed_stability']) ? (int)$input['speed_stability'] : null;
+        $requirement_meeting = isset($input['requirement_meeting']) ? (int)$input['requirement_meeting'] : null;
+        
+        if ($request_id <= 0) {
+            serviceJsonResponse(false, "Request ID is required");
+            return;
+        }
+        
+        try {
+            $db->beginTransaction();
+            
+            // Insert feedback record
+            $insert_feedback_query = "INSERT INTO request_feedback 
+                                     (service_request_id, created_by, rating, feedback, software_feedback, would_recommend, 
+                                      ease_of_use, speed_stability, requirement_meeting) 
+                                     VALUES (:request_id, :created_by, :rating, :feedback, :software_feedback, :would_recommend,
+                                            :ease_of_use, :speed_stability, :requirement_meeting)";
+            $insert_feedback_stmt = $db->prepare($insert_feedback_query);
+            $insert_feedback_stmt->bindParam(":request_id", $request_id);
+            $insert_feedback_stmt->bindParam(":created_by", $user_id);
+            $insert_feedback_stmt->bindParam(":rating", $rating);
+            $insert_feedback_stmt->bindParam(":feedback", $feedback);
+            $insert_feedback_stmt->bindParam(":software_feedback", $software_feedback);
+            $insert_feedback_stmt->bindParam(":would_recommend", $would_recommend);
+            $insert_feedback_stmt->bindParam(":ease_of_use", $ease_of_use);
+            $insert_feedback_stmt->bindParam(":speed_stability", $speed_stability);
+            $insert_feedback_stmt->bindParam(":requirement_meeting", $requirement_meeting);
+            
+            if (!$insert_feedback_stmt->execute()) {
+                $db->rollBack();
+                serviceJsonResponse(false, "Failed to create feedback record");
+                return;
+            }
+            
+            // Update service request status to closed
+            $update_request_query = "UPDATE service_requests 
+                                    SET status = 'closed', updated_at = NOW() 
+                                    WHERE id = :request_id";
+            $update_request_stmt = $db->prepare($update_request_query);
+            $update_request_stmt->bindParam(":request_id", $request_id);
+            
+            if (!$update_request_stmt->execute()) {
+                $db->rollBack();
+                serviceJsonResponse(false, "Failed to update request status");
+                return;
+            }
+            
+            $db->commit();
+            serviceJsonResponse(true, "Request closed successfully with feedback");
             
         } catch (Exception $e) {
             $db->rollBack();
