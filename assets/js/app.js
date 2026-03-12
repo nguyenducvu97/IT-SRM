@@ -489,12 +489,19 @@ class ITServiceApp {
             // Load all requests for accurate stats
             const statsResponse = await this.apiCall('api/service_requests.php?action=list');
             
-            // Load recent requests (limited to 5)
-            const recentResponse = await this.apiCall('api/service_requests.php?action=list&limit=5');
+            // Load recent requests (limited to 10 to have more data for prioritization)
+            const recentResponse = await this.apiCall('api/service_requests.php?action=list&limit=10');
             
             if (statsResponse.success && recentResponse.success) {
                 const allRequests = statsResponse.data.requests;
-                const recentRequests = recentResponse.data.requests;
+                let recentRequests = recentResponse.data.requests;
+                
+                // Prioritize support requests in recent requests
+                const supportRequests = recentRequests.filter(r => r.status === 'request_support');
+                const otherRequests = recentRequests.filter(r => r.status !== 'request_support');
+                
+                // Put support requests first, then other requests, limit to 5 total
+                recentRequests = [...supportRequests, ...otherRequests].slice(0, 5);
                 
                 // Update stats from all requests
                 const stats = {
@@ -857,7 +864,7 @@ class ITServiceApp {
                 </div>
                 
                 <div class="request-actions">
-                    ${support.status === 'pending' ? `
+                    ${support.status === 'pending' && this.currentUser.role === 'admin' ? `
                         <button class="btn btn-primary" onclick="app.showAdminSupportModal(${support.id})">
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>
@@ -2227,7 +2234,7 @@ class ITServiceApp {
                 </div>
                 
                 <div class="request-actions">
-                    ${reject.status === 'pending' ? `
+                    ${reject.status === 'pending' && this.currentUser.role === 'admin' ? `
                         <button class="btn btn-primary" onclick="app.showAdminRejectModal(${reject.id})">
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>
@@ -2395,7 +2402,7 @@ class ITServiceApp {
                 </div>
                 
                 <div class="request-actions">
-                    ${support.status === 'pending' ? `
+                    ${support.status === 'pending' && this.currentUser.role === 'admin' ? `
                         <button class="btn btn-primary" onclick="app.showAdminSupportModal(${support.id})">
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>

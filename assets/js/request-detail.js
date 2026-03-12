@@ -127,6 +127,13 @@ class RequestDetailApp {
         e.preventDefault();
         const formData = new FormData(e.target);
         
+        // Disable submit button and show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang đăng nhập...';
+        }
+        
         try {
             const response = await this.apiCall('api/auth.php', {
                 method: 'POST',
@@ -147,15 +154,34 @@ class RequestDetailApp {
                 }
             } else {
                 this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Đăng nhập';
+                }
             }
         } catch (error) {
             this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Đăng nhập';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
     async handleRegister(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
+        
+        // Disable submit button and show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang đăng ký...';
+        }
         
         try {
             const response = await this.apiCall('api/auth.php', {
@@ -176,9 +202,21 @@ class RequestDetailApp {
                 this.showLogin();
             } else {
                 this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Đăng ký';
+                }
             }
         } catch (error) {
             this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Đăng ký';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -279,6 +317,9 @@ class RequestDetailApp {
         console.log('Request ID:', this.requestId);
         console.log('Current user:', this.currentUser);
         
+        // Show loading state
+        this.showLoading('Đang tải chi tiết yêu cầu...');
+        
         try {
             const response = await this.apiCall(`api/service_requests.php?action=get&id=${this.requestId}`);
             
@@ -308,6 +349,8 @@ class RequestDetailApp {
         } catch (error) {
             console.error('Request detail error:', error);
             this.showNotification('Lỗi tải chi tiết yêu cầu', 'error');
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -616,6 +659,16 @@ class RequestDetailApp {
     }
 
     async acceptRequest(id) {
+        // Disable button immediately to prevent double-click
+        const acceptBtn = document.querySelector(`button[onclick="app.acceptRequest(${id})"]`);
+        if (acceptBtn) {
+            acceptBtn.disabled = true;
+            acceptBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang nhận yêu cầu...';
+        }
+        
+        // Show loading state
+        this.showLoading('Đang nhận yêu cầu...');
+        
         try {
             const response = await this.apiCall('api/service_requests.php', {
                 method: 'PUT',
@@ -630,9 +683,21 @@ class RequestDetailApp {
                 this.loadRequestDetail();
             } else {
                 this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (acceptBtn) {
+                    acceptBtn.disabled = false;
+                    acceptBtn.innerHTML = '<i class="fas fa-check"></i> Nhận yêu cầu';
+                }
             }
         } catch (error) {
             this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (acceptBtn) {
+                acceptBtn.disabled = false;
+                acceptBtn.innerHTML = '<i class="fas fa-check"></i> Nhận yêu cầu';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -643,6 +708,16 @@ class RequestDetailApp {
             this.showNotification('Vui lòng chọn trạng thái', 'error');
             return;
         }
+
+        // Disable button and show loading state
+        const updateBtn = document.querySelector('button[onclick="app.updateRequestStatus(' + id + ')"]');
+        if (updateBtn) {
+            updateBtn.disabled = true;
+            updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...';
+        }
+
+        // Show loading state
+        this.showLoading('Đang cập nhật trạng thái...');
 
         try {
             const response = await this.apiCall('api/service_requests.php', {
@@ -658,9 +733,21 @@ class RequestDetailApp {
                 this.loadRequestDetail();
             } else {
                 this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (updateBtn) {
+                    updateBtn.disabled = false;
+                    updateBtn.innerHTML = 'Cập nhật';
+                }
             }
         } catch (error) {
             this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (updateBtn) {
+                updateBtn.disabled = false;
+                updateBtn.innerHTML = 'Cập nhật';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -672,6 +759,16 @@ class RequestDetailApp {
             return;
         }
 
+        // Disable button and show loading state
+        const addBtn = document.getElementById('addCommentBtn');
+        if (addBtn) {
+            addBtn.disabled = true;
+            addBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi...';
+        }
+
+        // Show loading state
+        this.showLoading('Đang gửi bình luận...');
+        
         try {
             const response = await this.apiCall('api/comments.php', {
                 method: 'POST',
@@ -687,9 +784,21 @@ class RequestDetailApp {
                 this.showNotification('Bình luận đã được thêm', 'success');
             } else {
                 this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (addBtn) {
+                    addBtn.disabled = false;
+                    addBtn.innerHTML = '<i class="fas fa-plus"></i> Thêm bình luận';
+                }
             }
         } catch (error) {
             this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (addBtn) {
+                addBtn.disabled = false;
+                addBtn.innerHTML = '<i class="fas fa-plus"></i> Thêm bình luận';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -732,6 +841,16 @@ class RequestDetailApp {
         const formData = new FormData(e.target);
         const requestId = document.getElementById('resolveRequestId').value;
         
+        // Disable submit button and show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang giải quyết...';
+        }
+        
+        // Show loading state
+        this.showLoading('Đang giải quyết yêu cầu...');
+        
         try {
             const response = await this.apiCall('api/service_requests.php', {
                 method: 'PUT',
@@ -751,9 +870,21 @@ class RequestDetailApp {
                 this.loadRequestDetail();
             } else {
                 this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Đã giải quyết';
+                }
             }
         } catch (error) {
             this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Đã giải quyết';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -762,6 +893,16 @@ class RequestDetailApp {
         const form = document.getElementById('needSupportForm');
         const formData = new FormData(form);
         const requestId = document.getElementById('supportRequestId').value;
+        
+        // Disable submit button and show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi yêu cầu...';
+        }
+        
+        // Show loading state
+        this.showLoading('Đang gửi yêu cầu hỗ trợ...');
         
         try {
             const response = await this.apiCall('api/support_requests.php', {
@@ -782,10 +923,22 @@ class RequestDetailApp {
                 await this.loadRequestDetail();
             } else {
                 this.showNotification(response.message || 'Lỗi khi gửi yêu cầu hỗ trợ', 'error');
+                // Re-enable button if failed
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-hands-helping"></i> Cần hỗ trợ';
+                }
             }
         } catch (error) {
             console.error('Support request error:', error);
             this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-hands-helping"></i> Cần hỗ trợ';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -825,6 +978,16 @@ class RequestDetailApp {
         
         console.log('Reject data:', rejectData);
         
+        // Disable submit button and show loading state
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi yêu cầu...';
+        }
+        
+        // Show loading state
+        this.showLoading('Đang gửi yêu cầu từ chối...');
+        
         try {
             const response = await this.apiCall('api/service_requests.php', {
                 method: 'PUT',
@@ -843,10 +1006,22 @@ class RequestDetailApp {
                 await this.loadRequestDetail();
             } else {
                 this.showNotification(response.message || 'Lỗi khi gửi yêu cầu từ chối', 'error');
+                // Re-enable button if failed
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-times"></i> Gửi yêu cầu từ chối';
+                }
             }
         } catch (error) {
             console.error('Reject request error:', error);
             this.showNotification('Lỗi khi gửi yêu cầu từ chối', 'error');
+            // Re-enable button if error
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-times"></i> Gửi yêu cầu từ chối';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -854,6 +1029,16 @@ class RequestDetailApp {
         e.preventDefault();
         const formData = new FormData(e.target);
         const supportId = document.getElementById('adminSupportId').value;
+        
+        // Disable submit button and show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+        }
+        
+        // Show loading state
+        this.showLoading('Đang xử lý yêu cầu hỗ trợ...');
         
         try {
             const response = await this.apiCall('api/support_requests.php', {
@@ -886,9 +1071,21 @@ class RequestDetailApp {
                 }
             } else {
                 this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Xác nhận quyết định';
+                }
             }
         } catch (error) {
             this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Xác nhận quyết định';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -978,8 +1175,12 @@ class RequestDetailApp {
     }
 
     closeCloseRequestModal() {
-        document.getElementById('closeRequestModal').style.display = 'none';
-        document.getElementById('closeRequestForm').reset();
+        const modal = document.getElementById('closeRequestModal');
+        if (modal) {
+            modal.style.display = 'none';
+            // Reset form
+            document.getElementById('closeRequestForm').reset();
+        }
     }
 
     async loadWorkPerformedDetails(requestId) {
@@ -1041,6 +1242,16 @@ class RequestDetailApp {
             requirement_meeting: formData.get('requirement_meeting')
         });
         
+        // Disable submit button and show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang đóng yêu cầu...';
+        }
+        
+        // Show loading state
+        this.showLoading('Đang đóng yêu cầu...');
+        
         try {
             const response = await this.apiCall('api/service_requests.php', {
                 method: 'PUT',
@@ -1070,10 +1281,22 @@ class RequestDetailApp {
             } else {
                 console.log('API Error:', response.message);
                 this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-times"></i> Đóng yêu cầu';
+                }
             }
         } catch (error) {
             console.error('Close request error:', error);
             this.showNotification('Lỗi đóng yêu cầu', 'error');
+            // Re-enable button if error
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-times"></i> Đóng yêu cầu';
+            }
+        } finally {
+            this.hideLoading();
         }
     }
 
@@ -1381,6 +1604,97 @@ class RequestDetailApp {
         } catch (error) {
             console.error('Reject request error:', error);
             this.showNotification('Lỗi khi gửi yêu cầu từ chối', 'error');
+        }
+    }
+
+    closeAdminRejectModal() {
+        const modal = document.getElementById('adminRejectModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    closeCloseRequestModal() {
+        const modal = document.getElementById('closeRequestModal');
+        if (modal) {
+            modal.style.display = 'none';
+            // Reset form
+            document.getElementById('closeRequestForm').reset();
+        }
+    }
+
+    showLoading(message = 'Đang xử lý...') {
+        // Create or update loading overlay
+        let loadingOverlay = document.getElementById('loadingOverlay');
+        if (!loadingOverlay) {
+            loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'loadingOverlay';
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+                backdrop-filter: blur(3px);
+            `;
+            
+            const loadingContent = document.createElement('div');
+            loadingContent.style.cssText = `
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                text-align: center;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            `;
+            
+            const spinner = document.createElement('div');
+            spinner.style.cssText = `
+                border: 4px solid #f3f3f3;
+                border-top: 4px solid #007bff;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+                margin: 0 auto 15px;
+            `;
+            
+            const loadingText = document.createElement('div');
+            loadingText.id = 'loadingText';
+            loadingText.style.cssText = `
+                font-size: 16px;
+                color: #333;
+                font-weight: 500;
+            `;
+            
+            loadingContent.appendChild(spinner);
+            loadingContent.appendChild(loadingText);
+            loadingOverlay.appendChild(loadingContent);
+            document.body.appendChild(loadingOverlay);
+            
+            // Add CSS animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        document.getElementById('loadingText').textContent = message;
+        loadingOverlay.style.display = 'flex';
+    }
+
+    hideLoading() {
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'none';
         }
     }
 

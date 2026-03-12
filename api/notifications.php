@@ -67,6 +67,79 @@ try {
             
             echo json_encode($formattedNotifications);
         }
+    } else if ($method == 'PUT') {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $action = $_GET['action'] ?? '';
+        
+        if ($action == 'mark_read') {
+            // Mark single notification as read
+            $notificationId = $input['notification_id'] ?? null;
+            
+            if (!$notificationId) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Notification ID required']);
+                exit;
+            }
+            
+            // Verify notification belongs to user
+            $stmt = $pdo->prepare("SELECT id FROM notifications WHERE id = ? AND user_id = ?");
+            $stmt->execute([$notificationId, $userId]);
+            if (!$stmt->fetch()) {
+                http_response_code(403);
+                echo json_encode(['error' => 'Notification not found or access denied']);
+                exit;
+            }
+            
+            // Mark as read
+            $stmt = $pdo->prepare("
+                UPDATE notifications 
+                SET is_read = TRUE, read_at = CURRENT_TIMESTAMP 
+                WHERE id = ? AND user_id = ?
+            ");
+            $stmt->execute([$notificationId, $userId]);
+            
+            echo json_encode(['success' => true]);
+            
+        } else if ($action == 'mark_all_read') {
+            // Mark all notifications as read for user
+            $stmt = $pdo->prepare("
+                UPDATE notifications 
+                SET is_read = TRUE, read_at = CURRENT_TIMESTAMP 
+                WHERE user_id = ? AND is_read = FALSE
+            ");
+            $stmt->execute([$userId]);
+            
+            echo json_encode(['success' => true]);
+            
+        } else {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid action']);
+        }
+    } else if ($method == 'POST') {
+        // Create new notification
+        $input = json_decode(file_get_contents('php://input'), true);
+        
+        $targetUserId = $input['user_id'] ?? null;
+        $title = $input['title'] ?? '';
+        $message = $input['message'] ?? '';
+        $type = $input['type'] ?? 'info';
+        $relatedId = $input['related_id'] ?? null;
+        $relatedType = $input['related_type'] ?? null;
+        
+        if (!$targetUserId || !$title || !$message) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Missing required fields']);
+            exit;
+        }
+        
+        $stmt = $pdo->prepare("
+            INSERT INTO notifications (user_id, title, message, type, related_id, related_type, created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        ");
+        $stmt->execute([$targetUserId, $title, $message, $type, $relatedId, $relatedType]);
+        
+        echo json_encode(['success' => true, 'id' => $pdo->lastInsertId()]);
+        
     } else {
         http_response_code(405);
         echo json_encode(['error' => 'Method not allowed']);

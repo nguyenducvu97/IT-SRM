@@ -85,24 +85,24 @@ if ($user_role !== 'admin' && $_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// For GET requests, only allow check_status for non-admin users
+// For GET requests, allow staff to access list and check_status
 if ($user_role !== 'admin' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     $action = $_GET['action'] ?? '';
     
-    if ($action !== 'check_status') {
+    if (!in_array($action, ['list', 'check_status'])) {
         http_response_code(403);
         echo json_encode(['success' => false, 'message' => 'Access denied - action not allowed']);
         exit;
     }
     
-    // Staff can access check_status (no additional restrictions needed)
+    // Staff can access list and check_status
     // The session check above already verified user is authenticated
 }
 
 try {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
-            handleGet($db, $user_role);
+            handleGet($db, $current_user, $user_role);
             break;
         case 'PUT':
             handlePut($db, $current_user);
@@ -119,7 +119,7 @@ try {
     echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
 }
 
-function handleGet($db, $user_role) {
+function handleGet($db, $current_user, $user_role) {
     $action = $_GET['action'] ?? 'list';
     
     if ($action === 'get') {
@@ -161,22 +161,8 @@ function handleGet($db, $user_role) {
             return;
         }
         
-        // For staff, only check their own service requests
-        if ($user_role === 'staff') {
-            $stmt = $db->prepare("
-                SELECT rr.*, 
-                       u.full_name as requester_name,
-                       admin.full_name as admin_name
-                FROM reject_requests rr
-                JOIN users u ON rr.rejected_by = u.id
-                LEFT JOIN users admin ON rr.processed_by = admin.id
-                WHERE rr.service_request_id = ? AND rr.rejected_by = ?
-                ORDER BY rr.created_at DESC
-                LIMIT 1
-            ");
-            $stmt->execute([$service_request_id, $current_user]);
-        } elseif ($user_role === 'admin') {
-            // Admin can check any service request
+        // For staff and admin, check any service request
+        if ($user_role === 'staff' || $user_role === 'admin') {
             $stmt = $db->prepare("
                 SELECT rr.*, 
                        u.full_name as requester_name,
@@ -209,6 +195,13 @@ function handleGet($db, $user_role) {
     $page = max(1, intval($_GET['page'] ?? 1));
     $limit = max(1, intval($_GET['limit'] ?? 20));
     $offset = ($page - 1) * $limit;
+    
+    // Check role access
+    if (!in_array($user_role, ['admin', 'staff'])) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Access denied']);
+        return;
+    }
     
     // Count total records
     $count_stmt = $db->prepare("
@@ -268,45 +261,38 @@ function handlePut($db, $current_user) {
             return;
         }
         
-        // Check if reject request exists
-        $stmt = $db->prepare("
-            SELECT id, status FROM reject_requests 
-            WHERE id = ?
-        ");
-        $stmt->execute([$reject_id]);
-        $reject_request = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if (!$reject_request) {
-            http_response_code(404);
-            echo json_encode(['success' => false, 'message' => 'Reject request not found']);
-            return;
-        }
-        
-        // Update reject request
         $stmt = $db->prepare("
             UPDATE reject_requests 
-            SET reject_reason = ?, reject_details = ?
+            SET reject_reason = ?, reject_details = ?, updated_at = NOW()
             WHERE id = ?
         ");
         
         $result = $stmt->execute([$reject_reason, $reject_details, $reject_id]);
         
         if ($result) {
-            echo json_encode([
-                'success' => true,
-                'message' => 'Reject request updated successfully'
-            ]);
+            echo json_encode(['success' => true, 'message' => 'Reject request updated successfully']);
         } else {
-            http_response_code(500);
             echo json_encode(['success' => false, 'message' => 'Failed to update reject request']);
         }
+        
         return;
     }
     
-    // Original processing logic
+    // Original processing logic - Only admin can process reject request decisions
     $reject_id = $input['reject_id'] ?? null;
     $decision = $input['decision'] ?? null;
     $admin_reason = $input['admin_reason'] ?? null;
+    
+    // Only admin can process reject request decisions
+    $stmt = $db->prepare("SELECT role FROM users WHERE id = ?");
+    $stmt->execute([$current_user]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$user || $user['role'] !== 'admin') {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Chỉ admin mới có quyền xử lý yêu cầu từ chối']);
+        return;
+    }
     
     if (!$reject_id || !$decision || !$admin_reason) {
         http_response_code(400);
