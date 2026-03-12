@@ -8,7 +8,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Start session
-session_start();
+require_once '../config/session.php';
+startSession();
 
 // Check if user is authenticated
 if (!isset($_SESSION['user_id'])) {
@@ -21,9 +22,10 @@ $userId = $_SESSION['user_id'];
 $method = $_SERVER['REQUEST_METHOD'];
 
 try {
-    // Connect to database
-    $pdo = new PDO("mysql:host=localhost;dbname=it_service_request", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Connect to database using the same configuration as other APIs
+    require_once '../config/database.php';
+    $database = new Database();
+    $pdo = $database->getConnection();
     
     if ($method == 'GET') {
         $action = $_GET['action'] ?? 'list';

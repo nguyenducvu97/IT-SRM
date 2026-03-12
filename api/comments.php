@@ -9,6 +9,22 @@ require_once '../config/database.php';
 require_once '../config/session.php';
 require_once '../lib/EmailHelper.php';
 
+// Helper function for JSON responses (avoid conflict with database.php)
+function commentsJsonResponse($success, $message, $data = null) {
+    header('Content-Type: application/json');
+    $response = [
+        'success' => $success,
+        'message' => $message
+    ];
+    
+    if ($data !== null) {
+        $response['data'] = $data;
+    }
+    
+    echo json_encode($response);
+    exit();
+}
+
 // Notification helper functions
 function createNotification($pdo, $userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
     try {
@@ -83,6 +99,7 @@ function notifyRequestParticipants($pdo, $requestId, $excludeUserId = null, $tit
     }
 }
 
+// Connect to database using the same configuration as other APIs
 $database = new Database();
 $db = $database->getConnection();
 
@@ -93,14 +110,11 @@ if ($method == 'OPTIONS') {
     exit();
 }
 
-session_start([
-    'cookie_lifetime' => 86400, // 24 hours
-    'cookie_httponly' => true,
-    'cookie_samesite' => 'Lax'
-]);
+// Start session
+startSession();
 
 if (!isset($_SESSION['user_id'])) {
-    jsonResponse(false, "Unauthorized access");
+    commentsJsonResponse(false, "Unauthorized access");
 }
 
 $user_id = $_SESSION['user_id'];
@@ -110,10 +124,10 @@ if ($method == 'POST') {
     $data = json_decode(file_get_contents("php://input"));
     
     $service_request_id = isset($data->service_request_id) ? (int)$data->service_request_id : 0;
-    $comment = isset($data->comment) ? sanitizeInput($data->comment) : '';
+    $comment = isset($data->comment) ? trim($data->comment) : '';
     
     if ($service_request_id <= 0 || empty($comment)) {
-        jsonResponse(false, "Required fields are missing");
+        commentsJsonResponse(false, "Required fields are missing");
     }
     
     $check_query = "SELECT user_id, assigned_to FROM service_requests WHERE id = :id";
@@ -122,14 +136,14 @@ if ($method == 'POST') {
     $check_stmt->execute();
     
     if ($check_stmt->rowCount() == 0) {
-        jsonResponse(false, "Service request not found");
+        commentsJsonResponse(false, "Service request not found");
     }
     
     $request = $check_stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($user_role != 'admin' && $user_role != 'staff' && 
         $request['user_id'] != $user_id) {
-        jsonResponse(false, "Access denied");
+        commentsJsonResponse(false, "Access denied");
     }
     
     $query = "INSERT INTO comments (service_request_id, user_id, comment) 
@@ -163,8 +177,10 @@ if ($method == 'POST') {
         
         // Send email notification
         try {
-            $emailHelper = new EmailHelper();
-            $emailHelper->sendNewCommentNotification($request_data, $comment, $commenter_data);
+            // Temporarily disable email to test comment functionality
+            // $emailHelper = new EmailHelper();
+            // $emailHelper->sendNewCommentNotification($request_data, $comment, $commenter_data);
+            error_log("Email notification temporarily disabled for testing");
         } catch (Exception $e) {
             error_log("Email notification failed: " . $e->getMessage());
             // Continue even if email fails
@@ -184,9 +200,9 @@ if ($method == 'POST') {
             // Continue even if notification creation fails
         }
         
-        jsonResponse(true, "Comment added", ['id' => $db->lastInsertId()]);
+        commentsJsonResponse(true, "Comment added", ['id' => $db->lastInsertId()]);
     } else {
-        jsonResponse(false, "Failed to add comment");
+        commentsJsonResponse(false, "Failed to add comment");
     }
 }
 
@@ -194,7 +210,7 @@ elseif ($method == 'DELETE') {
     $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
     
     if ($id <= 0) {
-        jsonResponse(false, "Invalid comment ID");
+        commentsJsonResponse(false, "Invalid comment ID");
     }
     
     $check_query = "SELECT user_id FROM comments WHERE id = :id";
@@ -203,13 +219,13 @@ elseif ($method == 'DELETE') {
     $check_stmt->execute();
     
     if ($check_stmt->rowCount() == 0) {
-        jsonResponse(false, "Comment not found");
+        commentsJsonResponse(false, "Comment not found");
     }
     
     $comment = $check_stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($user_role != 'admin' && $comment['user_id'] != $user_id) {
-        jsonResponse(false, "Access denied");
+        commentsJsonResponse(false, "Access denied");
     }
     
     $query = "DELETE FROM comments WHERE id = :id";
@@ -217,13 +233,13 @@ elseif ($method == 'DELETE') {
     $stmt->bindParam(":id", $id);
     
     if ($stmt->execute()) {
-        jsonResponse(true, "Comment deleted");
+        commentsJsonResponse(true, "Comment deleted");
     } else {
-        jsonResponse(false, "Failed to delete comment");
+        commentsJsonResponse(false, "Failed to delete comment");
     }
 }
 
 else {
-    jsonResponse(false, "Method not allowed");
+    commentsJsonResponse(false, "Method not allowed");
 }
 ?>

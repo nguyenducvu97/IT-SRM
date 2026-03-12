@@ -1387,6 +1387,26 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     line-height: 1.4;
 }
 
+.delete-comment-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.delete-comment-btn:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-comment-btn i {
+    font-size: 0.75rem;
+}
+
 .add-comment {
     display: flex;
     gap: 1rem;

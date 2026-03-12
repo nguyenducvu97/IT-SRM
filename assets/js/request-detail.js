@@ -648,14 +648,60 @@ class RequestDetailApp {
         }
 
         container.innerHTML = comments.map(comment => `
-            <div class="comment">
+            <div class="comment" data-comment-id="${comment.id}">
                 <div class="comment-header">
                     <span class="comment-author">${comment.user_name}</span>
                     <span class="comment-date">${this.formatDate(comment.created_at)}</span>
+                    ${this.canDeleteComment(comment) ? `
+                        <button class="delete-comment-btn" onclick="requestDetail.deleteComment(${comment.id})" title="Xóa bình luận">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    ` : ''}
                 </div>
                 <div class="comment-text">${comment.comment}</div>
             </div>
         `).join('');
+    }
+
+    canDeleteComment(comment) {
+        // Admin can delete any comment
+        if (this.currentUser.role === 'admin') {
+            return true;
+        }
+        
+        // Staff can delete their own comments
+        if (this.currentUser.role === 'staff' && comment.user_id === this.currentUser.id) {
+            return true;
+        }
+        
+        // Users can delete their own comments
+        if (this.currentUser.role === 'user' && comment.user_id === this.currentUser.id) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    async deleteComment(commentId) {
+        if (!confirm('Bạn có chắc chắn muốn xóa bình luận này?')) {
+            return;
+        }
+
+        try {
+            const response = await this.apiCall(`api/comments.php?id=${commentId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.success) {
+                this.showNotification('Bình luận đã được xóa', 'success');
+                // Reload request detail to refresh comments
+                this.loadRequestDetail();
+            } else {
+                this.showNotification(response.message || 'Lỗi khi xóa bình luận', 'error');
+            }
+        } catch (error) {
+            this.showNotification('Lỗi kết nối', 'error');
+        }
     }
 
     async acceptRequest(id) {
@@ -782,6 +828,12 @@ class RequestDetailApp {
                 document.getElementById('commentText').value = '';
                 this.loadRequestDetail();
                 this.showNotification('Bình luận đã được thêm', 'success');
+                
+                // Re-enable button after success
+                if (addBtn) {
+                    addBtn.disabled = false;
+                    addBtn.innerHTML = '<i class="fas fa-plus"></i> Thêm bình luận';
+                }
             } else {
                 this.showNotification(response.message, 'error');
                 // Re-enable button if failed
@@ -1711,4 +1763,5 @@ class RequestDetailApp {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new RequestDetailApp();
+    window.requestDetail = window.app; // Add alias for delete comment functionality
 });

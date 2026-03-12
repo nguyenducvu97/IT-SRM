@@ -95,10 +95,10 @@ INSERT INTO categories (name, description) VALUES
 
 -- Insert default admin user (password: admin123)
 INSERT INTO users (username, email, password_hash, full_name, role, department) VALUES 
-('admin', 'admin@company.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'System Administrator', 'admin', 'IT');
+('admin', 'admin@company.com', '$2y$10$SEhfdD8EiF8Ay9gFQZANQeNstaAuzqyXBhjkC4Em5olLfVc0l0p32', 'System Administrator', 'admin', 'IT');
 
--- Insert sample staff users
+-- Insert sample staff users (password: staff123 for staff, user123 for regular users)
 INSERT INTO users (username, email, password_hash, full_name, role, department) VALUES 
-('staff1', 'staff1@company.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John Smith', 'staff', 'IT'),
-('staff2', 'staff2@company.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Jane Doe', 'staff', 'IT'),
-('user1', 'user1@company.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Mike Johnson', 'user', 'Sales');
+('staff1', 'staff1@company.com', '$2y$10$XJNvvS8344Fi5Blrg4vZL.9OXXJ6MsUyPRBEHL/Nb3YwrV2vnQxPK', 'John Smith', 'staff', 'IT'),
+('staff2', 'staff2@company.com', '$2y$10$XJNvvS8344Fi5Blrg4vZL.9OXXJ6MsUyPRBEHL/Nb3YwrV2vnQxPK', 'Jane Doe', 'staff', 'IT'),
+('user1', 'user1@company.com', '$2y$10$gPhkITe1Oi101enIdp6BvOsS5IkzHE/GSTNlp1WnmmkDlRocuKXK6', 'Mike Johnson', 'user', 'Sales');
