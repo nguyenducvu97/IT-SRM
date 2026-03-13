@@ -35,19 +35,83 @@ if ($method != 'GET') {
 }
 
 if ($method == 'GET') {
-    $query = "SELECT * FROM categories ORDER BY name ASC";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
+    $action = $_GET['action'] ?? 'list';
     
-    $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    header('Content-Type: application/json');
-    echo json_encode([
-        'success' => true,
-        'message' => "Categories retrieved",
-        'data' => $categories
-    ]);
-    exit();
+    if ($action == 'list') {
+        // Get categories with request counts
+        $query = "
+            SELECT c.*, 
+                   COUNT(sr.id) as request_count,
+                   COUNT(CASE WHEN sr.status = 'open' THEN 1 END) as open_count,
+                   COUNT(CASE WHEN sr.status = 'in_progress' THEN 1 END) as in_progress_count,
+                   COUNT(CASE WHEN sr.status = 'resolved' THEN 1 END) as resolved_count,
+                   COUNT(CASE WHEN sr.status = 'closed' THEN 1 END) as closed_count
+            FROM categories c
+            LEFT JOIN service_requests sr ON c.id = sr.category_id
+            GROUP BY c.id, c.name, c.description
+            ORDER BY c.name ASC
+        ";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        
+        $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'message' => "Categories retrieved with statistics",
+            'data' => $categories
+        ]);
+        exit();
+    } elseif ($action == 'requests') {
+        // Get requests for a specific category
+        $categoryId = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
+        $status = isset($_GET['status']) ? $_GET['status'] : 'all';
+        
+        if ($categoryId <= 0) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => "Invalid category ID"
+            ]);
+            exit();
+        }
+        
+        // Build query based on status filter
+        $statusCondition = "";
+        if ($status !== 'all') {
+            $statusCondition = " AND sr.status = :status";
+        }
+        
+        $query = "
+            SELECT sr.*, u.username, u.full_name, c.name as category_name,
+                   assigned.username as assigned_username, assigned.full_name as assigned_full_name
+            FROM service_requests sr
+            LEFT JOIN users u ON sr.user_id = u.id
+            LEFT JOIN users assigned ON sr.assigned_to = assigned.id
+            LEFT JOIN categories c ON sr.category_id = c.id
+            WHERE sr.category_id = :category_id $statusCondition
+            ORDER BY sr.created_at DESC
+        ";
+        
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':category_id', $categoryId);
+        
+        if ($status !== 'all') {
+            $stmt->bindParam(':status', $status);
+        }
+        
+        $stmt->execute();
+        $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'message' => "Category requests retrieved",
+            'data' => $requests
+        ]);
+        exit();
+    }
 }
 
 elseif ($method == 'POST') {

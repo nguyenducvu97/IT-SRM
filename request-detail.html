@@ -155,11 +155,15 @@
             <aside class="sidebar">
                 <nav class="nav-menu">
                     <ul>
-                        <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                        <li><a href="index.html?page=requests" class="nav-link"><i class="fas fa-list"></i> Yêu cầu</a></li>
-                        <li id="newRequestMenu" style="display: none;"><a href="index.html?page=new-request" class="nav-link"><i class="fas fa-plus"></i> Tạo yêu cầu</a></li>
-                        <li><a href="index.html?page=categories" class="nav-link"><i class="fas fa-tags"></i> Danh mục</a></li>
-                        <li id="adminMenu" style="display: none;"><a href="index.html?page=users" class="nav-link"><i class="fas fa-users"></i> Người dùng</a></li>
+                        <li><a href="#" class="nav-link" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                        <li><a href="#" class="nav-link" data-page="requests"><i class="fas fa-list"></i> Yêu cầu</a></li>
+                        <li id="newRequestMenu" style="display: none;"><a href="#" class="nav-link" data-page="new-request"><i class="fas fa-plus"></i> Tạo yêu cầu</a></li>
+                        <li><a href="#" class="nav-link" data-page="categories"><i class="fas fa-tags"></i> Danh mục</a></li>
+                        <li id="adminMenu" style="display: none;"><a href="#" class="nav-link" data-page="users"><i class="fas fa-users"></i> Người dùng</a></li>
+                        <li id="adminDepartmentMenu" style="display: none;"><a href="#" class="nav-link" data-page="departments"><i class="fas fa-building"></i> Phòng ban</a></li>
+                        <li id="adminSupportMenu" style="display: none;"><a href="#" class="nav-link" data-page="support-requests"><i class="fas fa-hands-helping"></i> Yêu cầu hỗ trợ</a></li>
+                        <li id="adminRejectMenu" style="display: none;"><a href="#" class="nav-link" data-page="reject-requests"><i class="fas fa-times-circle"></i> Yêu cầu từ chối</a></li>
+                        <li><a href="#" class="nav-link" data-page="profile"><i class="fas fa-user"></i> Hồ sơ cá nhân</a></li>
                     </ul>
                 </nav>
             </aside>
@@ -571,6 +575,7 @@
         </div>
     </div>
 
+    <script src="assets/js/translation.js"></script>
     <script src="assets/js/request-detail.js"></script>
     <script src="assets/js/department-helper.js"></script>
     <script src="assets/js/notifications.js"></script>

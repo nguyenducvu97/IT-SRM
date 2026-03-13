@@ -1,20 +1,22 @@
 <?php
 // IT Service Request Support Requests API
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: http://localhost');
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
 
 // Handle preflight OPTIONS request
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    exit(0);
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
 
-require_once '../config/database.php';
 require_once '../config/session.php';
+require_once '../config/database.php';
 
 // Start session
-session_start();
+startSession();
 
 // Check if user is authenticated
 if (!isset($_SESSION['user_id'])) {
@@ -71,25 +73,33 @@ $action = $_GET['action'] ?? '';
 
 try {
     $pdo = getDatabaseConnection();
+    error_log("Database connection established successfully");
     
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
+            error_log("Handling GET request with action: " . $action);
             handleGet($pdo, $action, $current_user, $user_role);
             break;
         case 'POST':
+            error_log("Handling POST request with action: " . $action);
             handlePost($pdo, $action, $current_user, $user_role);
             break;
         case 'PUT':
+            error_log("Handling PUT request with action: " . $action);
             handlePut($pdo, $action, $current_user, $user_role);
             break;
         case 'DELETE':
+            error_log("Handling DELETE request with action: " . $action);
             handleDelete($pdo, $action, $current_user, $user_role);
             break;
         default:
+            error_log("Method not allowed: " . $_SERVER['REQUEST_METHOD']);
             http_response_code(405);
             echo json_encode(['success' => false, 'message' => 'Method not allowed']);
     }
 } catch (Exception $e) {
+    error_log("Server error in support_requests.php: " . $e->getMessage());
+    error_log("Stack trace: " . $e->getTraceAsString());
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Server error: ' . $e->getMessage()]);
 }
@@ -178,11 +188,14 @@ function handleGet($pdo, $action, $current_user, $user_role) {
             break;
             
         case 'list':
+            error_log("Handling list action for user role: " . $user_role);
             // Admin can view all support requests, staff can view their own
             $status = $_GET['status'] ?? null;
             $page = max(1, intval($_GET['page'] ?? 1));
             $limit = max(1, intval($_GET['limit'] ?? 20));
             $offset = ($page - 1) * $limit;
+            
+            error_log("List parameters - status: " . ($status ?? 'all') . ", page: $page, limit: $limit");
             
             if ($user_role === 'admin') {
                 // Admin can see all, or filter by status
@@ -203,19 +216,31 @@ function handleGet($pdo, $action, $current_user, $user_role) {
                     $params = [];
                 }
             } else {
+                error_log("Access denied for user role: " . $user_role);
                 http_response_code(403);
                 echo json_encode(['success' => false, 'message' => 'Access denied']);
                 return;
             }
             
+            error_log("Where clause: '$where_clause', params count: " . count($params));
+            
             // Count total records
-            $count_stmt = $pdo->prepare("
+            $count_query = "
                 SELECT COUNT(*) as total
                 FROM support_requests sr
                 $where_clause
-            ");
-            $count_stmt->execute($params);
+            ";
+            $count_stmt = $pdo->prepare($count_query);
+            
+            // Execute with parameters if any
+            if (!empty($params)) {
+                $count_stmt->execute($params);
+            } else {
+                $count_stmt->execute();
+            }
             $total = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            
+            error_log("Total records: $total");
             
             // Get support requests with pagination
             $query = "
@@ -229,14 +254,16 @@ function handleGet($pdo, $action, $current_user, $user_role) {
                 ORDER BY sr.created_at DESC
                 LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
             
+            error_log("Executing query: " . $query);
+            
             $stmt = $pdo->prepare($query);
             
-            // Bind parameters
-            foreach ($params as $key => $value) {
-                $stmt->bindValue($key, $value);
+            // Execute with parameters if any
+            if (!empty($params)) {
+                $stmt->execute($params);
+            } else {
+                $stmt->execute();
             }
-            
-            $stmt->execute();
             $support_requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
             error_log("Support requests data: " . json_encode($support_requests));

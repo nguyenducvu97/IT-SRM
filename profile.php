@@ -37,9 +37,20 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
         <header class="header">
             <div class="header-content">
                 <h1><i class="fas fa-laptop-code"></i> IT Service Request</h1>
-                <div class="user-menu">
-                    <span id="userDisplay"></span>
-                    <button id="logoutBtn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                <div class="header-right">
+                    <!-- Language Switcher -->
+                    <div class="language-switcher-container">
+                        <select id="languageSwitcher" class="language-switcher">
+                            <option value="vi">🇻🇳 Tiếng Việt</option>
+                            <option value="en">🇺🇸 English</option>
+                            <option value="ko">🇰🇷 한국어</option>
+                        </select>
+                    </div>
+                    
+                    <div class="user-menu">
+                        <span id="userDisplay"></span>
+                        <button id="logoutBtn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> <span data-translate="logout">Đăng xuất</span></button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -48,14 +59,14 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
         <aside class="sidebar">
             <nav class="nav-menu">
                 <ul>
-                    <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="profile.php" class="nav-link active"><i class="fas fa-user"></i> Thông tin cá nhân</a></li>
-                    <li><a href="index.html#requestsPage" class="nav-link"><i class="fas fa-list"></i> Yêu cầu</a></li>
-                    <li id="newRequestMenu" style="display: none;"><a href="index.html#new-request" class="nav-link"><i class="fas fa-plus"></i> Tạo yêu cầu</a></li>
-                    <li><a href="index.html#categoriesPage" class="nav-link"><i class="fas fa-tags"></i> Danh mục</a></li>
-                    <li id="adminMenu" style="display: none;"><a href="index.html#usersPage" class="nav-link"><i class="fas fa-users"></i> Người dùng</a></li>
-                    <li id="adminSupportMenu" style="display: none;"><a href="index.html#support-requests" class="nav-link"><i class="fas fa-hands-helping"></i> Yêu cầu hỗ trợ</a></li>
-                    <li id="adminRejectMenu" style="display: none;"><a href="index.html#reject-requests" class="nav-link"><i class="fas fa-times-circle"></i> Yêu cầu từ chối</a></li>
+                    <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> <span data-translate="dashboard">Dashboard</span></a></li>
+                    <li><a href="profile.php" class="nav-link active"><i class="fas fa-user"></i> <span data-translate="profile">Thông tin cá nhân</span></a></li>
+                    <li><a href="index.html#requestsPage" class="nav-link"><i class="fas fa-list"></i> <span data-translate="requests">Yêu cầu</span></a></li>
+                    <li id="newRequestMenu" style="display: none;"><a href="index.html#new-request" class="nav-link"><i class="fas fa-plus"></i> <span data-translate="create_request">Tạo yêu cầu</span></a></li>
+                    <li><a href="index.html#categoriesPage" class="nav-link"><i class="fas fa-tags"></i> <span data-translate="categories">Danh mục</span></a></li>
+                    <li id="adminMenu" style="display: none;"><a href="index.html#usersPage" class="nav-link"><i class="fas fa-users"></i> <span data-translate="users">Người dùng</span></a></li>
+                    <li id="adminSupportMenu" style="display: none;"><a href="index.html#support-requests" class="nav-link"><i class="fas fa-hands-helping"></i> <span data-translate="support_requests">Yêu cầu hỗ trợ</span></a></li>
+                    <li id="adminRejectMenu" style="display: none;"><a href="index.html#reject-requests" class="nav-link"><i class="fas fa-times-circle"></i> <span data-translate="reject_requests">Yêu cầu từ chối</span></a></li>
                 </ul>
             </nav>
         </aside>
@@ -65,85 +76,85 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
             <!-- Profile Page -->
             <div class="page">
                 <div class="page-header">
-                    <h2><i class="fas fa-user"></i> Thông tin cá nhân</h2>
+                    <h2><i class="fas fa-user"></i> <span data-translate="profile">Thông tin cá nhân</span></h2>
                     <div class="page-actions">
                         <button id="refreshProfileBtn" class="btn btn-secondary">
-                            <i class="fas fa-sync"></i> Làm mới
+                            <i class="fas fa-sync"></i> <span data-translate="refresh">Làm mới</span>
                         </button>
                     </div>
                 </div>
                 
                 <!-- Profile Information -->
                 <div class="profile-section">
-                    <h3>Thông tin cá nhân</h3>
+                    <h3 data-translate="personal_info">Thông tin cá nhân</h3>
                     <form id="profileForm" class="form">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="username">Tên đăng nhập</label>
+                                <label for="username" data-translate="username">Tên đăng nhập</label>
                                 <input type="text" id="username" class="form-control" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="full_name">Họ và tên</label>
+                                <label for="full_name" data-translate="full_name">Họ và tên</label>
                                 <input type="text" id="full_name" name="full_name" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="email">Email</label>
+                                <label for="email" data-translate="email">Email</label>
                                 <input type="email" id="email" name="email" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="phone">Điện thoại</label>
+                                <label for="phone" data-translate="phone">Điện thoại</label>
                                 <input type="tel" id="phone" name="phone" class="form-control">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="role">Vai trò</label>
+                                <label for="role" data-translate="role">Vai trò</label>
                                 <input type="text" id="role" class="form-control" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="department">Phòng ban</label>
+                                <label for="department" data-translate="department">Phòng ban</label>
                                 <input type="text" id="department" name="department" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Cập nhật thông tin</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> <span data-translate="update_info">Cập nhật thông tin</span></button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Password Change -->
                 <div class="profile-section">
-                    <h3>Đổi mật khẩu</h3>
+                    <h3 data-translate="change_password">Đổi mật khẩu</h3>
                     <form id="passwordForm" class="form">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="current_password">Mật khẩu hiện tại</label>
+                                <label for="current_password" data-translate="current_password">Mật khẩu hiện tại</label>
                                 <input type="password" id="current_password" name="current_password" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="new_password">Mật khẩu mới</label>
+                                <label for="new_password" data-translate="new_password">Mật khẩu mới</label>
                                 <input type="password" id="new_password" name="new_password" class="form-control" required minlength="6">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="confirm_password">Xác nhận mật khẩu mới</label>
+                                <label for="confirm_password" data-translate="confirm_password">Xác nhận mật khẩu mới</label>
                                 <input type="password" id="confirm_password" name="confirm_password" class="form-control" required minlength="6">
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-warning"><i class="fas fa-key"></i> Đổi mật khẩu</button>
+                            <button type="submit" class="btn btn-warning"><i class="fas fa-key"></i> <span data-translate="change_password">Đổi mật khẩu</span></button>
                         </div>
                     </form>
                 </div>
 
                 <!-- User Management (Admin Only) -->
                 <div class="profile-section admin-only" id="userManagementSection" style="display: none;">
-                    <h3>Quản lý Users</h3>
+                    <h3 data-translate="user_management">Quản lý Users</h3>
                     <div class="search-filter">
-                        <input type="text" id="userSearch" placeholder="Tìm kiếm người dùng..." class="form-control">
+                        <input type="text" id="userSearch" data-translate="search_user" placeholder="Tìm kiếm người dùng..." class="form-control">
                         <select id="roleFilter" class="form-control">
                             <option value="">Tất cả vai trò</option>
                             <option value="admin">Admin</option>
@@ -191,6 +202,7 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
         </div>
     </div>
 
+    <script src="assets/js/translation.js"></script>
     <script src="assets/js/profile.js"></script>
     <script src="assets/js/department-helper.js"></script>
 </body>

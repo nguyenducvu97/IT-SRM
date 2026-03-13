@@ -8,8 +8,11 @@ function startSession() {
             'cookie_lifetime' => 86400,
             'cookie_httponly' => true,
             'cookie_samesite' => 'Lax',
-            'cookie_path' => '/',
-            'cookie_domain' => 'localhost'
+            'cookie_path' => '/it-service-request/',
+            'cookie_domain' => '',
+            'use_strict_mode' => true,
+            'use_cookies' => true,
+            'use_only_cookies' => true
         ]);
     }
 }

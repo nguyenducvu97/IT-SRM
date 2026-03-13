@@ -473,7 +473,7 @@ elseif ($method == 'POST') {
             
             // Handle file uploads if any
             if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
-                $upload_dir = 'uploads/requests/';
+                $upload_dir = __DIR__ . '/../uploads/requests/';
                 if (!is_dir($upload_dir)) {
                     mkdir($upload_dir, 0777, true);
                 }
