@@ -76,6 +76,17 @@ class RequestDetailApp {
         document.getElementById('showLogin').addEventListener('click', (e) => this.showLogin(e));
         document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
 
+        // Navigation events
+        const navLinks = document.querySelectorAll('.nav-link');
+        console.log('=== REQUEST DETAIL BINDING NAVIGATION ===');
+        console.log('Found nav links:', navLinks.length);
+        navLinks.forEach((link, index) => {
+            const page = link.dataset.page;
+            const href = link.href;
+            console.log(`Nav link ${index}:`, {page, text: link.textContent.trim(), href, dataset: link.dataset});
+            link.addEventListener('click', (e) => this.handleNavigation(e));
+        });
+
         // Comment events
         document.getElementById('addCommentBtn').addEventListener('click', () => this.addComment());
 
@@ -232,7 +243,63 @@ class RequestDetailApp {
         document.getElementById('loginScreen').classList.add('active');
     }
 
-    async logout() {
+    async handleNavigation(e) {
+        console.log('=== handleNavigation called ===');
+        console.log('Event target:', e.target);
+        console.log('Event currentTarget:', e.currentTarget);
+        
+        // Prevent multiple calls
+        if (this._navigating) {
+            console.log('Already navigating, ignoring');
+            return;
+        }
+        this._navigating = true;
+        
+        const navLink = e.currentTarget;
+        const page = navLink.dataset.page;
+        const href = navLink.href;
+        
+        console.log('Navigation data:', { page, href });
+        console.log('Dataset:', navLink.dataset);
+        
+        // Check if this is an internal navigation (has data-page)
+        if (page) {
+            console.log('Internal navigation detected for page:', page);
+            
+            // Check if user is trying to access admin-only pages
+            const adminPages = ['users', 'departments'];
+            const staffPages = ['support-requests', 'reject-requests'];
+            
+            if (adminPages.includes(page) && this.currentUser.role !== 'admin') {
+                console.log('❌ Non-admin user trying to access admin page:', page);
+                this.showNotification('Chỉ admin mới có quyền truy cập trang này', 'error');
+                this._navigating = false;
+                return;
+            }
+            
+            if (staffPages.includes(page) && !['admin', 'staff'].includes(this.currentUser.role)) {
+                console.log('❌ Non-admin/staff user trying to access staff page:', page);
+                this.showNotification('Chỉ admin và staff mới có quyền truy cập trang này', 'error');
+                this._navigating = false;
+                return;
+            }
+            
+            console.log('✅ Redirecting to index.html with page:', page);
+            e.preventDefault(); // Only prevent default for internal navigation
+            // Redirect to index.html with the page parameter
+            const redirectUrl = `index.html?page=${page}`;
+            console.log('Redirect URL:', redirectUrl);
+            window.location.href = redirectUrl;
+        } else {
+            console.log('External link detected, allowing navigation');
+            // This is an external link, let browser handle it naturally
+            // Don't prevent default - let browser navigate
+        }
+        
+        this._navigating = false;
+    }
+
+    logout() {
         this.currentUser = null;
         
         // Call logout API
@@ -272,10 +339,28 @@ class RequestDetailApp {
         document.getElementById('userInfo').textContent = this.currentUser.full_name;
         
         // Show/hide menu items based on role
+        document.getElementById('adminMenu').style.display = 'none';
+        document.getElementById('adminDepartmentMenu').style.display = 'none';
+        document.getElementById('adminSupportMenu').style.display = 'none';
+        document.getElementById('adminRejectMenu').style.display = 'none';
+        document.getElementById('newRequestMenu').style.display = 'none';
+        
         if (this.currentUser.role === 'admin') {
             document.getElementById('adminMenu').style.display = 'block';
+            document.getElementById('adminDepartmentMenu').style.display = 'block';
+            document.getElementById('adminSupportMenu').style.display = 'block';
+            document.getElementById('adminRejectMenu').style.display = 'block';
             document.getElementById('newRequestMenu').style.display = 'none';
+        } else if (this.currentUser.role === 'staff') {
+            // Staff should see limited menus - NOT adminMenu
+            document.getElementById('adminMenu').style.display = 'none'; // Staff can't see full admin menu
+            document.getElementById('adminDepartmentMenu').style.display = 'none'; // Staff can't manage departments
+            document.getElementById('adminSupportMenu').style.display = 'block'; // Staff can see support requests
+            document.getElementById('adminRejectMenu').style.display = 'block'; // Staff can handle reject requests
+            // Show new request menu for staff
+            document.getElementById('newRequestMenu').style.display = 'none'; // Staff typically handles requests, not creates new ones
         } else {
+            // Regular user - only new request menu
             document.getElementById('newRequestMenu').style.display = 'block';
         }
     }
@@ -1760,8 +1845,18 @@ class RequestDetailApp {
     }
 }
 
-// Initialize app when DOM is loaded
+// Initialize request detail app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    window.app = new RequestDetailApp();
-    window.requestDetail = window.app; // Add alias for delete comment functionality
+    console.log('DOM loaded, initializing request detail app...');
+    window.requestDetailApp = new RequestDetailApp();
+    
+    // Wait for translation system to be ready
+    setTimeout(() => {
+        if (window.t && window.translationSystem) {
+            console.log('Translation system is ready');
+            // Translation system already initialized by translation.js
+        } else {
+            console.log('Translation system not ready yet');
+        }
+    }, 1000);
 });

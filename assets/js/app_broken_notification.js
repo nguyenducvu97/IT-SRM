@@ -4,6 +4,8 @@ class ITServiceApp {
     constructor() {
         this.currentUser = null;
         this.currentPage = 'dashboard';
+        this.currentRequests = null; // Store current requests for re-rendering
+        this.currentRecentRequests = null; // Store recent requests
         this.init();
     }
 
@@ -11,6 +13,63 @@ class ITServiceApp {
         this.bindEvents();
         this.checkAuth();
         this.selectedFiles = []; // Store selected files
+        
+        // Initialize translation support
+        this.initTranslationSupport();
+    }
+
+    initTranslationSupport() {
+        // Listen for language changes
+        document.addEventListener('languageChanged', (e) => {
+            this.updateUIWithTranslations();
+        });
+        
+        // Update UI when translation system is ready
+        if (window.translationSystem) {
+            this.updateUIWithTranslations();
+        } else {
+            // Wait for translation system to be ready
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => this.updateUIWithTranslations(), 100);
+            });
+        }
+    }
+
+    updateUIWithTranslations() {
+        // Update dynamic content that might not have data-translate attributes
+        this.updateStatusTexts();
+        this.updatePriorityTexts();
+        this.updateMessages();
+        
+        // Re-render stored data with new translations
+        if (this.currentRequests) {
+            this.displayRequests(this.currentRequests);
+        }
+        if (this.currentRecentRequests) {
+            this.displayRecentRequests(this.currentRecentRequests);
+        }
+    }
+
+    updateStatusTexts() {
+        // This will be called when language changes to update status texts
+        if (this.currentPage === 'requests' && this.currentRequests) {
+            this.displayRequests(this.currentRequests);
+        }
+    }
+
+    updatePriorityTexts() {
+        // This will be called when language changes to update priority texts
+        if (this.currentPage === 'requests' && this.currentRequests) {
+            this.displayRequests(this.currentRequests);
+        }
+    }
+
+    updateMessages() {
+        // Update any current messages or notifications
+        const notifications = document.querySelectorAll('.notification');
+        notifications.forEach(notification => {
+            // You might want to re-translate notification messages here
+        });
     }
 
     bindEvents() {
@@ -270,6 +329,121 @@ class ITServiceApp {
         if (loginForm) loginForm.reset();
     }
 
+    async viewCategoryRequests(categoryId) {
+        try {
+            this.showNotification('Đang tải yêu cầu theo danh mục...', 'info');
+            
+            const response = await this.apiCall(`api/categories.php?action=requests&category_id=${categoryId}`);
+            
+            if (response.success) {
+                this.displayCategoryRequests(response.data, categoryId);
+            } else {
+                this.showNotification('Không thể tải yêu cầu theo danh mục', 'error');
+            }
+        } catch (error) {
+            this.showNotification('Lỗi kết nối', 'error');
+        }
+    }
+
+    displayCategoryRequests(requests, categoryId) {
+        const container = document.getElementById('categoriesList');
+        
+        if (requests.length === 0) {
+            container.innerHTML = `
+                <div class="category-requests-header">
+                    <button class="btn btn-secondary" onclick="app.loadCategories()">
+                        <i class="fas fa-arrow-left"></i> Quay lại danh mục
+                    </button>
+                    <h3>Yêu cầu theo danh mục</h3>
+                </div>
+                <p>Không có yêu cầu nào trong danh mục này.</p>
+            `;
+            return;
+        }
+
+        const requestsHtml = requests.map(request => this.createRequestCard(request)).join('');
+        
+        container.innerHTML = `
+            <div class="category-requests-header">
+                <button class="btn btn-secondary" onclick="app.loadCategories()">
+                    <i class="fas fa-arrow-left"></i> Quay lại danh mục
+                </button>
+                <h3>Yêu cầu theo danh mục (${requests.length})</h3>
+                <div class="status-filters">
+                    <button class="btn btn-outline-primary active" onclick="app.filterCategoryRequests('all', this)">Tất cả</button>
+                    <button class="btn btn-outline-primary" onclick="app.filterCategoryRequests('open', this)">Mới</button>
+                    <button class="btn btn-outline-primary" onclick="app.filterCategoryRequests('in_progress', this)">Đang xử lý</button>
+                    <button class="btn btn-outline-primary" onclick="app.filterCategoryRequests('resolved', this)">Đã giải quyết</button>
+                    <button class="btn btn-outline-primary" onclick="app.filterCategoryRequests('closed', this)">Đã đóng</button>
+                </div>
+            </div>
+            <div class="requests-grid">
+                ${requestsHtml}
+            </div>
+        `;
+        
+        // Store current category and requests for filtering
+        this.currentCategoryId = categoryId;
+        this.currentCategoryRequests = requests;
+    }
+
+    async filterCategoryRequests(status, button) {
+        // Update button states
+        document.querySelectorAll('.status-filters button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        button.classList.add('active');
+        
+        try {
+            const response = await this.apiCall(`api/categories.php?action=requests&category_id=${this.currentCategoryId}&status=${status}`);
+            
+            if (response.success) {
+                this.displayCategoryRequests(response.data, this.currentCategoryId);
+            }
+        } catch (error) {
+            this.showNotification('Lỗi lọc yêu cầu', 'error');
+        }
+    }
+
+    createRequestCard(request) {
+        const statusColors = {
+            'open': 'warning',
+            'in_progress': 'info', 
+            'resolved': 'success',
+            'closed': 'secondary'
+        };
+        
+        const statusTexts = {
+            'open': 'Mới',
+            'in_progress': 'Đang xử lý',
+            'resolved': 'Đã giải quyết',
+            'closed': 'Đã đóng'
+        };
+
+        return `
+            <div class="request-card" onclick="app.viewRequestDetail(${request.id})">
+                <div class="request-header">
+                    <h4>${request.title}</h4>
+                    <span class="badge badge-${statusColors[request.status]}">${statusTexts[request.status]}</span>
+                </div>
+                <div class="request-body">
+                    <p class="request-description">${request.description.substring(0, 150)}...</p>
+                    <div class="request-meta">
+                        <span><i class="fas fa-user"></i> ${request.full_name || request.username}</span>
+                        <span><i class="fas fa-calendar"></i> ${this.formatDate(request.created_at)}</span>
+                        ${request.assigned_full_name ? `
+                            <span><i class="fas fa-user-tie"></i> ${request.assigned_full_name}</span>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    viewRequestDetail(requestId) {
+        this.showRequestDetail(requestId);
+    }
+
     showDashboard() {
         // Hide loading screen first
         const loadingScreen = document.getElementById('loadingScreen');
@@ -289,9 +463,6 @@ class ITServiceApp {
         document.getElementById('userInfo').textContent = this.currentUser.full_name;
         
         // Show/hide menu items based on role
-        console.log('User role:', this.currentUser.role);
-        
-        // Hide all menus first
         document.getElementById('adminMenu').style.display = 'none';
         document.getElementById('adminDepartmentMenu').style.display = 'none';
         document.getElementById('adminSupportMenu').style.display = 'none';
@@ -299,29 +470,22 @@ class ITServiceApp {
         document.getElementById('newRequestMenu').style.display = 'none';
         
         if (this.currentUser.role === 'admin') {
-            console.log('✅ Showing admin menus');
             document.getElementById('adminMenu').style.display = 'block';
             document.getElementById('adminDepartmentMenu').style.display = 'block';
             document.getElementById('adminSupportMenu').style.display = 'block';
             document.getElementById('adminRejectMenu').style.display = 'block';
-            // Hide new request menu for admin
             document.getElementById('newRequestMenu').style.display = 'none';
-            console.log('Admin user - hiding new request menu');
         } else if (this.currentUser.role === 'staff') {
-            console.log('✅ Showing staff menus');
             // Staff should see limited menus - NOT adminMenu
             document.getElementById('adminMenu').style.display = 'none'; // Staff can't see full admin menu
             document.getElementById('adminDepartmentMenu').style.display = 'none'; // Staff can't manage departments
-            document.getElementById('adminSupportMenu').style.display = 'block'; // Staff can handle support requests
+            document.getElementById('adminSupportMenu').style.display = 'block'; // Staff can see support requests
             document.getElementById('adminRejectMenu').style.display = 'block'; // Staff can handle reject requests
             // Show new request menu for staff
             document.getElementById('newRequestMenu').style.display = 'none'; // Staff typically handles requests, not creates new ones
-            console.log('Staff user - hiding admin and new request menus');
         } else {
-            console.log('✅ Showing user menus');
             // Regular user - only new request menu
             document.getElementById('newRequestMenu').style.display = 'block';
-            console.log('Regular user - showing new request menu');
         }
         
         // Load dashboard data
@@ -562,6 +726,9 @@ class ITServiceApp {
     }
 
     displayRecentRequests(requests) {
+        // Store recent requests for language switching
+        this.currentRecentRequests = requests;
+        
         const container = document.getElementById('recentRequestsList');
         
         if (!container) {
@@ -577,7 +744,10 @@ class ITServiceApp {
         container.innerHTML = requests.map(request => `
             <div class="request-item" onclick="app.showRequestDetail(${request.id})">
                 <div class="request-header">
-                    <div class="request-title">${request.title}</div>
+                    <div class="request-title">
+                        <span class="request-id">ID: ${request.id}</span>
+                        ${request.title}
+                    </div>
                     <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
                 </div>
                 <div class="request-meta">
@@ -619,6 +789,9 @@ class ITServiceApp {
     }
 
     displayRequests(requests) {
+        // Store requests for language switching
+        this.currentRequests = requests;
+        
         const container = document.getElementById('requestsList');
         
         if (!container) {
@@ -634,7 +807,10 @@ class ITServiceApp {
         container.innerHTML = requests.map(request => `
             <div class="request-item" onclick="app.showRequestDetail(${request.id})">
                 <div class="request-header">
-                    <div class="request-title">${request.title}</div>
+                    <div class="request-title">
+                        <span class="request-id">ID: ${request.id}</span>
+                        ${request.title}
+                    </div>
                     <div>
                         <span class="badge priority-${request.priority}">${this.getPriorityText(request.priority)}</span>
                         <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
@@ -1176,17 +1352,16 @@ class ITServiceApp {
         try {
             // Create FormData for file upload
             const submitData = new FormData();
+            submitData.append('action', 'create');
             submitData.append('title', formData.get('title'));
             submitData.append('description', formData.get('description'));
             submitData.append('category_id', formData.get('category_id'));
             submitData.append('priority', formData.get('priority'));
             
             // Add selected files
-            this.selectedFiles.forEach((file, index) => {
-                submitData.append(`attachments[${index}]`, file);
+            this.selectedFiles.forEach((file) => {
+                submitData.append('attachments[]', file);
             });
-            
-            console.log('Submitting with files:', this.selectedFiles);
             
             // Update loading text
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi yêu cầu...';
@@ -1284,13 +1459,35 @@ class ITServiceApp {
         }
 
         container.innerHTML = categories.map(category => `
-            <div class="category-item">
+            <div class="category-item" onclick="app.viewCategoryRequests(${category.id})" style="cursor: pointer;">
                 <div class="category-info">
                     <h4>${category.name}</h4>
                     <p>${category.description || 'Không có mô tả'}</p>
+                    <div class="category-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">${category.request_count || 0}</span>
+                            <span class="stat-label">Tổng số</span>
+                        </div>
+                        <div class="stat-item open">
+                            <span class="stat-number">${category.open_count || 0}</span>
+                            <span class="stat-label">Mới</span>
+                        </div>
+                        <div class="stat-item progress">
+                            <span class="stat-number">${category.in_progress_count || 0}</span>
+                            <span class="stat-label">Đang xử lý</span>
+                        </div>
+                        <div class="stat-item resolved">
+                            <span class="stat-number">${category.resolved_count || 0}</span>
+                            <span class="stat-label">Đã giải quyết</span>
+                        </div>
+                        <div class="stat-item closed">
+                            <span class="stat-number">${category.closed_count || 0}</span>
+                            <span class="stat-label">Đã đóng</span>
+                        </div>
+                    </div>
                 </div>
                 ${this.currentUser.role === 'admin' ? `
-                    <div class="category-actions">
+                    <div class="category-actions" onclick="event.stopPropagation()">
                         <button class="btn btn-secondary" onclick="app.editCategory(${category.id}, '${category.name}', '${category.description || ''}')">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -1304,6 +1501,12 @@ class ITServiceApp {
     }
 
     showCategoryModal(category = null) {
+        // Check if user is admin
+        if (!this.currentUser || this.currentUser.role !== 'admin') {
+            this.showNotification('Chỉ admin mới có quyền quản lý danh mục', 'error');
+            return;
+        }
+        
         const modal = document.getElementById('categoryModal');
         const title = document.getElementById('categoryModalTitle');
         
@@ -1321,6 +1524,11 @@ class ITServiceApp {
     }
 
     editCategory(id, name, description) {
+        // Check if user is admin
+        if (!this.currentUser || this.currentUser.role !== 'admin') {
+            this.showNotification('Chỉ admin mới có quyền chỉnh sửa danh mục', 'error');
+            return;
+        }
         this.showCategoryModal({ id, name, description });
     }
 
@@ -1395,6 +1603,12 @@ class ITServiceApp {
     }
 
     async deleteCategory(id) {
+        // Check if user is admin
+        if (!this.currentUser || this.currentUser.role !== 'admin') {
+            this.showNotification('Chỉ admin mới có quyền xóa danh mục', 'error');
+            return;
+        }
+        
         if (!confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
             return;
         }
@@ -1465,55 +1679,23 @@ class ITServiceApp {
     }
 
     showNotification(message, type = 'info') {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.textContent = message;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 1.5rem;
-            border-radius: 5px;
-            color: white;
-            z-index: 10000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        `;
-
-        // Set background color based on type
-        switch(type) {
-            case 'success':
-                notification.style.backgroundColor = '#28a745';
-                break;
-            case 'error':
-                notification.style.backgroundColor = '#dc3545';
-                break;
-            case 'warning':
-                notification.style.backgroundColor = '#ffc107';
-                notification.style.color = '#333';
-                break;
-            default:
-                notification.style.backgroundColor = '#17a2b8';
+        // Use NotificationManager if available
+        if (window.notificationManager) {
+            window.notificationManager.show(message, type);
+        } else {
+            // Fallback to simple alert
+            console.log(`Notification [${type}]: ${message}`);
+            alert(message);
         }
-
-        document.body.appendChild(notification);
-
-        // Show notification
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-
-        // Hide notification after 3 seconds
-        setTimeout(() => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
         }, 3000);
     }
 
     getStatusText(status) {
+        if (window.t) {
+            return t(`status_${status}`) || status;
+        }
+        
+        // Fallback to hardcoded Vietnamese
         const statuses = {
             'open': 'Mở',
             'in_progress': 'Đang xử lý',
@@ -1527,11 +1709,17 @@ class ITServiceApp {
     }
 
     getPriorityText(priority) {
+        if (window.t) {
+            return t(`priority_${priority}`) || priority;
+        }
+        
+        // Fallback to hardcoded Vietnamese
         const priorityMap = {
             'low': 'Thấp',
             'medium': 'Trung bình',
             'high': 'Cao',
-            'critical': 'Khẩn cấp'
+            'critical': 'Khẩn cấp',
+            'urgent': 'Khẩn cấp'
         };
         return priorityMap[priority] || priority;
     }
@@ -2684,6 +2872,18 @@ class ITServiceApp {
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new ITServiceApp();
+    
+    // Handle URL parameter for page navigation
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageParam = urlParams.get('page');
+    
+    if (pageParam && window.app) {
+        console.log('URL parameter found, showing page:', pageParam);
+        // Wait a bit for app to fully initialize
+        setTimeout(() => {
+            window.app.showPage(pageParam);
+        }, 500);
+    }
 });
 
 // Global functions for onclick handlers

@@ -38,7 +38,7 @@ window.vi = {
     'all_roles': 'Tất cả vai trò',
     
     // Navigation Menu
-    'dashboard': 'Dashboard',
+    'dashboard': 'Bảng điều khiển',
     'requests': 'Yêu cầu dịch vụ',
     'my_requests': 'Yêu cầu của tôi',
     'create_request': 'Tạo yêu cầu mới',

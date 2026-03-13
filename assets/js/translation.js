@@ -218,6 +218,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Wait for initialization to complete
     await window.translationSystem.init();
     
+    // Create global t function for easy access
+    window.t = (key, fallbackText = null) => {
+        return window.translationSystem.translate(key, fallbackText);
+    };
+    
+    // Add setLanguage method to t function for convenience
+    window.t.setLanguage = (lang) => {
+        window.translationSystem.switchLanguage(lang);
+    };
+    
     // Add language switcher event listener
     const languageSwitcher = document.getElementById('languageSwitcher');
     if (languageSwitcher) {
