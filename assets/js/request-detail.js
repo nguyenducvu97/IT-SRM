@@ -711,15 +711,15 @@ class RequestDetailApp {
                 <div class="request-actions">
                     ${currentUser && currentUser.role === 'admin' ? `
                         ${request.status === 'open' && !request.assigned_to ? `
-                            <button class="btn btn-success" onclick="app.acceptRequest(${request.id})">
+                            <button class="btn btn-success" onclick="window.requestDetailApp.acceptRequest(${request.id})">
                                 <i class="fas fa-check"></i> Nhận yêu cầu
                             </button>
                         ` : ''}
                         ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
-                            <button class="btn btn-primary" onclick="app.showResolveModal(${request.id})">
+                            <button class="btn btn-primary" onclick="window.requestDetailApp.showResolveModal(${request.id})">
                                 <i class="fas fa-check-circle"></i> Đã giải quyết
                             </button>
-                            <button class="btn btn-warning" onclick="app.showNeedSupportModal(${request.id})">
+                            <button class="btn btn-warning" onclick="window.requestDetailApp.showNeedSupportModal(${request.id})">
                                 <i class="fas fa-hands-helping"></i> Cần hỗ trợ
                             </button>
                         ` : ''}
@@ -730,21 +730,21 @@ class RequestDetailApp {
                             <option value="resolved" ${request.status === 'resolved' ? 'selected' : ''}>Đã giải quyết</option>
                             <option value="closed" ${request.status === 'closed' ? 'selected' : ''}>Đã đóng</option>
                         </select>
-                        <button class="btn btn-primary" onclick="app.updateRequestStatus(${request.id})">Cập nhật</button>
+                        <button class="btn btn-primary" onclick="window.requestDetailApp.updateRequestStatus(${request.id})">Cập nhật</button>
                     ` : currentUser && currentUser.role === 'staff' ? `
                         ${request.status === 'open' && !request.assigned_to ? `
-                            <button class="btn btn-success" onclick="app.acceptRequest(${request.id})">
+                            <button class="btn btn-success" onclick="window.requestDetailApp.acceptRequest(${request.id})">
                                 <i class="fas fa-check"></i> Nhận yêu cầu
                             </button>
                         ` : ''}
                         ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
-                            <button class="btn btn-primary" onclick="app.showResolveModal(${request.id})">
+                            <button class="btn btn-primary" onclick="window.requestDetailApp.showResolveModal(${request.id})">
                                 <i class="fas fa-check-circle"></i> Đã giải quyết
                             </button>
-                            <button class="btn btn-warning" onclick="app.showNeedSupportModal(${request.id})">
+                            <button class="btn btn-warning" onclick="window.requestDetailApp.showNeedSupportModal(${request.id})">
                                 <i class="fas fa-hands-helping"></i> Cần hỗ trợ
                             </button>
-                            <button class="btn btn-danger" onclick="app.showRejectModal(${request.id})">
+                            <button class="btn btn-danger" onclick="window.requestDetailApp.showRejectModal(${request.id})">
                                 <i class="fas fa-times"></i> Từ chối
                             </button>
                         ` : ''}
@@ -752,7 +752,7 @@ class RequestDetailApp {
                     
                     <!-- Show Close Request button for requesters when request is resolved -->
                     ${currentUser && currentUser.role === 'user' && request.status === 'resolved' && (request.user_id == currentUser.id || request.requester_id == currentUser.id) ? `
-                        <button class="btn btn-danger" onclick="app.showCloseRequestModal(${request.id})">
+                        <button class="btn btn-danger" onclick="window.requestDetailApp.showCloseRequestModal(${request.id})">
                             <i class="fas fa-times-circle"></i> Đóng lại yêu cầu
                         </button>
                     ` : ''}

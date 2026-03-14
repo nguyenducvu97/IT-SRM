@@ -350,6 +350,63 @@ class NotificationManager {
         }
     }
     
+    // Public method to show toast notifications (for success/error messages)
+    show(message, type = 'info') {
+        console.log(`🔔 NotificationManager.show(): [${type}] ${message}`);
+        
+        // Remove existing toast notifications
+        const existingToasts = document.querySelectorAll('.toast-notification');
+        existingToasts.forEach(toast => toast.remove());
+        
+        // Create toast notification element
+        const toast = document.createElement('div');
+        toast.className = `toast-notification toast-${type}`;
+        
+        // Set icon based on type
+        let icon = '';
+        switch (type) {
+            case 'success':
+                icon = '<i class="fas fa-check-circle"></i>';
+                break;
+            case 'error':
+                icon = '<i class="fas fa-exclamation-circle"></i>';
+                break;
+            case 'warning':
+                icon = '<i class="fas fa-exclamation-triangle"></i>';
+                break;
+            default:
+                icon = '<i class="fas fa-info-circle"></i>';
+        }
+        
+        toast.innerHTML = `
+            <div class="toast-content">
+                <div class="toast-icon">${icon}</div>
+                <div class="toast-message">${message}</div>
+                <button class="toast-close" onclick="this.parentElement.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+        
+        // Add to document
+        document.body.appendChild(toast);
+        
+        // Trigger animation
+        setTimeout(() => {
+            toast.classList.add('toast-show');
+        }, 100);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            toast.classList.add('toast-hide');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 5000);
+    }
+    
     // Clean up when page is unloaded
     destroy() {
         this.stopAutoRefresh();

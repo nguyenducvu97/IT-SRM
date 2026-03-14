@@ -264,7 +264,15 @@ if ($method == 'GET') {
                   LEFT JOIN service_requests sr ON c.id = sr.category_id";
         
         // Add filtering based on user role
-        if ($user_role != 'admin') {
+        if ($user_role == 'admin') {
+            // Admin sees all requests
+            // No additional filtering needed
+        } elseif ($user_role == 'staff') {
+            // Staff sees all requests (can work on any request)
+            // No user_id filtering for staff
+            $query .= " WHERE sr.user_id IS NOT NULL";
+        } else {
+            // Regular users only see their own requests
             $query .= " WHERE sr.user_id = :user_id OR sr.user_id IS NULL";
         }
         
@@ -272,7 +280,8 @@ if ($method == 'GET') {
         
         $stmt = $db->prepare($query);
         
-        if ($user_role != 'admin') {
+        // Only bind user_id for regular users
+        if ($user_role != 'admin' && $user_role != 'staff') {
             $stmt->bindParam(':user_id', $_SESSION['user_id']);
         }
         
