@@ -12,7 +12,10 @@ class ProfileManager {
     init() {
         this.checkAuth();
         this.bindEvents();
-        this.loadProfile();
+        // Only load profile if auth is successful
+        if (this.currentUser) {
+            this.loadProfile();
+        }
     }
 
     checkAuth() {
@@ -20,7 +23,7 @@ class ProfileManager {
         console.log('window.currentUser:', window.currentUser);
         
         // Use user data passed from PHP instead of API call
-        if (window.currentUser) {
+        if (window.currentUser && window.currentUser.id) {
             console.log('User data found, setting up profile');
             this.currentUser = window.currentUser;
             this.updateUserDisplay();
@@ -62,32 +65,84 @@ class ProfileManager {
 
     async loadProfile() {
         try {
-            const response = await this.apiCall('api/profile.php?action=profile');
+            console.log('📋 Loading profile data...');
+            console.log('📋 Current user:', this.currentUser);
             
-            if (response.success) {
-                this.displayProfile(response.data);
+            // Show loading state if available
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                console.log('📋 Showing loading overlay');
+                loadingOverlay.style.display = 'flex';
             } else {
-                this.showNotification(response.message, 'error');
+                console.log('⚠️ Loading overlay not found');
+            }
+            
+            console.log('📋 Making API call to: api/profile.php?action=profile');
+            const response = await this.apiCall('api/profile.php?action=profile');
+            console.log('📋 Profile API response:', response);
+            console.log('📋 Response type:', typeof response);
+            console.log('📋 Response success:', response?.success);
+            console.log('📋 Response data:', response?.data);
+            
+            if (response && response.success) {
+                console.log('✅ Profile API call successful');
+                this.displayProfile(response.data);
+                console.log('✅ Profile displayed successfully');
+            } else {
+                console.error('❌ Profile API call failed:', response?.message || 'Unknown error');
+                this.showNotification(response?.message || 'Lỗi tải thông tin cá nhân', 'error');
             }
         } catch (error) {
-            console.error('Profile load error:', error);
+            console.error('❌ Profile load error:', error);
+            console.error('❌ Error stack:', error.stack);
             this.showNotification('Lỗi tải thông tin cá nhân', 'error');
+        } finally {
+            // Hide loading state
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                console.log('📋 Hiding loading overlay');
+                loadingOverlay.style.display = 'none';
+            }
         }
     }
 
     displayProfile(user) {
+        console.log('=== DISPLAY PROFILE START ===');
         console.log('Displaying profile data:', user);
         
-        document.getElementById('username').value = user.username || '';
-        document.getElementById('full_name').value = user.full_name || '';
-        document.getElementById('email').value = user.email || '';
-        document.getElementById('phone').value = user.phone || '';
-        document.getElementById('role').value = this.getRoleText(user.role) || '';
-        
-        // Set department value (readonly field)
-        const deptField = document.getElementById('department');
-        if (deptField) {
-            deptField.value = user.department || '';
+        try {
+            // Check if elements exist before trying to set values
+            const usernameEl = document.getElementById('username');
+            const fullNameEl = document.getElementById('full_name');
+            const emailEl = document.getElementById('email');
+            const phoneEl = document.getElementById('phone');
+            const roleEl = document.getElementById('role');
+            const deptEl = document.getElementById('department');
+            
+            console.log('Elements found:', {
+                username: !!usernameEl,
+                full_name: !!fullNameEl,
+                email: !!emailEl,
+                phone: !!phoneEl,
+                role: !!roleEl,
+                department: !!deptEl
+            });
+            
+            if (usernameEl) usernameEl.value = user.username || '';
+            if (fullNameEl) fullNameEl.value = user.full_name || '';
+            if (emailEl) emailEl.value = user.email || '';
+            if (phoneEl) phoneEl.value = user.phone || '';
+            if (roleEl) roleEl.value = this.getRoleText(user.role) || '';
+            
+            // Set department value (readonly field)
+            if (deptEl) {
+                deptEl.value = user.department || '';
+            }
+            
+            console.log('=== DISPLAY PROFILE END ===');
+        } catch (error) {
+            console.error('❌ Error in displayProfile:', error);
+            this.showNotification('Lỗi hiển thị thông tin cá nhân', 'error');
         }
     }
 
@@ -104,6 +159,14 @@ class ProfileManager {
         };
 
         try {
+            console.log('📋 Updating profile...');
+            
+            // Show loading state
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'flex';
+            }
+            
             const response = await this.apiCall('api/profile.php', {
                 method: 'PUT',
                 body: JSON.stringify(profileData)
@@ -111,13 +174,35 @@ class ProfileManager {
 
             if (response.success) {
                 this.showNotification('Cập nhật thông tin thành công', 'success');
-                this.loadProfile(); // Reload to show updated data
+                console.log('✅ Profile updated successfully');
+                
+                // Update current user data without full reload
+                if (this.currentUser) {
+                    this.currentUser.full_name = profileData.full_name;
+                    this.currentUser.email = profileData.email;
+                    this.currentUser.phone = profileData.phone;
+                    this.currentUser.department = profileData.department;
+                    this.updateUserDisplay();
+                }
+                
+                // Just update display instead of full reload
+                this.displayProfile({
+                    ...this.currentUser,
+                    ...profileData
+                });
             } else {
+                console.error('❌ Profile update failed:', response.message);
                 this.showNotification(response.message, 'error');
             }
         } catch (error) {
-            console.error('Profile update error:', error);
+            console.error('❌ Profile update error:', error);
             this.showNotification('Lỗi cập nhật thông tin', 'error');
+        } finally {
+            // Hide loading state
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
         }
     }
 
@@ -154,15 +239,20 @@ class ProfileManager {
         if (this.currentUser.role !== 'admin') return;
 
         try {
+            console.log('👥 Loading users for admin...');
+            
             const response = await this.apiCall('api/profile.php?action=all_users');
+            console.log('👥 Users API response:', response);
             
             if (response.success) {
                 this.displayUsers(response.data);
+                console.log('✅ Users loaded successfully');
             } else {
+                console.error('❌ Users load failed:', response.message);
                 this.showNotification(response.message, 'error');
             }
         } catch (error) {
-            console.error('Users load error:', error);
+            console.error('❌ Users load error:', error);
             this.showNotification('Lỗi tải danh sách users', 'error');
         }
     }
@@ -314,17 +404,36 @@ class ProfileManager {
     }
 
     async apiCall(url, options = {}) {
-        const defaultOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+        try {
+            console.log('🌐 API Call:', url, options);
+            
+            const defaultOptions = {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            };
+
+            const finalOptions = { ...defaultOptions, ...options };
+            console.log('🌐 Final options:', finalOptions);
+
+            const response = await fetch(url, finalOptions);
+            console.log('🌐 Response status:', response.status);
+            console.log('🌐 Response ok:', response.ok);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        };
-
-        const finalOptions = { ...defaultOptions, ...options };
-
-        const response = await fetch(url, finalOptions);
-        return await response.json();
+            
+            const data = await response.json();
+            console.log('🌐 Response data:', data);
+            
+            return data;
+        } catch (error) {
+            console.error('🌐 API Call error:', error);
+            console.error('🌐 Error details:', error.message);
+            throw error;
+        }
     }
 }
 

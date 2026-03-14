@@ -548,7 +548,10 @@ class RequestDetailApp {
                         <h4><i class="fas fa-paperclip"></i> Tệp đính kèm (${request.attachments.length})</h4>
                         <div class="attachments-list">
                             ${request.attachments.map(attachment => {
-                                const isImage = attachment.mime_type.startsWith('image/');
+                                console.log('=== PROCESSING ATTACHMENT ===');
+                                console.log('Attachment:', attachment);
+                                
+                                const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
                                 const fileExt = attachment.filename.split('.').pop().toLowerCase();
                                 const isPDF = fileExt === 'pdf';
                                 const isWord = ['doc', 'docx'].includes(fileExt);
@@ -556,6 +559,18 @@ class RequestDetailApp {
                                 const isPowerPoint = ['ppt', 'pptx'].includes(fileExt);
                                 const isText = ['txt', 'md'].includes(fileExt);
                                 const isViewable = isPDF || isWord || isExcel || isPowerPoint || isText;
+                                
+                                console.log('File info:', {
+                                    filename: attachment.filename,
+                                    original_name: attachment.original_name,
+                                    mime_type: attachment.mime_type,
+                                    isImage: isImage,
+                                    isViewable: isViewable,
+                                    fileExt: fileExt
+                                });
+                                
+                                const imagePath = `uploads/requests/${attachment.filename}`;
+                                console.log('Image path:', imagePath);
                                 
                                 return `
                                     <div class="attachment-item">
@@ -566,10 +581,11 @@ class RequestDetailApp {
                                         </div>
                                         <div class="attachment-actions">
                                             ${isImage ? `
-                                                <img src="uploads/requests/${attachment.filename}" 
+                                                <img src="${imagePath}" 
                                                      alt="${attachment.original_name}" 
                                                      class="attachment-preview"
-                                                     onclick="app.showImageModal('uploads/requests/${attachment.filename}', '${attachment.original_name}')">
+                                                     onclick="window.requestDetailApp.showImageModal('${imagePath}', '${attachment.original_name}')"
+                                                     onerror="console.error('Preview failed for: ${imagePath}'); this.style.display='none';">
                                                 <div class="image-overlay">
                                                     <i class="fas fa-search-plus"></i>
                                                 </div>
@@ -1634,9 +1650,15 @@ class RequestDetailApp {
     }
 
     showImageModal(imageSrc, imageName) {
+        console.log('=== SHOW IMAGE MODAL ===');
+        console.log('Image source:', imageSrc);
+        console.log('Image name:', imageName);
+        console.log('window.requestDetailApp:', window.requestDetailApp);
+        
         // Create image modal if it doesn't exist
         let modal = document.getElementById('imageModal');
         if (!modal) {
+            console.log('Creating image modal...');
             modal = document.createElement('div');
             modal.id = 'imageModal';
             modal.className = 'image-modal';
@@ -1652,11 +1674,56 @@ class RequestDetailApp {
                 </div>
             `;
             document.body.appendChild(modal);
+            console.log('Image modal added to body');
+        } else {
+            console.log('Image modal already exists');
         }
         
-        document.getElementById('modalImage').src = imageSrc;
+        const modalImage = document.getElementById('modalImage');
+        console.log('Setting image source to:', imageSrc);
+        console.log('Modal element:', modal);
+        console.log('Modal display style before:', modal.style.display);
+        
+        // Add error handling for image loading
+        modalImage.onerror = function() {
+            console.error('Failed to load image:', imageSrc);
+            modalImage.alt = 'Failed to load image: ' + imageName;
+            modalImage.style.display = 'none';
+            
+            // Add error message
+            const errorDiv = document.createElement('div');
+            errorDiv.textContent = 'Không thể tải hình ảnh. Vui lòng kiểm tra đường dẫn file.';
+            errorDiv.style.color = 'red';
+            errorDiv.style.padding = '20px';
+            modalImage.parentNode.appendChild(errorDiv);
+        };
+        
+        modalImage.onload = function() {
+            console.log('Image loaded successfully:', imageSrc);
+        };
+        
+        modalImage.src = imageSrc;
         document.getElementById('imageModalTitle').textContent = imageName;
+        
+        // Force display modal
         modal.style.display = 'block';
+        modal.style.zIndex = '9999';
+        modal.style.position = 'fixed';
+        
+        console.log('Modal display style after:', modal.style.display);
+        console.log('Modal z-index:', modal.style.zIndex);
+        console.log('Modal position:', modal.style.position);
+        console.log('Image modal displayed');
+        
+        // Add click outside to close
+        setTimeout(() => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    console.log('Modal closed by clicking outside');
+                }
+            });
+        }, 100);
     }
 
     closeModal(modal) {

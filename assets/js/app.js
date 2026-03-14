@@ -4,6 +4,10 @@ class ITServiceApp {
     constructor() {
         this.currentUser = null;
         this.currentPage = 'dashboard';
+        
+        // Initialize managers
+        this.departmentsManager = null;
+        
         this.init();
     }
 
@@ -496,9 +500,23 @@ class ITServiceApp {
     }
 
     hideLoadingState() {
+        // Debounce to prevent multiple calls
+        if (this._hidingLoading) {
+            console.log('Already hiding loading, skipping');
+            return;
+        }
+        this._hidingLoading = true;
+        
         const loadingOverlay = document.getElementById('loadingOverlay');
         if (loadingOverlay) {
-            loadingOverlay.style.display = 'none';
+            // Add a small delay to prevent flickering
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                this._hidingLoading = false;
+                console.log('Loading state hidden');
+            }, 50);
+        } else {
+            this._hidingLoading = false;
         }
     }
 
@@ -537,12 +555,16 @@ class ITServiceApp {
                         // Don't redirect to dashboard - just hide loading and show error
                         this.hideLoadingState();
                     }
-                    // Always hide loading for users page
-                    setTimeout(() => this.hideLoadingState(), 500);
                     break;
                 case 'departments':
+                    console.log('=== DEPARTMENTS CASE ===');
+                    console.log('Current user role:', this.currentUser.role);
+                    console.log('Departments manager available:', !!this.departmentsManager);
+                    console.log('DepartmentsManager class exists:', typeof DepartmentsManager !== 'undefined');
+                    
                     if (this.currentUser.role === 'admin') {
                         if (this.departmentsManager) {
+                            console.log('✅ Calling departmentsManager.loadDepartments()');
                             this.departmentsManager.loadDepartments();
                         } else {
                             console.log('❌ Departments manager not available');
@@ -554,8 +576,9 @@ class ITServiceApp {
                         // Don't redirect to dashboard - just hide loading and show error
                         this.hideLoadingState();
                     }
-                    // Always hide loading for departments page
-                    setTimeout(() => this.hideLoadingState(), 500);
+                    break;
+                case 'department-requests':
+                    this.loadDepartmentRequestsPage();
                     break;
                 case 'support-requests':
                     if (['admin', 'staff'].includes(this.currentUser.role)) {
@@ -566,8 +589,6 @@ class ITServiceApp {
                         // Don't redirect to dashboard - just hide loading and show error
                         this.hideLoadingState();
                     }
-                    // Always hide loading for support requests page
-                    setTimeout(() => this.hideLoadingState(), 500);
                     break;
                 case 'reject-requests':
                     if (['admin', 'staff'].includes(this.currentUser.role)) {
@@ -578,14 +599,119 @@ class ITServiceApp {
                         // Don't redirect to dashboard - just hide loading and show error
                         this.hideLoadingState();
                     }
-                    // Always hide loading for reject requests page
-                    setTimeout(() => this.hideLoadingState(), 500);
                     break;
                 default:
                     console.log('Unknown page:', page);
                     this.hideLoadingState();
             }
         }, 100); // Small delay to ensure DOM is updated
+    }
+
+    async loadDepartmentRequestsPage() {
+        console.log('=== LOAD DEPARTMENT REQUESTS PAGE ===');
+        
+        // Get department info from session storage
+        const departmentId = sessionStorage.getItem('currentDepartmentId');
+        const departmentName = sessionStorage.getItem('currentDepartmentName');
+        
+        console.log('Department ID from session:', departmentId);
+        console.log('Department Name from session:', departmentName);
+        
+        if (!departmentId) {
+            console.error('No department ID found in session storage');
+            this.showNotification('Không tìm thấy thông tin phòng ban', 'error');
+            this.showPage('departments');
+            return;
+        }
+        
+        // Update page header with department name
+        const pageHeader = document.querySelector('#department-requestsPage .page-header h2');
+        if (pageHeader && departmentName) {
+            pageHeader.textContent = `Yêu cầu - ${departmentName}`;
+        }
+        
+        // Load requests for this department
+        await this.loadDepartmentRequestsList(departmentId);
+    }
+
+    // Load requests list for department page
+    async loadDepartmentRequestsList(departmentId) {
+        const container = document.getElementById('departmentRequestsList');
+        
+        if (!container) {
+            console.error('Department requests list container not found');
+            return;
+        }
+        
+        // Show loading state
+        container.innerHTML = '<div class="loading">Đang tải yêu cầu...</div>';
+        
+        try {
+            console.log('🔍 Loading department requests for department ID:', departmentId);
+            const response = await this.apiCall(`api/service_requests.php?action=list&department_id=${departmentId}`);
+            
+            console.log('🔍 Department requests API response:', response);
+            console.log('🔍 Response success:', response.success);
+            console.log('🔍 Response data:', response.data);
+            
+            if (response.success) {
+                // Handle different data structures
+                let requests = response.data;
+                
+                console.log('🔍 Initial requests data:', requests);
+                console.log('🔍 Type of requests:', typeof requests);
+                console.log('🔍 Is array?', Array.isArray(requests));
+                
+                // Early validation with try-catch
+                try {
+                    // Check if data has pagination structure
+                    if (requests && requests.requests && Array.isArray(requests.requests)) {
+                        requests = requests.requests;
+                        console.log('🔍 Using pagination structure, requests:', requests);
+                    } else if (!Array.isArray(requests)) {
+                        console.error('🔍 Requests data is not an array:', requests);
+                        container.innerHTML = '<p class="error">Lỗi khi hiển thị danh sách yêu cầu.</p>';
+                        return;
+                    }
+                } catch (mapError) {
+                    console.error('🔍 Error during requests data processing:', mapError);
+                    container.innerHTML = '<p class="error">Lỗi khi xử lý dữ liệu yêu cầu.</p>';
+                    return;
+                }
+                
+                console.log('🔍 Final requests array:', requests);
+                console.log('🔍 Number of requests:', requests.length);
+                
+                // Log each request for debugging
+                requests.forEach((request, index) => {
+                    console.log(`🔍 Request ${index}:`, {
+                        id: request.id,
+                        title: request.title,
+                        department_name: request.department_name,
+                        department: request.department,
+                        department_id: request.department_id,
+                        status: request.status
+                    });
+                });
+                
+                if (requests.length === 0) {
+                    container.innerHTML = '<p>Không có yêu cầu nào cho phòng ban này.</p>';
+                    return;
+                }
+                
+                // Display requests using the same method as other pages
+                this.displayRequests(requests);
+            } else {
+                console.error('🔍 API call failed:', response.message);
+                container.innerHTML = '<p class="error">Không thể tải yêu cầu: ' + response.message + '</p>';
+            }
+        } catch (error) {
+            console.error('🔍 Error loading department requests:', error);
+            container.innerHTML = '<p class="error">Lỗi khi tải yêu cầu. Vui lòng thử lại.</p>';
+        } finally {
+            // Hide the main loading overlay if it exists
+            this.hideLoadingState();
+        }
     }
 
     async loadDashboard() {
@@ -1815,6 +1941,25 @@ class ITServiceApp {
         }
     }
 
+    initializeManagers() {
+        console.log('=== INITIALIZING MANAGERS ===');
+        
+        try {
+            // Initialize DepartmentsManager if class exists and user is admin
+            if (typeof DepartmentsManager !== 'undefined' && this.currentUser.role === 'admin') {
+                console.log('Initializing DepartmentsManager...');
+                this.departmentsManager = new DepartmentsManager(this);
+                console.log('DepartmentsManager initialized successfully');
+            } else {
+                console.log('DepartmentsManager not available or user not admin');
+                this.departmentsManager = null;
+            }
+        } catch (error) {
+            console.error('Error initializing managers:', error);
+            this.departmentsManager = null;
+        }
+    }
+
     async checkAuth() {
         try {
             console.log('Checking authentication...');
@@ -1830,6 +1975,10 @@ class ITServiceApp {
                 // User is logged in, set current user and show dashboard
                 this.currentUser = response.data;
                 console.log('User is logged in:', this.currentUser);
+                
+                // Initialize managers after authentication
+                this.initializeManagers();
+                
                 this.showDashboard();
             } else {
                 // No active session, show login screen
@@ -2891,16 +3040,27 @@ class ITServiceApp {
     // Profile Management Functions
     async loadProfile() {
         try {
+            console.log('📋 APP.JS Loading profile data...');
+            
+            // Show loading state
+            this.showLoadingState();
+            
             const response = await this.apiCall('api/profile.php?action=profile');
+            console.log('📋 APP.JS Profile API response:', response);
             
             if (response.success) {
                 this.displayProfile(response.data);
+                console.log('✅ APP.JS Profile loaded successfully');
             } else {
+                console.error('❌ APP.JS Profile load failed:', response.message);
                 this.showNotification(response.message, 'error');
             }
         } catch (error) {
-            console.error('Profile load error:', error);
+            console.error('❌ APP.JS Profile load error:', error);
             this.showNotification('Lỗi tải thông tin cá nhân', 'error');
+        } finally {
+            // Hide loading state
+            this.hideLoadingState();
         }
     }
 
@@ -2932,6 +3092,11 @@ class ITServiceApp {
         };
 
         try {
+            console.log('📋 APP.JS Updating profile...');
+            
+            // Show loading state
+            this.showLoadingState();
+            
             const response = await this.apiCall('api/profile.php', {
                 method: 'PUT',
                 body: JSON.stringify(profileData)
@@ -2939,13 +3104,31 @@ class ITServiceApp {
 
             if (response.success) {
                 this.showNotification('Cập nhật thông tin thành công', 'success');
-                this.loadProfile(); // Reload profile data
+                console.log('✅ APP.JS Profile updated successfully');
+                
+                // Update current user data locally
+                if (this.currentUser) {
+                    this.currentUser.full_name = profileData.full_name;
+                    this.currentUser.email = profileData.email;
+                    this.currentUser.phone = profileData.phone;
+                    this.currentUser.department = profileData.department;
+                }
+                
+                // Update display without full reload
+                this.displayProfile({
+                    ...this.currentUser,
+                    ...profileData
+                });
             } else {
+                console.error('❌ APP.JS Profile update failed:', response.message);
                 this.showNotification(response.message, 'error');
             }
         } catch (error) {
-            console.error('Profile update error:', error);
+            console.error('❌ APP.JS Profile update error:', error);
             this.showNotification('Lỗi cập nhật thông tin', 'error');
+        } finally {
+            // Hide loading state
+            this.hideLoadingState();
         }
     }
 

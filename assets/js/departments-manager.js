@@ -41,8 +41,15 @@ class DepartmentsManager {
 
     async loadDepartments() {
         console.log('🏢 Loading departments for admin...');
+        console.log('🏢 App object available:', !!this.app);
+        console.log('🏢 App.apiCall method available:', typeof this.app.apiCall);
         
         try {
+            // Check if app and apiCall are available
+            if (!this.app || typeof this.app.apiCall !== 'function') {
+                throw new Error('App object or apiCall method not available');
+            }
+            
             // Explicitly call with action=get to get full department objects
             const response = await this.app.apiCall('api/departments.php?action=get');
             console.log('📡 Full API response:', response);
@@ -63,11 +70,12 @@ class DepartmentsManager {
                 await this.displayDepartments();
             } else {
                 console.error('❌ Failed to load departments:', response.message);
-                this.app.showNotification(response.message || 'Lỗi khi tải danh sách phòng ban', 'error');
+                this.app.showNotification('Không thể tải danh sách phòng ban: ' + response.message, 'error');
             }
         } catch (error) {
-            console.error('❌ Error in loadDepartments:', error);
-            this.app.showNotification('Lỗi khi tải danh sách phòng ban', 'error');
+            console.error('💥 Error loading departments:', error);
+            console.error('💥 Error stack:', error.stack);
+            this.app.showNotification('Lỗi khi tải phòng ban: ' + error.message, 'error');
         }
     }
 
@@ -86,15 +94,17 @@ class DepartmentsManager {
             return;
         }
 
-        // Get all users once and count by department locally
+        // Get all users and requests once and count by department locally
         let userCounts = {};
+        let requestCounts = {};
+        
         try {
             console.log('👥 Loading all users for department counts...');
-            const response = await this.app.apiCall('api/users.php');
-            if (response.success && response.data) {
+            const usersResponse = await this.app.apiCall('api/users.php');
+            if (usersResponse.success && usersResponse.data) {
                 // Count users by department
                 userCounts = {};
-                response.data.forEach(user => {
+                usersResponse.data.forEach(user => {
                     const dept = user.department || 'Unknown';
                     userCounts[dept] = (userCounts[dept] || 0) + 1;
                 });
@@ -102,7 +112,84 @@ class DepartmentsManager {
             }
         } catch (error) {
             console.log('Could not load users for department counts:', error);
-            // Continue with empty counts
+        }
+        
+        try {
+            console.log('📋 Loading all requests for department counts...');
+            const requestsResponse = await this.app.apiCall('api/service_requests.php?action=list&limit=1000');
+            console.log('📋 Full requests API response:', requestsResponse);
+            
+            if (requestsResponse.success && requestsResponse.data) {
+                // Count requests by department
+                requestCounts = {};
+                const requests = requestsResponse.data.requests || requestsResponse.data || [];
+                console.log('📋 Total requests loaded:', requests.length);
+                
+                // Load all users to get department info
+                let users = [];
+                try {
+                    console.log('� Loading users for department mapping...');
+                    const usersResponse = await this.app.apiCall('api/users.php');
+                    if (usersResponse.success && usersResponse.data) {
+                        users = usersResponse.data;
+                        console.log('� Users loaded:', users.length);
+                    }
+                } catch (error) {
+                    console.error('� Error loading users:', error);
+                }
+                
+                // Create user department mapping
+                const userDepartmentMap = {};
+                users.forEach(user => {
+                    if (user.id && user.department) {
+                        userDepartmentMap[user.id] = user.department;
+                    }
+                });
+                console.log('👤 User department mapping:', userDepartmentMap);
+                
+                requests.forEach((request, index) => {
+                    console.log(`📋 Request ${index}:`, request);
+                    console.log(`📋 Request ${index} - ALL KEYS:`, Object.keys(request));
+                    console.log(`📋 Request ${index} - user_id:`, request.user_id);
+                    
+                    // Get department from user mapping
+                    const dept = userDepartmentMap[request.user_id] || 'Unknown';
+                    console.log(`📋 Using department field: "${dept}" for request ${request.id} (user_id: ${request.user_id})`);
+                    
+                    if (!requestCounts[dept]) {
+                        requestCounts[dept] = {
+                            total: 0,
+                            open: 0,
+                            in_progress: 0,
+                            resolved: 0,
+                            rejected: 0
+                        };
+                    }
+                    
+                    requestCounts[dept].total++;
+                    
+                    switch(request.status) {
+                        case 'open':
+                            requestCounts[dept].open++;
+                            break;
+                        case 'in_progress':
+                            requestCounts[dept].in_progress++;
+                            break;
+                        case 'resolved':
+                            requestCounts[dept].resolved++;
+                            break;
+                        case 'rejected':
+                            requestCounts[dept].rejected++;
+                            break;
+                    }
+                });
+                
+                console.log('📋 Final request counts by department:', requestCounts);
+            } else {
+                console.error('📋 Failed to load requests:', requestsResponse.message);
+            }
+        } catch (error) {
+            console.error('📋 Error loading requests for department counts:', error);
         }
 
         container.innerHTML = this.departments.map((department, index) => {
@@ -126,6 +213,7 @@ class DepartmentsManager {
             }
             
             const userCount = userCounts[deptName] || 0;
+            const deptRequestCounts = requestCounts[deptName] || { total: 0, open: 0, in_progress: 0, resolved: 0, rejected: 0 };
             
             console.log('🏢 Rendering department:', { 
                 index, 
@@ -134,11 +222,12 @@ class DepartmentsManager {
                 isActive,
                 description,
                 userCount,
+                requestCounts: deptRequestCounts,
                 originalData: department 
             });
             
             return `
-            <div class="department-card" data-department-id="${deptId}">
+            <div class="department-card clickable" data-department-id="${deptId}" data-department-name="${deptName}">
                 <div class="department-header">
                     <h3 class="department-name">${deptName}</h3>
                     <span class="department-status ${isActive ? 'active' : 'inactive'}">
@@ -151,6 +240,33 @@ class DepartmentsManager {
                 <div class="department-meta">
                     <span><i class="fas fa-calendar"></i> ${this.formatDate(createdAt)}</span>
                     <span><i class="fas fa-users"></i> ${userCount} người dùng</span>
+                </div>
+                <div class="department-requests">
+                    <div class="request-stats">
+                        <span class="stat-item total">
+                            <i class="fas fa-tasks"></i>
+                            <span class="stat-number">${deptRequestCounts.total}</span>
+                            <span class="stat-label">Tổng</span>
+                        </span>
+                        <span class="stat-item open">
+                            <i class="fas fa-clock"></i>
+                            <span class="stat-number">${deptRequestCounts.open}</span>
+                            <span class="stat-label">Mới</span>
+                        </span>
+                        <span class="stat-item in-progress">
+                            <i class="fas fa-spinner"></i>
+                            <span class="stat-number">${deptRequestCounts.in_progress}</span>
+                            <span class="stat-label">Đang xử lý</span>
+                        </span>
+                        <span class="stat-item resolved">
+                            <i class="fas fa-check-circle"></i>
+                            <span class="stat-number">${deptRequestCounts.resolved}</span>
+                            <span class="stat-label">Hoàn thành</span>
+                        </span>
+                    </div>
+                    <div class="view-requests-hint">
+                        <i class="fas fa-arrow-right"></i> Click để xem yêu cầu
+                    </div>
                 </div>
                 <div class="department-actions">
                     <button class="btn btn-secondary btn-sm edit-department-btn">
@@ -180,6 +296,38 @@ class DepartmentsManager {
                 this.deleteDepartment(parseInt(deptId));
             });
         });
+        
+        // Add click event listener for department cards (excluding action buttons)
+        container.querySelectorAll('.department-card.clickable').forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Don't trigger if clicking on action buttons
+                if (e.target.closest('.department-actions')) {
+                    return;
+                }
+                
+                const deptId = card.dataset.departmentId;
+                const deptName = card.dataset.departmentName;
+                console.log('🏢 Department card clicked:', { deptId, deptName });
+                this.showDepartmentRequests(deptId, deptName);
+            });
+        });
+        
+        // Hide loading state after departments are displayed
+        if (this.app && typeof this.app.hideLoadingState === 'function') {
+            this.app.hideLoadingState();
+            console.log('🏢 Loading state hidden after displaying departments');
+        }
+    }
+    
+    showDepartmentRequests(deptId, deptName) {
+        console.log('🏢 Showing department requests:', { deptId, deptName });
+        
+        // Store department info in session storage
+        sessionStorage.setItem('currentDepartmentId', deptId);
+        sessionStorage.setItem('currentDepartmentName', deptName);
+        
+        // Navigate to department requests page
+        this.app.showPage('department-requests');
     }
 
     showAddDepartmentModal() {
