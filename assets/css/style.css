@@ -3957,6 +3957,33 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     font-size: 0.7rem;
 }
 
+/* Loading Overlay Styles */
+.loading-content {
+    text-align: center;
+    padding: 2rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+.loading-text {
+    font-size: 1.1rem;
+    color: #495057;
+    font-weight: 500;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* Status Breakdown Styles */
 .status-breakdown {
     display: flex;

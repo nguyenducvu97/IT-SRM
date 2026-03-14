@@ -404,6 +404,16 @@ class ITServiceApp {
     showPage(page) {
         console.log('=== showPage called with:', page, '===');
         console.log('Current user:', this.currentUser);
+        console.log('Current page before:', this.currentPage);
+        
+        // Check if loading overlay is already shown
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const hasLoading = loadingOverlay && loadingOverlay.style.display === 'flex';
+        
+        if (!hasLoading) {
+            // Show loading state for better UX
+            this.showLoadingState('Đang tải trang...');
+        }
         
         // Update navigation
         document.querySelectorAll('.nav-link').forEach(link => {
@@ -414,6 +424,9 @@ class ITServiceApp {
         const navPageElement = document.querySelector(`[data-page="${page}"]`);
         if (navPageElement) {
             navPageElement.classList.add('active');
+            console.log('Updated navigation active state for:', page);
+        } else {
+            console.log('No navigation element found for:', page);
         }
 
         // Update pages
@@ -427,79 +440,152 @@ class ITServiceApp {
         console.log('Looking for page element:', pageId);
         console.log('Page element found:', !!pageElement);
         
-        if (pageElement) {
-            pageElement.classList.add('active');
-        } else {
-            console.error(`Page element not found: ${pageId}`);
-            return;
-        }
-
+        // Set current page BEFORE checking element existence
         this.currentPage = page;
         console.log('Current page set to:', this.currentPage);
+        
+        if (pageElement) {
+            pageElement.classList.add('active');
+            console.log('Successfully activated page:', page);
+        } else {
+            console.error(`Page element not found: ${pageId}`);
+            this.hideLoadingState();
+            this.showNotification(`Trang ${page} không tồn tại`, 'error');
+            // Don't return here - continue with loadPageData which will handle the error
+        }
 
         // Load page-specific data
         console.log('Loading page-specific data for:', page);
-        switch(page) {
-            case 'dashboard':
-                this.loadDashboard();
-                break;
-            case 'profile':
-                this.loadProfile();
-                break;
-            case 'requests':
-                this.loadRequests();
-                break;
-            case 'new-request':
-                this.loadCategories();
-                break;
-            case 'categories':
-                this.loadCategories();
-                break;
-            case 'category-requests':
-                this.loadCategoryRequestsPage();
-                break;
-            case 'users':
-                console.log('Users page detected, checking role...');
-                if (this.currentUser.role === 'admin') {
-                    console.log('User is admin, calling loadUsers()');
-                    this.loadUsers();
-                } else {
-                    console.log('❌ User is not admin, denying access to users page');
-                    this.showNotification('Chỉ admin mới có quyền truy cập quản lý người dùng', 'error');
-                    // Redirect to dashboard
-                    setTimeout(() => this.showPage('dashboard'), 1000);
-                }
-                break;
-            case 'departments':
-                if (this.currentUser.role === 'admin') {
-                    if (this.departmentsManager) {
-                        this.departmentsManager.loadDepartments();
-                    }
-                } else {
-                    console.log('❌ User is not admin, denying access to departments page');
-                    this.showNotification('Chỉ admin mới có quyền quản lý phòng ban', 'error');
-                    setTimeout(() => this.showPage('dashboard'), 1000);
-                }
-                break;
-            case 'support-requests':
-                if (['admin', 'staff'].includes(this.currentUser.role)) {
-                    this.loadSupportRequests();
-                } else {
-                    console.log('❌ User is not admin/staff, denying access to support requests page');
-                    this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu hỗ trợ', 'error');
-                    setTimeout(() => this.showPage('dashboard'), 1000);
-                }
-                break;
-            case 'reject-requests':
-                if (['admin', 'staff'].includes(this.currentUser.role)) {
-                    this.loadRejectRequests();
-                } else {
-                    console.log('❌ User is not admin/staff, denying access to reject requests page');
-                    this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu từ chối', 'error');
-                    setTimeout(() => this.showPage('dashboard'), 1000);
-                }
-                break;
+        this.loadPageData(page);
+    }
+
+    showLoadingState(message = 'Đang tải...') {
+        // Create or update loading overlay
+        let loadingOverlay = document.getElementById('loadingOverlay');
+        if (!loadingOverlay) {
+            loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'loadingOverlay';
+            loadingOverlay.innerHTML = `
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">${message}</div>
+                </div>
+            `;
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                backdrop-filter: blur(2px);
+            `;
+            document.body.appendChild(loadingOverlay);
+        } else {
+            // Safely update loading text
+            const loadingText = loadingOverlay.querySelector('.loading-text');
+            if (loadingText) {
+                loadingText.textContent = message;
+            }
         }
+        loadingOverlay.style.display = 'flex';
+    }
+
+    hideLoadingState() {
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        if (loadingOverlay) {
+            loadingOverlay.style.display = 'none';
+        }
+    }
+
+    loadPageData(page) {
+        console.log('=== LOAD PAGE DATA FOR:', page, '===');
+        
+        // Use setTimeout to ensure DOM is updated before loading data
+        setTimeout(() => {
+            switch(page) {
+                case 'dashboard':
+                    this.loadDashboard();
+                    break;
+                case 'profile':
+                    this.loadProfile();
+                    break;
+                case 'requests':
+                    this.loadRequests();
+                    break;
+                case 'new-request':
+                    this.loadCategories();
+                    break;
+                case 'categories':
+                    this.loadCategories();
+                    break;
+                case 'category-requests':
+                    this.loadCategoryRequestsPage();
+                    break;
+                case 'users':
+                    console.log('Users page detected, checking role...');
+                    if (this.currentUser.role === 'admin') {
+                        console.log('User is admin, calling loadUsers()');
+                        this.loadUsers();
+                    } else {
+                        console.log('❌ User is not admin, denying access to users page');
+                        this.showNotification('Chỉ admin mới có quyền truy cập quản lý người dùng', 'error');
+                        // Don't redirect to dashboard - just hide loading and show error
+                        this.hideLoadingState();
+                    }
+                    // Always hide loading for users page
+                    setTimeout(() => this.hideLoadingState(), 500);
+                    break;
+                case 'departments':
+                    if (this.currentUser.role === 'admin') {
+                        if (this.departmentsManager) {
+                            this.departmentsManager.loadDepartments();
+                        } else {
+                            console.log('❌ Departments manager not available');
+                            this.showNotification('Quản lý phòng ban không khả dụng', 'error');
+                        }
+                    } else {
+                        console.log('❌ User is not admin, denying access to departments page');
+                        this.showNotification('Chỉ admin mới có quyền quản lý phòng ban', 'error');
+                        // Don't redirect to dashboard - just hide loading and show error
+                        this.hideLoadingState();
+                    }
+                    // Always hide loading for departments page
+                    setTimeout(() => this.hideLoadingState(), 500);
+                    break;
+                case 'support-requests':
+                    if (['admin', 'staff'].includes(this.currentUser.role)) {
+                        this.loadSupportRequests();
+                    } else {
+                        console.log('❌ User is not admin/staff, denying access to support requests page');
+                        this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu hỗ trợ', 'error');
+                        // Don't redirect to dashboard - just hide loading and show error
+                        this.hideLoadingState();
+                    }
+                    // Always hide loading for support requests page
+                    setTimeout(() => this.hideLoadingState(), 500);
+                    break;
+                case 'reject-requests':
+                    if (['admin', 'staff'].includes(this.currentUser.role)) {
+                        this.loadRejectRequests();
+                    } else {
+                        console.log('❌ User is not admin/staff, denying access to reject requests page');
+                        this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu từ chối', 'error');
+                        // Don't redirect to dashboard - just hide loading and show error
+                        this.hideLoadingState();
+                    }
+                    // Always hide loading for reject requests page
+                    setTimeout(() => this.hideLoadingState(), 500);
+                    break;
+                default:
+                    console.log('Unknown page:', page);
+                    this.hideLoadingState();
+            }
+        }, 100); // Small delay to ensure DOM is updated
     }
 
     async loadDashboard() {
@@ -559,6 +645,8 @@ class ITServiceApp {
             }
         } catch (error) {
             console.error('Dashboard load error:', error);
+        } finally {
+            this.hideLoadingState();
         }
     }
 
@@ -640,6 +728,8 @@ class ITServiceApp {
             }
         } catch (error) {
             console.error('Requests load error:', error);
+        } finally {
+            this.hideLoadingState();
         }
     }
 
@@ -751,18 +841,7 @@ class ITServiceApp {
         console.log('=== SHOW REQUESTS BY STATUS ===');
         console.log('Status:', status);
         
-        // Navigate to requests page with status filter
-        this.showPage('requests');
-        
-        // Set status filter and load requests
-        if (status === 'all') {
-            // Clear status filter
-            const statusFilter = document.getElementById('statusFilter');
-            if (statusFilter) {
-                statusFilter.value = '';
-            }
-            await this.loadRequests();
-        } else if (status === 'support') {
+        if (status === 'support') {
             console.log('=== SHOWING SUPPORT PAGE ===');
             console.log('Current user role:', this.currentUser.role);
             
@@ -772,27 +851,28 @@ class ITServiceApp {
             } else {
                 this.showNotification('Bạn không có quyền xem yêu cầu hỗ trợ', 'error');
             }
-        } else if (status === 'request_support') {
-            // Set status filter for service requests
-            const statusFilter = document.getElementById('statusFilter');
-            if (statusFilter) {
-                statusFilter.value = 'request_support';
-            }
-            await this.loadRequests();
-        } else if (status === 'rejected') {
-            // Load rejected requests
-            const statusFilter = document.getElementById('statusFilter');
-            if (statusFilter) {
-                statusFilter.value = 'rejected';
-            }
-            await this.loadRequests();
         } else {
-            // Set status filter for service requests
-            const statusFilter = document.getElementById('statusFilter');
-            if (statusFilter) {
-                statusFilter.value = status;
+            // For all other statuses, navigate to requests page
+            // Only showPage if we're not already on requests page
+            if (this.currentPage !== 'requests') {
+                this.showPage('requests');
+                
+                // Set status filter after page loads
+                setTimeout(() => {
+                    const statusFilter = document.getElementById('statusFilter');
+                    if (statusFilter) {
+                        statusFilter.value = status === 'all' ? '' : status;
+                    }
+                    this.loadRequests();
+                }, 200);
+            } else {
+                // Already on requests page, just update filter and reload
+                const statusFilter = document.getElementById('statusFilter');
+                if (statusFilter) {
+                    statusFilter.value = status === 'all' ? '' : status;
+                }
+                this.loadRequests();
             }
-            await this.loadRequests();
         }
     }
 
@@ -832,6 +912,8 @@ class ITServiceApp {
         } catch (error) {
             console.error('Support requests load error:', error);
             this.showNotification('Lỗi tải yêu cầu hỗ trợ', 'error');
+        } finally {
+            this.hideLoadingState();
         }
     }
 
@@ -873,6 +955,16 @@ class ITServiceApp {
                     <span><i class="fas fa-clock"></i> ${this.formatDate(support.created_at)}</span>
                 </div>
                 
+            <div class="request-description">
+                    <p>${support.support_details ? support.support_details.substring(0, 150) + (support.support_details.length > 150 ? '...' : '') : 'Không có chi tiết'}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    async showRequestDetail(id) {
+        // Check if user is authenticated before redirecting
+        if (!this.currentUser || !this.currentUser.id) {
             console.log('User not authenticated, staying on current page');
             this.showNotification('Vui lòng đăng nhập để xem chi tiết', 'error');
             return;
@@ -1236,6 +1328,7 @@ class ITServiceApp {
             this.showNotification('Lỗi khi tải danh mục', 'error');
         } finally {
             this._loadingCategories = false;
+            this.hideLoadingState();
         }
     }
 
@@ -1375,7 +1468,8 @@ class ITServiceApp {
         if (!categoryId) {
             console.error('No category ID found in session storage');
             this.showNotification('Không tìm thấy thông tin danh mục', 'error');
-            this.showPage('categories');
+            // Don't redirect to categories - just show error and hide loading
+            this.hideLoadingState();
             return;
         }
         
@@ -1482,6 +1576,9 @@ class ITServiceApp {
         } catch (error) {
             console.error('Error loading category requests:', error);
             container.innerHTML = '<p class="error">Lỗi khi tải yêu cầu. Vui lòng thử lại.</p>';
+        } finally {
+            // Hide the main loading overlay if it exists
+            this.hideLoadingState();
         }
     }
 
@@ -1495,9 +1592,8 @@ class ITServiceApp {
         sessionStorage.setItem('currentCategoryId', categoryId);
         sessionStorage.setItem('currentCategoryName', categoryName);
         
-        // Navigate to a new page with category requests
-        // We'll create a new page or use existing requests page with category filter
-        window.location.href = `index.html?page=category-requests&category_id=${categoryId}&category_name=${encodeURIComponent(categoryName)}`;
+        // Use internal navigation instead of full page reload
+        this.showPage('category-requests');
     }
 
     // Toggle category requests list (kept for backward compatibility)
@@ -1859,6 +1955,7 @@ class ITServiceApp {
         } finally {
             console.log('🏁 loadUsers() FINISHED');
             this._loadingUsers = false;
+            this.hideLoadingState();
         }
     }
 
@@ -2451,6 +2548,8 @@ class ITServiceApp {
             }
         } catch (error) {
             this.showNotification('Lỗi tải yêu cầu từ chối', 'error');
+        } finally {
+            this.hideLoadingState();
         }
     }
 
@@ -2944,16 +3043,85 @@ class ITServiceApp {
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new ITServiceApp();
     
-    // Handle URL parameter for page navigation
+    // Check for URL parameter first
     const urlParams = new URLSearchParams(window.location.search);
     const pageParam = urlParams.get('page');
     
     if (pageParam && window.app) {
-        console.log('URL parameter found, showing page:', pageParam);
+        console.log('URL parameter found, showing loading and navigating to:', pageParam);
+        
+        // Show loading immediately to hide dashboard flash
+        window.app.showLoadingState('Đang tải trang...');
+        
+        // Hide default page content
+        document.querySelectorAll('.page').forEach(p => {
+            p.classList.remove('active');
+        });
+        
+        // Navigate to target page after short delay
         setTimeout(() => {
             window.app.showPage(pageParam);
-        }, 500);
+        }, 100);
+    } else {
+        // No URL parameter, load default page (dashboard)
+        console.log('No URL parameter, loading default page');
+        setTimeout(() => {
+            window.app.showPage('dashboard');
+        }, 100);
     }
+    
+    // Listen for navigation requests from detail window
+    window.addEventListener('storage', (e) => {
+        console.log('=== Storage Event Triggered ===');
+        console.log('Key:', e.key);
+        console.log('New Value:', e.newValue);
+        console.log('Old Value:', e.oldValue);
+        
+        if (e.key === 'navigationRequest') {
+            try {
+                const request = JSON.parse(e.newValue);
+                console.log('Navigation request received:', request);
+                
+                // Check if this is a valid recent request (within last 5 seconds)
+                if (request.timestamp && (Date.now() - request.timestamp) < 5000) {
+                    console.log('Request is recent, processing...');
+                    if (request.action === 'showPage' && request.page) {
+                        console.log('Executing navigation request:', request.page);
+                        window.app.showPage(request.page);
+                        
+                        // Clear the request after processing
+                        localStorage.removeItem('navigationRequest');
+                        console.log('Navigation request cleared from localStorage');
+                    }
+                } else {
+                    console.log('Request is too old, ignoring');
+                }
+            } catch (error) {
+                console.error('Error parsing navigation request:', error);
+            }
+        }
+    });
+    
+    // Listen for postMessage from detail window
+    window.addEventListener('message', (e) => {
+        console.log('=== Message Event Triggered ===');
+        console.log('Origin:', e.origin);
+        console.log('Data:', e.data);
+        
+        // Check if this is a navigation request from detail window
+        if (e.data && e.data.action === 'showPage' && e.data.page) {
+            console.log('PostMessage navigation request received:', e.data);
+            
+            // Check if this is a valid recent request (within last 5 seconds)
+            if (e.data.timestamp && (Date.now() - e.data.timestamp) < 5000) {
+                console.log('PostMessage request is recent, processing...');
+                console.log('Executing postMessage navigation request:', e.data.page);
+                window.app.showPage(e.data.page);
+            } else {
+                console.log('PostMessage request is too old, ignoring');
+            }
+        }
+    });
 });
 
 // Global functions for onclick handlers

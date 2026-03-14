@@ -286,10 +286,33 @@ class RequestDetailApp {
             
             console.log('✅ Redirecting to index.html with page:', page);
             e.preventDefault(); // Only prevent default for internal navigation
-            // Redirect to index.html with the page parameter
-            const redirectUrl = `index.html?page=${page}`;
-            console.log('Redirect URL:', redirectUrl);
-            window.location.href = redirectUrl;
+            
+            // Use postMessage to communicate with parent window
+            try {
+                if (window.opener && window.opener !== window) {
+                    console.log('Using postMessage to parent window');
+                    window.opener.postMessage({
+                        action: 'showPage',
+                        page: page,
+                        timestamp: Date.now()
+                    }, '*');
+                    
+                    console.log('PostMessage sent to parent window');
+                } else {
+                    // This is a standalone window, use URL redirect
+                    console.log('Using URL redirect for standalone window');
+                    const redirectUrl = `index.html?page=${page}`;
+                    console.log('Redirecting to:', redirectUrl);
+                    window.location.href = redirectUrl;
+                }
+                
+            } catch (error) {
+                console.error('Error sending navigation request:', error);
+                // Fallback to URL redirect
+                const redirectUrl = `index.html?page=${page}`;
+                console.log('Fallback to URL redirect:', redirectUrl);
+                window.location.href = redirectUrl;
+            }
         } else {
             console.log('External link detected, allowing navigation');
             // This is an external link, let browser handle it naturally
