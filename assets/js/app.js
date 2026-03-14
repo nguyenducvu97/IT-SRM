@@ -1407,7 +1407,8 @@ class ITServiceApp {
             console.log('Create request response:', result);
 
             if (result.success) {
-                this.showNotification('Yêu cầu đã được tạo thành công', 'success');
+                const requestId = result.data?.id || 'mới';
+                this.showNotification(`🎉 Yêu cầu #${requestId} đã được tạo thành công!`, 'success');
                 e.target.reset();
                 this.selectedFiles = [];
                 this.updateFileList();
@@ -2309,9 +2310,9 @@ class ITServiceApp {
             if (data.success) {
                 this.showNotification('Xóa yêu cầu thành công', 'success');
                 this.loadRequests();
-            } else if (data.message && data.message.includes('Bạn có chắc chắn muốn tiếp tục?')) {
+            } else if (data.message && data.message.includes('Cannot delete request')) {
                 // Show additional confirmation dialog for cascade delete
-                if (confirm(data.message)) {
+                if (confirm(data.message + '\n\nBạn có chắc chắn muốn xóa tất cả dữ liệu liên quan?')) {
                     // Delete with force parameter
                     const forceResponse = await fetch(`api/service_requests.php?id=${requestId}&force=true`, {
                         method: 'DELETE'
