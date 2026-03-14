@@ -3231,3 +3231,775 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
         margin-right: 0.5rem;
     }
 }
+
+/* Category Requests Styles */
+.category-requests {
+    margin-top: 1rem;
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+}
+
+.requests-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.requests-toggle:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.requests-toggle i {
+    transition: transform 0.2s ease;
+}
+
+.requests-list {
+    margin-top: 1rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.requests-list .loading {
+    text-align: center;
+    padding: 1rem;
+    color: #6c757d;
+}
+
+.requests-list .no-requests,
+.requests-list .error {
+    text-align: center;
+    padding: 1rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.requests-list .error {
+    color: #dc3545;
+}
+
+.requests-list .request-item.compact {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.requests-list .request-item.compact:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
+}
+
+.requests-list .request-item.compact .request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.requests-list .request-item.compact .request-title {
+    flex: 1;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.requests-list .request-item.compact .request-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.requests-list .request-item.compact .request-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Enhanced Requests List - Universal Grid Layout */
+.requests-list,
+#requestsList,
+#recentRequestsList,
+#supportRequestsList,
+#rejectRequestsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.requests-list .request-item,
+#requestsList .request-item,
+#recentRequestsList .request-item,
+#supportRequestsList .request-item,
+#rejectRequestsList .request-item {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #e9ecef;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.requests-list .request-item:hover,
+#requestsList .request-item:hover,
+#recentRequestsList .request-item:hover,
+#supportRequestsList .request-item:hover,
+#rejectRequestsList .request-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.requests-list .request-item::before,
+#requestsList .request-item::before,
+#recentRequestsList .request-item::before,
+#supportRequestsList .request-item::before,
+#rejectRequestsList .request-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--status-color) 0%, var(--priority-color) 100%);
+}
+
+.requests-list .request-header,
+#requestsList .request-header,
+#recentRequestsList .request-header,
+#supportRequestsList .request-header,
+#rejectRequestsList .request-header {
+    margin-bottom: 1rem;
+}
+
+.requests-list .request-title,
+#requestsList .request-title,
+#recentRequestsList .request-title,
+#supportRequestsList .request-title,
+#rejectRequestsList .request-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.requests-list .request-id,
+#requestsList .request-id,
+#recentRequestsList .request-id,
+#supportRequestsList .request-id,
+#rejectRequestsList .request-id {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-right: 0.5rem;
+}
+
+.requests-list .request-badges,
+#requestsList .request-badges,
+#recentRequestsList .request-badges,
+#supportRequestsList .request-badges,
+#rejectRequestsList .request-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+.requests-list .request-meta,
+#requestsList .request-meta,
+#recentRequestsList .request-meta,
+#supportRequestsList .request-meta,
+#rejectRequestsList .request-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.requests-list .request-meta span,
+#requestsList .request-meta span,
+#recentRequestsList .request-meta span,
+#supportRequestsList .request-meta span,
+#rejectRequestsList .request-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.requests-list .request-description,
+#requestsList .request-description,
+#recentRequestsList .request-description,
+#supportRequestsList .request-description,
+#rejectRequestsList .request-description {
+    color: #495057;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.requests-list .request-description p,
+#requestsList .request-description p,
+#recentRequestsList .request-description p,
+#supportRequestsList .request-description p,
+#rejectRequestsList .request-description p {
+    margin: 0;
+}
+
+/* Compact version for nested lists */
+.requests-list .request-item.compact,
+#requestsList .request-item.compact,
+#recentRequestsList .request-item.compact,
+#supportRequestsList .request-item.compact,
+#rejectRequestsList .request-item.compact {
+    padding: 1rem;
+}
+
+.requests-list .request-item.compact .request-title,
+#requestsList .request-item.compact .request-title,
+#recentRequestsList .request-item.compact .request-title,
+#supportRequestsList .request-item.compact .request-title,
+#rejectRequestsList .request-item.compact .request-title {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.requests-list .request-item.compact .request-meta,
+#requestsList .request-item.compact .request-meta,
+#recentRequestsList .request-item.compact .request-meta,
+#supportRequestsList .request-item.compact .request-meta,
+#rejectRequestsList .request-item.compact .request-meta {
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Status-based colors for all request lists */
+.requests-list .request-item.status-open,
+#requestsList .request-item.status-open,
+#recentRequestsList .request-item.status-open,
+#supportRequestsList .request-item.status-open,
+#rejectRequestsList .request-item.status-open {
+    --status-color: #28a745;
+    border-left-color: #28a745;
+}
+
+.requests-list .request-item.status-in_progress,
+#requestsList .request-item.status-in_progress,
+#recentRequestsList .request-item.status-in_progress,
+#supportRequestsList .request-item.status-in_progress,
+#rejectRequestsList .request-item.status-in_progress {
+    --status-color: #ffc107;
+    border-left-color: #ffc107;
+}
+
+.requests-list .request-item.status-resolved,
+#requestsList .request-item.status-resolved,
+#recentRequestsList .request-item.status-resolved,
+#supportRequestsList .request-item.status-resolved,
+#rejectRequestsList .request-item.status-resolved {
+    --status-color: #17a2b8;
+    border-left-color: #17a2b8;
+}
+
+.requests-list .request-item.status-closed,
+#requestsList .request-item.status-closed,
+#recentRequestsList .request-item.status-closed,
+#supportRequestsList .request-item.status-closed,
+#rejectRequestsList .request-item.status-closed {
+    --status-color: #6c757d;
+    border-left-color: #6c757d;
+}
+
+.requests-list .request-item.status-request_support,
+#requestsList .request-item.status-request_support,
+#recentRequestsList .request-item.status-request_support,
+#supportRequestsList .request-item.status-request_support,
+#rejectRequestsList .request-item.status-request_support {
+    --status-color: #fd7e14;
+    border-left-color: #fd7e14;
+}
+
+.requests-list .request-item.status-rejected,
+#requestsList .request-item.status-rejected,
+#recentRequestsList .request-item.status-rejected,
+#supportRequestsList .request-item.status-rejected,
+#rejectRequestsList .request-item.status-rejected {
+    --status-color: #dc3545;
+    border-left-color: #dc3545;
+}
+
+/* Priority-based colors for all request lists */
+.requests-list .request-item.priority-low,
+#requestsList .request-item.priority-low,
+#recentRequestsList .request-item.priority-low,
+#supportRequestsList .request-item.priority-low,
+#rejectRequestsList .request-item.priority-low {
+    --priority-color: #28a745;
+}
+
+.requests-list .request-item.priority-medium,
+#requestsList .request-item.priority-medium,
+#recentRequestsList .request-item.priority-medium,
+#supportRequestsList .request-item.priority-medium,
+#rejectRequestsList .request-item.priority-medium {
+    --priority-color: #ffc107;
+}
+
+.requests-list .request-item.priority-high,
+#requestsList .request-item.priority-high,
+#recentRequestsList .request-item.priority-high,
+#supportRequestsList .request-item.priority-high,
+#rejectRequestsList .request-item.priority-high {
+    --priority-color: #fd7e14;
+}
+
+.requests-list .request-item.priority-critical,
+#requestsList .request-item.priority-critical,
+#recentRequestsList .request-item.priority-critical,
+#supportRequestsList .request-item.priority-critical,
+#rejectRequestsList .request-item.priority-critical {
+    --priority-color: #dc3545;
+}
+
+/* Enhanced badges for all request lists */
+.requests-list .badge,
+#requestsList .badge,
+#recentRequestsList .badge,
+#supportRequestsList .badge,
+#rejectRequestsList .badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.requests-list .badge.status-open,
+#requestsList .badge.status-open,
+#recentRequestsList .badge.status-open,
+#supportRequestsList .badge.status-open,
+#rejectRequestsList .badge.status-open {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.requests-list .badge.status-in_progress,
+#requestsList .badge.status-in_progress,
+#recentRequestsList .badge.status-in_progress,
+#supportRequestsList .badge.status-in_progress,
+#rejectRequestsList .badge.status-in_progress {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #212529;
+}
+
+.requests-list .badge.status-resolved,
+#requestsList .badge.status-resolved,
+#recentRequestsList .badge.status-resolved,
+#supportRequestsList .badge.status-resolved,
+#rejectRequestsList .badge.status-resolved {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+}
+
+.requests-list .badge.status-closed,
+#requestsList .badge.status-closed,
+#recentRequestsList .badge.status-closed,
+#supportRequestsList .badge.status-closed,
+#rejectRequestsList .badge.status-closed {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+}
+
+.requests-list .badge.priority-low,
+#requestsList .badge.priority-low,
+#recentRequestsList .badge.priority-low,
+#supportRequestsList .badge.priority-low,
+#rejectRequestsList .badge.priority-low {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+}
+
+.requests-list .badge.priority-medium,
+#requestsList .badge.priority-medium,
+#recentRequestsList .badge.priority-medium,
+#supportRequestsList .badge.priority-medium,
+#rejectRequestsList .badge.priority-medium {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+}
+
+.requests-list .badge.priority-high,
+#requestsList .badge.priority-high,
+#recentRequestsList .badge.priority-high,
+#supportRequestsList .badge.priority-high,
+#rejectRequestsList .badge.priority-high {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+}
+
+.requests-list .badge.priority-critical,
+#requestsList .badge.priority-critical,
+#recentRequestsList .badge.priority-critical,
+#supportRequestsList .badge.priority-critical,
+#rejectRequestsList .badge.priority-critical {
+    background: linear-gradient(135deg, #f5c6cb, #e74c3c);
+    color: white;
+}
+
+/* Responsive adjustments for all request lists */
+@media (max-width: 768px) {
+    .requests-list,
+    #requestsList,
+    #recentRequestsList,
+    #supportRequestsList,
+    #rejectRequestsList {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0.5rem;
+    }
+    
+    .requests-list .request-item,
+    #requestsList .request-item,
+    #recentRequestsList .request-item,
+    #supportRequestsList .request-item,
+    #rejectRequestsList .request-item {
+        padding: 1rem;
+    }
+    
+    .requests-list .request-title,
+    #requestsList .request-title,
+    #recentRequestsList .request-title,
+    #supportRequestsList .request-title,
+    #rejectRequestsList .request-title {
+        font-size: 1rem;
+    }
+    
+    .requests-list .request-meta,
+    #requestsList .request-meta,
+    #recentRequestsList .request-meta,
+    #supportRequestsList .request-meta,
+    #rejectRequestsList .request-meta {
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .requests-list .request-meta,
+    #requestsList .request-meta,
+    #recentRequestsList .request-meta,
+    #supportRequestsList .request-meta,
+    #rejectRequestsList .request-meta {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+    
+    .requests-list .request-description,
+    #requestsList .request-description,
+    #recentRequestsList .request-description,
+    #supportRequestsList .request-description,
+    #rejectRequestsList .request-description {
+        font-size: 0.85rem;
+    }
+}
+
+/* Category Requests Grid Layout */
+#categoryRequestsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+#categoryRequestsList .request-item {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #e9ecef;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+#categoryRequestsList .request-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+#categoryRequestsList .request-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--status-color) 0%, var(--priority-color) 100%);
+}
+
+#categoryRequestsList .request-header {
+    margin-bottom: 1rem;
+}
+
+#categoryRequestsList .request-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+#categoryRequestsList .request-id {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-right: 0.5rem;
+}
+
+#categoryRequestsList .request-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+#categoryRequestsList .request-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+#categoryRequestsList .request-description {
+    color: #495057;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+#categoryRequestsList .request-description p {
+    margin: 0;
+}
+
+/* Status-based colors */
+#categoryRequestsList .request-item.status-open {
+    --status-color: #28a745;
+    border-left-color: #28a745;
+}
+
+#categoryRequestsList .request-item.status-in_progress {
+    --status-color: #ffc107;
+    border-left-color: #ffc107;
+}
+
+#categoryRequestsList .request-item.status-resolved {
+    --status-color: #17a2b8;
+    border-left-color: #17a2b8;
+}
+
+#categoryRequestsList .request-item.status-closed {
+    --status-color: #6c757d;
+    border-left-color: #6c757d;
+}
+
+#categoryRequestsList .request-item.status-request_support {
+    --status-color: #fd7e14;
+    border-left-color: #fd7e14;
+}
+
+#categoryRequestsList .request-item.status-rejected {
+    --status-color: #dc3545;
+    border-left-color: #dc3545;
+}
+
+/* Priority-based colors */
+#categoryRequestsList .request-item.priority-low {
+    --priority-color: #28a745;
+}
+
+#categoryRequestsList .request-item.priority-medium {
+    --priority-color: #ffc107;
+}
+
+#categoryRequestsList .request-item.priority-high {
+    --priority-color: #fd7e14;
+}
+
+#categoryRequestsList .request-item.priority-critical {
+    --priority-color: #dc3545;
+}
+
+/* Enhanced badges */
+#categoryRequestsList .badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#categoryRequestsList .badge.status-open {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+#categoryRequestsList .badge.status-in_progress {
+    background: linear-gradient(135deg, #ffc107, #ff9800);
+    color: #212529;
+}
+
+#categoryRequestsList .badge.status-resolved {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+    color: white;
+}
+
+#categoryRequestsList .badge.status-closed {
+    background: linear-gradient(135deg, #6c757d, #495057);
+    color: white;
+}
+
+#categoryRequestsList .badge.priority-low {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+}
+
+#categoryRequestsList .badge.priority-medium {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+}
+
+#categoryRequestsList .badge.priority-high {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+}
+
+#categoryRequestsList .badge.priority-critical {
+    background: linear-gradient(135deg, #f5c6cb, #e74c3c);
+    color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #categoryRequestsList {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0.5rem;
+    }
+    
+    #categoryRequestsList .request-item {
+        padding: 1rem;
+    }
+    
+    #categoryRequestsList .request-title {
+        font-size: 1rem;
+    }
+    
+    #categoryRequestsList .request-meta {
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #categoryRequestsList .request-meta {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+    
+    #categoryRequestsList .request-description {
+        font-size: 0.85rem;
+    }
+}
+
+.stat-badge i {
+    font-size: 0.7rem;
+}
+
+/* Status Breakdown Styles */
+.status-breakdown {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: white;
+}
+
+.status-badge.open {
+    background-color: #28a745;
+}
+
+.status-badge.in_progress {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.status-badge.resolved {
+    background-color: #17a2b8;
+}
+
+.status-badge.closed {
+    background-color: #6c757d;
+}
+
+/* Category Item Clickable */
+.category-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.category-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

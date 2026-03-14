@@ -68,17 +68,36 @@ class TranslationSystem {
                 .replace(/\/\/.*$/gm, '') // Remove line comments
                 .trim();
             
-            // Find the object content
-            const match = cleanText.match(/const\s+translations\s*=\s*({[\s\S]*})/);
+            // Try different patterns for language file formats
+            let match;
+            
+            // Pattern 1: const translations = {...}
+            match = cleanText.match(/const\s+translations\s*=\s*({[\s\S]*})/);
             if (match) {
-                // Safely evaluate the object
                 const objectText = match[1];
                 return new Function('return ' + objectText)();
             }
+            
+            // Pattern 2: window.vi = {...} or window.en = {...} or window.ko = {...}
+            match = cleanText.match(/window\.\w+\s*=\s*({[\s\S]*})/);
+            if (match) {
+                const objectText = match[1];
+                return new Function('return ' + objectText)();
+            }
+            
+            // Pattern 3: Just {...} object
+            match = cleanText.match(/^({[\s\S]*})$/);
+            if (match) {
+                const objectText = match[1];
+                return new Function('return ' + objectText)();
+            }
+            
+            console.error('No valid translation object found in language file');
+            return null;
         } catch (error) {
             console.error('Error parsing language file:', error);
+            return null;
         }
-        return null;
     }
 
     translate(key, fallbackText = null) {
@@ -116,14 +135,18 @@ class TranslationSystem {
 
     applyTranslations(lang) {
         console.log(`Applying translations for language: ${lang}`);
+        console.log('Available translations for this language:', this.translations[lang] ? 'Yes' : 'No');
         
         // Find all elements with data-translate attribute
         const elements = document.querySelectorAll('[data-translate]');
         console.log(`Found ${elements.length} elements to translate`);
         
-        elements.forEach(element => {
+        elements.forEach((element, index) => {
             const key = element.getAttribute('data-translate');
             const translation = this.translations[lang]?.[key] || key;
+            
+            console.log(`Element ${index}: key="${key}", translation="${translation}"`);
+            console.log(`Before apply - element.textContent: "${element.textContent}"`);
             
             // Handle different element types
             if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
@@ -175,7 +198,21 @@ class TranslationSystem {
                     element.textContent = translation;
                 }
             }
+            
+            console.log(`After apply - element.textContent: "${element.textContent}"`);
         });
+        
+        console.log(`Applied ${lang} to ${elements.length} elements`);
+        
+        // Test specific dashboard element
+        const dashboardElement = document.querySelector('[data-translate="dashboard"]');
+        if (dashboardElement) {
+            console.log('Dashboard element test:');
+            console.log('- Tag:', dashboardElement.tagName);
+            console.log('- HTML:', dashboardElement.innerHTML);
+            console.log('- Text:', dashboardElement.textContent);
+            console.log('- Parent HTML:', dashboardElement.parentElement.innerHTML);
+        }
         
         // Update page title
         const titleKey = document.querySelector('title')?.getAttribute('data-translate');
@@ -218,6 +255,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Wait for initialization to complete
     await window.translationSystem.init();
     
+    console.log('Translation system initialized successfully!');
+    console.log('Available translations:', Object.keys(window.translationSystem.translations));
+    console.log('Current language:', window.translationSystem.currentLanguage);
+    
     // Create global t function for easy access
     window.t = (key, fallbackText = null) => {
         return window.translationSystem.translate(key, fallbackText);
@@ -235,6 +276,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('Language switcher changed to:', e.target.value);
             window.translationSystem.switchLanguage(e.target.value);
         });
+    } else {
+        console.log('Language switcher not found');
     }
     
     console.log('Translation system initialization complete');

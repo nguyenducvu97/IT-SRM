@@ -440,7 +440,15 @@ class RequestDetailApp {
     }
 
     displayRequestDetail(request) {
+        console.log('=== DISPLAY REQUEST DETAIL ===');
+        console.log('Request ID:', request.id);
+        console.log('Request title:', request.title);
+        
         const container = document.getElementById('requestDetails');
+        if (!container) {
+            console.error('Request details container not found!');
+            return;
+        }
         
         // Extract all values before template to avoid 'this' context issues
         const priorityText = this.getPriorityText(request.priority);
@@ -455,7 +463,7 @@ class RequestDetailApp {
         container.innerHTML = `
             <div class="request-detail" data-request-id="${request.id}">
                 <div class="request-header-info">
-                    <h3>${request.title}</h3>
+                    <h3>${request.title} <span class="request-id">#${request.id}</span></h3>
                     <div class="request-badges">
                         <span class="badge priority-${request.priority}">${priorityText}</span>
                         <span class="badge status-${request.status}">${statusText}</span>

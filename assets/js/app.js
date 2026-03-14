@@ -306,7 +306,12 @@ class ITServiceApp {
             document.getElementById('adminRejectMenu').style.display = 'block';
             // Hide new request menu for admin
             document.getElementById('newRequestMenu').style.display = 'none';
-            console.log('Admin user - hiding new request menu');
+            // Show add category button for admin
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            if (addCategoryBtn) {
+                addCategoryBtn.style.display = 'block';
+            }
+            console.log('Admin user - hiding new request menu, showing add category button');
         } else if (this.currentUser.role === 'staff') {
             console.log('✅ Showing staff menus');
             // Staff should see limited menus - NOT adminMenu
@@ -316,12 +321,22 @@ class ITServiceApp {
             document.getElementById('adminRejectMenu').style.display = 'block'; // Staff can handle reject requests
             // Show new request menu for staff
             document.getElementById('newRequestMenu').style.display = 'none'; // Staff typically handles requests, not creates new ones
-            console.log('Staff user - hiding admin and new request menus');
+            // Hide add category button for staff
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            if (addCategoryBtn) {
+                addCategoryBtn.style.display = 'none';
+            }
+            console.log('Staff user - hiding admin, new request menus, and add category button');
         } else {
             console.log('✅ Showing user menus');
             // Regular user - only new request menu
             document.getElementById('newRequestMenu').style.display = 'block';
-            console.log('Regular user - showing new request menu');
+            // Hide add category button for regular user
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            if (addCategoryBtn) {
+                addCategoryBtn.style.display = 'none';
+            }
+            console.log('Regular user - showing new request menu, hiding add category button');
         }
         
         // Load dashboard data
@@ -439,6 +454,9 @@ class ITServiceApp {
                 break;
             case 'categories':
                 this.loadCategories();
+                break;
+            case 'category-requests':
+                this.loadCategoryRequestsPage();
                 break;
             case 'users':
                 console.log('Users page detected, checking role...');
@@ -575,17 +593,24 @@ class ITServiceApp {
         }
 
         container.innerHTML = requests.map(request => `
-            <div class="request-item" onclick="app.showRequestDetail(${request.id})">
+            <div class="request-item status-${request.status} priority-${request.priority}" onclick="app.showRequestDetail(${request.id})">
                 <div class="request-header">
-                    <div class="request-title">${request.title}</div>
-                    <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
+                    <div class="request-title">
+                        <span class="request-id">ID: ${request.id}</span> - ${request.title}
+                    </div>
+                    <div class="request-badges">
+                        <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
+                        <span class="badge priority-${request.priority}">${this.getPriorityText(request.priority)}</span>
+                    </div>
                 </div>
                 <div class="request-meta">
                     <span><i class="fas fa-user"></i> ${request.requester_name}</span>
                     <span><i class="fas fa-tag"></i> ${request.category_name}</span>
                     <span><i class="fas fa-clock"></i> ${this.formatDate(request.created_at)}</span>
                 </div>
-                <div class="request-description">${request.description.substring(0, 100)}...</div>
+                <div class="request-description">
+                    <p>${request.description.substring(0, 150)}${request.description.length > 150 ? '...' : ''}</p>
+                </div>
             </div>
         `).join('');
     }
@@ -632,12 +657,14 @@ class ITServiceApp {
         }
 
         container.innerHTML = requests.map(request => `
-            <div class="request-item" onclick="app.showRequestDetail(${request.id})">
+            <div class="request-item status-${request.status} priority-${request.priority}" onclick="app.showRequestDetail(${request.id})">
                 <div class="request-header">
-                    <div class="request-title">${request.title}</div>
-                    <div>
-                        <span class="badge priority-${request.priority}">${this.getPriorityText(request.priority)}</span>
+                    <div class="request-title">
+                        <span class="request-id">ID: ${request.id}</span> - ${request.title}
+                    </div>
+                    <div class="request-badges">
                         <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
+                        <span class="badge priority-${request.priority}">${this.getPriorityText(request.priority)}</span>
                     </div>
                 </div>
                 <div class="request-meta">
@@ -647,7 +674,9 @@ class ITServiceApp {
                     ${request.assigned_name ? `<span><i class="fas fa-user-check"></i> ${request.assigned_name}</span>` : ''}
                     ${request.accepted_at ? `<span><i class="fas fa-hand-paper"></i> Đã nhận: ${this.formatDate(request.accepted_at)}</span>` : ''}
                 </div>
-                <div class="request-description">${request.description.substring(0, 150)}...</div>
+                <div class="request-description">
+                    <p>${request.description.substring(0, 150)}${request.description.length > 150 ? '...' : ''}</p>
+                </div>
                 ${this.currentUser && this.currentUser.role === 'admin' ? `
                 <div class="request-actions" onclick="event.stopPropagation()">
                     <button class="btn btn-secondary btn-sm" onclick="app.editRequest(${request.id})">
@@ -826,13 +855,13 @@ class ITServiceApp {
 
         console.log('Container found, rendering HTML...');
         container.innerHTML = supportRequests.map(support => `
-            <div class="request-item support-request" data-support-id="${support.id}">
+            <div class="request-item support-request status-${support.status}" data-support-id="${support.id}">
                 <div class="request-header">
-                    <h4>
+                    <div class="request-title">
                         <a href="request-detail.html?id=${support.service_request_id}" target="_blank">
-                            #${support.service_request_id} - ${support.request_title}
+                            <span class="request-id">ID: ${support.service_request_id}</span> - ${support.request_title}
                         </a>
-                    </h4>
+                    </div>
                     <div class="request-badges">
                         <span class="badge status-${support.status}">${this.getSupportStatusText(support.status)}</span>
                         <span class="badge support-type-${support.support_type}">${this.getSupportTypeText(support.support_type)}</span>
@@ -840,51 +869,10 @@ class ITServiceApp {
                 </div>
                 
                 <div class="request-meta">
-                    <div class="meta-item">
-                        <strong>Người tạo:</strong> ${support.requester_name}
-                    </div>
-                    <div class="meta-item">
-                        <strong>Ngày tạo:</strong> ${this.formatDate(support.created_at)}
-                    </div>
-                    <div class="meta-item">
-                        <strong>Chi tiết:</strong> ${support.support_details}
-                    </div>
-                    <div class="meta-item">
-                        <strong>Lý do:</strong> ${support.support_reason}
-                    </div>
-                    ${support.admin_reason ? `
-                        <div class="meta-item">
-                            <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
-                        </div>
-                        <div class="meta-item">
-                            <strong>Trạng thái yêu cầu:</strong> 
-                            <span class="badge status-${support.service_request_status || 'unknown'}">${this.getStatusText(support.service_request_status || 'unknown')}</span>
-                        </div>
-                    ` : ''}
+                    <span><i class="fas fa-user"></i> ${support.requester_name}</span>
+                    <span><i class="fas fa-clock"></i> ${this.formatDate(support.created_at)}</span>
                 </div>
                 
-                <div class="request-actions">
-                    ${support.status === 'pending' && this.currentUser.role === 'admin' ? `
-                        <button class="btn btn-primary" onclick="app.showAdminSupportModal(${support.id})">
-                            <i class="fas fa-gavel"></i> Xử lý
-                        </button>
-                    ` : ''}
-                    ${support.admin_reason ? `
-                        <div class="admin-reason">
-                            <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
-                        </div>
-                    ` : ''}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    async showRequestDetail(id) {
-        console.log('=== SHOW REQUEST DETAIL ===');
-        console.log('Request ID:', id);
-        
-        // Check if user is authenticated before redirecting
-        if (!this.currentUser || !this.currentUser.id) {
             console.log('User not authenticated, staying on current page');
             this.showNotification('Vui lòng đăng nhập để xem chi tiết', 'error');
             return;
@@ -1284,23 +1272,332 @@ class ITServiceApp {
         }
 
         container.innerHTML = categories.map(category => `
-            <div class="category-item">
+            <div class="category-item" data-category-id="${category.id}" onclick="app.showCategoryRequests(${category.id}, '${category.name}')">
                 <div class="category-info">
                     <h4>${category.name}</h4>
                     <p>${category.description || 'Không có mô tả'}</p>
+                    <div class="category-stats" id="categoryStats_${category.id}">
+                        <span class="stat-badge">
+                            <i class="fas fa-list"></i>
+                            <span class="request-count" data-category-id="${category.id}">0</span> yêu cầu
+                        </span>
+                        <div class="status-breakdown" id="statusBreakdown_${category.id}">
+                            <span class="status-badge open">0 mở</span>
+                            <span class="status-badge in_progress">0 đang xử lý</span>
+                            <span class="status-badge resolved">0 đã giải quyết</span>
+                            <span class="status-badge closed">0 đã đóng</span>
+                        </div>
+                    </div>
                 </div>
                 ${this.currentUser.role === 'admin' ? `
                     <div class="category-actions">
-                        <button class="btn btn-secondary" onclick="app.editCategory(${category.id}, '${category.name}', '${category.description || ''}')">
+                        <button class="btn btn-secondary" onclick="app.editCategory(${category.id}, '${category.name}', '${category.description || ''}')" onclick="event.stopPropagation()">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-danger" onclick="app.deleteCategory(${category.id})">
+                        <button class="btn btn-danger" onclick="app.deleteCategory(${category.id})" onclick="event.stopPropagation()">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 ` : ''}
             </div>
         `).join('');
+        
+        // Load request counts for each category
+        this.loadCategoryRequestCounts(categories);
+    }
+
+    // Load request counts for each category
+    async loadCategoryRequestCounts(categories) {
+        console.log('=== LOAD CATEGORY REQUEST COUNTS ===');
+        console.log('Categories to load counts for:', categories);
+        
+        try {
+            // Get request counts for all categories
+            const response = await this.apiCall('api/service_requests.php?action=category_stats');
+            
+            console.log('Category stats API response:', response);
+            
+            if (response.success) {
+                const stats = response.data;
+                console.log('Category stats data:', stats);
+                
+                // Update count for each category
+                categories.forEach(category => {
+                    const categoryStats = stats[category.id] || {
+                        total: 0,
+                        open: 0,
+                        in_progress: 0,
+                        resolved: 0,
+                        closed: 0
+                    };
+                    
+                    // Update total count
+                    const countElement = document.querySelector(`.request-count[data-category-id="${category.id}"]`);
+                    if (countElement) {
+                        countElement.textContent = categoryStats.total;
+                        console.log(`Updated category ${category.id} (${category.name}) total count: ${categoryStats.total}`);
+                    } else {
+                        console.log(`Count element not found for category ${category.id}`);
+                    }
+                    
+                    // Update status breakdown (always visible now)
+                    const statusBreakdown = document.getElementById(`statusBreakdown_${category.id}`);
+                    if (statusBreakdown) {
+                        statusBreakdown.innerHTML = `
+                            <span class="status-badge open">${categoryStats.open} mở</span>
+                            <span class="status-badge in_progress">${categoryStats.in_progress} đang xử lý</span>
+                            <span class="status-badge resolved">${categoryStats.resolved} đã giải quyết</span>
+                            <span class="status-badge closed">${categoryStats.closed} đã đóng</span>
+                        `;
+                        // Ensure status breakdown is always visible
+                        statusBreakdown.style.display = 'flex';
+                    }
+                });
+            } else {
+                console.error('Category stats API failed:', response.message);
+            }
+        } catch (error) {
+            console.error('Error loading category request counts:', error);
+        }
+    }
+
+    // Load category requests page
+    async loadCategoryRequestsPage() {
+        console.log('=== LOAD CATEGORY REQUESTS PAGE ===');
+        
+        // Get category info from session storage
+        const categoryId = sessionStorage.getItem('currentCategoryId');
+        const categoryName = sessionStorage.getItem('currentCategoryName');
+        
+        console.log('Category ID from session:', categoryId);
+        console.log('Category Name from session:', categoryName);
+        
+        if (!categoryId) {
+            console.error('No category ID found in session storage');
+            this.showNotification('Không tìm thấy thông tin danh mục', 'error');
+            this.showPage('categories');
+            return;
+        }
+        
+        // Update page header with category name
+        const pageHeader = document.querySelector('#category-requestsPage .page-header h2');
+        if (pageHeader && categoryName) {
+            pageHeader.textContent = `Yêu cầu - ${categoryName}`;
+        }
+        
+        // Load requests for this category
+        await this.loadCategoryRequestsList(categoryId);
+    }
+
+    // Load requests list for category page
+    async loadCategoryRequestsList(categoryId) {
+        const container = document.getElementById('categoryRequestsList');
+        
+        if (!container) {
+            console.error('Category requests list container not found');
+            return;
+        }
+        
+        // Show loading state
+        container.innerHTML = '<div class="loading">Đang tải yêu cầu...</div>';
+        
+        try {
+            const response = await this.apiCall(`api/service_requests.php?action=list&category_id=${categoryId}`);
+            
+            console.log('Category requests API response:', response);
+            
+            if (response.success) {
+                // Handle different data structures
+                let requests = response.data;
+                
+                console.log('Initial requests data:', requests);
+                console.log('Type of requests:', typeof requests);
+                console.log('Is array?', Array.isArray(requests));
+                
+                // Early validation with try-catch
+                try {
+                    // Check if data has pagination structure
+                    if (requests && requests.requests && Array.isArray(requests.requests)) {
+                        requests = requests.requests;
+                        console.log('Using paginated data.requests:', requests);
+                    } else if (requests && requests.data && Array.isArray(requests.data)) {
+                        requests = requests.data;
+                        console.log('Using paginated data.data:', requests);
+                    } else if (!Array.isArray(requests)) {
+                        console.error('Invalid data structure:', requests);
+                        container.innerHTML = '<p class="error">Dữ liệu không hợp lệ từ server.</p>';
+                        return;
+                    }
+                    
+                    console.log('Final requests array:', requests);
+                    console.log('Requests length:', requests.length);
+                    
+                    // Additional validation before map
+                    if (!requests || !Array.isArray(requests)) {
+                        console.error('Requests is not an array before map:', requests);
+                        container.innerHTML = '<p class="error">Dữ liệu yêu cầu không hợp lệ.</p>';
+                        return;
+                    }
+                    
+                } catch (validationError) {
+                    console.error('Error during validation:', validationError);
+                    container.innerHTML = '<p class="error">Lỗi khi xác thực dữ liệu.</p>';
+                    return;
+                }
+                
+                if (requests.length === 0) {
+                    container.innerHTML = '<p class="no-requests">Không có yêu cầu nào trong danh mục này.</p>';
+                } else {
+                    try {
+                        container.innerHTML = requests.map(request => `
+                            <div class="request-item status-${request.status} priority-${request.priority}" onclick="app.showRequestDetail(${request.id})">
+                                <div class="request-header">
+                                    <div class="request-title">
+                                        <span class="request-id">ID: ${request.id}</span> - ${request.title}
+                                    </div>
+                                    <div class="request-badges">
+                                        <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
+                                        <span class="badge priority-${request.priority}">${this.getPriorityText(request.priority)}</span>
+                                    </div>
+                                </div>
+                                <div class="request-meta">
+                                    <span><i class="fas fa-user"></i> ${request.requester_name}</span>
+                                    <span><i class="fas fa-tag"></i> ${request.category_name || 'N/A'}</span>
+                                    <span><i class="fas fa-clock"></i> ${this.formatDate(request.created_at)}</span>
+                                </div>
+                                <div class="request-description">
+                                    <p>${request.description.substring(0, 150)}${request.description.length > 150 ? '...' : ''}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    } catch (mapError) {
+                        console.error('Error during map operation:', mapError);
+                        console.error('Requests data during map:', requests);
+                        container.innerHTML = '<p class="error">Lỗi khi hiển thị danh sách yêu cầu.</p>';
+                    }
+                }
+            } else {
+                container.innerHTML = '<p class="error">Không thể tải yêu cầu: ' + response.message + '</p>';
+            }
+        } catch (error) {
+            console.error('Error loading category requests:', error);
+            container.innerHTML = '<p class="error">Lỗi khi tải yêu cầu. Vui lòng thử lại.</p>';
+        }
+    }
+
+    // Show category requests in a new page
+    showCategoryRequests(categoryId, categoryName) {
+        console.log('=== SHOW CATEGORY REQUESTS ===');
+        console.log('Category ID:', categoryId);
+        console.log('Category Name:', categoryName);
+        
+        // Store category info in session storage for the new page
+        sessionStorage.setItem('currentCategoryId', categoryId);
+        sessionStorage.setItem('currentCategoryName', categoryName);
+        
+        // Navigate to a new page with category requests
+        // We'll create a new page or use existing requests page with category filter
+        window.location.href = `index.html?page=category-requests&category_id=${categoryId}&category_name=${encodeURIComponent(categoryName)}`;
+    }
+
+    // Toggle category requests list (kept for backward compatibility)
+    async toggleCategoryRequests(categoryId) {
+        const requestsList = document.getElementById(`categoryRequests_${categoryId}`);
+        const statusBreakdown = document.getElementById(`statusBreakdown_${categoryId}`);
+        
+        if (requestsList && requestsList.style.display === 'none') {
+            // Show requests
+            requestsList.style.display = 'block';
+            statusBreakdown.style.display = 'block';
+            
+            // Load requests for this category
+            await this.loadCategoryRequests(categoryId);
+        } else {
+            // Hide requests
+            if (requestsList) requestsList.style.display = 'none';
+            if (statusBreakdown) statusBreakdown.style.display = 'none';
+        }
+    }
+
+    // Load requests for a specific category
+    async loadCategoryRequests(categoryId) {
+        const requestsList = document.getElementById(`categoryRequests_${categoryId}`);
+        
+        try {
+            const response = await this.apiCall(`api/service_requests.php?action=list&category_id=${categoryId}`);
+            
+            console.log('Category requests API response:', response);
+            
+            if (response.success) {
+                // Handle different data structures
+                let requests = response.data;
+                
+                console.log('Initial requests data:', requests);
+                console.log('Type of requests:', typeof requests);
+                console.log('Is array?', Array.isArray(requests));
+                
+                // Early validation with try-catch
+                try {
+                    // Check if data has pagination structure
+                    if (requests && requests.requests && Array.isArray(requests.requests)) {
+                        requests = requests.requests;
+                        console.log('Using paginated data.requests:', requests);
+                    } else if (requests && requests.data && Array.isArray(requests.data)) {
+                        requests = requests.data;
+                        console.log('Using paginated data.data:', requests);
+                    } else if (!Array.isArray(requests)) {
+                        console.error('Invalid data structure:', requests);
+                        requestsList.innerHTML = '<p class="error">Dữ liệu không hợp lệ từ server.</p>';
+                        return;
+                    }
+                    
+                    console.log('Final requests array:', requests);
+                    console.log('Requests length:', requests.length);
+                    
+                    // Additional validation before map
+                    if (!requests || !Array.isArray(requests)) {
+                        console.error('Requests is not an array before map:', requests);
+                        requestsList.innerHTML = '<p class="error">Dữ liệu yêu cầu không hợp lệ.</p>';
+                        return;
+                    }
+                    
+                } catch (validationError) {
+                    console.error('Error during validation:', validationError);
+                    requestsList.innerHTML = '<p class="error">Lỗi khi xác thực dữ liệu.</p>';
+                    return;
+                }
+                
+                if (requests.length === 0) {
+                    requestsList.innerHTML = '<p class="no-requests">Không có yêu cầu nào trong danh mục này.</p>';
+                } else {
+                    try {
+                        requestsList.innerHTML = requests.map(request => `
+                            <div class="request-item compact" onclick="app.showRequestDetail(${request.id})">
+                                <div class="request-header">
+                                    <div class="request-title">
+                                        <span class="request-id">ID: ${request.id}</span> - ${request.title}
+                                    </div>
+                                    <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
+                                </div>
+                                <div class="request-meta">
+                                    <span><i class="fas fa-user"></i> ${request.requester_name}</span>
+                                    <span><i class="fas fa-clock"></i> ${this.formatDate(request.created_at)}</span>
+                                </div>
+                            </div>
+                        `).join('');
+                    } catch (mapError) {
+                        console.error('Error during map operation:', mapError);
+                        console.error('Requests data during map:', requests);
+                        requestsList.innerHTML = '<p class="error">Lỗi khi hiển thị danh sách yêu cầu.</p>';
+                    }
+                }
+            } else {
+                requestsList.innerHTML = '<p class="error">Không thể tải yêu cầu: ' + response.message + '</p>';
+            }
+        } catch (error) {
+            console.error('Error loading category requests:', error);
+            requestsList.innerHTML = '<p class="error">Lỗi khi tải yêu cầu. Vui lòng thử lại.</p>';
+        }
     }
 
     showCategoryModal(category = null) {
@@ -2170,7 +2467,7 @@ class ITServiceApp {
                 <div class="request-header">
                     <h4>
                         <a href="request-detail.html?id=${reject.service_request_id}" target="_blank">
-                            #${reject.service_request_id} - ${reject.request_title}
+                            ID: ${reject.service_request_id} - ${reject.request_title}
                         </a>
                     </h4>
                     <div class="request-badges">
@@ -2330,7 +2627,7 @@ class ITServiceApp {
                 <div class="request-header">
                     <h4>
                         <a href="request-detail.html?id=${support.service_request_id}" target="_blank">
-                            #${support.service_request_id} - ${support.request_title}
+                            ID: ${support.service_request_id} - ${support.request_title}
                         </a>
                     </h4>
                     <div class="request-badges">

@@ -157,6 +157,7 @@ if ($method == 'GET') {
         $status_filter = isset($_GET['status']) ? $_GET['status'] : '';
         $priority_filter = isset($_GET['priority']) ? $_GET['priority'] : '';
         $category_filter = isset($_GET['category']) ? $_GET['category'] : '';
+        $category_id_filter = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
         
         $where_clause = "WHERE 1=1";
         $params = [];
@@ -179,6 +180,11 @@ if ($method == 'GET') {
         if (!empty($category_filter)) {
             $where_clause .= " AND sr.category_id = :category";
             $params[':category'] = $category_filter;
+        }
+        
+        if (!empty($category_id_filter)) {
+            $where_clause .= " AND sr.category_id = :category_id";
+            $params[':category_id'] = $category_id_filter;
         }
         
         $query = "SELECT sr.*, u.username as requester_name, c.name as category_name 
@@ -243,6 +249,48 @@ if ($method == 'GET') {
             ]);
         } else {
             serviceJsonResponse(false, "Failed to retrieve service requests");
+        }
+    }
+    
+    elseif ($action == 'category_stats') {
+        // Get request counts by category with status breakdown
+        $query = "SELECT c.id as category_id, c.name, 
+                         COUNT(sr.id) as total_count,
+                         SUM(CASE WHEN sr.status = 'open' THEN 1 ELSE 0 END) as open_count,
+                         SUM(CASE WHEN sr.status = 'in_progress' THEN 1 ELSE 0 END) as in_progress_count,
+                         SUM(CASE WHEN sr.status = 'resolved' THEN 1 ELSE 0 END) as resolved_count,
+                         SUM(CASE WHEN sr.status = 'closed' THEN 1 ELSE 0 END) as closed_count
+                  FROM categories c 
+                  LEFT JOIN service_requests sr ON c.id = sr.category_id";
+        
+        // Add filtering based on user role
+        if ($user_role != 'admin') {
+            $query .= " WHERE sr.user_id = :user_id OR sr.user_id IS NULL";
+        }
+        
+        $query .= " GROUP BY c.id, c.name ORDER BY c.name";
+        
+        $stmt = $db->prepare($query);
+        
+        if ($user_role != 'admin') {
+            $stmt->bindParam(':user_id', $_SESSION['user_id']);
+        }
+        
+        if ($stmt->execute()) {
+            $stats = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $stats[$row['category_id']] = [
+                    'total' => (int)$row['total_count'],
+                    'open' => (int)$row['open_count'],
+                    'in_progress' => (int)$row['in_progress_count'],
+                    'resolved' => (int)$row['resolved_count'],
+                    'closed' => (int)$row['closed_count']
+                ];
+            }
+            
+            serviceJsonResponse(true, "Category statistics retrieved successfully", $stats);
+        } else {
+            serviceJsonResponse(false, "Failed to retrieve category statistics");
         }
     }
     
