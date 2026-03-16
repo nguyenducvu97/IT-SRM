@@ -11,11 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 // Start session
-require_once '../config/session.php';
+require_once __DIR__ . '/../config/session.php';
 startSession();
 
 // Check if user is authenticated
@@ -29,35 +26,31 @@ $userId = $_SESSION['user_id'];
 $method = $_SERVER['REQUEST_METHOD'];
 
 try {
-    // Connect to database using the same configuration as other APIs
-    require_once '../config/database.php';
+    // Connect to database using same configuration as other APIs
+    require_once __DIR__ . '/../config/database.php';
     $database = new Database();
     $pdo = $database->getConnection();
+    
+    // Use advanced notification helper
+    require_once __DIR__ . '/../lib/NotificationHelper.php';
+    $notificationHelper = new NotificationHelper();
     
     if ($method == 'GET') {
         $action = $_GET['action'] ?? 'list';
         
         if ($action == 'count') {
-            // Get unread notification count
-            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND is_read = FALSE");
-            $stmt->execute([$userId]);
-            $count = $stmt->fetch(PDO::FETCH_ASSOC);
-            echo json_encode(['count' => (int)$count['count']]);
+            // Get unread notification count using helper
+            $count = $notificationHelper->getUnreadCount($userId);
+            echo json_encode(['count' => $count]);
             
         } else {
-            // Get notifications list
-            $stmt = $pdo->prepare("
-                SELECT id, title, message, type, related_id, related_type, 
-                       is_read, created_at, read_at
-                FROM notifications 
-                WHERE user_id = ?
-                ORDER BY created_at DESC
-                LIMIT 20
-            ");
-            $stmt->execute([$userId]);
-            $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            // Get notifications list using helper
+            $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 20;
+            $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
             
-            // Format notifications
+            $notifications = $notificationHelper->getUserNotifications($userId, $limit, $offset);
+            
+            // Format notifications for frontend
             $formattedNotifications = [];
             foreach ($notifications as $notif) {
                 $formattedNotifications[] = [
@@ -81,7 +74,7 @@ try {
         $action = $_GET['action'] ?? '';
         
         if ($action == 'mark_read') {
-            // Mark single notification as read
+            // Mark single notification as read using helper
             $notificationId = $input['notification_id'] ?? null;
             
             if (!$notificationId) {
@@ -90,64 +83,69 @@ try {
                 exit;
             }
             
-            // Verify notification belongs to user
-            $stmt = $pdo->prepare("SELECT id FROM notifications WHERE id = ? AND user_id = ?");
-            $stmt->execute([$notificationId, $userId]);
-            if (!$stmt->fetch()) {
-                http_response_code(403);
-                echo json_encode(['error' => 'Notification not found or access denied']);
-                exit;
+            $result = $notificationHelper->markAsRead($notificationId, $userId);
+            
+            if ($result) {
+                echo json_encode(['success' => true, 'message' => 'Notification marked as read']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to mark notification as read']);
             }
             
-            // Mark as read
-            $stmt = $pdo->prepare("
-                UPDATE notifications 
-                SET is_read = TRUE, read_at = CURRENT_TIMESTAMP 
-                WHERE id = ? AND user_id = ?
-            ");
-            $stmt->execute([$notificationId, $userId]);
-            
-            echo json_encode(['success' => true]);
-            
         } else if ($action == 'mark_all_read') {
-            // Mark all notifications as read for user
-            $stmt = $pdo->prepare("
-                UPDATE notifications 
-                SET is_read = TRUE, read_at = CURRENT_TIMESTAMP 
-                WHERE user_id = ? AND is_read = FALSE
-            ");
-            $stmt->execute([$userId]);
+            // Mark all notifications as read using helper
+            $result = $notificationHelper->markAllAsRead($userId);
             
-            echo json_encode(['success' => true]);
-            
+            if ($result) {
+                echo json_encode(['success' => true, 'message' => 'All notifications marked as read']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to mark all notifications as read']);
+            }
         } else {
             http_response_code(400);
             echo json_encode(['error' => 'Invalid action']);
         }
     } else if ($method == 'POST') {
-        // Create new notification
+        // Create new notification using helper
         $input = json_decode(file_get_contents('php://input'), true);
         
-        $targetUserId = $input['user_id'] ?? null;
+        if (!$input) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid JSON data']);
+            exit;
+        }
+        
+        $notificationUserId = $input['user_id'] ?? $userId;
         $title = $input['title'] ?? '';
         $message = $input['message'] ?? '';
         $type = $input['type'] ?? 'info';
         $relatedId = $input['related_id'] ?? null;
         $relatedType = $input['related_type'] ?? null;
         
-        if (!$targetUserId || !$title || !$message) {
+        if (empty($title) || empty($message)) {
             http_response_code(400);
-            echo json_encode(['error' => 'Missing required fields']);
+            echo json_encode(['error' => 'Title and message are required']);
             exit;
         }
         
-        $stmt = $pdo->prepare("
-            INSERT INTO notifications (user_id, title, message, type, related_id, related_type, created_at) 
-            VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
-        ");
-        $stmt->execute([$targetUserId, $title, $message, $type, $relatedId, $relatedType]);
+        $result = $notificationHelper->createNotification(
+            $notificationUserId, 
+            $title, 
+            $message, 
+            $type, 
+            $relatedId, 
+            $relatedType, 
+            true // Send email
+        );
         
-        echo json_encode(['success' => true, 'id' => $pdo->lastInsertId()]);
+        if ($result) {
+            echo json_encode([
+                'success' => true, 
+                'message' => 'Notification created successfully',
+                'data' => ['id' => $pdo->lastInsertId()]
+            ]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to create notification']);
+        }
         
     } else {
         http_response_code(405);

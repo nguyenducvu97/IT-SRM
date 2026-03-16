@@ -35,7 +35,7 @@ try {
         if ($action == 'profile') {
             // Get current user profile
             $stmt = $pdo->prepare("
-                SELECT id, username, full_name, email, phone, role, created_at, updated_at
+                SELECT id, username, full_name, email, phone, role, department, created_at, updated_at
                 FROM users 
                 WHERE id = ?
             ");
@@ -54,7 +54,7 @@ try {
         elseif ($action == 'all_users' && $current_user_role === 'admin') {
             // Admin only: Get all users for role management
             $stmt = $pdo->prepare("
-                SELECT id, username, full_name, email, phone, role, created_at, updated_at
+                SELECT id, username, full_name, email, phone, role, department, created_at, updated_at
                 FROM users 
                 ORDER BY created_at DESC
             ");

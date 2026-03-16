@@ -104,6 +104,11 @@ class RequestDetailApp {
 
         // Reject Request form events
         document.getElementById('rejectForm').addEventListener('submit', (e) => this.handleRejectSubmit(e));
+        
+        // File upload events for all modals
+        document.getElementById('resolveAttachments').addEventListener('change', (e) => this.handleFileUpload(e, 'resolveAttachmentPreview'));
+        document.getElementById('supportAttachments').addEventListener('change', (e) => this.handleFileUpload(e, 'supportAttachmentPreview'));
+        document.getElementById('rejectAttachments').addEventListener('change', (e) => this.handleFileUpload(e, 'rejectAttachmentPreview'));
 
         // Modal close events
         document.querySelectorAll('.close').forEach(closeBtn => {
@@ -569,14 +574,14 @@ class RequestDetailApp {
                                                 <img src="uploads/requests/${attachment.filename}" 
                                                      alt="${attachment.original_name}" 
                                                      class="attachment-preview"
-                                                     onclick="app.showImageModal('uploads/requests/${attachment.filename}', '${attachment.original_name}')">
+                                                     onclick="requestDetailApp.showImageModal('uploads/requests/${attachment.filename}', '${attachment.original_name}')">
                                                 <div class="image-overlay">
                                                     <i class="fas fa-search-plus"></i>
                                                 </div>
                                             ` : ''}
                                             ${isViewable ? `
                                                 <button class="btn btn-sm btn-primary" 
-                                                        onclick="app.viewDocument('uploads/requests/${attachment.filename}', '${attachment.original_name}', '${fileExt}')">
+                                                        onclick="requestDetailApp.viewDocument('uploads/requests/${attachment.filename}', '${attachment.original_name}', '${fileExt}')">
                                                     <i class="fas fa-eye"></i> Xem
                                                 </button>
                                             ` : ''}
@@ -695,15 +700,15 @@ class RequestDetailApp {
                 <div class="request-actions">
                     ${currentUser && currentUser.role === 'admin' ? `
                         ${request.status === 'open' && !request.assigned_to ? `
-                            <button class="btn btn-success" onclick="app.acceptRequest(${request.id})">
+                            <button class="btn btn-success" onclick="requestDetailApp.acceptRequest(${request.id})">
                                 <i class="fas fa-check"></i> Nhận yêu cầu
                             </button>
                         ` : ''}
                         ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
-                            <button class="btn btn-primary" onclick="app.showResolveModal(${request.id})">
+                            <button class="btn btn-primary" onclick="requestDetailApp.showResolveModal(${request.id})">
                                 <i class="fas fa-check-circle"></i> Đã giải quyết
                             </button>
-                            <button class="btn btn-warning" onclick="app.showNeedSupportModal(${request.id})">
+                            <button class="btn btn-warning" onclick="requestDetailApp.showNeedSupportModal(${request.id})">
                                 <i class="fas fa-hands-helping"></i> Cần hỗ trợ
                             </button>
                         ` : ''}
@@ -714,21 +719,21 @@ class RequestDetailApp {
                             <option value="resolved" ${request.status === 'resolved' ? 'selected' : ''}>Đã giải quyết</option>
                             <option value="closed" ${request.status === 'closed' ? 'selected' : ''}>Đã đóng</option>
                         </select>
-                        <button class="btn btn-primary" onclick="app.updateRequestStatus(${request.id})">Cập nhật</button>
+                        <button class="btn btn-primary" onclick="requestDetailApp.updateRequestStatus(${request.id})">Cập nhật</button>
                     ` : currentUser && currentUser.role === 'staff' ? `
                         ${request.status === 'open' && !request.assigned_to ? `
-                            <button class="btn btn-success" onclick="app.acceptRequest(${request.id})">
+                            <button class="btn btn-success" onclick="requestDetailApp.acceptRequest(${request.id})">
                                 <i class="fas fa-check"></i> Nhận yêu cầu
                             </button>
                         ` : ''}
                         ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
-                            <button class="btn btn-primary" onclick="app.showResolveModal(${request.id})">
+                            <button class="btn btn-primary" onclick="requestDetailApp.showResolveModal(${request.id})">
                                 <i class="fas fa-check-circle"></i> Đã giải quyết
                             </button>
-                            <button class="btn btn-warning" onclick="app.showNeedSupportModal(${request.id})">
+                            <button class="btn btn-warning" onclick="requestDetailApp.showNeedSupportModal(${request.id})">
                                 <i class="fas fa-hands-helping"></i> Cần hỗ trợ
                             </button>
-                            <button class="btn btn-danger" onclick="app.showRejectModal(${request.id})">
+                            <button class="btn btn-danger" onclick="requestDetailApp.showRejectModal(${request.id})">
                                 <i class="fas fa-times"></i> Từ chối
                             </button>
                         ` : ''}
@@ -736,7 +741,7 @@ class RequestDetailApp {
                     
                     <!-- Show Close Request button for requesters when request is resolved -->
                     ${currentUser && currentUser.role === 'user' && request.status === 'resolved' && (request.user_id == currentUser.id || request.requester_id == currentUser.id) ? `
-                        <button class="btn btn-danger" onclick="app.showCloseRequestModal(${request.id})">
+                        <button class="btn btn-danger" onclick="requestDetailApp.showCloseRequestModal(${request.id})">
                             <i class="fas fa-times-circle"></i> Đóng lại yêu cầu
                         </button>
                     ` : ''}
@@ -822,7 +827,7 @@ class RequestDetailApp {
 
     async acceptRequest(id) {
         // Disable button immediately to prevent double-click
-        const acceptBtn = document.querySelector(`button[onclick="app.acceptRequest(${id})"]`);
+        const acceptBtn = document.querySelector(`button[onclick="requestDetailApp.acceptRequest(${id})"]`);
         if (acceptBtn) {
             acceptBtn.disabled = true;
             acceptBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang nhận yêu cầu...';
@@ -872,7 +877,7 @@ class RequestDetailApp {
         }
 
         // Disable button and show loading state
-        const updateBtn = document.querySelector('button[onclick="app.updateRequestStatus(' + id + ')"]');
+        const updateBtn = document.querySelector('button[onclick="requestDetailApp.updateRequestStatus(' + id + ')"]');
         if (updateBtn) {
             updateBtn.disabled = true;
             updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...';
@@ -974,22 +979,40 @@ class RequestDetailApp {
     showResolveModal(requestId) {
         document.getElementById('resolveRequestId').value = requestId;
         document.getElementById('resolveForm').reset();
+        document.getElementById('resolveAttachmentPreview').innerHTML = '<div class="no-files">Chưa có tệp nào được chọn</div>';
+        document.getElementById('resolveAttachmentPreview').classList.remove('has-files');
         document.getElementById('resolveModal').style.display = 'block';
     }
 
     closeResolveModal() {
-        document.getElementById('resolveModal').style.display = 'none';
+        const modal = document.getElementById('resolveModal');
+        if (modal) {
+            // Move modal to body if it's nested
+            if (modal.parentElement !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.style.display = 'none';
+        }
     }
 
     // Need Support Functions
     showNeedSupportModal(requestId) {
         document.getElementById('supportRequestId').value = requestId;
         document.getElementById('needSupportForm').reset();
+        document.getElementById('supportAttachmentPreview').innerHTML = '<div class="no-files">Chưa có tệp nào được chọn</div>';
+        document.getElementById('supportAttachmentPreview').classList.remove('has-files');
         document.getElementById('needSupportModal').style.display = 'block';
     }
 
     closeNeedSupportModal() {
-        document.getElementById('needSupportModal').style.display = 'none';
+        const modal = document.getElementById('needSupportModal');
+        if (modal) {
+            // Move modal to body if it's nested
+            if (modal.parentElement !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.style.display = 'none';
+        }
     }
 
     // Admin Support Functions
@@ -1001,7 +1024,14 @@ class RequestDetailApp {
     }
 
     closeAdminSupportModal() {
-        document.getElementById('adminSupportModal').style.display = 'none';
+        const modal = document.getElementById('adminSupportModal');
+        if (modal) {
+            // Move modal to body if it's nested
+            if (modal.parentElement !== document.body) {
+                document.body.appendChild(modal);
+            }
+            modal.style.display = 'none';
+        }
     }
 
     async handleResolveSubmit(e) {
@@ -1112,8 +1142,22 @@ class RequestDetailApp {
 
     showRejectModal(requestId) {
         const modal = document.getElementById('rejectModal');
+        
         if (modal) {
-            modal.style.display = 'block';
+            // Move modal to body if it's nested
+            if (modal.parentElement !== document.body) {
+                document.body.appendChild(modal);
+            }
+            
+            // Reset form and file preview
+            document.getElementById('rejectForm').reset();
+            document.getElementById('rejectAttachmentPreview').innerHTML = '<div class="no-files">Chưa có tệp nào được chọn</div>';
+            document.getElementById('rejectAttachmentPreview').classList.remove('has-files');
+            
+            // Show modal
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+            
             // Store request ID for form submission
             this.rejectRequestId = requestId;
         }
@@ -1123,6 +1167,7 @@ class RequestDetailApp {
         const modal = document.getElementById('rejectModal');
         if (modal) {
             modal.style.display = 'none';
+            modal.classList.remove('show');
             // Reset form
             document.getElementById('rejectForm').reset();
             this.rejectRequestId = null;
@@ -1345,6 +1390,10 @@ class RequestDetailApp {
     closeCloseRequestModal() {
         const modal = document.getElementById('closeRequestModal');
         if (modal) {
+            // Move modal to body if it's nested
+            if (modal.parentElement !== document.body) {
+                document.body.appendChild(modal);
+            }
             modal.style.display = 'none';
             // Reset form
             document.getElementById('closeRequestForm').reset();
@@ -1665,6 +1714,79 @@ class RequestDetailApp {
         }
     }
 
+    // File Upload Functions
+    handleFileUpload(event, previewContainerId) {
+        const files = event.target.files;
+        const previewContainer = document.getElementById(previewContainerId);
+        
+        if (files.length === 0) {
+            previewContainer.innerHTML = '<div class="no-files">Chưa có tệp nào được chọn</div>';
+            previewContainer.classList.remove('has-files');
+            return;
+        }
+        
+        previewContainer.innerHTML = '';
+        previewContainer.classList.add('has-files');
+        
+        Array.from(files).forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'attachment-item';
+            
+            // Check file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                fileItem.style.backgroundColor = '#f8d7da';
+                fileItem.innerHTML = `
+                    <div class="attachment-info">
+                        <i class="fas fa-exclamation-triangle attachment-icon"></i>
+                        <div>
+                            <div class="attachment-name">${file.name}</div>
+                            <div class="attachment-size" style="color: #dc3545;">Kích thước vượt quá giới hạn (tối đa 10MB)</div>
+                        </div>
+                    </div>
+                    <button type="button" class="attachment-remove" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+            } else {
+                const icon = this.getFileIcon(file.name);
+                fileItem.innerHTML = `
+                    <div class="attachment-info">
+                        <i class="fas ${icon} attachment-icon"></i>
+                        <div>
+                            <div class="attachment-name">${file.name}</div>
+                            <div class="attachment-size">${this.formatFileSize(file.size)}</div>
+                        </div>
+                    </div>
+                    <button type="button" class="attachment-remove" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+            }
+            
+            previewContainer.appendChild(fileItem);
+        });
+    }
+    
+    getFileIcon(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        const iconMap = {
+            'jpg': 'fa-image', 'jpeg': 'fa-image', 'png': 'fa-image', 'gif': 'fa-image',
+            'pdf': 'fa-file-pdf', 'doc': 'fa-file-word', 'docx': 'fa-file-word',
+            'xls': 'fa-file-excel', 'xlsx': 'fa-file-excel',
+            'ppt': 'fa-file-powerpoint', 'pptx': 'fa-file-powerpoint',
+            'txt': 'fa-file-alt', 'zip': 'fa-file-archive'
+        };
+        return iconMap[ext] || 'fa-file';
+    }
+    
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
     showNotification(message, type = 'info') {
         // Create notification element
         const notification = document.createElement('div');
@@ -1700,7 +1822,22 @@ class RequestDetailApp {
         }
         
         const response = await fetch(url, finalOptions);
-        return await response.json();
+        
+        // Check if response is OK before parsing JSON
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const text = await response.text();
+        
+        // Try to parse JSON, handle errors gracefully
+        try {
+            return JSON.parse(text);
+        } catch (parseError) {
+            console.error('JSON Parse Error:', parseError);
+            console.error('Response Text:', text);
+            throw new Error(`Invalid JSON response: ${parseError.message}`);
+        }
     }
 
     // Reject Request Functions
@@ -1726,68 +1863,10 @@ class RequestDetailApp {
         }
     }
 
-    showRejectModal(requestId) {
-        const modal = document.getElementById('rejectModal');
-        if (modal) {
-            modal.style.display = 'block';
-            this.rejectRequestId = requestId;
-        }
-    }
-
-    closeRejectModal() {
-        const modal = document.getElementById('rejectModal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
-    }
-
-    async handleRejectSubmit(event) {
-        event.preventDefault();
-        
-        const form = document.getElementById('rejectForm');
-        const formData = new FormData(form);
-        
-        const rejectData = {
-            request_id: this.rejectRequestId,
-            reject_reason: formData.get('reject_reason'),
-            reject_details: formData.get('reject_details')
-        };
-        
-        try {
-            const response = await this.apiCall('api/service_requests.php', {
-                method: 'PUT',
-                body: JSON.stringify({
-                    action: 'reject_request',
-                    ...rejectData
-                })
-            });
-            
-            if (response.success) {
-                this.showNotification('Yêu cầu từ chối đã được gửi đến admin để duyệt', 'success');
-                this.closeRejectModal();
-                await this.loadRequestDetail();
-            } else {
-                this.showNotification(response.message || 'Lỗi khi gửi yêu cầu từ chối', 'error');
-            }
-        } catch (error) {
-            console.error('Reject request error:', error);
-            this.showNotification('Lỗi khi gửi yêu cầu từ chối', 'error');
-        }
-    }
-
     closeAdminRejectModal() {
         const modal = document.getElementById('adminRejectModal');
         if (modal) {
             modal.style.display = 'none';
-        }
-    }
-
-    closeCloseRequestModal() {
-        const modal = document.getElementById('closeRequestModal');
-        if (modal) {
-            modal.style.display = 'none';
-            // Reset form
-            document.getElementById('closeRequestForm').reset();
         }
     }
 

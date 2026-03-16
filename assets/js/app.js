@@ -2593,7 +2593,7 @@ class ITServiceApp {
                 
                 <div class="request-actions">
                     ${reject.status === 'pending' && this.currentUser.role === 'admin' ? `
-                        <button class="btn btn-primary" onclick="app.showAdminRejectModal(${reject.id})">
+                        <button class="btn btn-primary reject-process-btn" data-reject-id="${reject.id}">
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>
                     ` : ''}
@@ -2605,17 +2605,50 @@ class ITServiceApp {
                 </div>
             </div>
         `).join('');
+        
+        // Add event listeners to reject process buttons
+        const rejectButtons = container.querySelectorAll('.reject-process-btn');
+        console.log('Found reject buttons:', rejectButtons.length);
+        
+        rejectButtons.forEach((btn, index) => {
+            console.log(`Binding reject button ${index}:`, btn.dataset.rejectId);
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Reject button clicked:', btn.dataset.rejectId);
+                const rejectId = btn.dataset.rejectId;
+                this.showAdminRejectModal(rejectId);
+            });
+        });
     }
 
     showAdminRejectModal(rejectId) {
-        document.getElementById('adminRejectId').value = rejectId;
-        document.getElementById('adminRejectForm').reset();
+        console.log('=== showAdminRejectModal called ===');
+        console.log('Reject ID:', rejectId);
+        
+        const modal = document.getElementById('adminRejectModal');
+        const idInput = document.getElementById('adminRejectId');
+        const form = document.getElementById('adminRejectForm');
+        
+        console.log('Modal found:', !!modal);
+        console.log('ID input found:', !!idInput);
+        console.log('Form found:', !!form);
+        
+        if (!modal || !idInput || !form) {
+            console.error('Missing modal elements:', { modal: !!modal, idInput: !!idInput, form: !!form });
+            this.showNotification('Lỗi: Không tìm thấy modal xử lý yêu cầu từ chối', 'error');
+            return;
+        }
+        
+        idInput.value = rejectId;
+        form.reset();
         this.loadRejectRequestDetails(rejectId);
-        document.getElementById('adminRejectModal').style.display = 'block';
+        modal.style.display = 'block';
+        
+        console.log('Modal displayed');
     }
 
     closeAdminRejectModal() {
-        document.getElementById('adminRejectModal').style.display = 'none';
+        this.closeModal(document.getElementById('adminRejectModal'));
     }
 
     async loadRejectRequestDetails(rejectId) {

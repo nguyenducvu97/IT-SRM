@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 class ProfileManager {
     constructor() {
         this.currentUser = null;
+        this.allUsers = []; // Store all users for filtering
         this.init();
     }
 
@@ -57,6 +58,24 @@ class ProfileManager {
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => this.logout());
+        }
+        
+        // Refresh profile
+        const refreshBtn = document.getElementById('refreshProfileBtn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => this.loadProfile());
+        }
+        
+        // User search and filter (admin only)
+        const userSearch = document.getElementById('userSearch');
+        const roleFilter = document.getElementById('roleFilter');
+        
+        if (userSearch) {
+            userSearch.addEventListener('input', () => this.filterUsers());
+        }
+        
+        if (roleFilter) {
+            roleFilter.addEventListener('change', () => this.filterUsers());
         }
     }
 
@@ -157,6 +176,7 @@ class ProfileManager {
             const response = await this.apiCall('api/profile.php?action=all_users');
             
             if (response.success) {
+                this.allUsers = response.data; // Store for filtering
                 this.displayUsers(response.data);
             } else {
                 this.showNotification(response.message, 'error');
@@ -165,6 +185,26 @@ class ProfileManager {
             console.error('Users load error:', error);
             this.showNotification('Lỗi tải danh sách users', 'error');
         }
+    }
+
+    filterUsers() {
+        if (!this.allUsers || this.allUsers.length === 0) return;
+        
+        const searchTerm = document.getElementById('userSearch')?.value.toLowerCase() || '';
+        const roleFilter = document.getElementById('roleFilter')?.value || '';
+        
+        const filteredUsers = this.allUsers.filter(user => {
+            const matchesSearch = !searchTerm || 
+                user.username.toLowerCase().includes(searchTerm) ||
+                user.full_name.toLowerCase().includes(searchTerm) ||
+                user.email.toLowerCase().includes(searchTerm);
+            
+            const matchesRole = !roleFilter || user.role === roleFilter;
+            
+            return matchesSearch && matchesRole;
+        });
+        
+        this.displayUsers(filteredUsers);
     }
 
     displayUsers(users) {
@@ -193,7 +233,7 @@ class ProfileManager {
     showUserRoleModal(userId, username, currentRole) {
         document.getElementById('userRoleUserId').value = userId;
         document.getElementById('userRoleName').value = username;
-        document.getElementById('userRole').value = currentRole;
+        document.getElementById('userRoleSelect').value = currentRole;
         document.getElementById('userRoleModal').style.display = 'block';
     }
 
@@ -203,8 +243,8 @@ class ProfileManager {
         
         const roleData = {
             action: 'update_role',
-            user_id: parseInt(formData.get('userRoleUserId')),
-            role: formData.get('role')
+            user_id: parseInt(document.getElementById('userRoleUserId').value),
+            role: document.getElementById('userRoleSelect').value
         };
 
         try {
@@ -318,7 +358,8 @@ class ProfileManager {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            credentials: 'include' // Important for session cookies
         };
 
         const finalOptions = { ...defaultOptions, ...options };

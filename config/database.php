@@ -63,6 +63,7 @@ function generateToken($length = 32) {
 }
 
 function hashPassword($password) {
+    require_once __DIR__ . '/../session.php';
     return password_hash($password, PASSWORD_DEFAULT);
 }
 

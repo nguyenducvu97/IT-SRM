@@ -378,6 +378,38 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         ");
         $update_result = $update_stmt->execute([$service_request_id]);
         
+        // Create notifications for admin users
+        try {
+            // Get staff name and request details
+            $staff_stmt = $pdo->prepare("SELECT full_name FROM users WHERE id = ?");
+            $staff_stmt->execute([$current_user]);
+            $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $request_stmt = $pdo->prepare("SELECT title FROM service_requests WHERE id = ?");
+            $request_stmt->execute([$service_request_id]);
+            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $staff_name = $staff_data['full_name'] ?? 'Staff';
+            $request_title = $request_data['title'] ?? 'Unknown';
+            
+            $title = "Yêu cầu hỗ trợ mới #" . $support_id;
+            $message = $staff_name . " yêu cầu hỗ trợ cho: " . $request_title;
+            
+            // Notify all admin users
+            $admin_stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin'");
+            $admin_stmt->execute();
+            $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+            
+            if (!empty($admins)) {
+                foreach ($admins as $admin_id) {
+                    createNotification($pdo, $admin_id, $title, $message, 'warning', $support_id, 'support_request');
+                }
+            }
+        } catch (Exception $e) {
+            error_log("Failed to create support request notifications: " . $e->getMessage());
+            // Continue even if notification creation fails
+        }
+        
         echo json_encode([
             'success' => true,
             'message' => 'Support request created successfully',

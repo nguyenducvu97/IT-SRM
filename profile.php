@@ -164,7 +164,22 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
                     </div>
                     
                     <div id="usersList" class="user-list">
-                        <!-- Users will be loaded here -->
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Họ và tên</th>
+                                    <th>Email</th>
+                                    <th>Vai trò</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -244,5 +259,3 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
             }
         });
     </script>
-</body>
-</html>

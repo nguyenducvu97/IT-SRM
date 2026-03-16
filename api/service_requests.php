@@ -1,6 +1,12 @@
 <?php
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../logs/api_errors.log');
+
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -11,10 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-require_once '../config/database.php';
-require_once '../config/session.php';
-require_once '../lib/ImprovedEmailHelper.php';
-require_once '../lib/PHPMailerEmailHelper.php'; // Quay lại PHPMailer
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/session.php';
+require_once __DIR__ . '/../lib/ImprovedEmailHelper.php';
+require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php'; // Quay lại PHPMailer
+require_once __DIR__ . '/../lib/NotificationHelper.php'; // Advanced Notification Helper
 
 // Start session for authentication
 startSession();
@@ -33,94 +40,6 @@ function serviceJsonResponse($success, $message, $data = null) {
     
     echo json_encode($response);
     exit();
-}
-
-// Notification helper functions
-function createNotification($pdo, $userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
-    try {
-        $stmt = $pdo->prepare("
-            INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ");
-        return $stmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
-    } catch (Exception $e) {
-        error_log("Failed to create notification: " . $e->getMessage());
-        return false;
-    }
-}
-
-function notifyUsers($pdo, $userIds, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
-    $stmt = $pdo->prepare("
-        INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ");
-    
-    foreach ($userIds as $userId) {
-        try {
-            $stmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
-        } catch (Exception $e) {
-            error_log("Failed to notify user $userId: " . $e->getMessage());
-        }
-    }
-}
-
-function notifyRole($pdo, $role, $title, $message, $type = 'info', $relatedId = null, $relatedType = null) {
-    try {
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE role = ?");
-        $stmt->execute([$role]);
-        $users = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        
-        if (!empty($users)) {
-            notifyUsers($pdo, $users, $title, $message, $type, $relatedId, $relatedType);
-        }
-    } catch (Exception $e) {
-        error_log("Failed to notify role $role: " . $e->getMessage());
-    }
-}
-
-function notifyRequestParticipants($pdo, $requestId, $excludeUserId = null, $title, $message, $type = 'info') {
-    try {
-        // Get request owner and assigned staff
-        $stmt = $pdo->prepare("
-            SELECT user_id, assigned_to 
-            FROM service_requests 
-            WHERE id = ?
-        ");
-        $stmt->execute([$requestId]);
-        $request = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        $notifyUsers = [];
-        
-        // Add request owner if not excluded
-        if ($request['user_id'] != $excludeUserId) {
-            $notifyUsers[] = $request['user_id'];
-        }
-        
-        // Add assigned staff if not excluded and exists
-        if ($request['assigned_to'] && $request['assigned_to'] != $excludeUserId) {
-            $notifyUsers[] = $request['assigned_to'];
-        }
-        
-        // Add all admin users
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin'");
-        $stmt->execute();
-        $admins = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        
-        foreach ($admins as $adminId) {
-            if ($adminId != $excludeUserId) {
-                $notifyUsers[] = $adminId;
-            }
-        }
-        
-        // Remove duplicates
-        $notifyUsers = array_unique($notifyUsers);
-        
-        if (!empty($notifyUsers)) {
-            notifyUsers($pdo, $notifyUsers, $title, $message, $type, $requestId, 'request');
-        }
-    } catch (Exception $e) {
-        error_log("Failed to notify request participants: " . $e->getMessage());
-    }
 }
 
 if (!isLoggedIn()) {
@@ -220,6 +139,8 @@ if ($method == 'GET') {
             
             // Calculate actual status counts
             $status_query = "SELECT status, COUNT(*) as count FROM service_requests";
+            
+            // Only filter by user for non-admin/non-staff
             if ($user_role != 'admin' && $user_role != 'staff') {
                 $status_query .= " WHERE user_id = :user_id";
             }
@@ -264,15 +185,15 @@ if ($method == 'GET') {
                   LEFT JOIN service_requests sr ON c.id = sr.category_id";
         
         // Add filtering based on user role
-        if ($user_role != 'admin') {
-            $query .= " WHERE sr.user_id = :user_id OR sr.user_id IS NULL";
+        if ($user_role != 'admin' && $user_role != 'staff') {
+            $query .= " WHERE sr.user_id = :user_id";
         }
         
         $query .= " GROUP BY c.id, c.name ORDER BY c.name";
         
         $stmt = $db->prepare($query);
         
-        if ($user_role != 'admin') {
+        if ($user_role != 'admin' && $user_role != 'staff') {
             $stmt->bindParam(':user_id', $_SESSION['user_id']);
         }
         
@@ -519,6 +440,24 @@ elseif ($method == 'POST') {
                 // Continue even if email fails
             }
             
+            // Create in-app notifications for staff and admin
+            try {
+                $title = "Yêu cầu mới #" . $request_id;
+                $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
+                
+                // Notify all staff and admin users
+                $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
+                $stmt->execute();
+                $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                
+                if (!empty($staff_admin_users)) {
+                    notifyUsers($db, $staff_admin_users, $title, $message, 'info', $request_id, 'request');
+                }
+            } catch (Exception $e) {
+                error_log("Failed to create new request notifications: " . $e->getMessage());
+                // Continue even if notification creation fails
+            }
+            
             // Handle file uploads if any
             if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
                 $upload_dir = __DIR__ . '/../uploads/requests/';
@@ -681,6 +620,123 @@ elseif ($method == 'PUT') {
                             $type = $status === 'resolved' ? 'success' : 'info';
                             
                             notifyRequestParticipants($db, $request_id, $user_id, $title, $message, $type);
+                            
+                            // Special notification when staff accepts request (status = in_progress)
+                            if ($status === 'in_progress' && $assigned_to) {
+                                try {
+                                    // Get staff name
+                                    $staff_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+                                    $staff_stmt->execute([$assigned_to]);
+                                    $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
+                                    
+                                    $staff_name = $staff_data['full_name'] ?? 'Staff';
+                                    
+                                    // Notify user and admin that staff has accepted the request
+                                    $accept_title = "Yêu cầu #" . $request_id . " đã được nhận";
+                                    $accept_message = $staff_name . " đã nhận yêu cầu: " . $request_data['title'];
+                                    
+                                    // Get user and admin IDs
+                                    $notify_ids = [];
+                                    
+                                    // Add request owner
+                                    if ($request_data['user_id'] != $assigned_to) {
+                                        $notify_ids[] = $request_data['user_id'];
+                                    }
+                                    
+                                    // Add all admins
+                                    $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
+                                    $admin_stmt->execute();
+                                    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                                    $notify_ids = array_merge($notify_ids, $admins);
+                                    
+                                    // Remove duplicates and exclude the staff who accepted
+                                    $notify_ids = array_unique(array_diff($notify_ids, [$assigned_to]));
+                                    
+                                    if (!empty($notify_ids)) {
+                                        notifyUsers($db, $notify_ids, $accept_title, $accept_message, 'success', $request_id, 'request');
+                                    }
+                                } catch (Exception $e) {
+                                    error_log("Failed to create staff acceptance notification: " . $e->getMessage());
+                                }
+                            }
+                            
+                            // Special notification when staff resolves request (status = resolved)
+                            if ($status === 'resolved' && $assigned_to) {
+                                try {
+                                    // Get staff name
+                                    $staff_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+                                    $staff_stmt->execute([$assigned_to]);
+                                    $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
+                                    
+                                    $staff_name = $staff_data['full_name'] ?? 'Staff';
+                                    
+                                    // Notify user and admin that staff has resolved the request
+                                    $resolve_title = "Yêu cầu #" . $request_id . " đã được giải quyết";
+                                    $resolve_message = $staff_name . " đã giải quyết yêu cầu: " . $request_data['title'];
+                                    
+                                    // Get user and admin IDs
+                                    $notify_ids = [];
+                                    
+                                    // Add request owner
+                                    if ($request_data['user_id'] != $assigned_to) {
+                                        $notify_ids[] = $request_data['user_id'];
+                                    }
+                                    
+                                    // Add all admins
+                                    $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
+                                    $admin_stmt->execute();
+                                    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                                    $notify_ids = array_merge($notify_ids, $admins);
+                                    
+                                    // Remove duplicates and exclude the staff who resolved
+                                    $notify_ids = array_unique(array_diff($notify_ids, [$assigned_to]));
+                                    
+                                    if (!empty($notify_ids)) {
+                                        notifyUsers($db, $notify_ids, $resolve_title, $resolve_message, 'success', $request_id, 'request');
+                                    }
+                                } catch (Exception $e) {
+                                    error_log("Failed to create staff resolution notification: " . $e->getMessage());
+                                }
+                            }
+                            
+                            // Special notification when user closes request (status = closed)
+                            if ($status === 'closed') {
+                                try {
+                                    // Get user name who closed the request
+                                    $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+                                    $user_stmt->execute([$user_id]);
+                                    $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
+                                    
+                                    $user_name = $user_data['full_name'] ?? 'User';
+                                    
+                                    // Notify staff and admin that user has closed the request
+                                    $close_title = "Yêu cầu #" . $request_id . " đã được đóng";
+                                    $close_message = $user_name . " đã đóng yêu cầu: " . $request_data['title'];
+                                    
+                                    // Get staff and admin IDs
+                                    $notify_ids = [];
+                                    
+                                    // Add assigned staff if exists
+                                    if ($request_data['assigned_to'] && $request_data['assigned_to'] != $user_id) {
+                                        $notify_ids[] = $request_data['assigned_to'];
+                                    }
+                                    
+                                    // Add all staff and admins
+                                    $staff_admin_stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
+                                    $staff_admin_stmt->execute();
+                                    $staff_admins = $staff_admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                                    $notify_ids = array_merge($notify_ids, $staff_admins);
+                                    
+                                    // Remove duplicates and exclude the user who closed
+                                    $notify_ids = array_unique(array_diff($notify_ids, [$user_id]));
+                                    
+                                    if (!empty($notify_ids)) {
+                                        notifyUsers($db, $notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
+                                    }
+                                } catch (Exception $e) {
+                                    error_log("Failed to create user close notification: " . $e->getMessage());
+                                }
+                            }
                         }
                     }
                     
@@ -777,6 +833,38 @@ elseif ($method == 'PUT') {
             $insert_stmt->bindParam(":reject_details", $reject_details);
             
             if ($insert_stmt->execute()) {
+                // Create notifications for admin users
+                try {
+                    // Get staff name and request details
+                    $staff_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+                    $staff_stmt->execute([$user_id]);
+                    $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    $request_stmt = $db->prepare("SELECT title FROM service_requests WHERE id = ?");
+                    $request_stmt->execute([$request_id]);
+                    $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    $staff_name = $staff_data['full_name'] ?? 'Staff';
+                    $request_title = $request_data['title'] ?? 'Unknown';
+                    
+                    $title = "Yêu cầu từ chối mới #" . $db->lastInsertId();
+                    $message = $staff_name . " từ chối yêu cầu: " . $request_title;
+                    
+                    // Notify all admin users
+                    $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
+                    $admin_stmt->execute();
+                    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                    
+                    if (!empty($admins)) {
+                        foreach ($admins as $admin_id) {
+                            createNotification($db, $admin_id, $title, $message, 'warning', $request_id, 'reject_request');
+                        }
+                    }
+                } catch (Exception $e) {
+                    error_log("Failed to create reject request notifications: " . $e->getMessage());
+                    // Continue even if notification creation fails
+                }
+                
                 serviceJsonResponse(true, "Reject request submitted successfully");
             } else {
                 serviceJsonResponse(false, "Failed to submit reject request");

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài đặt thông báo - IT Service Request</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .notification-settings {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .settings-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .settings-header h2 {
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+        
+        .settings-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .settings-section h3 {
+            color: #495057;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            flex: 1;
+        }
+        
+        .setting-label h4 {
+            margin: 0 0 5px 0;
+            color: #343a40;
+        }
+        
+        .setting-label p {
+            margin: 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #007bff;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        /* Test buttons */
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-test {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-test:hover {
+            opacity: 0.8;
+        }
+        
+        .btn-info { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: black; }
+        .btn-error { background: #dc3545; color: white; }
+        
+        /* Sound preview */
+        .sound-preview {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .volume-slider {
+            width: 150px;
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        
+        .status-enabled { background-color: #28a745; }
+        .status-disabled { background-color: #dc3545; }
+        
+        .permission-status {
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        
+        .permission-granted {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .permission-denied {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="notification-settings">
+            <div class="settings-header">
+                <h2><i class="fas fa-bell"></i> Cài đặt thông báo</h2>
+                <p>Quản lý cách bạn nhận thông báo từ hệ thống</p>
+            </div>
+            
+            <!-- Browser Notifications -->
+            <div class="settings-section">
+                <h3><i class="fas fa-desktop"></i> Thông báo trình duyệt</h3>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Thông báo desktop</h4>
+                        <p>Hiển thị thông báo trên desktop ngay cả khi tab không active</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="desktopNotificationToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="status-indicator" id="desktopStatus"></span>
+                    </div>
+                </div>
+                
+                <div class="permission-status" id="permissionStatus">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="permissionText">Đang kiểm tra quyền thông báo...</span>
+                </div>
+            </div>
+            
+            <!-- Sound Notifications -->
+            <div class="settings-section">
+                <h3><i class="fas fa-volume-up"></i> Thông báo âm thanh</h3>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Âm thanh thông báo</h4>
+                        <p>Phát âm thanh khi có thông báo mới</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="notificationSoundToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="status-indicator" id="soundStatus"></span>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Âm lượng</h4>
+                        <p>Điều chỉnh âm lượng của thông báo</p>
+                    </div>
+                    <div class="setting-control volume-control">
+                        <i class="fas fa-volume-down"></i>
+                        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="30">
+                        <i class="fas fa-volume-up"></i>
+                        <span id="volumeValue">30%</span>
+                    </div>
+                </div>
+                
+                <div class="sound-preview">
+                    <p><strong>Thử âm thanh:</strong></p>
+                    <div class="test-buttons">
+                        <button class="btn-test btn-info" onclick="testSound('info')">
+                            <i class="fas fa-info-circle"></i> Thông báo
+                        </button>
+                        <button class="btn-test btn-success" onclick="testSound('success')">
+                            <i class="fas fa-check-circle"></i> Thành công
+                        </button>
+                        <button class="btn-test btn-warning" onclick="testSound('warning')">
+                            <i class="fas fa-exclamation-triangle"></i> Cảnh báo
+                        </button>
+                        <button class="btn-test btn-error" onclick="testSound('error')">
+                            <i class="fas fa-times-circle"></i> Lỗi
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Notifications -->
+            <div class="settings-section">
+                <h3><i class="fas fa-envelope"></i> Thông báo Email</h3>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Email thông báo</h4>
+                        <p>Gửi email cùng lúc với thông báo trong ứng dụng</p>
+                    </div>
+                    <div class="setting-control">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="emailNotificationToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="status-indicator status-enabled"></span>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Địa chỉ email</h4>
+                        <p>Email nhận thông báo: <span id="userEmail">đang tải...</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Real-time Updates -->
+            <div class="settings-section">
+                <h3><i class="fas fa-sync"></i> Cập nhật real-time</h3>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Tự động làm mới</h4>
+                        <p>Tần suất kiểm tra thông báo mới: <span id="refreshInterval">15</span> giây</p>
+                    </div>
+                    <div class="setting-control">
+                        <select id="refreshIntervalSelect" class="form-control">
+                            <option value="10">10 giây (Real-time)</option>
+                            <option value="15" selected>15 giây (Nhanh)</option>
+                            <option value="30">30 giây (Bình thường)</option>
+                            <option value="60">60 giây (Tiết kiệm)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">
+                        <h4>Service Worker</h4>
+                        <p>Cho phép thông báo ngay cả khi tab đã đóng</p>
+                    </div>
+                    <div class="setting-control">
+                        <span class="status-indicator" id="serviceWorkerStatus"></span>
+                        <span id="serviceWorkerText">Đang kiểm tra...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button class="btn btn-primary" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> Lưu cài đặt
+                </button>
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Quay lại
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <script src="assets/sounds/notification-sounds.js"></script>
+    <script>
+        // Initialize notification sounds
+        const notificationSounds = new NotificationSounds();
+        
+        // Load user settings
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('notificationSettings') || '{}');
+            
+            // Set toggle states
+            document.getElementById('desktopNotificationToggle').checked = settings.desktopNotifications !== false;
+            document.getElementById('notificationSoundToggle').checked = settings.soundEnabled !== false;
+            document.getElementById('emailNotificationToggle').checked = settings.emailEnabled !== false;
+            
+            // Set volume
+            document.getElementById('volumeSlider').value = settings.volume || 30;
+            document.getElementById('volumeValue').textContent = (settings.volume || 30) + '%';
+            
+            // Set refresh interval
+            document.getElementById('refreshIntervalSelect').value = settings.refreshInterval || 15;
+            document.getElementById('refreshInterval').textContent = settings.refreshInterval || 15;
+            
+            updateStatusIndicators();
+            checkNotificationPermission();
+            checkServiceWorker();
+        }
+        
+        // Save settings
+        function saveSettings() {
+            const settings = {
+                desktopNotifications: document.getElementById('desktopNotificationToggle').checked,
+                soundEnabled: document.getElementById('notificationSoundToggle').checked,
+                emailEnabled: document.getElementById('emailNotificationToggle').checked,
+                volume: document.getElementById('volumeSlider').value,
+                refreshInterval: parseInt(document.getElementById('refreshIntervalSelect').value)
+            };
+            
+            localStorage.setItem('notificationSettings', JSON.stringify(settings));
+            
+            // Show success message
+            alert('Cài đặt đã được lưu thành công!');
+        }
+        
+        // Test sound
+        function testSound(type) {
+            notificationSounds.playNotificationSound(type);
+        }
+        
+        // Update volume
+        document.getElementById('volumeSlider').addEventListener('input', function(e) {
+            const volume = e.target.value;
+            document.getElementById('volumeValue').textContent = volume + '%';
+        });
+        
+        // Check notification permission
+        function checkNotificationPermission() {
+            if ('Notification' in window) {
+                const permission = Notification.permission;
+                updatePermissionStatus(permission);
+            } else {
+                document.getElementById('permissionStatus').innerHTML = `
+                    <i class="fas fa-times-circle"></i>
+                    <span>Trình duyệt không hỗ trợ thông báo desktop</span>
+                `;
+                document.getElementById('permissionStatus').className = 'permission-status permission-denied';
+            }
+        }
+        
+        function updatePermissionStatus(permission) {
+            const statusElement = document.getElementById('permissionStatus');
+            const textElement = document.getElementById('permissionText');
+            const indicatorElement = document.getElementById('desktopStatus');
+            
+            if (permission === 'granted') {
+                statusElement.className = 'permission-status permission-granted';
+                textElement.textContent = 'Đã cấp quyền thông báo desktop';
+                indicatorElement.className = 'status-indicator status-enabled';
+            } else if (permission === 'denied') {
+                statusElement.className = 'permission-status permission-denied';
+                textElement.textContent = 'Bị từ chối quyền thông báo desktop';
+                indicatorElement.className = 'status-indicator status-disabled';
+            } else {
+                statusElement.className = 'permission-status permission-granted';
+                textElement.textContent = 'Chưa cấp quyền thông báo desktop';
+                indicatorElement.className = 'status-indicator status-disabled';
+            }
+        }
+        
+        // Request notification permission
+        document.getElementById('desktopNotificationToggle').addEventListener('change', function(e) {
+            if (e.target.checked && 'Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    updatePermissionStatus(permission);
+                });
+            }
+        });
+        
+        // Check service worker
+        function checkServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    const statusElement = document.getElementById('serviceWorkerStatus');
+                    const textElement = document.getElementById('serviceWorkerText');
+                    
+                    if (registrations.length > 0) {
+                        statusElement.className = 'status-indicator status-enabled';
+                        textElement.textContent = 'Service Worker đã kích hoạt';
+                    } else {
+                        statusElement.className = 'status-indicator status-disabled';
+                        textElement.textContent = 'Service Worker chưa kích hoạt';
+                    }
+                });
+            } else {
+                document.getElementById('serviceWorkerStatus').className = 'status-indicator status-disabled';
+                document.getElementById('serviceWorkerText').textContent = 'Trình duyệt không hỗ trợ Service Worker';
+            }
+        }
+        
+        // Update status indicators
+        function updateStatusIndicators() {
+            const desktopEnabled = document.getElementById('desktopNotificationToggle').checked;
+            const soundEnabled = document.getElementById('notificationSoundToggle').checked;
+            
+            document.getElementById('desktopStatus').className = 
+                'status-indicator ' + (desktopEnabled ? 'status-enabled' : 'status-disabled');
+            document.getElementById('soundStatus').className = 
+                'status-indicator ' + (soundEnabled ? 'status-enabled' : 'status-disabled');
+        }
+        
+        // Load user email
+        function loadUserEmail() {
+            // This would typically come from the server
+            const userEmail = localStorage.getItem('userEmail') || 'user@example.com';
+            document.getElementById('userEmail').textContent = userEmail;
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            loadUserEmail();
+        });
+    </script>
+</body>
+</html>

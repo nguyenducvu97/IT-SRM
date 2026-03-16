@@ -2876,6 +2876,100 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     color: #212529;
 }
 
+/* Form Sections */
+.form-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-section h4 {
+    color: #495057;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-section h4 i {
+    color: #667eea;
+}
+
+/* Attachment Preview Styles */
+.attachment-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.attachment-preview.has-files {
+    display: block;
+    padding: 0.5rem;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.attachment-item:last-child {
+    margin-bottom: 0;
+}
+
+.attachment-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.attachment-icon {
+    color: #667eea;
+    font-size: 1.2rem;
+}
+
+.attachment-name {
+    font-weight: 500;
+    color: #495057;
+}
+
+.attachment-size {
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.attachment-remove {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.attachment-remove:hover {
+    background-color: #f8d7da;
+}
+
 /* Close Request Modal Styles */
 .work-performed-list {
     background: #f8f9fa;

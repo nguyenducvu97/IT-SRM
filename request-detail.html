@@ -262,11 +262,28 @@
                             </div>
                         </div>
                         
+                        <div class="form-section">
+                            <h4><i class="fas fa-paperclip"></i> Tệp đính kèm</h4>
+                            
+                            <div class="form-group">
+                                <label for="resolveAttachments">Tệp đính kèm (nếu có)</label>
+                                <input type="file" id="resolveAttachments" name="attachments" multiple 
+                                       accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip">
+                                <small class="form-text text-muted">
+                                    Chấp nhận các định dạng: JPG, PNG, GIF, PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, ZIP (tối đa 10MB mỗi tệp)
+                                </small>
+                            </div>
+                            
+                            <div id="resolveAttachmentPreview" class="attachment-preview">
+                                <!-- Preview will be shown here -->
+                            </div>
+                        </div>
+                        
                         <div class="form-actions">
                             <button type="submit" class="btn btn-success">
                                 <i class="fas fa-check"></i> Xác nhận giải quyết
                             </button>
-                            <button type="button" class="btn btn-secondary" onclick="app.closeResolveModal()">
+                            <button type="button" class="btn btn-secondary" onclick="requestDetailApp.closeResolveModal()">
                                 <i class="fas fa-times"></i> Hủy
                             </button>
                         </div>
@@ -311,11 +328,28 @@
                             </div>
                         </div>
                         
+                        <div class="form-section">
+                            <h4><i class="fas fa-paperclip"></i> Tệp đính kèm</h4>
+                            
+                            <div class="form-group">
+                                <label for="supportAttachments">Tệp đính kèm (nếu có)</label>
+                                <input type="file" id="supportAttachments" name="attachments" multiple 
+                                       accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip">
+                                <small class="form-text text-muted">
+                                    Chấp nhận các định dạng: JPG, PNG, GIF, PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, ZIP (tối đa 10MB mỗi tệp)
+                                </small>
+                            </div>
+                            
+                            <div id="supportAttachmentPreview" class="attachment-preview">
+                                <!-- Preview will be shown here -->
+                            </div>
+                        </div>
+                        
                         <div class="form-actions">
                             <button type="submit" class="btn btn-warning">
                                 <i class="fas fa-paper-plane"></i> Gửi yêu cầu hỗ trợ
                             </button>
-                            <button type="button" class="btn btn-secondary" onclick="app.closeNeedSupportModal()">
+                            <button type="button" class="btn btn-secondary" onclick="requestDetailApp.closeNeedSupportModal()">
                                 <i class="fas fa-times"></i> Hủy
                             </button>
                         </div>
@@ -362,7 +396,7 @@
                             <button type="submit" class="btn btn-success">
                                 <i class="fas fa-check"></i> Xác nhận quyết định
                             </button>
-                            <button type="button" class="btn btn-secondary" onclick="app.closeAdminSupportModal()">
+                            <button type="button" class="btn btn-secondary" onclick="requestDetailApp.closeAdminSupportModal()">
                                 <i class="fas fa-times"></i> Đóng
                             </button>
                         </div>
@@ -498,7 +532,7 @@
                         <button type="submit" class="btn btn-danger">
                             <i class="fas fa-times"></i> Đóng yêu cầu
                         </button>
-                        <button type="button" class="btn btn-secondary" onclick="app.closeCloseRequestModal()">
+                        <button type="button" class="btn btn-secondary" onclick="requestDetailApp.closeCloseRequestModal()">
                             <i class="fas fa-arrow-left"></i> Quay lại
                         </button>
                     </div>
@@ -509,31 +543,58 @@
 
     <!-- Reject Request Modal -->
     <div id="rejectModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content modal-large">
             <div class="modal-header">
                 <h3><i class="fas fa-times"></i> Từ chối yêu cầu</h3>
-                <button class="close-btn" onclick="app.closeRejectModal()">&times;</button>
+                <button class="close-btn" onclick="requestDetailApp.closeRejectModal()">&times;</button>
             </div>
-            <form id="rejectForm" onsubmit="app.handleRejectSubmit(event)">
-                <div class="form-group">
-                    <label for="rejectReason">Lý do từ chối *</label>
-                    <textarea id="rejectReason" name="reject_reason" rows="4" required placeholder="Vui lòng nhập lý do từ chối yêu cầu này..."></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="rejectDetails">Chi tiết bổ sung</label>
-                    <textarea id="rejectDetails" name="reject_details" rows="3" placeholder="Thông tin bổ sung về lý do từ chối..."></textarea>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-times"></i> Gửi yêu cầu từ chối
-                    </button>
-                    <button type="button" class="btn btn-secondary" onclick="app.closeRejectModal()">
-                        <i class="fas fa-arrow-left"></i> Hủy
-                    </button>
-                </div>
-            </form>
+            <div class="modal-body">
+                <form id="rejectForm" onsubmit="requestDetailApp.handleRejectSubmit(event)">
+                    <input type="hidden" id="rejectRequestId">
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-info-circle"></i> Thông tin từ chối yêu cầu</h4>
+                        
+                        <div class="form-group">
+                            <label for="rejectReason">Lý do từ chối *</label>
+                            <textarea id="rejectReason" name="reject_reason" rows="4" required 
+                                      placeholder="Mô tả lý do tại sao bạn từ chối yêu cầu này..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="rejectDetails">Chi tiết bổ sung</label>
+                            <textarea id="rejectDetails" name="reject_details" rows="4" 
+                                      placeholder="Thông tin bổ sung về lý do từ chối (nếu có)..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h4><i class="fas fa-paperclip"></i> Tệp đính kèm</h4>
+                        
+                        <div class="form-group">
+                            <label for="rejectAttachments">Tệp đính kèm (nếu có)</label>
+                            <input type="file" id="rejectAttachments" name="attachments" multiple 
+                                   accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip">
+                            <small class="form-text text-muted">
+                                Chấp nhận các định dạng: JPG, PNG, GIF, PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, ZIP (tối đa 10MB mỗi tệp)
+                            </small>
+                        </div>
+                        
+                        <div id="rejectAttachmentPreview" class="attachment-preview">
+                            <!-- Preview will be shown here -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Gửi yêu cầu từ chối
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="requestDetailApp.closeRejectModal()">
+                            <i class="fas fa-arrow-left"></i> Hủy
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -575,7 +636,7 @@
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-check"></i> Xác nhận quyết định
                         </button>
-                        <button type="button" class="btn btn-secondary" onclick="app.closeAdminRejectModal()">
+                        <button type="button" class="btn btn-secondary" onclick="requestDetailApp.closeAdminRejectModal()">
                             <i class="fas fa-times"></i> Đóng
                         </button>
                     </div>
