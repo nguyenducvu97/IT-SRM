@@ -1,6 +1,6 @@
 <?php
-require_once '../config/database.php';
-require_once '../config/session.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/session.php';
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: http://localhost');
 header('Access-Control-Allow-Credentials: true');
@@ -24,7 +24,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $method = $_SERVER['REQUEST_METHOD'];
 $current_user_id = $_SESSION['user_id'];
-$current_user_role = $_SESSION['user_role'];
+$current_user_role = $_SESSION['user_role'] ?? $_SESSION['role'] ?? 'user';
 
 try {
     $pdo = getDatabaseConnection();

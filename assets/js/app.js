@@ -1853,8 +1853,29 @@ class ITServiceApp {
 
         const finalOptions = { ...defaultOptions, ...options };
         
-        const response = await fetch(url, finalOptions);
-        return await response.json();
+        try {
+            const response = await fetch(url, finalOptions);
+            
+            // Check if response is OK
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            // Get response text first
+            const responseText = await response.text();
+            
+            // Try to parse as JSON
+            try {
+                return JSON.parse(responseText);
+            } catch (parseError) {
+                console.error('JSON Parse Error:', parseError);
+                console.error('Response Text:', responseText);
+                throw new Error(`Invalid JSON response: ${parseError.message}`);
+            }
+        } catch (error) {
+            console.error('API Call Error:', error);
+            throw error;
+        }
     }
 
     showNotification(message, type = 'info') {
@@ -2934,6 +2955,9 @@ class ITServiceApp {
         } catch (error) {
             console.error('Profile load error:', error);
             this.showNotification('Lỗi tải thông tin cá nhân', 'error');
+        } finally {
+            // Hide loading state regardless of success or error
+            this.hideLoadingState();
         }
     }
 
