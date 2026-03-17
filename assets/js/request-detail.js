@@ -553,6 +553,7 @@ class RequestDetailApp {
                         <h4><i class="fas fa-paperclip"></i> Tệp đính kèm (${request.attachments.length})</h4>
                         <div class="attachments-list">
                             ${request.attachments.map(attachment => {
+                                console.log('Processing attachment:', attachment);
                                 const isImage = attachment.mime_type.startsWith('image/');
                                 const fileExt = attachment.filename.split('.').pop().toLowerCase();
                                 const isPDF = fileExt === 'pdf';
@@ -561,6 +562,8 @@ class RequestDetailApp {
                                 const isPowerPoint = ['ppt', 'pptx'].includes(fileExt);
                                 const isText = ['txt', 'md'].includes(fileExt);
                                 const isViewable = isPDF || isWord || isExcel || isPowerPoint || isText;
+                                
+                                console.log('Attachment info:', {isImage, fileExt, isPDF, isViewable});
                                 
                                 return `
                                     <div class="attachment-item">
@@ -571,21 +574,22 @@ class RequestDetailApp {
                                         </div>
                                         <div class="attachment-actions">
                                             ${isImage ? `
-                                                <img src="uploads/requests/${attachment.filename}" 
+                                                <img src="api/attachment.php?file=${attachment.filename}&action=view" 
                                                      alt="${attachment.original_name}" 
                                                      class="attachment-preview"
-                                                     onclick="requestDetailApp.showImageModal('uploads/requests/${attachment.filename}', '${attachment.original_name}')">
+                                                     onclick="requestDetailApp.showImageModal('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                     style="cursor: pointer;">
                                                 <div class="image-overlay">
                                                     <i class="fas fa-search-plus"></i>
                                                 </div>
                                             ` : ''}
                                             ${isViewable ? `
                                                 <button class="btn btn-sm btn-primary" 
-                                                        onclick="requestDetailApp.viewDocument('uploads/requests/${attachment.filename}', '${attachment.original_name}', '${fileExt}')">
+                                                        onclick="requestDetailApp.viewDocument('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}', '${fileExt}')">
                                                     <i class="fas fa-eye"></i> Xem
                                                 </button>
                                             ` : ''}
-                                            <a href="uploads/requests/${attachment.filename}" 
+                                            <a href="api/attachment.php?file=${attachment.filename}&action=download" 
                                                class="btn btn-sm btn-secondary" 
                                                target="_blank"
                                                download="${attachment.original_name}">

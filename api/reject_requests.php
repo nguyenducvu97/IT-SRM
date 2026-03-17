@@ -336,17 +336,17 @@ function handlePut($db, $current_user) {
         $reject_data = $reject_stmt->fetch(PDO::FETCH_ASSOC);
         
         // Create title and message
-        $title = "Yêu cầu từ chối #" . $reject_id . " đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối');
-        $message = "Yêu cầu từ chối từ " . $reject_data['requester_name'] . " về '" . $reject_data['request_title'] . "' đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối') . ". Lý do: " . $admin_reason;
+        $title = "Yêu cầu hỗ trợ #" . $reject_data['service_request_id'] . " đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối');
+        $message = "Yêu cầu hỗ trợ từ " . $reject_data['requester_name'] . " đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối') . ". Lý do: " . $admin_reason;
         $type = $decision === 'approved' ? 'success' : 'warning';
         
         // Notify all staff and admin about the decision
-        notifyRole($db, 'staff', $title, $message, $type, $reject_id, 'reject_request');
-        notifyRole($db, 'admin', $title, $message, $type, $reject_id, 'reject_request');
+        notifyRole($db, 'staff', $title, $message, $type, $reject_data['service_request_id'], 'service_request');
+        notifyRole($db, 'admin', $title, $message, $type, $reject_data['service_request_id'], 'service_request');
         
         // Also notify original requester
         if ($reject_data['rejected_by'] != $current_user) {
-            createNotification($db, $reject_data['rejected_by'], $title, $message, $type, $reject_id, 'reject_request');
+            createNotification($db, $reject_data['rejected_by'], $title, $message, $type, $reject_data['service_request_id'], 'service_request');
         }
         
     } catch (Exception $e) {

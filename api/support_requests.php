@@ -132,6 +132,22 @@ function handleGet($pdo, $action, $current_user, $user_role) {
                 return;
             }
             
+            // Get attachments for this support request
+            try {
+                $attachments_query = "SELECT id, filename, original_name, file_size, mime_type, uploaded_at 
+                                     FROM support_request_attachments 
+                                     WHERE support_request_id = :id 
+                                     ORDER BY uploaded_at ASC";
+                $attachments_stmt = $pdo->prepare($attachments_query);
+                $attachments_stmt->bindParam(":id", $support_id);
+                $attachments_stmt->execute();
+                
+                $attachments = $attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
+                $support_request['attachments'] = $attachments;
+            } catch (Exception $e) {
+                $support_request['attachments'] = [];
+            }
+            
             echo json_encode(['success' => true, 'data' => $support_request]);
             break;
             

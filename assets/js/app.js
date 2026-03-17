@@ -1,5 +1,23 @@
 // IT Service Request Management JavaScript
 
+// Global error handler for undefined script errors
+window.addEventListener('error', function(e) {
+    if (e.filename && e.filename.includes('onboarding.js')) {
+        console.warn('Ignoring onboarding.js error - file not found');
+        e.preventDefault();
+        return false;
+    }
+});
+
+// Global unhandled promise rejection handler
+window.addEventListener('unhandledrejection', function(e) {
+    if (e.reason && e.reason.toString().includes('onboarding')) {
+        console.warn('Ignoring onboarding promise rejection');
+        e.preventDefault();
+        return false;
+    }
+});
+
 class ITServiceApp {
     constructor() {
         this.currentUser = null;
@@ -1642,6 +1660,24 @@ class ITServiceApp {
         sessionStorage.setItem('currentCategoryId', categoryId);
         sessionStorage.setItem('currentCategoryName', categoryName);
         
+        // Global error handler for undefined script errors
+        window.addEventListener('error', function(e) {
+            if (e.filename && e.filename.includes('onboarding.js')) {
+                console.warn('Ignoring onboarding.js error - file not found');
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Global unhandled promise rejection handler
+        window.addEventListener('unhandledrejection', function(e) {
+            if (e.reason && e.reason.toString().includes('onboarding')) {
+                console.warn('Ignoring onboarding promise rejection');
+                e.preventDefault();
+                return false;
+            }
+        });
+
         // Use internal navigation instead of full page reload
         this.showPage('category-requests');
     }
