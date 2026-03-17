@@ -1,7 +1,7 @@
 <?php
-// Enable error reporting for debugging
+// Enable error logging but disable display for JSON responses
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0);  // Don't display errors in output
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/api_errors.log');
 
@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/session.php';
-require_once __DIR__ . '/../lib/ImprovedEmailHelper.php';
-require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php'; // Quay lại PHPMailer
+require_once __DIR__ . '/../lib/EmailHelper.php'; // Use original EmailHelper
+require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php'; // Use PHPMailerEmailHelper for beautiful emails
 require_once __DIR__ . '/../lib/NotificationHelper.php'; // Advanced Notification Helper
 
 // Start session for authentication
@@ -433,25 +433,30 @@ elseif ($method == 'POST') {
             
             // Send email notification to staff and admin
             try {
-                $emailHelper = new PHPMailerEmailHelper(); // Use PHPMailerEmailHelper with new notification logic
+                $emailHelper = new EmailHelper(); // Use original EmailHelper for reliability
                 $emailHelper->sendNewRequestNotification($email_data);
             } catch (Exception $e) {
                 error_log("Email notification failed: " . $e->getMessage());
                 // Continue even if email fails
             }
             
-            // Create in-app notifications for staff and admin
+            // Create in-app notifications for staff and admin (OPTIMIZED)
+            $notification_start = microtime(true);
             try {
-                $title = "Yêu cầu mới #" . $request_id;
-                $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
-                
-                // Notify all staff and admin users
+                // Get all staff and admin users ONCE
                 $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
                 $stmt->execute();
                 $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 
                 if (!empty($staff_admin_users)) {
-                    notifyUsers($db, $staff_admin_users, $title, $message, 'info', $request_id, 'request');
+                    $title = "Yêu cầu mới #" . $request_id;
+                    $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
+                    
+                    // Create notifications WITHOUT email for faster response
+                    $notificationHelper = new NotificationHelper($db);
+                    $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
+                    
+                    error_log("Notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
                 }
             } catch (Exception $e) {
                 error_log("Failed to create new request notifications: " . $e->getMessage());
@@ -489,24 +494,6 @@ elseif ($method == 'POST') {
                         }
                     }
                 }
-            }
-            
-            // Create notifications for staff and admin users
-            try {
-                // Get all staff and admin users
-                $staff_query = "SELECT id FROM users WHERE role IN ('admin', 'staff')";
-                $staff_stmt = $db->prepare($staff_query);
-                $staff_stmt->execute();
-                $staff_users = $staff_stmt->fetchAll(PDO::FETCH_COLUMN);
-                
-                // Create notifications for each staff/admin
-                $title = "Yêu cầu dịch vụ mới #" . $request_id;
-                $message = $request_data['requester_name'] . " đã tạo yêu cầu mới: " . $request_data['title'];
-                
-                notifyUsers($db, $staff_users, $title, $message, 'info', $request_id, 'request');
-            } catch (Exception $e) {
-                error_log("Failed to create notifications: " . $e->getMessage());
-                // Continue even if notification creation fails
             }
             
             serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id]);
@@ -653,7 +640,8 @@ elseif ($method == 'PUT') {
                                     $notify_ids = array_unique(array_diff($notify_ids, [$assigned_to]));
                                     
                                     if (!empty($notify_ids)) {
-                                        notifyUsers($db, $notify_ids, $accept_title, $accept_message, 'success', $request_id, 'request');
+                                        $notificationHelper = new NotificationHelper($db);
+                                        $notificationHelper->notifyUsers($notify_ids, $accept_title, $accept_message, 'success', $request_id, 'request');
                                     }
                                 } catch (Exception $e) {
                                     error_log("Failed to create staff acceptance notification: " . $e->getMessage());
@@ -692,7 +680,8 @@ elseif ($method == 'PUT') {
                                     $notify_ids = array_unique(array_diff($notify_ids, [$assigned_to]));
                                     
                                     if (!empty($notify_ids)) {
-                                        notifyUsers($db, $notify_ids, $resolve_title, $resolve_message, 'success', $request_id, 'request');
+                                        $notificationHelper = new NotificationHelper($db);
+                                        $notificationHelper->notifyUsers($notify_ids, $resolve_title, $resolve_message, 'success', $request_id, 'request');
                                     }
                                 } catch (Exception $e) {
                                     error_log("Failed to create staff resolution notification: " . $e->getMessage());
@@ -731,7 +720,8 @@ elseif ($method == 'PUT') {
                                     $notify_ids = array_unique(array_diff($notify_ids, [$user_id]));
                                     
                                     if (!empty($notify_ids)) {
-                                        notifyUsers($db, $notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
+                                        $notificationHelper = new NotificationHelper($db);
+                                        $notificationHelper->notifyUsers($notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
                                     }
                                 } catch (Exception $e) {
                                     error_log("Failed to create user close notification: " . $e->getMessage());

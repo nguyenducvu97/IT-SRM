@@ -1317,13 +1317,27 @@ class ITServiceApp {
             console.log('Create request response:', result);
 
             if (result.success) {
-                this.showNotification('Yêu cầu đã được tạo thành công', 'success');
+                // Hiển thị toast notification đẹp cho việc tạo yêu cầu thành công
+                if (window.notificationManager) {
+                    window.notificationManager.success(
+                        `Yêu cầu #${result.data?.id || 'mới'} đã được tạo thành công!`,
+                        'Tạo yêu cầu thành công',
+                        5000
+                    );
+                } else {
+                    this.showNotification('Yêu cầu đã được tạo thành công', 'success');
+                }
+                
                 e.target.reset();
                 this.selectedFiles = [];
                 this.updateFileList();
                 this.showPage('requests');
             } else {
-                this.showNotification(result.message, 'error');
+                if (window.notificationManager) {
+                    window.notificationManager.error(result.message, 'Lỗi tạo yêu cầu');
+                } else {
+                    this.showNotification(result.message, 'error');
+                }
             }
         } catch (error) {
             console.error('Create request error:', error);

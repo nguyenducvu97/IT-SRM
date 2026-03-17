@@ -192,8 +192,9 @@ let toastManager;
 document.addEventListener('DOMContentLoaded', function() {
     toastManager = new ToastNotificationManager({ position: 'top-center' });
     
-    // Make it globally available
+    // Make it globally available with both names for compatibility
     window.toastManager = toastManager;
+    window.notificationManager = toastManager; // Add this line for app.js compatibility
     
     // Override the existing notification system
     if (window.app && window.app.showNotification) {

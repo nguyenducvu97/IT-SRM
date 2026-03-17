@@ -41,6 +41,13 @@ class NotificationHelper {
      */
     private function sendNotificationEmail($userId, $title, $message, $type, $relatedId, $relatedType) {
         try {
+            // DISABLED: Email sending is handled by PHPMailerEmailHelper with beautiful templates
+            // This prevents duplicate emails with different templates
+            error_log("NotificationHelper email sending disabled - using PHPMailerEmailHelper instead");
+            return true; // Return success to avoid errors
+            
+            // Old code (disabled):
+            /*
             // Get user email
             $stmt = $this->db->prepare("SELECT email, full_name FROM users WHERE id = ?");
             $stmt->execute([$userId]);
@@ -56,6 +63,7 @@ class NotificationHelper {
             // Send email
             $subject = '=?UTF-8?B?' . base64_encode($title) . '?=';
             return $this->emailHelper->sendEmail($user['email'], $user['full_name'], $subject, $emailBody);
+            */
             
         } catch (Exception $e) {
             error_log("Failed to send notification email: " . $e->getMessage());

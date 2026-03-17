@@ -312,3 +312,314 @@ Stack trace:
 [17-Mar-2026 03:03:49 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
 [17-Mar-2026 03:03:55 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
 [17-Mar-2026 03:03:55 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[17-Mar-2026 03:05:19 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[17-Mar-2026 03:05:33 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:05:33 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:05:37 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:05:37 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:06:43 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[17-Mar-2026 03:07:08 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:07:08 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:07:11 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:07:11 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:07:52 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:07:59 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:08:01 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:09:34 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:09:41 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:09:47 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:17:42 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:43 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:46 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:47 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:47 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:48 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:54 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '-10' at line 7 in C:\xampp\htdocs\it-service-request\api\service_requests.php:125
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(125): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 125
+[17-Mar-2026 03:17:55 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:55 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '-10' at line 7 in C:\xampp\htdocs\it-service-request\api\service_requests.php:125
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(125): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 125
+[17-Mar-2026 03:17:56 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:57 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:57 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:58 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:59 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:17:59 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:18:01 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:18:02 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:18:05 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:18:09 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:18:12 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:18:16 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:18:20 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:18:58 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:19:08 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:19:08 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:19:08 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:19:10 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:19:27 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:20:14 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[17-Mar-2026 03:20:19 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[17-Mar-2026 03:20:20 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[17-Mar-2026 03:20:20 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailerEmailHelper::$from_email is deprecated in C:\xampp\htdocs\it-service-request\lib\PHPMailerEmailHelper.php on line 10
+[17-Mar-2026 03:20:20 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailerEmailHelper::$from_name is deprecated in C:\xampp\htdocs\it-service-request\lib\PHPMailerEmailHelper.php on line 11
+[17-Mar-2026 03:26:31 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[17-Mar-2026 03:27:05 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[17-Mar-2026 03:27:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:27:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:27:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:28:08 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:28:12 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined function notifyUsers() in C:\xampp\htdocs\it-service-request\api\service_requests.php:454
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 454
+[17-Mar-2026 03:29:31 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:31 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:31 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:31 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:33 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:33 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:36 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:41 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:41 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:29:55 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:30:03 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined function notifyUsers() in C:\xampp\htdocs\it-service-request\api\service_requests.php:507
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 507
+[17-Mar-2026 03:31:44 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:31:44 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:31:57 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:32:12 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:35:07 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:35:07 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:36:45 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:36:45 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:36:50 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:36:50 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:36:56 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:36:58 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:36:59 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:37:00 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:37:02 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:37:03 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:38:55 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:39:01 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:39:16 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:39:18 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:39:18 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:39:20 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:39:30 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:39:45 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:40:40 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:41:59 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:02 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:03 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:05 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:06 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:07 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:09 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:09 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:11 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:12 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:13 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:42:26 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:42:26 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:42:33 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:42:48 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:42:58 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:42:58 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:43:16 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:43:30 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:45:12 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:45:16 Europe/Berlin] Notifications created in 0.023102998733521s for 2 users
+[17-Mar-2026 03:45:17 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:48:38 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:48:42 Europe/Berlin] Notifications created in 0.0049231052398682s for 2 users
+[17-Mar-2026 03:48:42 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:50:05 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:50:11 Europe/Berlin] Notifications created in 0.0044682025909424s for 2 users
+[17-Mar-2026 03:50:11 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:52:18 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:52:20 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:52:20 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:52:27 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:52:27 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 03:52:27 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method PHPMailer::isMail() in C:\xampp\htdocs\it-service-request\lib\PHPMailerEmailHelper.php:38
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\lib\PHPMailerEmailHelper.php(158): PHPMailerEmailHelper->sendEmail('ndvu@sgitech.co...', 'System Administ...', '\xF0\x9F\x94\x94 Y\xC3\xAAu c\xE1\xBA\xA7u...', '<!DOCTYPE html>...')
+#1 C:\xampp\htdocs\it-service-request\api\service_requests.php(437): PHPMailerEmailHelper->sendNewRequestNotification(Array)
+#2 {main}
+  thrown in C:\xampp\htdocs\it-service-request\lib\PHPMailerEmailHelper.php on line 38
+[17-Mar-2026 03:53:40 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:53:40 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 03:53:40 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[17-Mar-2026 03:53:40 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[17-Mar-2026 03:53:44 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[17-Mar-2026 03:53:44 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[17-Mar-2026 03:53:48 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 03:53:48 Europe/Berlin] Notifications created in 0.020620107650757s for 2 users
+[17-Mar-2026 03:53:48 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:54:20 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:21 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:23 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:24 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:26 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:27 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:28 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:29 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:31 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:32 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:33 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:34 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:35 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:36 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:38 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:39 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 03:54:48 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 03:54:48 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:05:50 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:05:50 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:05:55 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:05:55 Europe/Berlin] Notifications created in 0.016116142272949s for 2 users
+[17-Mar-2026 04:05:55 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:07:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:21 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:21 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:21 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:21 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:31 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:37 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:40 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:40 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:40 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:40 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:40 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:43 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:45 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:45 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:45 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:45 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:48 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:50 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:50 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:50 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:07:50 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:10:40 Europe/Berlin] PHP Fatal error:  Cannot redeclare EmailHelper::sendNewRequestNotification() in C:\xampp\htdocs\it-service-request\lib\EmailHelper.php on line 303
+[17-Mar-2026 04:10:42 Europe/Berlin] PHP Fatal error:  Cannot redeclare EmailHelper::sendNewRequestNotification() in C:\xampp\htdocs\it-service-request\lib\EmailHelper.php on line 303
+[17-Mar-2026 04:10:45 Europe/Berlin] PHP Fatal error:  Cannot redeclare EmailHelper::sendNewRequestNotification() in C:\xampp\htdocs\it-service-request\lib\EmailHelper.php on line 303
+[17-Mar-2026 04:10:46 Europe/Berlin] PHP Fatal error:  Cannot redeclare EmailHelper::sendNewRequestNotification() in C:\xampp\htdocs\it-service-request\lib\EmailHelper.php on line 303
+[17-Mar-2026 04:10:47 Europe/Berlin] PHP Fatal error:  Cannot redeclare EmailHelper::sendNewRequestNotification() in C:\xampp\htdocs\it-service-request\lib\EmailHelper.php on line 303
+[17-Mar-2026 04:10:48 Europe/Berlin] PHP Fatal error:  Cannot redeclare EmailHelper::sendNewRequestNotification() in C:\xampp\htdocs\it-service-request\lib\EmailHelper.php on line 303
+[17-Mar-2026 04:10:49 Europe/Berlin] PHP Fatal error:  Cannot redeclare EmailHelper::sendNewRequestNotification() in C:\xampp\htdocs\it-service-request\lib\EmailHelper.php on line 303
+[17-Mar-2026 04:10:50 Europe/Berlin] PHP Fatal error:  Cannot redeclare EmailHelper::sendNewRequestNotification() in C:\xampp\htdocs\it-service-request\lib\EmailHelper.php on line 303
+[17-Mar-2026 04:18:19 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:18:20 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:18:20 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:18:20 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:18:26 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:18:26 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:18:40 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:18:49 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:18:49 Europe/Berlin] Notifications created in 0.023599147796631s for 2 users
+[17-Mar-2026 04:18:50 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:21:08 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:21:08 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:21:14 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:21:18 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:21:18 Europe/Berlin] Notifications created in 0.014636993408203s for 2 users
+[17-Mar-2026 04:21:19 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:35:05 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:35:05 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:35:10 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:35:15 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:35:15 Europe/Berlin] Notifications created in 0.0047621726989746s for 2 users
+[17-Mar-2026 04:35:15 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:39:36 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:39:36 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:39:44 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:39:44 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:39:53 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:39:53 Europe/Berlin] Notifications created in 0.0060839653015137s for 2 users
+[17-Mar-2026 04:39:53 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:40:04 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:40:04 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:40:04 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:40:04 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:12 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:41:12 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:41:16 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:17 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:23 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:24 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:26 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:26 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:28 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:28 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:30 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:31 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:32 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:33 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:41:37 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:41:37 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:41:42 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:41:42 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:41:51 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:41:51 Europe/Berlin] Notifications created in 0.0050919055938721s for 2 users
+[17-Mar-2026 04:41:51 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:43:35 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:43:41 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:43:41 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:43:41 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method PHPMailer::isMail() in C:\xampp\htdocs\it-service-request\lib\PHPMailerEmailHelper.php:38
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\lib\PHPMailerEmailHelper.php(158): PHPMailerEmailHelper->sendEmail('ndvu@sgitech.co...', 'System Administ...', '\xF0\x9F\x94\x94 Y\xC3\xAAu c\xE1\xBA\xA7u...', '<!DOCTYPE html>...')
+#1 C:\xampp\htdocs\it-service-request\api\service_requests.php(437): PHPMailerEmailHelper->sendNewRequestNotification(Array)
+#2 {main}
+  thrown in C:\xampp\htdocs\it-service-request\lib\PHPMailerEmailHelper.php on line 38
+[17-Mar-2026 04:48:20 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:48:20 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:48:27 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:48:27 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:48:27 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[17-Mar-2026 04:48:27 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[17-Mar-2026 04:48:31 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[17-Mar-2026 04:48:31 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[17-Mar-2026 04:48:35 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:48:35 Europe/Berlin] Notifications created in 0.0069591999053955s for 2 users
+[17-Mar-2026 04:48:35 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:49:42 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:49:42 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:49:47 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:49:56 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:49:56 Europe/Berlin] Notifications created in 0.027496814727783s for 2 users
+[17-Mar-2026 04:49:56 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:55:09 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:55:09 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:55:14 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:55:21 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:55:21 Europe/Berlin] Notifications created in 0.0054581165313721s for 2 users
+[17-Mar-2026 04:55:21 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:56:57 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:56:57 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:57:03 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:57:10 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:57:10 Europe/Berlin] Notifications created in 0.0059108734130859s for 2 users
+[17-Mar-2026 04:57:10 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:57:55 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:57:55 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:58:01 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:58:10 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[17-Mar-2026 04:58:10 Europe/Berlin] Notifications created in 0.016161918640137s for 2 users
+[17-Mar-2026 04:58:10 Europe/Berlin] Database session started - ID: p8l5vfa96d58j7h7fqa11jdgh3
+[17-Mar-2026 04:58:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:58:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:58:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
+[17-Mar-2026 04:58:18 Europe/Berlin] Database session started - ID: 1eci0kevi3pdvqr2sdqnhv400o
