@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toast Notifications Test</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .test-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .success-btn { background: #28a745; color: white; }
+        .error-btn { background: #dc3545; color: white; }
+        .warning-btn { background: #ffc107; color: #212529; }
+        .info-btn { background: #17a2b8; color: white; }
+        .login-btn { background: #007bff; color: white; }
+        .logout-btn { background: #6c757d; color: white; }
+        .clear-btn { background: #343a40; color: white; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1><i class="fas fa-bell"></i> Toast Notifications Test</h1>
+        <p>Test các loại thông báo đẹp mượt mà với vị trí tùy chọn.</p>
+        
+        <div style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+            <h4><i class="fas fa-cog"></i> Vị trí thông báo:</h4>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="test-btn info-btn" onclick="setPosition('top-center')">
+                    <i class="fas fa-arrow-up"></i> Phía trên giữa
+                </button>
+                <button class="test-btn info-btn" onclick="setPosition('top-right')">
+                    <i class="fas fa-arrow-up"></i> Góc phải
+                </button>
+            </div>
+            <p style="margin: 10px 0 0 0; font-size: 14px; color: #666;">
+                <strong>Vị trí hiện tại:</strong> <span id="currentPosition">Phía trên giữa</span>
+            </p>
+        </div>
+        
+        <div class="test-buttons">
+            <button class="test-btn success-btn" onclick="testSuccess()">
+                <i class="fas fa-check"></i> Success
+            </button>
+            <button class="test-btn error-btn" onclick="testError()">
+                <i class="fas fa-times"></i> Error
+            </button>
+            <button class="test-btn warning-btn" onclick="testWarning()">
+                <i class="fas fa-exclamation"></i> Warning
+            </button>
+            <button class="test-btn info-btn" onclick="testInfo()">
+                <i class="fas fa-info"></i> Info
+            </button>
+            <button class="test-btn login-btn" onclick="testLogin()">
+                <i class="fas fa-sign-in-alt"></i> Login Success
+            </button>
+            <button class="test-btn logout-btn" onclick="testLogout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+            <button class="test-btn clear-btn" onclick="testClear()">
+                <i class="fas fa-trash"></i> Clear All
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="assets/js/toast-notifications.js"></script>
+    <script>
+        function setPosition(position) {
+            // Create new toast manager with new position
+            toastManager = new ToastNotificationManager({ position: position });
+            
+            // Update display
+            const positionText = position === 'top-center' ? 'Phía trên giữa' : 'Góc phải';
+            document.getElementById('currentPosition').textContent = positionText;
+            
+            // Show notification about position change
+            toastManager.info(`Đã chuyển vị trí thông báo sang: ${positionText}`, 'Thay đổi vị trí');
+        }
+        
+        function testSuccess() {
+            toastManager.success('Thao tác đã được thực hiện thành công!', 'Thành công');
+        }
+        
+        function testError() {
+            toastManager.error('Đã xảy ra lỗi trong quá trình xử lý. Vui lòng thử lại.', 'Lỗi hệ thống');
+        }
+        
+        function testWarning() {
+            toastManager.warning('Hãy kiểm tra lại thông tin trước khi tiếp tục.', 'Cảnh báo');
+        }
+        
+        function testInfo() {
+            toastManager.info('Hệ thống đang được bảo trì. Một số tính năng có thể không khả dụng.', 'Thông báo');
+        }
+        
+        function testLogin() {
+            toastManager.loginSuccess('Nguyễn Văn A');
+        }
+        
+        function testLogout() {
+            toastManager.logoutSuccess();
+        }
+        
+        function testClear() {
+            toastManager.clear();
+        }
+        
+        // Auto test on page load
+        setTimeout(() => {
+            toastManager.info('Chào mừng bạn đến với trang test Toast Notifications! Bạn có thể chọn vị trí hiển thị.', 'Test Page');
+        }, 1000);
+    </script>
+</body>
+</html>

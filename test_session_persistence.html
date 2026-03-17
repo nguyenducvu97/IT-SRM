@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Persistence Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Session Persistence Test</h1>
+    
+    <div class="test-section">
+        <h3>1. Check Current Session</h3>
+        <button onclick="checkSession()">Check Session</button>
+        <div id="sessionResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>2. Test Login</h3>
+        <button onclick="testLogin()">Test Login (admin/admin)</button>
+        <div id="loginResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>3. Test Session After Login</h3>
+        <button onclick="checkSessionAfterLogin()">Check Session Again</button>
+        <div id="afterLoginResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>4. Instructions</h3>
+        <ol>
+            <li>Click "Check Session" - Should show no session</li>
+            <li>Click "Test Login" - Should login successfully</li>
+            <li>Click "Check Session Again" - Should show session data</li>
+            <li><strong>Refresh this page (F5)</strong> - Session should persist</li>
+            <li>Click "Check Session" again - Should still show session data</li>
+        </ol>
+    </div>
+
+    <script>
+        async function checkSession() {
+            try {
+                const response = await fetch('api/auth.php?action=check_session', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const result = await response.json();
+                const resultDiv = document.getElementById('sessionResult');
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `<div class="success">✅ Session Active: ${JSON.stringify(result.data)}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ No Session: ${result.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('sessionResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testLogin() {
+            try {
+                const response = await fetch('api/auth.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        action: 'login',
+                        username: 'admin',
+                        password: 'admin'
+                    })
+                });
+                
+                const result = await response.json();
+                const resultDiv = document.getElementById('loginResult');
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `<div class="success">✅ Login Success: ${JSON.stringify(result.data)}</div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ Login Failed: ${result.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('loginResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function checkSessionAfterLogin() {
+            await checkSession();
+            document.getElementById('afterLoginResult').innerHTML = document.getElementById('sessionResult').innerHTML;
+        }
+        
+        // Auto check on page load
+        window.onload = function() {
+            checkSession();
+        };
+    </script>
+</body>
+</html>

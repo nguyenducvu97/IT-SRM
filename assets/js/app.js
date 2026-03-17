@@ -187,13 +187,32 @@ class ITServiceApp {
 
             if (response.success) {
                 this.currentUser = response.data;
+                console.log('=== LOGIN SUCCESS DEBUG ===');
+                console.log('Login response:', response);
+                console.log('Document cookies after login:', document.cookie);
+                console.log('Current user set to:', this.currentUser);
+                
                 this.showDashboard();
-                this.showNotification('Đăng nhập thành công!', 'success');
+                
+                // Use toast notification for login success
+                if (window.toastManager) {
+                    window.toastManager.loginSuccess(this.currentUser.full_name || this.currentUser.username);
+                } else {
+                    this.showNotification('Đăng nhập thành công!', 'success');
+                }
             } else {
-                this.showNotification(response.message, 'error');
+                if (window.toastManager) {
+                    window.toastManager.error(response.message, 'Đăng nhập thất bại');
+                } else {
+                    this.showNotification(response.message, 'error');
+                }
             }
         } catch (error) {
-            this.showNotification('Lỗi kết nối', 'error');
+            if (window.toastManager) {
+                window.toastManager.error('Lỗi kết nối máy chủ', 'Lỗi kết nối');
+            } else {
+                this.showNotification('Lỗi kết nối', 'error');
+            }
         }
     }
 
@@ -216,13 +235,25 @@ class ITServiceApp {
             });
 
             if (response.success) {
-                this.showNotification('Đăng ký thành công! Vui lòng đăng nhập.', 'success');
+                if (window.toastManager) {
+                    window.toastManager.success('Đăng ký thành công! Vui lòng đăng nhập.', 'Đăng ký thành công');
+                } else {
+                    this.showNotification('Đăng ký thành công! Vui lòng đăng nhập.', 'success');
+                }
                 this.showLogin();
             } else {
-                this.showNotification(response.message, 'error');
+                if (window.toastManager) {
+                    window.toastManager.error(response.message, 'Đăng ký thất bại');
+                } else {
+                    this.showNotification(response.message, 'error');
+                }
             }
         } catch (error) {
-            this.showNotification('Lỗi kết nối', 'error');
+            if (window.toastManager) {
+                window.toastManager.error('Lỗi kết nối máy chủ', 'Lỗi kết nối');
+            } else {
+                this.showNotification('Lỗi kết nối', 'error');
+            }
         }
     }
 
@@ -240,6 +271,11 @@ class ITServiceApp {
 
     async logout() {
         this.currentUser = null;
+        
+        // Show logout notification first
+        if (window.toastManager) {
+            window.toastManager.logoutSuccess();
+        }
         
         // Call logout API
         this.apiCall('api/auth.php', {
@@ -1817,7 +1853,8 @@ class ITServiceApp {
 
     async checkAuth() {
         try {
-            console.log('Checking authentication...');
+            console.log('=== CHECK AUTH DEBUG ===');
+            console.log('Document cookies:', document.cookie);
             
             // Add small delay to ensure session is ready
             await new Promise(resolve => setTimeout(resolve, 100));
@@ -1829,11 +1866,11 @@ class ITServiceApp {
             if (response.success && response.data) {
                 // User is logged in, set current user and show dashboard
                 this.currentUser = response.data;
-                console.log('User is logged in:', this.currentUser);
+                console.log('✅ User is logged in:', this.currentUser);
                 this.showDashboard();
             } else {
                 // No active session, show login screen
-                console.log('No active session, showing login');
+                console.log('❌ No active session, showing login');
                 this.showLoginScreen();
             }
         } catch (error) {
@@ -1843,6 +1880,9 @@ class ITServiceApp {
     }
 
     async apiCall(url, options = {}) {
+        const baseUrl = window.location.origin + '/it-service-request';
+        const fullUrl = url.startsWith('http') ? url : baseUrl + '/' + url;
+        
         const defaultOptions = {
             method: 'GET',
             headers: {
@@ -1853,8 +1893,13 @@ class ITServiceApp {
 
         const finalOptions = { ...defaultOptions, ...options };
         
+        console.log('=== API CALL DEBUG ===');
+        console.log('URL:', fullUrl);
+        console.log('Options:', finalOptions);
+        console.log('Origin:', window.location.origin);
+        
         try {
-            const response = await fetch(url, finalOptions);
+            const response = await fetch(fullUrl, finalOptions);
             
             // Check if response is OK
             if (!response.ok) {

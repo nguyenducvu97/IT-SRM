@@ -262,4 +262,16 @@ echo json_encode([
 exit();
     }
 }
+
+// Helper functions
+function sanitizeInput($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+function verifyPassword($password, $hash) {
+    return password_verify($password, $hash);
+}
 ?>

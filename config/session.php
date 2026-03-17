@@ -1,9 +1,77 @@
 <?php
-// Session management for IT Service Request System
+// Database Session Management for IT Service Request System
 
-// Function to start session if not already started
+class DatabaseSessionHandler {
+    private $db;
+    
+    public function __construct() {
+        require_once 'database.php';
+        $database = new Database();
+        $this->db = $database->getConnection();
+        
+        // Create session table if not exists
+        $this->createSessionTable();
+    }
+    
+    private function createSessionTable() {
+        $sql = "CREATE TABLE IF NOT EXISTS sessions (
+            id VARCHAR(128) PRIMARY KEY,
+            data TEXT NOT NULL,
+            timestamp INT NOT NULL,
+            INDEX (timestamp)
+        )";
+        $this->db->exec($sql);
+    }
+    
+    public function open($savePath, $sessionName) {
+        return true;
+    }
+    
+    public function close() {
+        return true;
+    }
+    
+    public function read($sessionId) {
+        $stmt = $this->db->prepare("SELECT data FROM sessions WHERE id = ?");
+        $stmt->execute([$sessionId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['data'] : '';
+    }
+    
+    public function write($sessionId, $data) {
+        $timestamp = time();
+        $stmt = $this->db->prepare("INSERT INTO sessions (id, data, timestamp) VALUES (?, ?, ?) 
+                                     ON DUPLICATE KEY UPDATE data = ?, timestamp = ?");
+        return $stmt->execute([$sessionId, $data, $timestamp, $data, $timestamp]);
+    }
+    
+    public function destroy($sessionId) {
+        $stmt = $this->db->prepare("DELETE FROM sessions WHERE id = ?");
+        return $stmt->execute([$sessionId]);
+    }
+    
+    public function gc($maxLifetime) {
+        $old = time() - $maxLifetime;
+        $stmt = $this->db->prepare("DELETE FROM sessions WHERE timestamp < ?");
+        return $stmt->execute([$old]);
+    }
+}
+
+// Function to start session with database handler
 function startSession() {
     if (session_status() == PHP_SESSION_NONE) {
+        // Set database session handler
+        $handler = new DatabaseSessionHandler();
+        session_set_save_handler(
+            [$handler, 'open'],
+            [$handler, 'close'],
+            [$handler, 'read'],
+            [$handler, 'write'],
+            [$handler, 'destroy'],
+            [$handler, 'gc']
+        );
+        
+        // Start session with standard settings
         session_start([
             'cookie_lifetime' => 86400,
             'cookie_httponly' => true,
@@ -14,6 +82,8 @@ function startSession() {
             'use_cookies' => true,
             'use_only_cookies' => true
         ]);
+        
+        error_log("Database session started - ID: " . session_id());
     }
 }
 
@@ -29,8 +99,8 @@ function getCurrentUser() {
             'id' => $_SESSION['user_id'],
             'username' => $_SESSION['username'] ?? '',
             'full_name' => $_SESSION['full_name'] ?? '',
-            'role' => $_SESSION['role'] ?? '',
-            'email' => $_SESSION['email'] ?? ''
+            'email' => $_SESSION['email'] ?? '',
+            'role' => $_SESSION['role'] ?? ''
         ];
     }
     return null;
