@@ -1,0 +1,81 @@
+# Allow access to uploaded files
+Options +Indexes
+
+# Set proper MIME types
+<Files "*.png">
+    ForceType image/png
+</Files>
+
+<Files "*.jpg">
+    ForceType image/jpeg
+</Files>
+
+<Files "*.jpeg">
+    ForceType image/jpeg
+</Files>
+
+<Files "*.gif">
+    ForceType image/gif
+</Files>
+
+<Files "*.pdf">
+    ForceType application/pdf
+</Files>
+
+<Files "*.doc">
+    ForceType application/msword
+</Files>
+
+<Files "*.docx">
+    ForceType application/vnd.openxmlformats-officedocument.wordprocessingml.document
+</Files>
+
+<Files "*.xls">
+    ForceType application/vnd.ms-excel
+</Files>
+
+<Files "*.xlsx">
+    ForceType application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+</Files>
+
+<Files "*.ppt">
+    ForceType application/vnd.ms-powerpoint
+</Files>
+
+<Files "*.pptx">
+    ForceType application/vnd.openxmlformats-officedocument.presentationml.presentation
+</Files>
+
+<Files "*.txt">
+    ForceType text/plain
+</Files>
+
+<Files "*.md">
+    ForceType text/markdown
+</Files>
+
+# Prevent execution of scripts
+<Files "*.php">
+    deny from all
+</Files>
+
+<Files "*.phtml">
+    deny from all
+</Files>
+
+<Files "*.php3">
+    deny from all
+</Files>
+
+<Files "*.php4">
+    deny from all
+</Files>
+
+<Files "*.php5">
+    deny from all
+</Files>
+
+# Prevent access to .htaccess
+<Files ".htaccess">
+    deny from all
+</Files>

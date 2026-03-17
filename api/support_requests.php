@@ -148,6 +148,14 @@ function handleGet($pdo, $action, $current_user, $user_role) {
                 $support_request['attachments'] = [];
             }
             
+            // Filter sensitive information based on user role
+            if ($user_role === 'user') {
+                // Remove admin decision information for regular users
+                unset($support_request['admin_reason']);
+                unset($support_request['processed_by']);
+                unset($support_request['processed_at']);
+            }
+            
             echo json_encode(['success' => true, 'data' => $support_request]);
             break;
             
@@ -197,6 +205,15 @@ function handleGet($pdo, $action, $current_user, $user_role) {
             $support_request = $stmt->fetch(PDO::FETCH_ASSOC);
             
             if ($support_request) {
+                // Filter sensitive information based on user role
+                if ($user_role === 'staff') {
+                    // Staff can see admin decisions
+                    // Keep all data as is
+                } elseif ($user_role === 'admin') {
+                    // Admin can see all data
+                    // Keep all data as is
+                }
+                
                 echo json_encode(['success' => true, 'data' => $support_request]);
             } else {
                 echo json_encode(['success' => true, 'data' => null]);
@@ -215,7 +232,7 @@ function handleGet($pdo, $action, $current_user, $user_role) {
             
             if ($user_role === 'admin') {
                 // Admin can see all, or filter by status
-                if ($status) {
+                if ($status && $status !== 'all') {
                     $where_clause = "WHERE sr.status = ?";
                     $params = [$status];
                 } else {
@@ -224,7 +241,7 @@ function handleGet($pdo, $action, $current_user, $user_role) {
                 }
             } elseif ($user_role === 'staff') {
                 // Staff can see all support requests for processing
-                if ($status) {
+                if ($status && $status !== 'all') {
                     $where_clause = "WHERE sr.status = ?";
                     $params = [$status];
                 } else {
@@ -282,6 +299,15 @@ function handleGet($pdo, $action, $current_user, $user_role) {
             }
             $support_requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
+            // Filter sensitive information based on user role
+            if ($user_role === 'user') {
+                foreach ($support_requests as &$request) {
+                    unset($request['admin_reason']);
+                    unset($request['processed_by']);
+                    unset($request['processed_at']);
+                }
+            }
+            
             error_log("Support requests data: " . json_encode($support_requests));
             
             echo json_encode([
@@ -310,18 +336,34 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         return;
     }
     
-    $input = json_decode(file_get_contents('php://input'), true);
+    // Check if this is FormData (file upload) or JSON
+    $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
     
-    if (!$input) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'Invalid JSON data']);
-        return;
+    if (strpos($content_type, 'multipart/form-data') !== false) {
+        // Handle FormData (file upload)
+        $service_request_id = isset($_POST['service_request_id']) ? (int)$_POST['service_request_id'] : 0;
+        $support_type = isset($_POST['support_type']) ? $_POST['support_type'] : '';
+        $support_details = isset($_POST['support_details']) ? $_POST['support_details'] : '';
+        $support_reason = isset($_POST['support_reason']) ? $_POST['support_reason'] : '';
+        
+        error_log("FormData upload - service_request_id: $service_request_id, support_type: $support_type");
+    } else {
+        // Handle JSON
+        $input = json_decode(file_get_contents('php://input'), true);
+        
+        if (!$input) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Invalid JSON data']);
+            return;
+        }
+        
+        $service_request_id = $input['service_request_id'] ?? null;
+        $support_type = $input['support_type'] ?? null;
+        $support_details = $input['support_details'] ?? null;
+        $support_reason = $input['support_reason'] ?? null;
+        
+        error_log("JSON upload - service_request_id: $service_request_id, support_type: $support_type");
     }
-    
-    $service_request_id = $input['service_request_id'] ?? null;
-    $support_type = $input['support_type'] ?? null;
-    $support_details = $input['support_details'] ?? null;
-    $support_reason = $input['support_reason'] ?? null;
     
     if (!$service_request_id || !$support_type || !$support_details || !$support_reason) {
         error_log("Missing fields - service_request_id: $service_request_id, support_type: $support_type, support_details: $support_details, support_reason: $support_reason");
@@ -386,6 +428,87 @@ function handlePost($pdo, $action, $current_user, $user_role) {
     if ($result) {
         $support_id = $pdo->lastInsertId();
         
+        // Handle file uploads if any
+        $uploaded_files = [];
+        if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+            error_log("Processing file uploads for support request $support_id");
+            
+            $uploads_dir = __DIR__ . '/../uploads/support_requests/';
+            if (!file_exists($uploads_dir)) {
+                mkdir($uploads_dir, 0755, true);
+            }
+            
+            $file_attachments = $_FILES['attachments'];
+            $file_count = count($file_attachments['name']);
+            
+            for ($i = 0; $i < $file_count; $i++) {
+                if ($file_attachments['error'][$i] === UPLOAD_ERR_OK) {
+                    $original_name = $file_attachments['name'][$i];
+                    $file_size = $file_attachments['size'][$i];
+                    $file_tmp = $file_attachments['tmp_name'][$i];
+                    $file_type = $file_attachments['type'][$i];
+                    
+                    // Generate unique filename
+                    $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
+                    $unique_filename = uniqid('support_', true) . '.' . $file_extension;
+                    $file_path = $uploads_dir . $unique_filename;
+                    
+                    // Validate file (size, type)
+                    $max_size = 10 * 1024 * 1024; // 10MB
+                    $allowed_types = [
+                        'image/jpeg', 'image/png', 'image/gif',
+                        'application/pdf', 'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                        'application/vnd.ms-excel',
+                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'application/vnd.ms-powerpoint',
+                        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                        'text/plain', 'application/zip'
+                    ];
+                    
+                    if ($file_size > $max_size) {
+                        error_log("File too large: $original_name ($file_size bytes)");
+                        continue;
+                    }
+                    
+                    if (!in_array($file_type, $allowed_types)) {
+                        error_log("File type not allowed: $original_name ($file_type)");
+                        continue;
+                    }
+                    
+                    // Move file
+                    if (move_uploaded_file($file_tmp, $file_path)) {
+                        // Save to database
+                        $attachment_stmt = $pdo->prepare("
+                            INSERT INTO support_request_attachments 
+                            (support_request_id, original_name, filename, file_size, mime_type, uploaded_at)
+                            VALUES (?, ?, ?, ?, ?, NOW())
+                        ");
+                        
+                        if ($attachment_stmt->execute([$support_id, $original_name, $unique_filename, $file_size, $file_type])) {
+                            $uploaded_files[] = [
+                                'original_name' => $original_name,
+                                'filename' => $unique_filename,
+                                'file_size' => $file_size,
+                                'mime_type' => $file_type
+                            ];
+                            error_log("Successfully uploaded: $original_name");
+                        } else {
+                            error_log("Failed to save attachment to database: $original_name");
+                            // Clean up uploaded file
+                            unlink($file_path);
+                        }
+                    } else {
+                        error_log("Failed to move uploaded file: $original_name");
+                    }
+                } else {
+                    error_log("Upload error for file $i: " . $file_attachments['error'][$i]);
+                }
+            }
+            
+            error_log("Uploaded " . count($uploaded_files) . " files for support request $support_id");
+        }
+        
         // Update service request status to 'request_support'
         $update_stmt = $pdo->prepare("
             UPDATE service_requests 
@@ -429,7 +552,10 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         echo json_encode([
             'success' => true,
             'message' => 'Support request created successfully',
-            'data' => ['id' => $support_id]
+            'data' => [
+                'id' => $support_id,
+                'attachments_uploaded' => count($uploaded_files)
+            ]
         ]);
     } else {
         http_response_code(500);
@@ -647,22 +773,22 @@ function handlePut($pdo, $action, $current_user, $user_role) {
                     ]);
                     
                 } elseif ($decision === 'rejected') {
-                    // Keep with staff but set to in_progress with rejection info
+                    // Set service request to rejected status
                     $update_stmt = $pdo->prepare("
                         UPDATE service_requests 
-                        SET status = 'in_progress'
+                        SET status = 'rejected'
                         WHERE id = ?
                     ");
                     $update_result = $update_stmt->execute([$service_request_id]);
                     
                     echo json_encode([
                         'success' => true,
-                        'message' => 'Support request rejected, request continues with staff',
+                        'message' => 'Support request rejected, request marked as rejected',
                         'data' => [
                             'decision' => $decision,
                             'reason' => $reason,
                             'service_request_id' => $service_request_id,
-                            'service_request_status' => 'in_progress'
+                            'service_request_status' => 'rejected'
                         ]
                     ]);
                     

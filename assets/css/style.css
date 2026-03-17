@@ -1357,6 +1357,52 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     overflow: hidden;
 }
 
+/* Clickable card enhancement */
+.clickable-card {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.clickable-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, transparent 50%, rgba(0, 123, 255, 0.1) 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    content: '\f08e';
+    color: rgba(0, 123, 255, 0.6);
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.clickable-card:hover::after {
+    opacity: 1;
+}
+
+.clickable-card .request-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.clickable-card:hover .request-link {
+    color: #007bff;
+}
+
+/* Ensure buttons don't inherit card click behavior */
+.clickable-card button {
+    position: relative;
+    z-index: 10;
+}
+
 .request-item {
     padding: 1.5rem;
     border-bottom: 1px solid #eee;

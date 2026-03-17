@@ -952,8 +952,8 @@ class ITServiceApp {
             const status = document.getElementById('supportStatusFilter').value || 'all';
             console.log('Loading with status:', status);
             
-            // For admin, load all requests by default, for staff load pending
-            if (this.currentUser.role === 'admin' && status === 'all') {
+            // For both admin and staff, load all requests when status is 'all', otherwise filter by status
+            if (status === 'all') {
                 const response = await this.apiCall('api/support_requests.php?action=list');
                 console.log('API response (all):', response);
                 
@@ -1028,7 +1028,7 @@ class ITServiceApp {
                     <div class="meta-item">
                         <strong>Lý do:</strong> ${support.support_reason}
                     </div>
-                    ${support.admin_reason ? `
+                    ${support.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
                         <div class="meta-item">
                             <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
                         </div>
@@ -1045,7 +1045,7 @@ class ITServiceApp {
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>
                     ` : ''}
-                    ${support.admin_reason ? `
+                    ${support.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
                         <div class="admin-reason">
                             <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
                         </div>
@@ -1695,12 +1695,11 @@ class ITServiceApp {
             return t(`status_${status}`) || status;
         }
         
-        // Fallback to hardcoded Vietnamese
         const statuses = {
             'open': 'Mở',
             'in_progress': 'Đang xử lý',
             'resolved': 'Đã giải quyết',
-            'rejected': 'Đã từ chối',
+            'rejected': this.currentUser && ['admin', 'staff'].includes(this.currentUser.role) ? 'Đã từ chối' : 'Đã xử lý',
             'closed': 'Đã đóng',
             'cancelled': 'Đã hủy',
             'request_support': 'Cần hỗ trợ'
@@ -2427,7 +2426,7 @@ class ITServiceApp {
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>
                     ` : ''}
-                    ${reject.admin_reason ? `
+                    ${reject.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
                         <div class="admin-reason">
                             <strong>Quyết định ADMIN:</strong> ${reject.admin_reason}
                         </div>
@@ -2578,7 +2577,7 @@ class ITServiceApp {
                     <div class="meta-item">
                         <strong>Lý do:</strong> ${support.support_reason}
                     </div>
-                    ${support.admin_reason ? `
+                    ${support.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
                         <div class="meta-item">
                             <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
                         </div>
@@ -2595,7 +2594,7 @@ class ITServiceApp {
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>
                     ` : ''}
-                    ${support.admin_reason ? `
+                    ${support.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
                         <div class="admin-reason">
                             <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
                         </div>

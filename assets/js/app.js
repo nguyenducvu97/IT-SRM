@@ -939,8 +939,8 @@ class ITServiceApp {
             const status = document.getElementById('supportStatusFilter').value || 'all';
             console.log('Loading with status:', status);
             
-            // For admin, load all requests by default, for staff load pending
-            if (this.currentUser.role === 'admin' && status === 'all') {
+            // For both admin and staff, load all requests when status is 'all', otherwise filter by status
+            if (status === 'all') {
                 const response = await this.apiCall('api/support_requests.php?action=list');
                 console.log('API response (all):', response);
                 
@@ -1989,7 +1989,7 @@ class ITServiceApp {
             'open': 'Mở',
             'in_progress': 'Đang xử lý',
             'resolved': 'Đã giải quyết',
-            'rejected': 'Đã từ chối',
+            'rejected': this.currentUser && ['admin', 'staff'].includes(this.currentUser.role) ? 'Đã từ chối' : 'Đã xử lý',
             'closed': 'Đã đóng',
             'cancelled': 'Đã hủy',
             'request_support': 'Cần hỗ trợ'
@@ -2654,8 +2654,15 @@ class ITServiceApp {
     // Reject Request Functions
     async loadRejectRequests() {
         try {
-            const status = document.getElementById('rejectStatusFilter').value || 'pending';
-            const response = await this.apiCall(`api/reject_requests.php?action=list&status=${status}`);
+            const statusFilter = document.getElementById('rejectStatusFilter');
+            const status = statusFilter ? statusFilter.value : 'pending';
+            
+            // If "all" is selected, don't pass status parameter to get all requests
+            const url = status === 'all' 
+                ? 'api/reject_requests.php?action=list'
+                : `api/reject_requests.php?action=list&status=${status}`;
+            
+            const response = await this.apiCall(url);
             
             if (response.success) {
                 this.displayRejectRequests(response.data);
@@ -2713,7 +2720,7 @@ class ITServiceApp {
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>
                     ` : ''}
-                    ${reject.admin_reason ? `
+                    ${reject.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
                         <div class="admin-reason">
                             <strong>Quyết định ADMIN:</strong> ${reject.admin_reason}
                         </div>
@@ -2800,6 +2807,58 @@ class ITServiceApp {
                                 <strong>Ngày tạo:</strong> ${this.formatDate(reject.created_at)}
                             </div>
                         </div>
+                        
+                        ${reject.attachments && reject.attachments.length > 0 ? `
+                            <div class="reject-attachments">
+                                <h4><i class="fas fa-paperclip"></i> Tệp đính kèm (${reject.attachments.length})</h4>
+                                <div class="attachments-list">
+                                    ${reject.attachments.map(attachment => {
+                                        const isImage = attachment.mime_type.startsWith('image/');
+                                        const fileExt = attachment.filename.split('.').pop().toLowerCase();
+                                        const isPDF = fileExt === 'pdf';
+                                        const isWord = ['doc', 'docx'].includes(fileExt);
+                                        const isExcel = ['xls', 'xlsx'].includes(fileExt);
+                                        const isPowerPoint = ['ppt', 'pptx'].includes(fileExt);
+                                        const isText = ['txt', 'md'].includes(fileExt);
+                                        const isViewable = isPDF || isWord || isExcel || isPowerPoint || isText;
+                                        
+                                        return `
+                                            <div class="attachment-item">
+                                                <div class="attachment-info">
+                                                    <i class="fas fa-${isImage ? 'image' : isPDF ? 'file-pdf' : isWord ? 'file-word' : isExcel ? 'file-excel' : isPowerPoint ? 'file-powerpoint' : 'file'}"></i>
+                                                    <span class="attachment-name">${attachment.original_name}</span>
+                                                    <span class="attachment-size">(${this.formatFileSize(attachment.file_size)})</span>
+                                                </div>
+                                                <div class="attachment-actions">
+                                                    ${isImage ? `
+                                                        <img src="api/reject_request_attachment.php?file=${attachment.filename}&action=view" 
+                                                             alt="${attachment.original_name}" 
+                                                             class="attachment-preview"
+                                                             onclick="app.showImageModal('api/reject_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                             style="cursor: pointer;">
+                                                        <div class="image-overlay">
+                                                            <i class="fas fa-search-plus"></i>
+                                                        </div>
+                                                    ` : ''}
+                                                    ${isViewable ? `
+                                                        <button class="btn btn-sm btn-primary" 
+                                                                onclick="app.viewDocument('api/reject_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}', '${fileExt}')">
+                                                            <i class="fas fa-eye"></i> Xem
+                                                        </button>
+                                                    ` : ''}
+                                                    <a href="api/reject_request_attachment.php?file=${attachment.filename}&action=download" 
+                                                       class="btn btn-sm btn-secondary" 
+                                                       target="_blank"
+                                                       download="${attachment.original_name}">
+                                                        <i class="fas fa-download"></i> Tải về
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             } else {
@@ -2871,12 +2930,10 @@ class ITServiceApp {
         }
 
         container.innerHTML = supportRequests.map(support => `
-            <div class="request-item support-request" data-support-id="${support.id}">
+            <div class="request-item support-request clickable-card" data-support-id="${support.id}" data-service-request-id="${support.service_request_id}">
                 <div class="request-header">
                     <h4>
-                        <a href="request-detail.html?id=${support.service_request_id}" target="_blank">
-                            ID: ${support.service_request_id} - ${support.request_title}
-                        </a>
+                        <span class="request-link">ID: ${support.service_request_id} - ${support.request_title}</span>
                     </h4>
                     <div class="request-badges">
                         <span class="badge status-${support.status}">${this.getSupportStatusText(support.status)}</span>
@@ -2897,7 +2954,7 @@ class ITServiceApp {
                     <div class="meta-item">
                         <strong>Lý do:</strong> ${support.support_reason}
                     </div>
-                    ${support.admin_reason ? `
+                    ${support.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
                         <div class="meta-item">
                             <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
                         </div>
@@ -2910,11 +2967,11 @@ class ITServiceApp {
                 
                 <div class="request-actions">
                     ${support.status === 'pending' && this.currentUser.role === 'admin' ? `
-                        <button class="btn btn-primary" onclick="app.showAdminSupportModal(${support.id})">
+                        <button class="btn btn-primary" onclick="app.showAdminSupportModal(${support.id}, event)">
                             <i class="fas fa-gavel"></i> Xử lý
                         </button>
                     ` : ''}
-                    ${support.admin_reason ? `
+                    ${support.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
                         <div class="admin-reason">
                             <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
                         </div>
@@ -2922,13 +2979,42 @@ class ITServiceApp {
                 </div>
             </div>
         `).join('');
+        
+        // Add click handlers to support request cards
+        this.addSupportRequestCardHandlers();
     }
 
-    showAdminSupportModal(supportId) {
+    showAdminSupportModal(supportId, event) {
+        // Prevent card click when clicking button
+        if (event) {
+            event.stopPropagation();
+        }
+        
         document.getElementById('adminSupportId').value = supportId;
         document.getElementById('adminSupportForm').reset();
         this.loadSupportRequestDetails(supportId);
         document.getElementById('adminSupportModal').style.display = 'block';
+    }
+
+    addSupportRequestCardHandlers() {
+        const cards = document.querySelectorAll('.clickable-card');
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Don't navigate if clicking on buttons or links
+                if (e.target.closest('button') || e.target.closest('a')) {
+                    return;
+                }
+                
+                const serviceRequestId = card.dataset.serviceRequestId;
+                if (serviceRequestId) {
+                    // Open request detail in new tab
+                    window.open(`request-detail.html?id=${serviceRequestId}`, '_blank');
+                }
+            });
+            
+            // Add cursor pointer for better UX
+            card.style.cursor = 'pointer';
+        });
     }
 
     closeAdminSupportModal() {
@@ -2969,6 +3055,58 @@ class ITServiceApp {
                                 <strong>Trạng thái:</strong> <span class="badge status-${support.status}">${this.getSupportStatusText(support.status)}</span>
                             </div>
                         </div>
+                        
+                        ${support.attachments && support.attachments.length > 0 ? `
+                            <div class="support-attachments">
+                                <h4><i class="fas fa-paperclip"></i> Tệp đính kèm (${support.attachments.length})</h4>
+                                <div class="attachments-list">
+                                    ${support.attachments.map(attachment => {
+                                        const isImage = attachment.mime_type.startsWith('image/');
+                                        const fileExt = attachment.filename.split('.').pop().toLowerCase();
+                                        const isPDF = fileExt === 'pdf';
+                                        const isWord = ['doc', 'docx'].includes(fileExt);
+                                        const isExcel = ['xls', 'xlsx'].includes(fileExt);
+                                        const isPowerPoint = ['ppt', 'pptx'].includes(fileExt);
+                                        const isText = ['txt', 'md'].includes(fileExt);
+                                        const isViewable = isPDF || isWord || isExcel || isPowerPoint || isText;
+                                        
+                                        return `
+                                            <div class="attachment-item">
+                                                <div class="attachment-info">
+                                                    <i class="fas fa-${isImage ? 'image' : isPDF ? 'file-pdf' : isWord ? 'file-word' : isExcel ? 'file-excel' : isPowerPoint ? 'file-powerpoint' : 'file'}"></i>
+                                                    <span class="attachment-name">${attachment.original_name}</span>
+                                                    <span class="attachment-size">(${this.formatFileSize(attachment.file_size)})</span>
+                                                </div>
+                                                <div class="attachment-actions">
+                                                    ${isImage ? `
+                                                        <img src="api/support_request_attachment.php?file=${attachment.filename}&action=view" 
+                                                             alt="${attachment.original_name}" 
+                                                             class="attachment-preview"
+                                                             onclick="app.showImageModal('api/support_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                             style="cursor: pointer;">
+                                                        <div class="image-overlay">
+                                                            <i class="fas fa-search-plus"></i>
+                                                        </div>
+                                                    ` : ''}
+                                                    ${isViewable ? `
+                                                        <button class="btn btn-sm btn-primary" 
+                                                                onclick="app.viewDocument('api/support_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}', '${fileExt}')">
+                                                            <i class="fas fa-eye"></i> Xem
+                                                        </button>
+                                                    ` : ''}
+                                                    <a href="api/support_request_attachment.php?file=${attachment.filename}&action=download" 
+                                                       class="btn btn-sm btn-secondary" 
+                                                       target="_blank"
+                                                       download="${attachment.original_name}">
+                                                        <i class="fas fa-download"></i> Tải về
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
             } else {

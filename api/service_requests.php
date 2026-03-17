@@ -307,6 +307,32 @@ if ($method == 'GET') {
                 
                 $reject_request = $reject_stmt->fetch(PDO::FETCH_ASSOC);
                 $request['reject_request'] = $reject_request ?: null;
+                
+                // Get attachments for this reject request
+                if ($request['reject_request']) {
+                    try {
+                        $reject_attachments_query = "SELECT id, filename, original_name, file_size, mime_type, uploaded_at 
+                                                     FROM reject_request_attachments 
+                                                     WHERE reject_request_id = :id 
+                                                     ORDER BY uploaded_at ASC";
+                        $reject_attachments_stmt = $db->prepare($reject_attachments_query);
+                        $reject_attachments_stmt->bindParam(":id", $request['reject_request']['id']);
+                        $reject_attachments_stmt->execute();
+                        
+                        $reject_attachments = $reject_attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $request['reject_request']['attachments'] = $reject_attachments;
+                    } catch (Exception $e) {
+                        $request['reject_request']['attachments'] = [];
+                    }
+                }
+                
+                // Filter sensitive information based on user role
+                if ($request['reject_request'] && $user_role === 'user') {
+                    unset($request['reject_request']['admin_reason']);
+                    unset($request['reject_request']['processed_by']);
+                    unset($request['reject_request']['processed_at']);
+                    unset($request['reject_request']['admin_name']);
+                }
             } catch (Exception $e) {
                 $request['reject_request'] = null;
             }
@@ -325,6 +351,30 @@ if ($method == 'GET') {
                     'created_at' => $request['support_created_at'],
                     'admin_name' => $request['support_admin_name']
                 ];
+                
+                // Get attachments for this support request
+                try {
+                    $support_attachments_query = "SELECT id, filename, original_name, file_size, mime_type, uploaded_at 
+                                                 FROM support_request_attachments 
+                                                 WHERE support_request_id = :id 
+                                                 ORDER BY uploaded_at ASC";
+                    $support_attachments_stmt = $db->prepare($support_attachments_query);
+                    $support_attachments_stmt->bindParam(":id", $request['support_request_id']);
+                    $support_attachments_stmt->execute();
+                    
+                    $support_attachments = $support_attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $request['support_request']['attachments'] = $support_attachments;
+                } catch (Exception $e) {
+                    $request['support_request']['attachments'] = [];
+                }
+                
+                // Filter sensitive information based on user role
+                if ($user_role === 'user') {
+                    unset($request['support_request']['admin_reason']);
+                    unset($request['support_request']['processed_by']);
+                    unset($request['support_request']['processed_at']);
+                    unset($request['support_request']['admin_name']);
+                }
                 
                 // Clean up the original fields
                 unset($request['support_request_id'], $request['support_type'], 

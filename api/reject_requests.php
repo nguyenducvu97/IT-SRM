@@ -148,6 +148,30 @@ function handleGet($db, $current_user, $user_role) {
             return;
         }
         
+        // Get attachments for this reject request
+        try {
+            $attachments_query = "SELECT id, filename, original_name, file_size, mime_type, uploaded_at 
+                                 FROM reject_request_attachments 
+                                 WHERE reject_request_id = :id 
+                                 ORDER BY uploaded_at ASC";
+            $attachments_stmt = $db->prepare($attachments_query);
+            $attachments_stmt->bindParam(":id", $reject_id);
+            $attachments_stmt->execute();
+            
+            $attachments = $attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
+            $reject_request['attachments'] = $attachments;
+        } catch (Exception $e) {
+            $reject_request['attachments'] = [];
+        }
+        
+        // Filter sensitive information based on user role
+        if ($user_role === 'user') {
+            // Remove admin decision information for regular users
+            unset($reject_request['admin_reason']);
+            unset($reject_request['processed_by']);
+            unset($reject_request['processed_at']);
+        }
+        
         echo json_encode(['success' => true, 'data' => $reject_request]);
         return;
     }
@@ -184,6 +208,15 @@ function handleGet($db, $current_user, $user_role) {
         $reject_request = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if ($reject_request) {
+            // Filter sensitive information based on user role
+            if ($user_role === 'staff') {
+                // Staff can see admin decisions
+                // Keep all data as is
+            } elseif ($user_role === 'admin') {
+                // Admin can see all data
+                // Keep all data as is
+            }
+            
             echo json_encode(['success' => true, 'data' => $reject_request]);
         } else {
             echo json_encode(['success' => true, 'data' => null]);
@@ -226,6 +259,14 @@ function handleGet($db, $current_user, $user_role) {
     ");
     $stmt->execute([$status]);
     $reject_requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Filter sensitive information based on user role
+    if ($user_role === 'staff') {
+        foreach ($reject_requests as &$request) {
+            // Staff can see admin decisions
+            // Keep all data as is
+        }
+    }
     
     echo json_encode([
         'success' => true,

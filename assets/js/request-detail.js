@@ -292,32 +292,11 @@ class RequestDetailApp {
             console.log('✅ Redirecting to index.html with page:', page);
             e.preventDefault(); // Only prevent default for internal navigation
             
-            // Use postMessage to communicate with parent window
-            try {
-                if (window.opener && window.opener !== window) {
-                    console.log('Using postMessage to parent window');
-                    window.opener.postMessage({
-                        action: 'showPage',
-                        page: page,
-                        timestamp: Date.now()
-                    }, '*');
-                    
-                    console.log('PostMessage sent to parent window');
-                } else {
-                    // This is a standalone window, use URL redirect
-                    console.log('Using URL redirect for standalone window');
-                    const redirectUrl = `index.html?page=${page}`;
-                    console.log('Redirecting to:', redirectUrl);
-                    window.location.href = redirectUrl;
-                }
-                
-            } catch (error) {
-                console.error('Error sending navigation request:', error);
-                // Fallback to URL redirect
-                const redirectUrl = `index.html?page=${page}`;
-                console.log('Fallback to URL redirect:', redirectUrl);
-                window.location.href = redirectUrl;
-            }
+            // Simple redirect to index.html with page parameter
+            const redirectUrl = `index.html?page=${page}`;
+            console.log('Redirecting to:', redirectUrl);
+            window.location.href = redirectUrl;
+            
         } else {
             console.log('External link detected, allowing navigation');
             // This is an external link, let browser handle it naturally
@@ -448,9 +427,15 @@ class RequestDetailApp {
                 
                 // Show notification for reject request decision
                 if (this.request.reject_request && this.request.reject_request.status !== 'pending') {
-                    const decision = this.request.reject_request.status === 'approved' ? 'đã được phê duyệt' : 'đã bị từ chối';
-                    const message = `📢 Yêu cầu từ chối ${decision} bởi admin!`;
-                    this.showNotification(message, this.request.reject_request.status === 'approved' ? 'success' : 'warning');
+                    if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
+                        const decision = this.request.reject_request.status === 'approved' ? 'đã được phê duyệt' : 'đã bị từ chối';
+                        const message = `📢 Yêu cầu từ chối ${decision} bởi admin!`;
+                        this.showNotification(message, this.request.reject_request.status === 'approved' ? 'success' : 'warning');
+                    } else {
+                        // Regular users see generic message
+                        const message = '📢 Yêu cầu của bạn đã được xử lý!';
+                        this.showNotification(message, 'info');
+                    }
                 }
             } else {
                 console.log('Request detail failed:', response.message);
@@ -631,7 +616,7 @@ class RequestDetailApp {
                     </div>
                 ` : ''}
                 
-                ${request.reject_request ? `
+                ${request.reject_request && currentUser && ['admin', 'staff'].includes(currentUser.role) ? `
                     <div class="reject-request-info">
                         <h4><i class="fas fa-times-circle"></i> Yêu cầu từ chối từ Staff</h4>
                         <div class="reject-details">
@@ -664,6 +649,58 @@ class RequestDetailApp {
                             </div>
                         ` : ''}
                         </div>
+                        
+                        ${request.reject_request.attachments && request.reject_request.attachments.length > 0 ? `
+                            <div class="reject-attachments">
+                                <h4><i class="fas fa-paperclip"></i> Tệp đính kèm (${request.reject_request.attachments.length})</h4>
+                                <div class="attachments-list">
+                                    ${request.reject_request.attachments.map(attachment => {
+                                        const isImage = attachment.mime_type.startsWith('image/');
+                                        const fileExt = attachment.filename.split('.').pop().toLowerCase();
+                                        const isPDF = fileExt === 'pdf';
+                                        const isWord = ['doc', 'docx'].includes(fileExt);
+                                        const isExcel = ['xls', 'xlsx'].includes(fileExt);
+                                        const isPowerPoint = ['ppt', 'pptx'].includes(fileExt);
+                                        const isText = ['txt', 'md'].includes(fileExt);
+                                        const isViewable = isPDF || isWord || isExcel || isPowerPoint || isText;
+                                        
+                                        return `
+                                            <div class="attachment-item">
+                                                <div class="attachment-info">
+                                                    <i class="fas fa-${isImage ? 'image' : isPDF ? 'file-pdf' : isWord ? 'file-word' : isExcel ? 'file-excel' : isPowerPoint ? 'file-powerpoint' : 'file'}"></i>
+                                                    <span class="attachment-name">${attachment.original_name}</span>
+                                                    <span class="attachment-size">(${formatFileSize(attachment.file_size)})</span>
+                                                </div>
+                                                <div class="attachment-actions">
+                                                    ${isImage ? `
+                                                        <img src="api/reject_request_attachment.php?file=${attachment.filename}&action=view" 
+                                                             alt="${attachment.original_name}" 
+                                                             class="attachment-preview"
+                                                             onclick="requestDetailApp.showImageModal('api/reject_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                             style="cursor: pointer;">
+                                                        <div class="image-overlay">
+                                                            <i class="fas fa-search-plus"></i>
+                                                        </div>
+                                                    ` : ''}
+                                                    ${isViewable ? `
+                                                        <button class="btn btn-sm btn-primary" 
+                                                                onclick="requestDetailApp.viewDocument('api/reject_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}', '${fileExt}')">
+                                                            <i class="fas fa-eye"></i> Xem
+                                                        </button>
+                                                    ` : ''}
+                                                    <a href="api/reject_request_attachment.php?file=${attachment.filename}&action=download" 
+                                                       class="btn btn-sm btn-secondary" 
+                                                       target="_blank"
+                                                       download="${attachment.original_name}">
+                                                        <i class="fas fa-download"></i> Tải về
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 ` : ''}
                 
@@ -698,6 +735,58 @@ class RequestDetailApp {
                                 </div>
                             ` : ''}
                         </div>
+                        
+                        ${request.support_request.attachments && request.support_request.attachments.length > 0 ? `
+                            <div class="support-attachments">
+                                <h4><i class="fas fa-paperclip"></i> Tệp đính kèm (${request.support_request.attachments.length})</h4>
+                                <div class="attachments-list">
+                                    ${request.support_request.attachments.map(attachment => {
+                                        const isImage = attachment.mime_type.startsWith('image/');
+                                        const fileExt = attachment.filename.split('.').pop().toLowerCase();
+                                        const isPDF = fileExt === 'pdf';
+                                        const isWord = ['doc', 'docx'].includes(fileExt);
+                                        const isExcel = ['xls', 'xlsx'].includes(fileExt);
+                                        const isPowerPoint = ['ppt', 'pptx'].includes(fileExt);
+                                        const isText = ['txt', 'md'].includes(fileExt);
+                                        const isViewable = isPDF || isWord || isExcel || isPowerPoint || isText;
+                                        
+                                        return `
+                                            <div class="attachment-item">
+                                                <div class="attachment-info">
+                                                    <i class="fas fa-${isImage ? 'image' : isPDF ? 'file-pdf' : isWord ? 'file-word' : isExcel ? 'file-excel' : isPowerPoint ? 'file-powerpoint' : 'file'}"></i>
+                                                    <span class="attachment-name">${attachment.original_name}</span>
+                                                    <span class="attachment-size">(${formatFileSize(attachment.file_size)})</span>
+                                                </div>
+                                                <div class="attachment-actions">
+                                                    ${isImage ? `
+                                                        <img src="api/support_request_attachment.php?file=${attachment.filename}&action=view" 
+                                                             alt="${attachment.original_name}" 
+                                                             class="attachment-preview"
+                                                             onclick="requestDetailApp.showImageModal('api/support_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                             style="cursor: pointer;">
+                                                        <div class="image-overlay">
+                                                            <i class="fas fa-search-plus"></i>
+                                                        </div>
+                                                    ` : ''}
+                                                    ${isViewable ? `
+                                                        <button class="btn btn-sm btn-primary" 
+                                                                onclick="requestDetailApp.viewDocument('api/support_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}', '${fileExt}')">
+                                                            <i class="fas fa-eye"></i> Xem
+                                                        </button>
+                                                    ` : ''}
+                                                    <a href="api/support_request_attachment.php?file=${attachment.filename}&action=download" 
+                                                       class="btn btn-sm btn-secondary" 
+                                                       target="_blank"
+                                                       download="${attachment.original_name}">
+                                                        <i class="fas fa-download"></i> Tải về
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 ` : ''}
                 
@@ -1107,24 +1196,40 @@ class RequestDetailApp {
         this.showLoading('Đang gửi yêu cầu hỗ trợ...');
         
         try {
-            const response = await this.apiCall('api/support_requests.php', {
+            // Create FormData for file upload
+            const uploadFormData = new FormData();
+            uploadFormData.append('action', 'create');
+            uploadFormData.append('service_request_id', requestId);
+            uploadFormData.append('support_type', formData.get('support_type'));
+            uploadFormData.append('support_details', formData.get('support_details'));
+            uploadFormData.append('support_reason', formData.get('support_reason'));
+            
+            // Add files if any
+            const fileInput = document.getElementById('supportAttachments');
+            if (fileInput && fileInput.files.length > 0) {
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    uploadFormData.append('attachments[]', fileInput.files[i]);
+                }
+                console.log('Adding', fileInput.files.length, 'files to upload');
+            } else {
+                console.log('No files to upload');
+            }
+            
+            const response = await fetch('api/support_requests.php', {
                 method: 'POST',
-                body: JSON.stringify({
-                    action: 'create',
-                    service_request_id: requestId,
-                    support_type: formData.get('support_type'),
-                    support_details: formData.get('support_details'),
-                    support_reason: formData.get('support_reason')
-                })
+                body: uploadFormData,
+                credentials: 'include'
             });
             
-            if (response.success) {
+            const result = await response.json();
+            
+            if (result.success) {
                 this.showNotification('Yêu cầu hỗ trợ đã được gửi thành công', 'success');
                 this.closeNeedSupportModal();
                 // Reload request detail to show updated status
                 await this.loadRequestDetail();
             } else {
-                this.showNotification(response.message || 'Lỗi khi gửi yêu cầu hỗ trợ', 'error');
+                this.showNotification(result.message || 'Lỗi khi gửi yêu cầu hỗ trợ', 'error');
                 // Re-enable button if failed
                 if (submitBtn) {
                     submitBtn.disabled = false;
@@ -1282,9 +1387,15 @@ class RequestDetailApp {
                 
                 // Show notification about admin decision
                 if (response.data && response.data.decision) {
-                    const decision = response.data.decision === 'approved' ? 'đã được phê duyệt' : 'đã bị từ chối';
-                    const message = `📢 Yêu cầu hỗ trợ ${decision} bởi admin!`;
-                    this.showNotification(message, response.data.decision === 'approved' ? 'success' : 'warning');
+                    if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
+                        const decision = response.data.decision === 'approved' ? 'đã được phê duyệt' : 'đã bị từ chối';
+                        const message = `📢 Yêu cầu hỗ trợ ${decision} bởi admin!`;
+                        this.showNotification(message, response.data.decision === 'approved' ? 'success' : 'warning');
+                    } else {
+                        // Regular users see generic message
+                        const message = '📢 Yêu cầu hỗ trợ của bạn đã được xử lý!';
+                        this.showNotification(message, 'info');
+                    }
                 }
             } else {
                 this.showNotification(response.message, 'error');
@@ -1536,9 +1647,10 @@ class RequestDetailApp {
             'open': 'Mở',
             'in_progress': 'Đang xử lý',
             'resolved': 'Đã giải quyết',
+            'rejected': this.currentUser && ['admin', 'staff'].includes(this.currentUser.role) ? 'Đã từ chối' : 'Đã xử lý',
             'closed': 'Đã đóng',
             'cancelled': 'Đã hủy',
-            'request_support': 'Yêu cầu hỗ trợ'
+            'request_support': 'Cần hỗ trợ'
         };
         return statuses[status] || status;
     }
@@ -1854,9 +1966,15 @@ class RequestDetailApp {
                 
                 // Thông báo cho staff nếu admin đã quyết định
                 if (this.rejectRequestStatus.status !== 'pending') {
-                    const decision = this.rejectRequestStatus.status === 'approved' ? 'được đồng ý' : 'bị từ chối';
-                    const message = `📢 Yêu cầu từ chối đã ${decision} bởi admin!`;
-                    this.showNotification(message, this.rejectRequestStatus.status === 'approved' ? 'success' : 'warning');
+                    if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
+                        const decision = this.rejectRequestStatus.status === 'approved' ? 'được đồng ý' : 'bị từ chối';
+                        const message = `📢 Yêu cầu từ chối đã ${decision} bởi admin!`;
+                        this.showNotification(message, this.rejectRequestStatus.status === 'approved' ? 'success' : 'warning');
+                    } else {
+                        // Regular users see generic message
+                        const message = '📢 Yêu cầu từ chối của bạn đã được xử lý!';
+                        this.showNotification(message, 'info');
+                    }
                 }
             } else {
                 this.rejectRequestStatus = null;
@@ -1871,6 +1989,17 @@ class RequestDetailApp {
         const modal = document.getElementById('adminRejectModal');
         if (modal) {
             modal.style.display = 'none';
+        }
+    }
+
+    goBack() {
+        // Check if we have history to go back to
+        if (window.history.length > 1) {
+            // If we have history, go back
+            window.history.back();
+        } else {
+            // If no history (opened in new tab), go to main page
+            window.location.href = 'index.html';
         }
     }
 
