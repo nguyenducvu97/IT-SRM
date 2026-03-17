@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once '../config/database.php';
 require_once '../config/session.php';
+require_once '../lib/PHPMailerEmailHelper.php';
 
 // Start session for authentication
 startSession();
@@ -53,9 +54,9 @@ function notifyRole($pdo, $role, $title, $message, $type = 'info', $relatedId = 
                 try {
                     $notifyStmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
                     
-                    // Send email notification
+                    // Send email notification (temporarily disabled for debugging)
+                    /*
                     try {
-                        require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php';
                         $emailHelper = new PHPMailerEmailHelper();
                         
                         // Get user email
@@ -83,6 +84,7 @@ function notifyRole($pdo, $role, $title, $message, $type = 'info', $relatedId = 
                     } catch (Exception $e) {
                         error_log("Failed to send email to user $userId: " . $e->getMessage());
                     }
+                    */
                     
                 } catch (Exception $e) {
                     error_log("Failed to notify user $userId: " . $e->getMessage());
@@ -273,14 +275,14 @@ function handleGet($db, $current_user, $user_role) {
     $params = [];
     
     if ($status && $status !== 'all') {
-        $where_clause = "WHERE status = ?";
+        $where_clause = "WHERE rr.status = ?";
         $params[] = $status;
     }
     
     // Count total records
     $count_query = "
         SELECT COUNT(*) as total
-        FROM reject_requests
+        FROM reject_requests rr
         $where_clause
     ";
     $count_stmt = $db->prepare($count_query);
