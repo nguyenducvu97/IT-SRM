@@ -224,7 +224,7 @@ function handleGet($db, $current_user, $user_role) {
         return;
     }
     
-    $status = $_GET['status'] ?? 'pending';
+    $status = $_GET['status'] ?? null;
     $page = max(1, intval($_GET['page'] ?? 1));
     $limit = max(1, intval($_GET['limit'] ?? 20));
     $offset = ($page - 1) * $limit;
@@ -236,28 +236,52 @@ function handleGet($db, $current_user, $user_role) {
         return;
     }
     
+    // Build WHERE clause based on status
+    $where_clause = "";
+    $params = [];
+    
+    if ($status && $status !== 'all') {
+        $where_clause = "WHERE status = ?";
+        $params[] = $status;
+    }
+    
     // Count total records
-    $count_stmt = $db->prepare("
+    $count_query = "
         SELECT COUNT(*) as total
         FROM reject_requests
-        WHERE status = ?
-    ");
-    $count_stmt->execute([$status]);
+        $where_clause
+    ";
+    $count_stmt = $db->prepare($count_query);
+    
+    // Execute with parameters if any
+    if (!empty($params)) {
+        $count_stmt->execute($params);
+    } else {
+        $count_stmt->execute();
+    }
     $total = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'];
     
     // Get reject requests with pagination
-    $stmt = $db->prepare("
+    $query = "
         SELECT rr.*, 
                u.full_name as requester_name,
                sr.title as request_title
         FROM reject_requests rr
         JOIN users u ON rr.rejected_by = u.id
         JOIN service_requests sr ON rr.service_request_id = sr.id
-        WHERE rr.status = ?
+        $where_clause
         ORDER BY rr.created_at DESC
         LIMIT $limit OFFSET $offset
-    ");
-    $stmt->execute([$status]);
+    ";
+    
+    $stmt = $db->prepare($query);
+    
+    // Execute with parameters if any
+    if (!empty($params)) {
+        $stmt->execute($params);
+    } else {
+        $stmt->execute();
+    }
     $reject_requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // Filter sensitive information based on user role

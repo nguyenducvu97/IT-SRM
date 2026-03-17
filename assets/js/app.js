@@ -612,11 +612,13 @@ class ITServiceApp {
                     setTimeout(() => this.hideLoadingState(), 500);
                     break;
                 case 'support-requests':
-                    if (['admin', 'staff'].includes(this.currentUser.role)) {
+                    if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
                         this.loadSupportRequests();
                     } else {
-                        console.log('❌ User is not admin/staff, denying access to support requests page');
-                        this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu hỗ trợ', 'error');
+                        console.log('❌ User is not admin/staff or user not loaded, denying access to support requests page');
+                        if (this.currentUser) {
+                            this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu hỗ trợ', 'error');
+                        }
                         // Don't redirect to dashboard - just hide loading and show error
                         this.hideLoadingState();
                     }
@@ -624,11 +626,13 @@ class ITServiceApp {
                     setTimeout(() => this.hideLoadingState(), 500);
                     break;
                 case 'reject-requests':
-                    if (['admin', 'staff'].includes(this.currentUser.role)) {
+                    if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
                         this.loadRejectRequests();
                     } else {
-                        console.log('❌ User is not admin/staff, denying access to reject requests page');
-                        this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu từ chối', 'error');
+                        console.log('❌ User is not admin/staff or user not loaded, denying access to reject requests page');
+                        if (this.currentUser) {
+                            this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu từ chối', 'error');
+                        }
                         // Don't redirect to dashboard - just hide loading and show error
                         this.hideLoadingState();
                     }

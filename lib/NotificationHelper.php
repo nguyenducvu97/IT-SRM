@@ -99,10 +99,48 @@ class NotificationHelper {
                     $relatedLink = "<p><a href='http://localhost/it-service-request/request-detail.html?id={$relatedId}' style='background: #007bff; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem chi tiết yêu cầu</a></p>";
                     break;
                 case 'support_request':
-                    $relatedLink = "<p><a href='http://localhost/it-service-request/support-requests.html' style='background: #ffc107; color: black; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem yêu cầu hỗ trợ</a></p>";
+                    // For support requests, we need to link to the original service request
+                    // Get the service_request_id from the support request
+                    try {
+                        $pdo = require_once 'config/database.php';
+                        if ($pdo) {
+                            $stmt = $pdo->prepare("SELECT service_request_id FROM support_requests WHERE id = ?");
+                            $stmt->execute([$relatedId]);
+                            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                            if ($result && $result['service_request_id']) {
+                                $relatedLink = "<p><a href='http://localhost/it-service-request/request-detail.html?id={$result['service_request_id']}' style='background: #ffc107; color: black; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem chi tiết yêu cầu</a></p>";
+                            } else {
+                                $relatedLink = "<p><a href='http://localhost/it-service-request/support-requests.html' style='background: #ffc107; color: black; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem yêu cầu hỗ trợ</a></p>";
+                            }
+                        } else {
+                            $relatedLink = "<p><a href='http://localhost/it-service-request/support-requests.html' style='background: #ffc107; color: black; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem yêu cầu hỗ trợ</a></p>";
+                        }
+                    } catch (Exception $e) {
+                        // Fallback to support requests list if database query fails
+                        $relatedLink = "<p><a href='http://localhost/it-service-request/support-requests.html' style='background: #ffc107; color: black; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem yêu cầu hỗ trợ</a></p>";
+                    }
                     break;
                 case 'reject_request':
-                    $relatedLink = "<p><a href='http://localhost/it-service-request/reject-requests.html' style='background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem yêu cầu từ chối</a></p>";
+                    // For reject requests, we need to link to the original service request
+                    // Get the service_request_id from the reject request
+                    try {
+                        $pdo = require_once 'config/database.php';
+                        if ($pdo) {
+                            $stmt = $pdo->prepare("SELECT service_request_id FROM reject_requests WHERE id = ?");
+                            $stmt->execute([$relatedId]);
+                            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                            if ($result && $result['service_request_id']) {
+                                $relatedLink = "<p><a href='http://localhost/it-service-request/request-detail.html?id={$result['service_request_id']}' style='background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem chi tiết yêu cầu</a></p>";
+                            } else {
+                                $relatedLink = "<p><a href='http://localhost/it-service-request/reject-requests.html' style='background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem yêu cầu từ chối</a></p>";
+                            }
+                        } else {
+                            $relatedLink = "<p><a href='http://localhost/it-service-request/reject-requests.html' style='background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem yêu cầu từ chối</a></p>";
+                        }
+                    } catch (Exception $e) {
+                        // Fallback to reject requests list if database query fails
+                        $relatedLink = "<p><a href='http://localhost/it-service-request/reject-requests.html' style='background: #dc3545; color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; display: inline-block;'>Xem yêu cầu từ chối</a></p>";
+                    }
                     break;
             }
         }
