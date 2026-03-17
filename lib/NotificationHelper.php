@@ -41,12 +41,38 @@ class NotificationHelper {
      */
     private function sendNotificationEmail($userId, $title, $message, $type, $relatedId, $relatedType) {
         try {
-            // DISABLED: Email sending is handled by PHPMailerEmailHelper with beautiful templates
-            // This prevents duplicate emails with different templates
-            error_log("NotificationHelper email sending disabled - using PHPMailerEmailHelper instead");
-            return true; // Return success to avoid errors
+            // Use PHPMailerEmailHelper for consistent email templates
+            require_once __DIR__ . '/PHPMailerEmailHelper.php';
+            $emailHelper = new PHPMailerEmailHelper();
             
-            // Old code (disabled):
+            // Get user details
+            $stmt = $this->db->prepare("SELECT email, full_name FROM users WHERE id = ?");
+            $stmt->execute([$userId]);
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($userData) {
+                $subject = $title;
+                $email_body = $title . "\n\n";
+                $email_body .= "Nội dung: " . $message . "\n\n";
+                
+                // Add link based on related type
+                if ($relatedType === 'request' && $relatedId) {
+                    $email_body .= "Xem chi tiết: http://localhost/it-service-request/request-detail.html?id=" . $relatedId . "\n\n";
+                }
+                
+                $email_body .= "Trân trọng,\n";
+                $email_body .= "IT Service Request System";
+                
+                return $emailHelper->sendEmail($userData['email'], $userData['full_name'], $subject, $email_body);
+            }
+            
+            return false;
+            
+        } catch (Exception $e) {
+            error_log("Failed to send notification email: " . $e->getMessage());
+            return false;
+        }
+    }
             /*
             // Get user email
             $stmt = $this->db->prepare("SELECT email, full_name FROM users WHERE id = ?");
@@ -63,7 +89,6 @@ class NotificationHelper {
             // Send email
             $subject = '=?UTF-8?B?' . base64_encode($title) . '?=';
             return $this->emailHelper->sendEmail($user['email'], $user['full_name'], $subject, $emailBody);
-            */
             
         } catch (Exception $e) {
             error_log("Failed to send notification email: " . $e->getMessage());

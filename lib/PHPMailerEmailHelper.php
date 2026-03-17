@@ -134,7 +134,7 @@ class PHPMailerEmailHelper {
             </div>
             
             <div style='text-align: center; margin: 30px 0;'>
-                <a href='http://localhost/it-service-request/' class='cta-button'>
+                <a href='http://localhost/it-service-request/request-detail.html?id=" . $request_data["id"] . "' class='cta-button'>
                     Xem chi tiết yêu cầu →
                 </a>
             </div>
@@ -258,7 +258,7 @@ class PHPMailerEmailHelper {
             </div>
             
             <div style='text-align: center; margin: 30px 0;'>
-                <a href='http://localhost/it-service-request/' class='cta-button'>
+                <a href='http://localhost/it-service-request/request-detail.html?id=" . $request_data["id"] . "' class='cta-button'>
                     Xem chi tiết yêu cầu →
                 </a>
             </div>

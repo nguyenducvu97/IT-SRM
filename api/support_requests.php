@@ -517,63 +517,61 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         ");
         $update_result = $update_stmt->execute([$service_request_id]);
         
-        // Temporarily disable email sending to debug 500 error
-/*
-try {
-    // Get staff name and request details
-    $staff_stmt = $pdo->prepare("SELECT full_name FROM users WHERE id = ?");
-    $staff_stmt->execute([$current_user]);
-    $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
-    
-    $request_stmt = $pdo->prepare("SELECT title FROM service_requests WHERE id = ?");
-    $request_stmt->execute([$service_request_id]);
-    $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-    
-    $staff_name = $staff_data['full_name'] ?? 'Staff';
-    $request_title = $request_data['title'] ?? 'Unknown';
-    
-    $title = "Yêu cầu hỗ trợ mới cho yêu cầu #" . $service_request_id;
-    $message = $staff_name . " yêu cầu hỗ trợ cho: " . $request_title;
-    
-    // Notify all admin users
-    $admin_stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin'");
-    $admin_stmt->execute();
-    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
-    
-    if (!empty($admins)) {
-        foreach ($admins as $admin_id) {
-            createNotification($pdo, $admin_id, $title, $message, 'warning', $service_request_id, 'request');
+        // Enable email sending with fixed template
+        try {
+            // Get staff name and request details
+            $staff_stmt = $pdo->prepare("SELECT full_name FROM users WHERE id = ?");
+            $staff_stmt->execute([$current_user]);
+            $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
             
-            // Send email notification to admin
-            try {
-                $emailHelper = new PHPMailerEmailHelper();
-                
-                // Get admin email
-                $admin_stmt = $pdo->prepare("SELECT email, full_name FROM users WHERE id = ?");
-                $admin_stmt->execute([$admin_id]);
-                $admin_data = $admin_stmt->fetch(PDO::FETCH_ASSOC);
-                
-                if ($admin_data) {
-                    $subject = $title;
-                    $email_body = "Yêu cầu hỗ trợ mới\n\n";
-                    $email_body .= "Tiêu đề: " . $title . "\n";
-                    $email_body .= "Nội dung: " . $message . "\n\n";
-                    $email_body .= "Xem chi tiết: http://localhost/it-service-request/request-detail.html?id=" . $service_request_id . "\n\n";
-                    $email_body .= "Trân trọng,\n";
-                    $email_body .= "IT Service Request System";
+            $request_stmt = $pdo->prepare("SELECT title FROM service_requests WHERE id = ?");
+            $request_stmt->execute([$service_request_id]);
+            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $staff_name = $staff_data['full_name'] ?? 'Staff';
+            $request_title = $request_data['title'] ?? 'Unknown';
+            
+            $title = "Yêu cầu hỗ trợ mới cho yêu cầu #" . $service_request_id;
+            $message = $staff_name . " yêu cầu hỗ trợ cho: " . $request_title;
+            
+            // Notify all admin users
+            $admin_stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin'");
+            $admin_stmt->execute();
+            $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+            
+            if (!empty($admins)) {
+                foreach ($admins as $admin_id) {
+                    createNotification($pdo, $admin_id, $title, $message, 'warning', $service_request_id, 'request');
                     
-                    $emailHelper->sendEmail($admin_data['email'], $admin_data['full_name'], $subject, $email_body);
+                    // Send email notification to admin
+                    try {
+                        $emailHelper = new PHPMailerEmailHelper();
+                        
+                        // Get admin email
+                        $admin_stmt = $pdo->prepare("SELECT email, full_name FROM users WHERE id = ?");
+                        $admin_stmt->execute([$admin_id]);
+                        $admin_data = $admin_stmt->fetch(PDO::FETCH_ASSOC);
+                        
+                        if ($admin_data) {
+                            $subject = $title;
+                            $email_body = "Yêu cầu hỗ trợ mới\n\n";
+                            $email_body .= "Tiêu đề: " . $title . "\n";
+                            $email_body .= "Nội dung: " . $message . "\n\n";
+                            $email_body .= "Xem chi tiết: http://localhost/it-service-request/request-detail.html?id=" . $service_request_id . "\n\n";
+                            $email_body .= "Trân trọng,\n";
+                            $email_body .= "IT Service Request System";
+                            
+                            $emailHelper->sendEmail($admin_data['email'], $admin_data['full_name'], $subject, $email_body);
+                        }
+                    } catch (Exception $e) {
+                        error_log("Failed to send support request email to admin {$admin_id}: " . $e->getMessage());
+                    }
                 }
-            } catch (Exception $e) {
-                error_log("Failed to send support request email to admin {$admin_id}: " . $e->getMessage());
             }
+        } catch (Exception $e) {
+            error_log("Failed to create support request notifications: " . $e->getMessage());
+            // Continue even if notification creation fails
         }
-    }
-} catch (Exception $e) {
-    error_log("Failed to create support request notifications: " . $e->getMessage());
-    // Continue even if notification creation fails
-}
-*/
         
         echo json_encode([
             'success' => true,

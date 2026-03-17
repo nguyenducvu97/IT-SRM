@@ -52,6 +52,38 @@ function notifyRole($pdo, $role, $title, $message, $type = 'info', $relatedId = 
             foreach ($users as $userId) {
                 try {
                     $notifyStmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
+                    
+                    // Send email notification
+                    try {
+                        require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php';
+                        $emailHelper = new PHPMailerEmailHelper();
+                        
+                        // Get user email
+                        $userStmt = $pdo->prepare("SELECT email, full_name FROM users WHERE id = ?");
+                        $userStmt->execute([$userId]);
+                        $userData = $userStmt->fetch(PDO::FETCH_ASSOC);
+                        
+                        if ($userData) {
+                            $subject = $title;
+                            $email_body = $title . "\n\n";
+                            $email_body .= "Nội dung: " . $message . "\n\n";
+                            
+                            // Add link based on related type
+                            if ($relatedType === 'service_request' && $relatedId) {
+                                $email_body .= "Xem chi tiết: http://localhost/it-service-request/request-detail.html?id=" . $relatedId . "\n\n";
+                            } elseif ($relatedType === 'request' && $relatedId) {
+                                $email_body .= "Xem chi tiết: http://localhost/it-service-request/request-detail.html?id=" . $relatedId . "\n\n";
+                            }
+                            
+                            $email_body .= "Trân trọng,\n";
+                            $email_body .= "IT Service Request System";
+                            
+                            $emailHelper->sendEmail($userData['email'], $userData['full_name'], $subject, $email_body);
+                        }
+                    } catch (Exception $e) {
+                        error_log("Failed to send email to user $userId: " . $e->getMessage());
+                    }
+                    
                 } catch (Exception $e) {
                     error_log("Failed to notify user $userId: " . $e->getMessage());
                 }

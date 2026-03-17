@@ -928,6 +928,12 @@ elseif ($method == 'PUT') {
             return;
         }
         
+        // Additional session check to ensure $user_id is properly set
+        if (!$user_id) {
+            serviceJsonResponse(false, "Session expired");
+            return;
+        }
+        
         try {
             // Check if request exists and is available for assignment
             // Available statuses: 'open' or 'request_support' (when support request is rejected)
@@ -978,13 +984,35 @@ elseif ($method == 'PUT') {
                 $request_stmt->execute();
                 $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
                 
-                // Send email notification to requester about assignment
+                // Send email notification to requester about assignment (only if current user is not the requester)
+                if ($request_data['user_id'] != $user_id) {
+                    try {
+                        $emailHelper = new PHPMailerEmailHelper(); // Use PHPMailerEmailHelper for actual email sending
+                        $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
+                    } catch (Exception $e) {
+                        error_log("Email notification failed: " . $e->getMessage());
+                        // Continue even if email fails
+                    }
+                }
+                
+                // Also notify all admins about the assignment
                 try {
-                    $emailHelper = new PHPMailerEmailHelper(); // Use PHPMailerEmailHelper for actual email sending
-                    $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
+                    require_once __DIR__ . '/../lib/NotificationHelper.php';
+                    $notificationHelper = new NotificationHelper($db);
+                    
+                    $title = "Yêu cầu #" . $request_id . " đã được nhận";
+                    $message = $request_data['assigned_name'] . " đã nhận yêu cầu: " . $request_data['title'];
+                    
+                    // Get all admin IDs
+                    $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
+                    $admin_stmt->execute();
+                    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                    
+                    if (!empty($admins)) {
+                        $notificationHelper->notifyUsers($admins, $title, $message, 'success', $request_id, 'request');
+                    }
                 } catch (Exception $e) {
-                    error_log("Email notification failed: " . $e->getMessage());
-                    // Continue even if email fails
+                    error_log("Failed to notify admins about staff acceptance: " . $e->getMessage());
                 }
                 
                 serviceJsonResponse(true, "Request accepted successfully");
@@ -1075,13 +1103,26 @@ elseif ($method == 'PUT') {
             $request_stmt->execute();
             $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
             
-            // Send email notification to requester about resolution
-            try {
-                $emailHelper = new PHPMailerEmailHelper();
-                $emailHelper->sendResolutionNotification($request_data, $error_description, $solution_method);
-            } catch (Exception $e) {
-                error_log("Email notification failed: " . $e->getMessage());
-                // Continue even if email fails
+            // Send email notification to requester about resolution (only if current user is not the requester)
+            if ($request_data['user_id'] != $user_id) {
+                try {
+                    $emailHelper = new PHPMailerEmailHelper();
+                    $emailHelper->sendResolutionNotification($request_data, $error_description, $solution_method);
+                } catch (Exception $e) {
+                    error_log("Email notification failed: " . $e->getMessage());
+                    // Continue even if email fails
+                }
+            }
+            
+            // Also notify assigned user about resolution (if different from current user)
+            if ($request_data['assigned_to'] && $request_data['assigned_to'] != $user_id) {
+                try {
+                    $title = "Yêu cầu được giao cho bạn đã được giải quyết #" . $request_id;
+                    $message = "Yêu cầu '" . $request_data['title'] . "' đã được giải quyết.";
+                    createNotification($db, $request_data['assigned_to'], $title, $message, 'success', $request_id, 'request');
+                } catch (Exception $e) {
+                    error_log("Failed to notify assigned user about resolution: " . $e->getMessage());
+                }
             }
             
             $db->commit();
