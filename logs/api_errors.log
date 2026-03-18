@@ -1941,3 +1941,305 @@ Stack trace:
 [18-Mar-2026 05:42:20 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
 [18-Mar-2026 05:42:27 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
 [18-Mar-2026 05:42:30 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:21:17 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:21:22 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:21:22 Europe/Berlin] PUT raw input: {"action":"update","id":"72","title":"Hư màn","description":"Không lên hình","category_id":"1","priority":"medium","status":"open","assigned_to":"17"}
+[18-Mar-2026 07:21:22 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 72
+    [title] => Hư màn
+    [description] => Không lên hình
+    [category_id] => 1
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 17
+)
+
+[18-Mar-2026 07:21:22 Europe/Berlin] PUT action: update
+[18-Mar-2026 07:21:29 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:21:29 Europe/Berlin] PUT raw input: {"action":"update","id":"72","title":"Hư màn","description":"Không lên hình","category_id":"1","priority":"medium","status":"open","assigned_to":"17"}
+[18-Mar-2026 07:21:29 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 72
+    [title] => Hư màn
+    [description] => Không lên hình
+    [category_id] => 1
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 17
+)
+
+[18-Mar-2026 07:21:29 Europe/Berlin] PUT action: update
+[18-Mar-2026 07:21:38 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:21:44 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:21:48 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:21:48 Europe/Berlin] PUT raw input: {"action":"update","id":"73","title":"Lỗi main","description":"ssssss","category_id":"4","priority":"high","status":"open","assigned_to":"17"}
+[18-Mar-2026 07:21:48 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 73
+    [title] => Lỗi main
+    [description] => ssssss
+    [category_id] => 4
+    [priority] => high
+    [status] => open
+    [assigned_to] => 17
+)
+
+[18-Mar-2026 07:21:48 Europe/Berlin] PUT action: update
+[18-Mar-2026 07:21:53 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:21:53 Europe/Berlin] PUT raw input: {"action":"update","id":"73","title":"Lỗi main","description":"ssssss","category_id":"4","priority":"high","status":"open","assigned_to":"17"}
+[18-Mar-2026 07:21:53 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 73
+    [title] => Lỗi main
+    [description] => ssssss
+    [category_id] => 4
+    [priority] => high
+    [status] => open
+    [assigned_to] => 17
+)
+
+[18-Mar-2026 07:21:53 Europe/Berlin] PUT action: update
+[18-Mar-2026 07:23:36 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:23:36 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:23:39 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:23:41 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:23:45 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:23:45 Europe/Berlin] PUT raw input: {"action":"update","id":"72","title":"Hư màn","description":"Không lên hình","category_id":"1","priority":"medium","status":"open","assigned_to":"17"}
+[18-Mar-2026 07:23:45 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 72
+    [title] => Hư màn
+    [description] => Không lên hình
+    [category_id] => 1
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 17
+)
+
+[18-Mar-2026 07:23:45 Europe/Berlin] PUT action: update
+[18-Mar-2026 07:23:56 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:23:56 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:23:58 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:23:59 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:24:05 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:24:05 Europe/Berlin] PUT raw input: {"action":"update","id":"72","title":"Hư màn","description":"Không lên hình","category_id":"1","priority":"medium","status":"open","assigned_to":"17"}
+[18-Mar-2026 07:24:05 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 72
+    [title] => Hư màn
+    [description] => Không lên hình
+    [category_id] => 1
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 17
+)
+
+[18-Mar-2026 07:24:05 Europe/Berlin] PUT action: update
+[18-Mar-2026 07:25:30 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:25:30 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:25:32 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:25:35 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:25:38 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:25:38 Europe/Berlin] PUT raw input: {"action":"update","id":"72","title":"Hư màn","description":"Không lên hình","category_id":"1","priority":"medium","status":"open","assigned_to":"17"}
+[18-Mar-2026 07:25:38 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 72
+    [title] => Hư màn
+    [description] => Không lên hình
+    [category_id] => 1
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 17
+)
+
+[18-Mar-2026 07:25:38 Europe/Berlin] PUT action: update
+[18-Mar-2026 07:25:38 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:25:49 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:25:49 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:25:49 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:25:49 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:26:03 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:26:08 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:26:18 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:26:33 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:26:59 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:26:59 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:26:59 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:27:00 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:27:11 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:28:56 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:28:56 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"OK","error_type":"hardware","replacement_materials":"Hành động theo quy trình","solution_method":"Thay thế màn hình"}
+[18-Mar-2026 07:28:56 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => OK
+    [error_type] => hardware
+    [replacement_materials] => Hành động theo quy trình
+    [solution_method] => Thay thế màn hình
+)
+
+[18-Mar-2026 07:28:56 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:29:06 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:29:18 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:29:18 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"sssss","error_type":"hardware","replacement_materials":"cccccccc","solution_method":"aaaaa"}
+[18-Mar-2026 07:29:18 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => sssss
+    [error_type] => hardware
+    [replacement_materials] => cccccccc
+    [solution_method] => aaaaa
+)
+
+[18-Mar-2026 07:29:18 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:29:54 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:29:54 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"sssss","error_type":"hardware","replacement_materials":"cccccccc","solution_method":"aaaaa"}
+[18-Mar-2026 07:29:54 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => sssss
+    [error_type] => hardware
+    [replacement_materials] => cccccccc
+    [solution_method] => aaaaa
+)
+
+[18-Mar-2026 07:29:54 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:29:59 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:29:59 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"sssss","error_type":"hardware","replacement_materials":"cccccccc","solution_method":"aaaaa"}
+[18-Mar-2026 07:29:59 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => sssss
+    [error_type] => hardware
+    [replacement_materials] => cccccccc
+    [solution_method] => aaaaa
+)
+
+[18-Mar-2026 07:29:59 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:30:22 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:30:22 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"sssss","error_type":"hardware","replacement_materials":"cccccccc","solution_method":"aaaaa"}
+[18-Mar-2026 07:30:22 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => sssss
+    [error_type] => hardware
+    [replacement_materials] => cccccccc
+    [solution_method] => aaaaa
+)
+
+[18-Mar-2026 07:30:22 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:32:42 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:32:42 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"sssss","error_type":"hardware","replacement_materials":"cccccccc","solution_method":"aaaaa"}
+[18-Mar-2026 07:32:42 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => sssss
+    [error_type] => hardware
+    [replacement_materials] => cccccccc
+    [solution_method] => aaaaa
+)
+
+[18-Mar-2026 07:32:42 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:32:47 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:32:47 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"sssss","error_type":"hardware","replacement_materials":"cccccccc","solution_method":"aaaaa"}
+[18-Mar-2026 07:32:47 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => sssss
+    [error_type] => hardware
+    [replacement_materials] => cccccccc
+    [solution_method] => aaaaa
+)
+
+[18-Mar-2026 07:32:47 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:32:52 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:33:05 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:33:05 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"Â","error_type":"hardware","replacement_materials":"s","solution_method":"sss"}
+[18-Mar-2026 07:33:05 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => Â
+    [error_type] => hardware
+    [replacement_materials] => s
+    [solution_method] => sss
+)
+
+[18-Mar-2026 07:33:05 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:46:12 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:46:25 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:46:25 Europe/Berlin] PUT raw input: {"id":"75","action":"resolve","error_description":"ssssssss","error_type":"hardware","replacement_materials":"d","solution_method":"đssssss"}
+[18-Mar-2026 07:46:25 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 75
+    [action] => resolve
+    [error_description] => ssssssss
+    [error_type] => hardware
+    [replacement_materials] => d
+    [solution_method] => đssssss
+)
+
+[18-Mar-2026 07:46:25 Europe/Berlin] PUT action: resolve
+[18-Mar-2026 07:46:25 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:46:38 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:46:38 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:46:38 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:46:41 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 07:47:01 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:47:01 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:47:01 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:47:01 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:47:03 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:47:03 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:47:05 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:53:27 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:53:27 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'field list' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 07:53:31 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:53:31 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'field list' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 07:54:39 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:54:39 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'on clause' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 07:54:49 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 07:54:49 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'on clause' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 07:54:54 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:54:54 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'on clause' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 07:54:57 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 07:54:57 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'on clause' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
