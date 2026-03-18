@@ -464,9 +464,9 @@ if ($method == 'GET') {
 
                         sr.error_type as resolution_error_type, sr.replacement_materials as resolution_replacement_materials,
 
-                        sr.solution_method as resolution_solution_method, sr.resolved_by as resolution_resolved_by,
+                        sr.solution_method as resolution_solution_method, 
 
-                        sr.resolved_at as resolution_resolved_at, resolver.full_name as resolver_name
+                        sr.resolved_at as resolution_resolved_at, assigned.full_name as resolver_name
 
                  FROM service_requests sr
 
