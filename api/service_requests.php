@@ -3272,6 +3272,71 @@ elseif ($method == 'PUT') {
             serviceJsonResponse(false, "Database error: " . $e->getMessage());
         }
     }
+    elseif ($action == 'update') {
+        // Handle full request update (admin only)
+        $request_id = isset($input['id']) ? (int)$input['id'] : 0;
+        $title = isset($input['title']) ? trim($input['title']) : '';
+        $description = isset($input['description']) ? trim($input['description']) : '';
+        $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
+        $priority = isset($input['priority']) ? $input['priority'] : 'medium';
+        $status = isset($input['status']) ? trim($input['status']) : '';
+        $assigned_to = isset($input['assigned_to']) ? (int)$input['assigned_to'] : null;
+        
+        if ($request_id <= 0) {
+            serviceJsonResponse(false, "Request ID is required");
+            return;
+        }
+        
+        // Only admin can update requests
+        if ($user_role != 'admin') {
+            serviceJsonResponse(false, "Access denied");
+            return;
+        }
+        
+        // Validate required fields
+        if (empty($title) || empty($description) || $category_id <= 0) {
+            serviceJsonResponse(false, "Title, description, and category are required");
+            return;
+        }
+        
+        // Validate status
+        $valid_statuses = ['open', 'in_progress', 'resolved', 'closed', 'cancelled'];
+        if (!empty($status) && !in_array($status, $valid_statuses)) {
+            serviceJsonResponse(false, "Invalid status");
+            return;
+        }
+        
+        // Validate priority
+        $valid_priorities = ['low', 'medium', 'high'];
+        if (!in_array($priority, $valid_priorities)) {
+            serviceJsonResponse(false, "Invalid priority");
+            return;
+        }
+        
+        try {
+            // Update request
+            $update_query = "UPDATE service_requests 
+                           SET title = :title, description = :description, category_id = :category_id, 
+                               priority = :priority, status = :status, assigned_to = :assigned_to 
+                           WHERE id = :request_id";
+            $update_stmt = $db->prepare($update_query);
+            $update_stmt->bindParam(":title", $title);
+            $update_stmt->bindParam(":description", $description);
+            $update_stmt->bindParam(":category_id", $category_id);
+            $update_stmt->bindParam(":priority", $priority);
+            $update_stmt->bindParam(":status", $status);
+            $update_stmt->bindParam(":assigned_to", $assigned_to);
+            $update_stmt->bindParam(":request_id", $request_id);
+            
+            if ($update_stmt->execute()) {
+                serviceJsonResponse(true, "Request updated successfully");
+            } else {
+                serviceJsonResponse(false, "Failed to update request");
+            }
+        } catch (Exception $e) {
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
     else {
         serviceJsonResponse(false, "Invalid action for PUT method");
     }
