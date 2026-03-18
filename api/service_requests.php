@@ -480,8 +480,6 @@ if ($method == 'GET') {
 
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
 
-                 LEFT JOIN users resolver ON sr.resolved_by = resolver.id
-
                  WHERE sr.id = :id";
 
         
