@@ -460,13 +460,13 @@ if ($method == 'GET') {
 
                         sreq_admin.full_name as support_admin_name,
 
-                        r.id as resolution_id, r.error_description as resolution_error_description,
+                        sr.error_description as resolution_error_description,
 
-                        r.error_type as resolution_error_type, r.replacement_materials as resolution_replacement_materials,
+                        sr.error_type as resolution_error_type, sr.replacement_materials as resolution_replacement_materials,
 
-                        r.solution_method as resolution_solution_method, r.resolved_by as resolution_resolved_by,
+                        sr.solution_method as resolution_solution_method, sr.resolved_by as resolution_resolved_by,
 
-                        r.resolved_at as resolution_resolved_at, resolver.full_name as resolver_name
+                        sr.resolved_at as resolution_resolved_at, resolver.full_name as resolver_name
 
                  FROM service_requests sr
 
@@ -480,9 +480,7 @@ if ($method == 'GET') {
 
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
 
-                 LEFT JOIN resolutions r ON sr.id = r.service_request_id
-
-                 LEFT JOIN users resolver ON r.resolved_by = resolver.id
+                 LEFT JOIN users resolver ON sr.resolved_by = resolver.id
 
                  WHERE sr.id = :id";
 
