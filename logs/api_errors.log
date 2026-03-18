@@ -2243,3 +2243,91 @@ Stack trace:
 #0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
 #1 {main}
   thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 08:03:59 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 08:03:59 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'on clause' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 08:04:02 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 08:04:02 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'on clause' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 08:04:08 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 08:04:08 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sr.resolved_by' in 'on clause' in C:\xampp\htdocs\it-service-request\api\service_requests.php:493
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(493): PDOStatement->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 493
+[18-Mar-2026 08:08:45 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:08:45 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:09:27 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 08:09:27 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 08:09:35 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:09:35 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:09:35 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:09:35 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:10:20 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:10:20 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:10:25 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:10:25 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:10:57 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:12:00 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:25:47 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 08:25:52 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 08:25:52 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:26:02 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 08:26:02 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:26:14 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:26:14 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:26:37 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:26:37 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:27:45 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 08:27:45 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:28:00 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 08:28:00 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:29:57 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:29:59 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:29:59 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:30:13 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:30:13 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 772
+[18-Mar-2026 08:32:28 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 08:32:28 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 08:32:34 Europe/Berlin] Database session started - ID: 7og41mntcse1ifm8290jlsrrig
+[18-Mar-2026 08:32:34 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 08:32:45 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:32:45 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 08:34:41 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:34:41 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 08:38:16 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:38:16 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:38:16 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:38:18 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:38:18 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 08:58:45 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:58:45 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:58:45 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:59:29 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:59:33 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:59:33 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:59:35 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:59:35 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:59:36 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:59:39 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 08:59:39 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 09:00:32 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 09:00:32 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 09:00:32 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 09:00:35 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 09:00:35 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 09:00:37 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 09:00:37 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 09:01:43 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 09:01:43 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[18-Mar-2026 09:01:46 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 09:01:48 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 09:01:48 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
+[18-Mar-2026 09:02:02 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
+[18-Mar-2026 09:02:02 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
