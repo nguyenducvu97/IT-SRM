@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple File Upload Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; background: #d4edda; padding: 10px; border-radius: 4px; }
+        .error { color: red; background: #f8d7da; padding: 10px; border-radius: 4px; }
+        .info { color: blue; background: #d1ecf1; padding: 10px; border-radius: 4px; }
+        button { padding: 10px 15px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        input, textarea { margin: 5px; padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100%; max-width: 400px; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Simple File Upload Test</h1>
+    
+    <div class="section">
+        <h2>Test Direct Upload to Debug Script</h2>
+        <form id="testForm">
+            <input type="hidden" name="action" value="reject_request">
+            <input type="hidden" name="request_id" value="1">
+            
+            <div>
+                <label>Reject Reason:</label><br>
+                <textarea name="reject_reason" rows="2" required>Test upload debug</textarea>
+            </div>
+            
+            <div>
+                <label>Reject Details:</label><br>
+                <textarea name="reject_details" rows="2">Testing direct file upload</textarea>
+            </div>
+            
+            <div>
+                <label>Attachments:</label><br>
+                <input type="file" id="testFile" name="attachments[]" multiple accept=".txt,.jpg,.png,.pdf">
+                <small>Select any file to test</small>
+            </div>
+            
+            <button type="submit" class="btn-success">Test Upload to Debug Script</button>
+        </form>
+        
+        <div id="result"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Test Upload to Real API</h2>
+        <button class="btn-primary" onclick="testRealApi()">Test Real API (service_requests.php) - POST</button>
+        <button class="btn-warning" onclick="testDebugApi()">Test Debug API Logic</button>
+        <div id="realApiResult"></div>
+    </div>
+
+    <script>
+        // Test form submission to debug script
+        document.getElementById('testForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('result');
+            const fileInput = document.getElementById('testFile');
+            
+            resultDiv.innerHTML = '<div class="info">🔍 Testing upload to debug script...</div>';
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                resultDiv.innerHTML = '<div class="error">❌ Please select a file</div>';
+                return;
+            }
+            
+            try {
+                const formData = new FormData(this);
+                
+                console.log('FormData contents:');
+                for (let [key, value] of formData.entries()) {
+                    if (value instanceof File) {
+                        console.log(`${key}: File(${value.name}, ${value.size} bytes, ${value.type})`);
+                    } else {
+                        console.log(`${key}: ${value}`);
+                    }
+                }
+                
+                const response = await fetch('debug_reject_upload_simple.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('Response data:', result);
+                
+                if (result.success) {
+                    let html = '<div class="success">✅ Upload to debug script successful!</div>';
+                    html += `<div class="info">Message: ${result.message}</div>`;
+                    
+                    if (result.debug_info) {
+                        html += '<div class="info"><strong>Debug Info:</strong></div>';
+                        html += '<pre>' + JSON.stringify(result.debug_info, null, 2) + '</pre>';
+                    }
+                    
+                    resultDiv.innerHTML = html;
+                } else {
+                    let html = '<div class="error">❌ Upload to debug script failed</div>';
+                    html += `<div class="error">Message: ${result.message}</div>`;
+                    
+                    if (result.debug_info) {
+                        html += '<div class="info"><strong>Debug Info:</strong></div>';
+                        html += '<pre>' + JSON.stringify(result.debug_info, null, 2) + '</pre>';
+                    }
+                    
+                    resultDiv.innerHTML = html;
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<div class="error">❌ Network error: ${error.message}</div>`;
+            }
+        });
+        
+        // Test real API
+        async function testRealApi() {
+            const resultDiv = document.getElementById('realApiResult');
+            resultDiv.innerHTML = '<div class="info">🔍 Testing real API...</div>';
+            
+            try {
+                // Create test FormData
+                const formData = new FormData();
+                formData.append('action', 'reject_request');
+                formData.append('request_id', '1');
+                formData.append('reject_reason', 'Test real API upload');
+                formData.append('reject_details', 'Testing real API file upload');
+                
+                // Add a test file
+                const testContent = 'Test file for real API\nCreated: ' + new Date().toISOString();
+                const blob = new Blob([testContent], { type: 'text/plain' });
+                const file = new File([blob], 'test_real_api.txt', { type: 'text/plain' });
+                formData.append('attachments[]', file);
+                
+                console.log('Sending to real API...');
+                
+                const response = await fetch('api/service_requests.php', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+                
+                console.log('Real API response status:', response.status);
+                const result = await response.json();
+                console.log('Real API response data:', result);
+                
+                if (result.success) {
+                    let html = '<div class="success">✅ Real API upload successful!</div>';
+                    html += `<div class="info">Message: ${result.message}</div>`;
+                    
+                    if (result.uploaded_files && result.uploaded_files.length > 0) {
+                        html += '<div class="success">📎 Files uploaded:</div>';
+                        result.uploaded_files.forEach(file => {
+                            html += `<div class="info">- ${file.original_name} (${file.file_size} bytes)</div>`;
+                        });
+                    }
+                    
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">❌ Real API failed: ${result.message}</div>`;
+                }
+                
+            } catch (error) {
+                console.error('Real API error:', error);
+                resultDiv.innerHTML = `<div class="error">❌ Real API error: ${error.message}</div>`;
+            }
+        }
+        
+        // Test debug API logic
+        async function testDebugApi() {
+            const resultDiv = document.getElementById('realApiResult');
+            resultDiv.innerHTML = '<div class="info">🔍 Testing debug API logic...</div>';
+            
+            try {
+                // Create test FormData
+                const formData = new FormData();
+                formData.append('action', 'reject_request');
+                formData.append('request_id', '1');
+                formData.append('reject_reason', 'Test debug API');
+                formData.append('reject_details', 'Testing debug API logic');
+                
+                // Add a test file
+                const testContent = 'Test file for debug API\nCreated: ' + new Date().toISOString();
+                const blob = new Blob([testContent], { type: 'text/plain' });
+                const file = new File([blob], 'test_debug_api.txt', { type: 'text/plain' });
+                formData.append('attachments[]', file);
+                
+                console.log('Sending to debug API with PUT...');
+                
+                const response = await fetch('debug_real_api_logic.php', {
+                    method: 'PUT',
+                    body: formData
+                });
+                
+                console.log('Debug API response status:', response.status);
+                const result = await response.json();
+                console.log('Debug API response data:', result);
+                
+                let html = '<h4>PUT Method Results:</h4>';
+                
+                if (result.success) {
+                    html += '<div class="success">✅ Debug API successful!</div>';
+                    html += `<div class="info">Message: ${result.message}</div>`;
+                } else {
+                    html += '<div class="error">❌ Debug API failed</div>';
+                    html += `<div class="error">Message: ${result.message}</div>`;
+                }
+                
+                if (result.debug_info) {
+                    html += '<div class="info"><strong>PUT Debug Info:</strong></div>';
+                    html += '<pre>' + JSON.stringify(result.debug_info, null, 2) + '</pre>';
+                }
+                
+                // Also test POST method
+                console.log('Sending to debug API with POST...');
+                html += '<h4>POST Method Results:</h4>';
+                
+                const postResponse = await fetch('debug_real_api_logic.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const postResult = await postResponse.json();
+                console.log('Debug API POST response data:', postResult);
+                
+                if (postResult.success) {
+                    html += '<div class="success">✅ Debug API POST successful!</div>';
+                    html += `<div class="info">Message: ${postResult.message}</div>`;
+                } else {
+                    html += '<div class="error">❌ Debug API POST failed</div>';
+                    html += `<div class="error">Message: ${postResult.message}</div>`;
+                }
+                
+                if (postResult.debug_info) {
+                    html += '<div class="info"><strong>POST Debug Info:</strong></div>';
+                    html += '<pre>' + JSON.stringify(postResult.debug_info, null, 2) + '</pre>';
+                }
+                
+                resultDiv.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Debug API error:', error);
+                resultDiv.innerHTML = `<div class="error">❌ Debug API error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

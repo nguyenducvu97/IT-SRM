@@ -119,17 +119,17 @@ if ($user_role !== 'admin' && $_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-// For GET requests, allow staff to access list and check_status
+// For GET requests, allow staff to access list, check_status, and get
 if ($user_role !== 'admin' && $_SERVER['REQUEST_METHOD'] === 'GET') {
     $action = $_GET['action'] ?? '';
     
-    if (!in_array($action, ['list', 'check_status'])) {
+    if (!in_array($action, ['list', 'check_status', 'get'])) {
         http_response_code(403);
         echo json_encode(['success' => false, 'message' => 'Access denied - action not allowed']);
         exit;
     }
     
-    // Staff can access list and check_status
+    // Staff can access list, check_status, and get
     // The session check above already verified user is authenticated
 }
 

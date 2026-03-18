@@ -114,6 +114,8 @@ class RequestDetailApp {
 
         this.request = null;
 
+        this.isLoading = false; // Prevent infinite loops
+
         this.rejectRequestStatus = null;
 
         this.supportRequestStatus = null;
@@ -854,6 +856,10 @@ class RequestDetailApp {
 
     async loadRequestDetail() {
 
+        // Prevent infinite loops and flickering
+        if (this.isLoading) return;
+        this.isLoading = true;
+
         console.log('=== DEBUG LOAD REQUEST DETAIL ===');
 
         console.log('Request ID:', this.requestId);
@@ -941,6 +947,7 @@ class RequestDetailApp {
         } finally {
 
             this.hideLoading();
+            this.isLoading = false;
 
         }
 

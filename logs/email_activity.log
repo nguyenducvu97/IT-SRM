@@ -252,3 +252,13 @@
 [2026-03-17 10:41:43] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu #73 đã được nhận
 [2026-03-17 10:47:36] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #72
 [2026-03-17 10:47:40] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu #72 đã được nhận
+[2026-03-18 02:16:11] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #74
+[2026-03-18 02:16:16] FAILED | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #74
+[2026-03-18 02:16:16] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #74
+[2026-03-18 02:20:52] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #74
+[2026-03-18 02:20:56] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu #74 đã được nhận
+[2026-03-18 04:02:43] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #75
+[2026-03-18 04:02:47] FAILED | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #75
+[2026-03-18 04:02:47] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #75
+[2026-03-18 04:12:44] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #75
+[2026-03-18 04:12:49] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu #75 đã được nhận

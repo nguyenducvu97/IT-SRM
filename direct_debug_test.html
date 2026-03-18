@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .success { color: green; background: #d4edda; padding: 10px; border-radius: 4px; }
+        .error { color: red; background: #f8d7da; padding: 10px; border-radius: 4px; }
+        .info { color: blue; background: #d1ecf1; padding: 10px; border-radius: 4px; }
+        button { padding: 10px 15px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; background: #007bff; color: white; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Direct Debug Test</h1>
+    
+    <button onclick="testDirectDebug()">Test Direct Debug Mode</button>
+    <div id="result"></div>
+
+    <script>
+        async function testDirectDebug() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="info">🔍 Testing direct debug...</div>';
+            
+            try {
+                // Create FormData with debug mode
+                const formData = new FormData();
+                formData.append('action', 'reject_request');
+                formData.append('request_id', '1');
+                formData.append('reject_reason', 'Direct debug test');
+                formData.append('reject_details', 'Testing direct debug mode');
+                formData.append('debug_mode', 'true'); // Enable debug mode
+                
+                // Add a test file
+                const testContent = 'Debug test file\nCreated: ' + new Date().toISOString();
+                const blob = new Blob([testContent], { type: 'text/plain' });
+                const file = new File([blob], 'debug_test.txt', { type: 'text/plain' });
+                formData.append('attachments[]', file);
+                
+                console.log('Sending direct debug request...');
+                
+                const response = await fetch('api/service_requests.php', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+                
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('Response data:', result);
+                
+                if (result.debug_mode) {
+                    let html = '<div class="success">🎉 DIRECT DEBUG SUCCESS!</div>';
+                    html += '<h3>Debug Results:</h3>';
+                    html += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+                    
+                    // Check comparisons
+                    if (result.comparisons.trimmed_equals_reject) {
+                        html += '<div class="success">✅ Trimmed action matches reject_request!</div>';
+                    } else {
+                        html += '<div class="error">❌ Trimmed action does NOT match reject_request</div>';
+                    }
+                    
+                    if (result.comparisons.trimmed_equals_update) {
+                        html += '<div class="error">❌ Trimmed action matches update (this is the problem!)</div>';
+                    } else {
+                        html += '<div class="success">✅ Trimmed action does NOT match update</div>';
+                    }
+                    
+                    resultDiv.innerHTML = html;
+                } else {
+                    resultDiv.innerHTML = '<div class="error">❌ Debug mode not activated</div>';
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

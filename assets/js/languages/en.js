@@ -132,6 +132,7 @@ window.en = {
     // Messages
     'loading': 'Loading...',
     'checking_auth': 'Checking authentication...',
+    'processing_request': 'sending request',
     'success': 'Success',
     'error': 'Error',
     'warning': 'Warning',

@@ -132,6 +132,7 @@ window.ko = {
     // Messages
     'loading': '로딩 중...',
     'checking_auth': '인증 확인 중...',
+    'processing_request': '요청 보내는 중',
     'success': '성공',
     'error': '오류',
     'warning': '경고',
