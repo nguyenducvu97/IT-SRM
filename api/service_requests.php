@@ -3229,6 +3229,49 @@ elseif ($method == 'PUT') {
             serviceJsonResponse(false, "Database error: " . $e->getMessage());
         }
     }
+    elseif ($action == 'update_status') {
+        $request_id = isset($input['id']) ? (int)$input['id'] : 0;
+        $status = isset($input['status']) ? trim($input['status']) : '';
+        
+        if ($request_id <= 0) {
+            serviceJsonResponse(false, "Request ID is required");
+            return;
+        }
+        
+        if (empty($status)) {
+            serviceJsonResponse(false, "Status is required");
+            return;
+        }
+        
+        // Only admin can update status
+        if ($user_role != 'admin') {
+            serviceJsonResponse(false, "Access denied");
+            return;
+        }
+        
+        // Validate status
+        $valid_statuses = ['open', 'in_progress', 'resolved', 'closed', 'cancelled'];
+        if (!in_array($status, $valid_statuses)) {
+            serviceJsonResponse(false, "Invalid status");
+            return;
+        }
+        
+        try {
+            // Update request status
+            $update_query = "UPDATE service_requests SET status = :status WHERE id = :request_id";
+            $update_stmt = $db->prepare($update_query);
+            $update_stmt->bindParam(":status", $status);
+            $update_stmt->bindParam(":request_id", $request_id);
+            
+            if ($update_stmt->execute()) {
+                serviceJsonResponse(true, "Request status updated successfully");
+            } else {
+                serviceJsonResponse(false, "Failed to update request status");
+            }
+        } catch (Exception $e) {
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
     else {
         serviceJsonResponse(false, "Invalid action for PUT method");
     }
