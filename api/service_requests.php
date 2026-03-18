@@ -3337,6 +3337,66 @@ elseif ($method == 'PUT') {
             serviceJsonResponse(false, "Database error: " . $e->getMessage());
         }
     }
+    elseif ($action == 'resolve') {
+        // Handle request resolution (staff only)
+        $request_id = isset($input['id']) ? (int)$input['id'] : 0;
+        $error_description = isset($input['error_description']) ? trim($input['error_description']) : '';
+        $error_type = isset($input['error_type']) ? trim($input['error_type']) : '';
+        $replacement_materials = isset($input['replacement_materials']) ? trim($input['replacement_materials']) : '';
+        $solution_method = isset($input['solution_method']) ? trim($input['solution_method']) : '';
+        
+        if ($request_id <= 0) {
+            serviceJsonResponse(false, "Request ID is required");
+            return;
+        }
+        
+        // Only staff can resolve requests
+        if ($user_role != 'staff') {
+            serviceJsonResponse(false, "Access denied");
+            return;
+        }
+        
+        try {
+            // Check if request exists and is assigned to current staff
+            $check_query = "SELECT id, assigned_to, status FROM service_requests 
+                           WHERE id = :request_id AND assigned_to = :user_id AND status = 'in_progress'";
+            $check_stmt = $db->prepare($check_query);
+            $check_stmt->bindParam(":request_id", $request_id);
+            $check_stmt->bindParam(":user_id", $user_id);
+            $check_stmt->execute();
+            
+            $request = $check_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$request) {
+                serviceJsonResponse(false, "Request not found or not assigned to you");
+                return;
+            }
+            
+            // Update request status to resolved
+            $update_query = "UPDATE service_requests 
+                           SET status = 'resolved', 
+                               error_description = :error_description,
+                               error_type = :error_type,
+                               replacement_materials = :replacement_materials,
+                               solution_method = :solution_method,
+                               resolved_at = NOW()
+                           WHERE id = :request_id";
+            $update_stmt = $db->prepare($update_query);
+            $update_stmt->bindParam(":error_description", $error_description);
+            $update_stmt->bindParam(":error_type", $error_type);
+            $update_stmt->bindParam(":replacement_materials", $replacement_materials);
+            $update_stmt->bindParam(":solution_method", $solution_method);
+            $update_stmt->bindParam(":request_id", $request_id);
+            
+            if ($update_stmt->execute()) {
+                serviceJsonResponse(true, "Request resolved successfully");
+            } else {
+                serviceJsonResponse(false, "Failed to resolve request");
+            }
+        } catch (Exception $e) {
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
     else {
         serviceJsonResponse(false, "Invalid action for PUT method");
     }
