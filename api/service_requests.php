@@ -648,18 +648,7 @@ if ($method == 'GET') {
                 
 
                 // Filter sensitive information based on user role
-
-                if ($request['reject_request'] && $user_role === 'user') {
-
-                    unset($request['reject_request']['admin_reason']);
-
-                    unset($request['reject_request']['processed_by']);
-
-                    unset($request['reject_request']['processed_at']);
-
-                    unset($request['reject_request']['admin_name']);
-
-                }
+                // Note: Allow all users to see resolution data when request is resolved
 
             } catch (Exception $e) {
 
