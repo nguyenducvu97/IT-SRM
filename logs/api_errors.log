@@ -2389,3 +2389,62 @@ Stack trace:
 [19-Mar-2026 14:25:23 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
 [19-Mar-2026 14:25:30 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
 [19-Mar-2026 14:25:30 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 14:26:21 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:26:21 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:09:33 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:09:34 Europe/Berlin] SMTP server down - skipping email (0: php_network_getaddresses: getaddrinfo for mail.sgitech.com.vn failed: No such host is known. )
+[19-Mar-2026 15:09:34 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[19-Mar-2026 15:09:34 Europe/Berlin] Notifications created in 0.0055830478668213s for 2 users
+[19-Mar-2026 15:09:34 Europe/Berlin] Total request creation time: 98.09ms (Request ID: 117)
+[19-Mar-2026 15:09:34 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:09:36 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:09:36 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 15:09:43 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:09:43 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:09:43 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:09:48 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:09:48 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:09:49 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:09:53 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:09:53 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:09:54 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:09:58 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:09:58 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:10:01 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:10:01 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 15:12:27 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:12:27 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:12:27 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:13:07 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:13:07 Europe/Berlin] SMTP server down - skipping email (0: php_network_getaddresses: getaddrinfo for mail.sgitech.com.vn failed: No such host is known. )
+[19-Mar-2026 15:13:07 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[19-Mar-2026 15:13:07 Europe/Berlin] Notifications created in 0.0048890113830566s for 2 users
+[19-Mar-2026 15:13:07 Europe/Berlin] Total request creation time: 32.67ms (Request ID: 118)
+[19-Mar-2026 15:13:07 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:13:10 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:13:10 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 15:13:22 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:13:22 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 15:15:10 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:15:10 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:15:10 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:16:32 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:32 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:32 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:34 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:35 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:35 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:37 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:37 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:37 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:39 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:40 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:16:40 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:17:18 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:17:29 Europe/Berlin] Email sent successfully in 11335.3ms
+[19-Mar-2026 15:17:29 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[19-Mar-2026 15:17:29 Europe/Berlin] Notifications created in 0.0077769756317139s for 2 users
+[19-Mar-2026 15:17:29 Europe/Berlin] Total request creation time: 11349.74ms (Request ID: 119)
+[19-Mar-2026 15:17:29 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 15:17:36 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 15:17:36 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761

@@ -1,0 +1,53 @@
+To: ndvu@sgitech.com.vn
+Subject: 🔔 Yêu cầu dịch vụ mới #999
+From: IT Service Request System <ndvu@sgitech.com.vn>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<div style="max-width: 600px; margin: 20px auto; background-color: white; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; font-family: Arial, sans-serif;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 24px; font-weight: bold;">🔔 IT Service Request</h1>
+                        <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;">Hệ thống yêu cầu dịch vụ CNTT</p>
+                    </div>
+                    
+                    <div style="padding: 30px 20px;">
+                        <h2 style="color: #333; margin-bottom: 20px;">Yêu cầu dịch vụ mới</h2>
+                        
+                        <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0;">
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Mã yêu cầu:</span>
+                                <span style="color: #212529;"><strong>##999</strong></span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Tiêu đề:</span>
+                                <span style="color: #212529;">Test Request - 2026-03-19 14:33:08</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Người tạo:</span>
+                                <span style="color: #212529;">Test User</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Danh mục:</span>
+                                <span style="color: #212529;">Test Category</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Ưu tiên:</span>
+                                <span style="color: #212529;"><span style="padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; text-transform: uppercase; background: #fff3e0; color: #ef6c00;">medium</span></span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Mô tả:</span>
+                                <span style="color: #212529;">Test description for email functionality check</span>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="http://localhost/it-service-request/" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 20px; font-weight: bold;">Xem chi tiết yêu cầu →</a>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #ddd;">
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;"><strong>IT Service Request System</strong></p>
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;">Đây là email tự động. Vui lòng không trả lời email này.</p>
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;">Nếu cần hỗ trợ, vui lòng liên hệ IT Department.</p>
+                    </div>
+                </div>

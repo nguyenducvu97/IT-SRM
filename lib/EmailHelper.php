@@ -5,9 +5,9 @@ class EmailHelper {
     private $config;
     
     public function __construct() {
-        // Simple constructor - no complex SMTP
+        // Simple constructor - using correct SMTP server
         $this->config = array(
-            'host' => 'gw.sgitech.com.vn',
+            'host' => 'gw.sgitech.com.vn', // Correct SMTP server
             'port' => 25,
             'username' => 'ndvu@sgitech.com.vn',
             'password' => 'ndvu', // Update với password thật

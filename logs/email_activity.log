@@ -268,3 +268,23 @@
 [2026-03-19 11:54:47] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #114
 [2026-03-19 11:55:13] FAILED | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #114
 [2026-03-19 11:55:13] SENT to 0/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #114
+[2026-03-19 14:33:38] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-19 14:34:05] FAILED | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-19 14:34:05] SENT to 0/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-19 14:37:52] FAILED | To: ndvu@sgitech.com.vn | Subject: Test Email from EmailHelper
+[2026-03-19 14:42:19] FAILED | To: ndvu@sgitech.com.vn | Subject: Test Email - 14:42:06
+[2026-03-19 14:57:34] FAILED | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #81
+[2026-03-19 14:57:54] FAILED | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #81
+[2026-03-19 14:57:54] SENT to 0/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #81
+[2026-03-19 15:00:40] FAILED | To: ndvu@sgitech.com.vn | Subject: Test Email after XAMPP Restart
+[2026-03-19 15:07:46] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🎉 SMTP Working Again! - 15:07:42
+[2026-03-19 15:11:09] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-19 15:11:14] FAILED | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-19 15:11:14] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #999
+[2026-03-19 15:11:16] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Direct Test Email - 15:11:14
+[2026-03-19 15:15:45] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #1000
+[2026-03-19 15:15:50] FAILED | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #1000
+[2026-03-19 15:15:50] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #1000
+[2026-03-19 15:17:24] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #119
+[2026-03-19 15:17:29] FAILED | To: nguyenducvu101223@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #119
+[2026-03-19 15:17:29] SENT to 1/2 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #119
