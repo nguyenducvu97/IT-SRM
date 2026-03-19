@@ -907,6 +907,8 @@ elseif ($method == 'POST') {
     
 
     try {
+        // Start timing the request creation
+        $request_start = microtime(true);
 
         $query = "INSERT INTO service_requests 
 
@@ -978,20 +980,26 @@ elseif ($method == 'POST') {
 
             
 
-            // Send email notification to staff and admin
-
+            // Send email notification to staff and admin - OPTIMIZED
+            $email_start = microtime(true);
+            
             try {
-
-                $emailHelper = new EmailHelper(); // Use original EmailHelper for reliability
-
-                $emailHelper->sendNewRequestNotification($email_data);
-
+                // Quick SMTP connectivity check before sending
+                $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 1);
+                
+                if ($smtp_socket) {
+                    // SMTP is responsive - send email normally
+                    fclose($smtp_socket);
+                    $emailHelper = new EmailHelper();
+                    $emailHelper->sendNewRequestNotification($email_data);
+                    error_log("Email sent successfully in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
+                } else {
+                    // SMTP is down - log and continue quickly
+                    error_log("SMTP server down - skipping email ({$errno}: {$errstr})");
+                }
             } catch (Exception $e) {
-
                 error_log("Email notification failed: " . $e->getMessage());
-
                 // Continue even if email fails
-
             }
 
             
@@ -1108,6 +1116,10 @@ elseif ($method == 'POST') {
 
             
 
+            // Log total execution time
+            $total_time = round((microtime(true) - $request_start) * 1000, 2);
+            error_log("Total request creation time: {$total_time}ms (Request ID: {$request_id})");
+            
             serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id]);
 
         } else {

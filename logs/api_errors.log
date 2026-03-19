@@ -2331,3 +2331,61 @@ Stack trace:
 [18-Mar-2026 09:01:48 Europe/Berlin] Database session started - ID: fc6cnad7b47gouqtpesdi8gp14
 [18-Mar-2026 09:02:02 Europe/Berlin] Database session started - ID: cvim95u3lm10q01fskcgvk81uu
 [18-Mar-2026 09:02:02 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 11:53:22 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 11:53:22 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 11:53:44 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[19-Mar-2026 11:53:44 Europe/Berlin] Notifications created in 0.0078399181365967s for 2 users
+[19-Mar-2026 11:53:45 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 11:53:45 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 11:54:21 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 11:55:13 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[19-Mar-2026 11:55:13 Europe/Berlin] Notifications created in 0.026834011077881s for 2 users
+[19-Mar-2026 11:55:13 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 11:55:19 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 11:55:19 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 11:55:29 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:29 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:29 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:32 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:34 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:34 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:37 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:38 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:38 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:42 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:42 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:45 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:45 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:48 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:48 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:51 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:52 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:52 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:58 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:59 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:55:59 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:56:02 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:56:04 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:56:04 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:56:09 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 11:56:09 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 14:23:55 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:23:55 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:23:57 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:23:57 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:11 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:12 Europe/Berlin] SMTP server down - skipping email (10060: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond)
+[19-Mar-2026 14:25:12 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[19-Mar-2026 14:25:12 Europe/Berlin] Notifications created in 0.022807121276855s for 2 users
+[19-Mar-2026 14:25:12 Europe/Berlin] Total request creation time: 1085.27ms (Request ID: 116)
+[19-Mar-2026 14:25:12 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:14 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:14 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 14:25:18 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:18 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:20 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:21 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:23 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
+[19-Mar-2026 14:25:23 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[19-Mar-2026 14:25:30 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
+[19-Mar-2026 14:25:30 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
