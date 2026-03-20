@@ -115,7 +115,9 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
                             </div>
                             <div class="form-group">
                                 <label for="department" data-translate="department">Phòng ban</label>
-                                <input type="text" id="department" name="department" class="form-control" readonly>
+                                <select id="department" name="department" class="form-control">
+                                    <option value="">Chọn phòng ban</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-actions">
@@ -214,6 +216,35 @@ error_log("User logged in: ID=$current_user_id, Role=$current_user_role");
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Đổi mật khẩu người dùng</h3>
+                <span class="close" onclick="closeResetPasswordModal()">&times;</span>
+            </div>
+            <form id="resetPasswordForm">
+                <input type="hidden" id="resetPasswordUserId">
+                <div class="form-group">
+                    <label for="resetPasswordName">Tên user</label>
+                    <input type="text" id="resetPasswordName" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="resetPasswordNewPassword">Mật khẩu mới</label>
+                    <input type="password" id="resetPasswordNewPassword" class="form-control" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="resetPasswordConfirmPassword">Xác nhận mật khẩu</label>
+                    <input type="password" id="resetPasswordConfirmPassword" class="form-control" required minlength="6">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-warning"><i class="fas fa-key"></i> Đổi mật khẩu</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeResetPasswordModal()">Hủy</button>
+                </div>
+            </form>
         </div>
     </div>
 

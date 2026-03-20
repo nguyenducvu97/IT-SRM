@@ -80,7 +80,7 @@ try {
         
         if ($action == 'update_profile') {
             // Update user profile
-            $allowed_fields = ['full_name', 'email', 'phone'];
+            $allowed_fields = ['full_name', 'email', 'phone', 'department'];
             $updates = [];
             $params = [];
             
@@ -178,6 +178,38 @@ try {
                 echo json_encode(['success' => true, 'message' => 'User role updated successfully']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Failed to update user role']);
+            }
+        }
+        
+        elseif ($action == 'reset_password' && $current_user_role === 'admin') {
+            // Admin only: Reset user password
+            $target_user_id = $input['user_id'] ?? 0;
+            $new_password = $input['new_password'] ?? '';
+            
+            if ($target_user_id <= 0 || empty($new_password)) {
+                echo json_encode(['success' => false, 'message' => 'User ID and new password are required']);
+                exit;
+            }
+            
+            if (strlen($new_password) < 6) {
+                echo json_encode(['success' => false, 'message' => 'Password must be at least 6 characters']);
+                exit;
+            }
+            
+            // Prevent admin from resetting their own password through this endpoint
+            if ($target_user_id == $current_user_id) {
+                echo json_encode(['success' => false, 'message' => 'Use password change form to change your own password']);
+                exit;
+            }
+            
+            // Update password
+            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare("UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?");
+            
+            if ($stmt->execute([$hashed_password, $target_user_id])) {
+                echo json_encode(['success' => true, 'message' => 'User password reset successfully']);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to reset user password']);
             }
         }
         

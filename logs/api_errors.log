@@ -2448,3 +2448,76 @@ Stack trace:
 [19-Mar-2026 15:17:29 Europe/Berlin] Database session started - ID: 1jup3m2puf5fu07791v8apq248
 [19-Mar-2026 15:17:36 Europe/Berlin] Database session started - ID: 3iaja9e1vblk1mfik16h324up0
 [19-Mar-2026 15:17:36 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[20-Mar-2026 10:46:57 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function exec() on null in C:\xampp\htdocs\it-service-request\config\session.php:23
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\config\session.php(13): DatabaseSessionHandler->createSessionTable()
+#1 C:\xampp\htdocs\it-service-request\config\session.php(64): DatabaseSessionHandler->__construct()
+#2 C:\xampp\htdocs\it-service-request\api\service_requests.php(53): startSession()
+#3 {main}
+  thrown in C:\xampp\htdocs\it-service-request\config\session.php on line 23
+[20-Mar-2026 10:47:02 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function exec() on null in C:\xampp\htdocs\it-service-request\config\session.php:23
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\config\session.php(13): DatabaseSessionHandler->createSessionTable()
+#1 C:\xampp\htdocs\it-service-request\config\session.php(64): DatabaseSessionHandler->__construct()
+#2 C:\xampp\htdocs\it-service-request\api\service_requests.php(53): startSession()
+#3 {main}
+  thrown in C:\xampp\htdocs\it-service-request\config\session.php on line 23
+[20-Mar-2026 10:49:09 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1932 Table 'it_service_request.sessions' doesn't exist in engine in C:\xampp\htdocs\it-service-request\config\session.php:36
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\config\session.php(36): PDOStatement->execute(Array)
+#1 [internal function]: DatabaseSessionHandler->read('qoe11t6mtheoqt5...')
+#2 C:\xampp\htdocs\it-service-request\config\session.php(75): session_start(Array)
+#3 C:\xampp\htdocs\it-service-request\api\service_requests.php(53): startSession()
+#4 {main}
+  thrown in C:\xampp\htdocs\it-service-request\config\session.php on line 36
+[20-Mar-2026 10:49:26 Europe/Berlin] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1932 Table 'it_service_request.sessions' doesn't exist in engine in C:\xampp\htdocs\it-service-request\config\session.php:36
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\config\session.php(36): PDOStatement->execute(Array)
+#1 [internal function]: DatabaseSessionHandler->read('qoe11t6mtheoqt5...')
+#2 C:\xampp\htdocs\it-service-request\config\session.php(75): session_start(Array)
+#3 C:\xampp\htdocs\it-service-request\api\service_requests.php(53): startSession()
+#4 {main}
+  thrown in C:\xampp\htdocs\it-service-request\config\session.php on line 36
+[20-Mar-2026 10:53:20 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:53:21 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:53:21 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:53:21 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:53:22 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:53:22 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:53:24 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:53:25 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:54:56 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:54:56 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:54:56 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:54:56 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:57:27 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:57:27 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:57:27 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:57:51 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 10:57:51 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:00:27 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:06:55 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:06:55 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:06:55 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:07:29 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:07:29 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:07:29 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:08:51 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:08:51 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:08:51 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:09:00 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:09:00 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:09:00 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:12:18 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:12:18 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:12:18 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:14:40 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:14:41 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:14:41 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:16:23 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:16:23 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:16:23 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:16:34 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[20-Mar-2026 11:17:46 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[20-Mar-2026 11:17:46 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[20-Mar-2026 11:17:53 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5

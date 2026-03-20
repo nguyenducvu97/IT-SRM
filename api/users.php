@@ -182,14 +182,17 @@ function updateUser($db) {
     
     if (empty($id) || empty($username) || empty($email) || empty($full_name)) {
         jsonResponse(false, "Required fields are missing");
+        exit();
     }
     
     if (!validateEmail($email)) {
         jsonResponse(false, "Invalid email format");
+        exit();
     }
     
     if (!empty($password) && strlen($password) < 6) {
         jsonResponse(false, "Password must be at least 6 characters");
+        exit();
     }
     
     // Check if username or email already exists (excluding current user)
@@ -202,6 +205,7 @@ function updateUser($db) {
     
     if ($check_stmt->rowCount() > 0) {
         jsonResponse(false, "Username or email already exists");
+        exit();
     }
     
     if (!empty($password)) {

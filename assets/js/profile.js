@@ -54,6 +54,12 @@ class ProfileManager {
             userRoleForm.addEventListener('submit', (e) => this.handleUserRoleSubmit(e));
         }
 
+        // Reset password form
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        if (resetPasswordForm) {
+            resetPasswordForm.addEventListener('submit', (e) => this.handleResetPasswordSubmit(e));
+        }
+
         // Logout
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
@@ -103,10 +109,37 @@ class ProfileManager {
         document.getElementById('phone').value = user.phone || '';
         document.getElementById('role').value = this.getRoleText(user.role) || '';
         
-        // Set department value (readonly field)
+        // Set department dropdown value
         const deptField = document.getElementById('department');
         if (deptField) {
-            deptField.value = user.department || '';
+            // Load departments first, then set the value
+            this.loadDepartments().then(() => {
+                deptField.value = user.department || '';
+            });
+        }
+    }
+
+    async loadDepartments() {
+        try {
+            const response = await this.apiCall('api/departments.php?action=dropdown');
+            
+            if (response.success && response.data) {
+                const deptSelect = document.getElementById('department');
+                if (deptSelect) {
+                    // Clear existing options except the first one
+                    deptSelect.innerHTML = '<option value="">Chọn phòng ban</option>';
+                    
+                    // Add department options
+                    response.data.forEach(dept => {
+                        const option = document.createElement('option');
+                        option.value = dept;
+                        option.textContent = dept;
+                        deptSelect.appendChild(option);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error loading departments:', error);
         }
     }
 
@@ -225,6 +258,9 @@ class ProfileManager {
                     <button class="btn btn-sm btn-primary" onclick="profileManager.showUserRoleModal(${user.id}, '${user.username}', '${user.role}')">
                         <i class="fas fa-edit"></i> Sửa vai trò
                     </button>
+                    <button class="btn btn-sm btn-warning" onclick="profileManager.showResetPasswordModal(${user.id}, '${user.username}')">
+                        <i class="fas fa-key"></i> Đổi mật khẩu
+                    </button>
                 </td>
             </tr>
         `).join('');
@@ -268,6 +304,57 @@ class ProfileManager {
 
     closeUserRoleModal() {
         document.getElementById('userRoleModal').style.display = 'none';
+    }
+
+    showResetPasswordModal(userId, username) {
+        document.getElementById('resetPasswordUserId').value = userId;
+        document.getElementById('resetPasswordName').value = username;
+        document.getElementById('resetPasswordModal').style.display = 'block';
+        document.getElementById('resetPasswordNewPassword').value = '';
+        document.getElementById('resetPasswordConfirmPassword').value = '';
+    }
+
+    closeResetPasswordModal() {
+        document.getElementById('resetPasswordModal').style.display = 'none';
+    }
+
+    async handleResetPasswordSubmit(e) {
+        e.preventDefault();
+        
+        const userId = parseInt(document.getElementById('resetPasswordUserId').value);
+        const newPassword = document.getElementById('resetPasswordNewPassword').value;
+        const confirmPassword = document.getElementById('resetPasswordConfirmPassword').value;
+        
+        if (newPassword !== confirmPassword) {
+            this.showNotification('Mật khẩu xác nhận không khớp', 'error');
+            return;
+        }
+        
+        if (newPassword.length < 6) {
+            this.showNotification('Mật khẩu phải có ít nhất 6 ký tự', 'error');
+            return;
+        }
+
+        try {
+            const response = await this.apiCall('api/profile.php', {
+                method: 'PUT',
+                body: JSON.stringify({
+                    action: 'reset_password',
+                    user_id: userId,
+                    new_password: newPassword
+                })
+            });
+
+            if (response.success) {
+                this.showNotification('Đổi mật khẩu user thành công', 'success');
+                this.closeResetPasswordModal();
+            } else {
+                this.showNotification(response.message, 'error');
+            }
+        } catch (error) {
+            console.error('Reset password error:', error);
+            this.showNotification('Lỗi đổi mật khẩu', 'error');
+        }
     }
 
     updateUserDisplay() {
@@ -371,3 +458,4 @@ class ProfileManager {
 
 // Global functions for onclick handlers
 window.closeUserRoleModal = () => profileManager.closeUserRoleModal();
+window.closeResetPasswordModal = () => profileManager.closeResetPasswordModal();
