@@ -3009,3 +3009,273 @@ Stack trace:
 [21-Mar-2026 09:56:56 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
 [21-Mar-2026 09:58:50 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
 [21-Mar-2026 09:58:50 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:59:36 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:59:36 Europe/Berlin] PUT raw input: {"id":"4","action":"resolve","error_description":"a","error_type":"hardware","replacement_materials":"d","solution_method":"d"}
+[21-Mar-2026 09:59:36 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 4
+    [action] => resolve
+    [error_description] => a
+    [error_type] => hardware
+    [replacement_materials] => d
+    [solution_method] => d
+)
+
+[21-Mar-2026 09:59:36 Europe/Berlin] PUT action: resolve
+[21-Mar-2026 10:00:28 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 10:00:28 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:03:04 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 10:03:04 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:03:11 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 10:03:11 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 10:03:11 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 10:03:14 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 10:03:14 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:03:22 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:26 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:26 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:28 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:28 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:30 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:30 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:03:36 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:36 Europe/Berlin] PUT raw input: {"id":4,"status":"in_progress"}
+[21-Mar-2026 10:03:37 Europe/Berlin] PUT parsed input: Array
+(
+    [id] => 4
+    [status] => in_progress
+)
+
+[21-Mar-2026 10:03:37 Europe/Berlin] PUT action: 
+[21-Mar-2026 10:03:40 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:40 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:03:44 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:03:44 Europe/Berlin] PUT raw input: {"action":"update","id":"4","title":"Abc","description":"sssss","category_id":"3","priority":"medium","status":"in_progress","assigned_to":"2"}
+[21-Mar-2026 10:03:44 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 4
+    [title] => Abc
+    [description] => sssss
+    [category_id] => 3
+    [priority] => medium
+    [status] => in_progress
+    [assigned_to] => 2
+)
+
+[21-Mar-2026 10:03:44 Europe/Berlin] PUT action: update
+[21-Mar-2026 10:03:44 Europe/Berlin] === UPDATE ACTION DEBUG ===
+[21-Mar-2026 10:03:44 Europe/Berlin] Raw input: {"action":"update","id":"4","title":"Abc","description":"sssss","category_id":"3","priority":"medium","status":"in_progress","assigned_to":"2"}
+[21-Mar-2026 10:03:44 Europe/Berlin] Parsed data - ID: 4, Status: 'in_progress', Assigned_to: 2
+[21-Mar-2026 10:03:44 Europe/Berlin] ==========================
+[21-Mar-2026 10:03:44 Europe/Berlin] Database session started - ID: id3pvp7qfes9ip4puejeemc7mr
+[21-Mar-2026 10:04:02 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:04:02 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:04:12 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:04:12 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:04:31 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:04:49 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:04:53 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:06:08 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:06:08 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:06:22 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:06:31 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:31 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:32 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:32 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:32 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:36 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:36 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:36 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:36 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:38 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:38 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:38 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:38 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 10:06:40 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:07:11 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:10:56 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:10:56 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 10:11:09 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:11:26 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:16:01 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:16:01 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:16:01 Europe/Berlin] Method: GET
+[21-Mar-2026 10:16:01 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:16:01 Europe/Berlin] POST data: []
+[21-Mar-2026 10:16:01 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:16:01 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:16:01 Europe/Berlin] ========================
+[21-Mar-2026 10:16:01 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 779
+[21-Mar-2026 10:16:12 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:16:12 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:16:12 Europe/Berlin] Method: POST
+[21-Mar-2026 10:16:12 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:16:12 Europe/Berlin] POST data: []
+[21-Mar-2026 10:16:12 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:16:12 Europe/Berlin] Raw input: {}
+[21-Mar-2026 10:16:12 Europe/Berlin] ========================
+[21-Mar-2026 10:16:16 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:16:16 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:16:16 Europe/Berlin] Method: POST
+[21-Mar-2026 10:16:16 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:16:16 Europe/Berlin] POST data: []
+[21-Mar-2026 10:16:16 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:16:16 Europe/Berlin] Raw input: {}
+[21-Mar-2026 10:16:16 Europe/Berlin] ========================
+[21-Mar-2026 10:21:36 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:21:36 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:21:36 Europe/Berlin] Method: GET
+[21-Mar-2026 10:21:36 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:21:36 Europe/Berlin] POST data: []
+[21-Mar-2026 10:21:36 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:21:36 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:21:36 Europe/Berlin] ========================
+[21-Mar-2026 10:21:36 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 779
+[21-Mar-2026 10:22:10 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:22:10 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:22:10 Europe/Berlin] Method: POST
+[21-Mar-2026 10:22:10 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryMjsJHzXXnZsoNmfC
+[21-Mar-2026 10:22:10 Europe/Berlin] POST data: {"id":"4","action":"resolve","error_description":"s","error_type":"hardware","replacement_materials":"\u0111","solution_method":"ggg"}
+[21-Mar-2026 10:22:10 Europe/Berlin] FILES data: ["attachments"]
+[21-Mar-2026 10:22:10 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:22:10 Europe/Berlin] ========================
+[21-Mar-2026 10:22:10 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryMjsJHzXXnZsoNmfC
+[21-Mar-2026 10:22:10 Europe/Berlin] Is FormData: Yes
+[21-Mar-2026 10:22:10 Europe/Berlin] Processing FormData resolve
+[21-Mar-2026 10:22:10 Europe/Berlin] Resolve data - ID: 4, Error: s
+[21-Mar-2026 10:22:10 Europe/Berlin] Found 4 files to upload
+[21-Mar-2026 10:22:10 Europe/Berlin] PHP Warning:  Undefined variable $pdo in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 907
+[21-Mar-2026 10:22:10 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\it-service-request\api\service_requests.php:3507
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(907): handleResolveRequest(4, 's', 'hardware', '\xC4\x91', 'ggg', Array, 2, 'staff', NULL)
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 3507
+[21-Mar-2026 10:23:18 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:23:18 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:23:18 Europe/Berlin] Method: GET
+[21-Mar-2026 10:23:18 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:23:18 Europe/Berlin] POST data: []
+[21-Mar-2026 10:23:18 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:23:18 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:23:18 Europe/Berlin] ========================
+[21-Mar-2026 10:23:18 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 779
+[21-Mar-2026 10:23:41 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:23:41 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:23:41 Europe/Berlin] Method: POST
+[21-Mar-2026 10:23:41 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundarykbEhGdWyYhvYR1t1
+[21-Mar-2026 10:23:41 Europe/Berlin] POST data: {"id":"4","action":"resolve","error_description":"\u0111","error_type":"hardware","replacement_materials":"s","solution_method":"a"}
+[21-Mar-2026 10:23:41 Europe/Berlin] FILES data: ["attachments"]
+[21-Mar-2026 10:23:41 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:23:41 Europe/Berlin] ========================
+[21-Mar-2026 10:23:41 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundarykbEhGdWyYhvYR1t1
+[21-Mar-2026 10:23:41 Europe/Berlin] Is FormData: Yes
+[21-Mar-2026 10:23:41 Europe/Berlin] Processing FormData resolve
+[21-Mar-2026 10:23:41 Europe/Berlin] Resolve data - ID: 4, Error: đ
+[21-Mar-2026 10:23:41 Europe/Berlin] Found 2 files to upload
+[21-Mar-2026 10:24:12 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:24:12 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:24:12 Europe/Berlin] Method: GET
+[21-Mar-2026 10:24:12 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:24:12 Europe/Berlin] POST data: []
+[21-Mar-2026 10:24:12 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:24:12 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:24:12 Europe/Berlin] ========================
+[21-Mar-2026 10:24:12 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 779
+[21-Mar-2026 10:24:25 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:24:25 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:24:25 Europe/Berlin] Method: POST
+[21-Mar-2026 10:24:25 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryvnLYiyNgLEX7LTrM
+[21-Mar-2026 10:24:25 Europe/Berlin] POST data: {"id":"4","action":"resolve","error_description":"sss","error_type":"software","replacement_materials":"\u0111sd","solution_method":"s\u1ea5"}
+[21-Mar-2026 10:24:25 Europe/Berlin] FILES data: ["attachments"]
+[21-Mar-2026 10:24:25 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:24:25 Europe/Berlin] ========================
+[21-Mar-2026 10:24:25 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryvnLYiyNgLEX7LTrM
+[21-Mar-2026 10:24:25 Europe/Berlin] Is FormData: Yes
+[21-Mar-2026 10:24:25 Europe/Berlin] Processing FormData resolve
+[21-Mar-2026 10:24:25 Europe/Berlin] Resolve data - ID: 4, Error: sss
+[21-Mar-2026 10:24:25 Europe/Berlin] Found 2 files to upload
+[21-Mar-2026 10:24:53 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:24:53 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:24:53 Europe/Berlin] Method: GET
+[21-Mar-2026 10:24:53 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:24:53 Europe/Berlin] POST data: []
+[21-Mar-2026 10:24:53 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:24:53 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:24:53 Europe/Berlin] ========================
+[21-Mar-2026 10:24:53 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 779
+[21-Mar-2026 10:25:03 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:25:03 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:25:03 Europe/Berlin] Method: POST
+[21-Mar-2026 10:25:03 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryJ15ksrjoFDAJn8Ie
+[21-Mar-2026 10:25:03 Europe/Berlin] POST data: {"id":"4","action":"resolve","error_description":"as","error_type":"hardware","replacement_materials":"ss","solution_method":"\u00e1"}
+[21-Mar-2026 10:25:03 Europe/Berlin] FILES data: ["attachments"]
+[21-Mar-2026 10:25:03 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:25:03 Europe/Berlin] ========================
+[21-Mar-2026 10:25:03 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryJ15ksrjoFDAJn8Ie
+[21-Mar-2026 10:25:03 Europe/Berlin] Is FormData: Yes
+[21-Mar-2026 10:25:03 Europe/Berlin] Processing FormData resolve
+[21-Mar-2026 10:25:03 Europe/Berlin] Resolve data - ID: 4, Error: as
+[21-Mar-2026 10:25:03 Europe/Berlin] Found 2 files to upload
+[21-Mar-2026 10:25:03 Europe/Berlin] PHP Warning:  Undefined variable $pdo in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 3554
+[21-Mar-2026 10:25:03 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function lastInsertId() on null in C:\xampp\htdocs\it-service-request\api\service_requests.php:3554
+Stack trace:
+#0 C:\xampp\htdocs\it-service-request\api\service_requests.php(907): handleResolveRequest('4', 'as', 'hardware', 'ss', '\xC3\xA1', Array, '2', 'staff', Object(PDO))
+#1 {main}
+  thrown in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 3554
+[21-Mar-2026 10:25:59 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:25:59 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:25:59 Europe/Berlin] Method: GET
+[21-Mar-2026 10:25:59 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:25:59 Europe/Berlin] POST data: []
+[21-Mar-2026 10:25:59 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:25:59 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:25:59 Europe/Berlin] ========================
+[21-Mar-2026 10:25:59 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 779
+[21-Mar-2026 10:26:18 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:26:18 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:26:18 Europe/Berlin] Method: POST
+[21-Mar-2026 10:26:18 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary6BGwKXQW1rgCldoU
+[21-Mar-2026 10:26:18 Europe/Berlin] POST data: {"id":"4","action":"resolve","error_description":"s\u00e2s","error_type":"software","replacement_materials":"sss","solution_method":"\u00e1ds"}
+[21-Mar-2026 10:26:18 Europe/Berlin] FILES data: ["attachments"]
+[21-Mar-2026 10:26:18 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:26:18 Europe/Berlin] ========================
+[21-Mar-2026 10:26:18 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundary6BGwKXQW1rgCldoU
+[21-Mar-2026 10:26:18 Europe/Berlin] Is FormData: Yes
+[21-Mar-2026 10:26:18 Europe/Berlin] Processing FormData resolve
+[21-Mar-2026 10:26:18 Europe/Berlin] Resolve data - ID: 4, Error: sâs
+[21-Mar-2026 10:26:18 Europe/Berlin] Found 2 files to upload
+[21-Mar-2026 10:26:39 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:26:39 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:26:39 Europe/Berlin] Method: GET
+[21-Mar-2026 10:26:39 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:26:39 Europe/Berlin] POST data: []
+[21-Mar-2026 10:26:39 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:26:39 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:26:39 Europe/Berlin] ========================
+[21-Mar-2026 10:26:39 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 779
+[21-Mar-2026 10:32:52 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:32:52 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:32:52 Europe/Berlin] Method: GET
+[21-Mar-2026 10:32:52 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:32:52 Europe/Berlin] POST data: []
+[21-Mar-2026 10:32:52 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:32:52 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:32:52 Europe/Berlin] ========================
+[21-Mar-2026 10:32:52 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 809
+[21-Mar-2026 10:37:14 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:37:14 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:37:14 Europe/Berlin] Method: GET
+[21-Mar-2026 10:37:14 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:37:14 Europe/Berlin] POST data: []
+[21-Mar-2026 10:37:14 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:37:14 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:37:14 Europe/Berlin] ========================
+[21-Mar-2026 10:40:25 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 10:40:25 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 10:40:25 Europe/Berlin] Method: GET
+[21-Mar-2026 10:40:25 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 10:40:25 Europe/Berlin] POST data: []
+[21-Mar-2026 10:40:25 Europe/Berlin] FILES data: []
+[21-Mar-2026 10:40:25 Europe/Berlin] Raw input: 
+[21-Mar-2026 10:40:25 Europe/Berlin] ========================

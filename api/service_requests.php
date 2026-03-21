@@ -120,6 +120,24 @@ if ($db === null) {
 
 
 
+// Debug logging
+
+error_log("=== API REQUEST DEBUG ===");
+
+error_log("Method: " . $_SERVER['REQUEST_METHOD']);
+
+error_log("Content-Type: " . ($_SERVER['CONTENT_TYPE'] ?? 'not set'));
+
+error_log("POST data: " . json_encode($_POST));
+
+error_log("FILES data: " . json_encode(array_keys($_FILES ?? [])));
+
+error_log("Raw input: " . file_get_contents('php://input'));
+
+error_log("========================");
+
+
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 
@@ -447,38 +465,28 @@ if ($method == 'GET') {
         
 
         $query = "SELECT sr.*, c.name as category_name, u.full_name as requester_name, 
-
                         u.email as requester_email, u.phone as requester_phone,
-
                         assigned.full_name as assigned_name, assigned.email as assigned_email,
-
                         sreq.id as support_request_id, sreq.support_type, sreq.support_details, 
-
                         sreq.support_reason, sreq.status as support_status, sreq.admin_reason,
-
                         sreq.processed_by, sreq.processed_at, sreq.created_at as support_created_at,
-
                         sreq_admin.full_name as support_admin_name,
-
                         sr.error_description as resolution_error_description,
-
                         sr.error_type as resolution_error_type, sr.replacement_materials as resolution_replacement_materials,
-
                         sr.solution_method as resolution_solution_method, 
-
-                        sr.resolved_at as resolution_resolved_at, assigned.full_name as resolver_name
-
+                        sr.resolved_at as resolution_resolved_at, assigned.full_name as resolver_name,
+                        res.resolved_by as resolution_resolved_by, res.error_description as res_error_description,
+                        res.error_type as res_error_type, res.replacement_materials as res_replacement_materials,
+                        res.solution_method as res_solution_method, res.resolved_at as res_resolved_at,
+                        resolver.full_name as resolution_resolver_name
                  FROM service_requests sr
-
                  LEFT JOIN categories c ON sr.category_id = c.id
-
                  LEFT JOIN users u ON sr.user_id = u.id
-
                  LEFT JOIN users assigned ON sr.assigned_to = assigned.id
-
                  LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id
-
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
+                 LEFT JOIN resolutions res ON sr.id = res.service_request_id
+                 LEFT JOIN users resolver ON res.resolved_by = resolver.id
 
                  WHERE sr.id = :id";
 
@@ -531,6 +539,36 @@ if ($method == 'GET') {
                 $attachments = $attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 $request['attachments'] = $attachments;
+
+                // Get resolution attachments if request is resolved
+
+                if ($request['status'] === 'resolved') {
+
+                    $resolution_attachments_query = "SELECT id, filename, original_name, file_size, mime_type, uploaded_at 
+
+                                                   FROM complete_request_attachments 
+
+                                                   WHERE service_request_id = :id 
+
+                                                   ORDER BY uploaded_at ASC";
+
+                    $resolution_attachments_stmt = $db->prepare($resolution_attachments_query);
+
+                    $resolution_attachments_stmt->bindParam(":id", $id);
+
+                    $resolution_attachments_stmt->execute();
+
+                    
+
+                    $resolution_attachments = $resolution_attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    $request['resolution_attachments'] = $resolution_attachments;
+
+                } else {
+
+                    $request['resolution_attachments'] = [];
+
+                }
 
             } catch (Exception $e) {
 
@@ -754,34 +792,16 @@ if ($method == 'GET') {
 
             }
 
-            
-
             // Format resolution data if exists
-
-            if ($request['resolution_id']) {
-
+            if ($request['status'] === 'resolved' && $request['resolution_resolver_name']) {
                 $request['resolution'] = [
-
-                    'id' => $request['resolution_id'],
-
-                    'error_description' => $request['resolution_error_description'],
-
-                    'error_type' => $request['resolution_error_type'],
-
-                    'replacement_materials' => $request['resolution_replacement_materials'],
-
-                    'solution_method' => $request['resolution_solution_method'],
-
-                    'resolved_by' => $request['resolution_resolved_by'],
-
-                    'resolved_at' => $request['resolution_resolved_at'],
-
-                    'resolver_name' => $request['resolver_name']
-
+                    'resolver_name' => $request['resolution_resolver_name'],
+                    'error_description' => $request['res_error_description'],
+                    'error_type' => $request['res_error_type'],
+                    'replacement_materials' => $request['res_replacement_materials'],
+                    'solution_method' => $request['res_solution_method'],
+                    'resolved_at' => $request['res_resolved_at']
                 ];
-
-                
-
                 // Clean up the original resolution fields
 
                 unset($request['resolution_id'], $request['resolution_error_description'],
@@ -849,6 +869,51 @@ elseif ($method == 'POST') {
         // This will be handled by the second POST block below
 
         // Continue to next block
+
+    } elseif ($action === 'resolve') {
+        
+        error_log("Resolve action detected - Content-Type: " . $content_type);
+        error_log("Is FormData: " . (strpos($content_type, 'multipart/form-data') !== false ? 'Yes' : 'No'));
+        
+        // Handle resolve action with FormData
+        if (strpos($content_type, 'multipart/form-data') !== false) {
+            error_log("Processing FormData resolve");
+            // Handle FormData (file upload)
+            $request_id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+            $error_description = isset($_POST['error_description']) ? trim($_POST['error_description']) : '';
+            $error_type = isset($_POST['error_type']) ? trim($_POST['error_type']) : '';
+            $replacement_materials = isset($_POST['replacement_materials']) ? trim($_POST['replacement_materials']) : '';
+            $solution_method = isset($_POST['solution_method']) ? trim($_POST['solution_method']) : '';
+            
+            error_log("Resolve data - ID: $request_id, Error: $error_description");
+            
+            // Handle file uploads
+            $attachments = [];
+            if (isset($_FILES['attachments']) && is_array($_FILES['attachments']['name'])) {
+                $file_count = count($_FILES['attachments']['name']);
+                error_log("Found $file_count files to upload");
+                for ($i = 0; $i < $file_count; $i++) {
+                    if ($_FILES['attachments']['error'][$i] === UPLOAD_ERR_OK) {
+                        $attachments[] = [
+                            'name' => $_FILES['attachments']['name'][$i],
+                            'tmp_name' => $_FILES['attachments']['tmp_name'][$i],
+                            'type' => $_FILES['attachments']['type'][$i],
+                            'size' => $_FILES['attachments']['size'][$i],
+                            'error' => $_FILES['attachments']['error'][$i]
+                        ];
+                    }
+                }
+            }
+            
+            // Use the same resolve logic as below
+            handleResolveRequest($request_id, $error_description, $error_type, $replacement_materials, $solution_method, $attachments, $user_id, $user_role, $db);
+            
+        } else {
+            error_log("Processing JSON resolve");
+            // Handle JSON (existing logic)
+            $input = json_decode(file_get_contents('php://input'), true);
+            // Continue to existing resolve logic below - don't return here
+        }
 
     } else {
 
@@ -3422,6 +3487,112 @@ elseif ($method == 'PUT') {
 else {
     serviceJsonResponse(false, "Method not allowed");
 
+}
+
+// Function to handle resolve request logic
+function handleResolveRequest($request_id, $error_description, $error_type, $replacement_materials, $solution_method, $attachments, $user_id, $user_role, $db) {
+    if ($request_id <= 0 || empty($error_description) || empty($error_type) || empty($solution_method)) {
+        serviceJsonResponse(false, "Request ID, error description, error type, and solution method are required");
+        return;
+    }
+    
+    // Only staff can resolve requests
+    if ($user_role != 'staff') {
+        serviceJsonResponse(false, "Access denied. Staff access required.");
+        return;
+    }
+    
+    try {
+        // Check if request exists and is assigned to current user
+        $check_query = "SELECT id, assigned_to, status FROM service_requests 
+                       WHERE id = :request_id AND assigned_to = :user_id AND status = 'in_progress'";
+        $check_stmt = $db->prepare($check_query);
+        $check_stmt->bindParam(":request_id", $request_id);
+        $check_stmt->bindParam(":user_id", $user_id);
+        $check_stmt->execute();
+        
+        if ($check_stmt->rowCount() === 0) {
+            serviceJsonResponse(false, "Request not found, not assigned to you, or not in progress");
+            return;
+        }
+        
+        // Start transaction
+        $db->beginTransaction();
+        
+        // Update request status to resolved
+        $update_query = "UPDATE service_requests 
+                        SET status = 'resolved', 
+                            resolved_at = NOW(),
+                            error_description = :error_description,
+                            error_type = :error_type,
+                            replacement_materials = :replacement_materials,
+                            solution_method = :solution_method
+                        WHERE id = :request_id";
+        $update_stmt = $db->prepare($update_query);
+        $update_stmt->bindParam(":request_id", $request_id);
+        $update_stmt->bindParam(":error_description", $error_description);
+        $update_stmt->bindParam(":error_type", $error_type);
+        $update_stmt->bindParam(":replacement_materials", $replacement_materials);
+        $update_stmt->bindParam(":solution_method", $solution_method);
+        $update_stmt->execute();
+        
+        // Insert resolution record
+        $resolution_query = "INSERT INTO resolutions 
+                           (service_request_id, resolved_by, error_description, error_type, 
+                            replacement_materials, solution_method, resolved_at) 
+                           VALUES (:request_id, :resolved_by, :error_description, :error_type, 
+                                   :replacement_materials, :solution_method, NOW())";
+        $resolution_stmt = $db->prepare($resolution_query);
+        $resolution_stmt->bindParam(":request_id", $request_id);
+        $resolution_stmt->bindParam(":resolved_by", $user_id);
+        $resolution_stmt->bindParam(":error_description", $error_description);
+        $resolution_stmt->bindParam(":error_type", $error_type);
+        $resolution_stmt->bindParam(":replacement_materials", $replacement_materials);
+        $resolution_stmt->bindParam(":solution_method", $solution_method);
+        $resolution_stmt->execute();
+        
+        // Handle file attachments if any
+        if (!empty($attachments)) {
+            $resolution_id = $db->lastInsertId();
+            
+            foreach ($attachments as $attachment) {
+                $upload_dir = __DIR__ . '/../uploads/completed/';
+                if (!is_dir($upload_dir)) {
+                    mkdir($upload_dir, 0755, true);
+                }
+                
+                $file_extension = strtolower(pathinfo($attachment['name'], PATHINFO_EXTENSION));
+                $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip'];
+                
+                if (in_array($file_extension, $allowed_extensions)) {
+                    $filename = uniqid() . '_' . basename($attachment['name']);
+                    $filepath = $upload_dir . $filename;
+                    
+                    if (move_uploaded_file($attachment['tmp_name'], $filepath)) {
+                        $file_query = "INSERT INTO complete_request_attachments 
+                                     (service_request_id, filename, original_name, file_size, mime_type) 
+                                     VALUES (:service_request_id, :filename, :original_name, :file_size, :mime_type)";
+                        $file_stmt = $db->prepare($file_query);
+                        $file_stmt->bindParam(":service_request_id", $request_id);
+                        $file_stmt->bindParam(":filename", $filename);
+                        $file_stmt->bindParam(":original_name", $attachment['name']);
+                        $file_stmt->bindParam(":file_size", $attachment['size']);
+                        $file_stmt->bindParam(":mime_type", $attachment['type']);
+                        $file_stmt->execute();
+                    }
+                }
+            }
+        }
+        
+        // Commit transaction
+        $db->commit();
+        
+        serviceJsonResponse(true, "Yêu cầu đã được giải quyết thành công");
+        
+    } catch (Exception $e) {
+        $db->rollBack();
+        serviceJsonResponse(false, "Database error: " . $e->getMessage());
+    }
 }
 
 ?>

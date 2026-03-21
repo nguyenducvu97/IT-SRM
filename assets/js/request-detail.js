@@ -2433,131 +2433,87 @@ class RequestDetailApp {
                                 `;
 
 
-
-                            }).join('')}
-
-
-
+    }).join('')}
                         </div>
-
-
-
                     </div>
-
-
-
                 ` : ''}
 
-
-
-                
-
-
-
                 ${request.resolution ? `
-
-
-
                     <div class="resolution-info">
-
-
-
                         <h4><i class="fas fa-check-circle"></i> Thông tin giải quyết</h4>
-
-
-
                         <div class="resolution-details">
-
-
-
                             <div class="resolution-item">
-
-
-
                                 <strong>Người giải quyết:</strong> ${request.resolution.resolver_name}
-
-
-
                             </div>
-
-
-
                             <div class="resolution-item">
-
-
-
                                 <strong>Ngày giải quyết:</strong> ${formatDate(request.resolution.resolved_at)}
-
-
-
                             </div>
-
-
-
                             <div class="resolution-item">
-
-
-
                                 <strong>Mô tả lỗi:</strong> ${request.resolution.error_description}
-
-
-
                             </div>
-
-
-
                             <div class="resolution-item">
-
-
-
                                 <strong>Loại lỗi:</strong> ${getErrorTypeText(request.resolution.error_type)}
-
-
-
                             </div>
-
-
-
                             ${request.resolution.replacement_materials ? `
-
-
-
                                 <div class="resolution-item">
-
-
-
                                     <strong>Vật tư thay thế:</strong> ${request.resolution.replacement_materials}
-
-
-
                                 </div>
-
-
-
                             ` : ''}
-
-
-
                             <div class="resolution-item">
-
-
-
                                 <strong>Cách khắc phục:</strong> ${request.resolution.solution_method}
-
-
-
                             </div>
-
-
-
                         </div>
-
-
-
+                        
+                        ${request.resolution_attachments && request.resolution_attachments.length > 0 ? `
+                            <div class="attachments-section">
+                                <h4><i class="fas fa-paperclip"></i> Tệp đính kèm giải quyết (${request.resolution_attachments.length})</h4>
+                                <div class="attachments-list">
+                                    ${request.resolution_attachments.map(attachment => {
+                                        console.log('Processing resolution attachment:', attachment);
+                                        
+                                        const isImage = attachment.mime_type.startsWith('image/');
+                                        const isPDF = attachment.mime_type === 'application/pdf';
+                                        const isWord = attachment.mime_type.includes('word') || attachment.mime_type.includes('document');
+                                        const isExcel = attachment.mime_type.includes('sheet') || attachment.mime_type.includes('excel');
+                                        const isPowerPoint = attachment.mime_type.includes('presentation') || attachment.mime_type.includes('powerpoint');
+                                        const fileExt = attachment.original_name.split('.').pop().toLowerCase();
+                                        const isViewable = isPDF || isWord || isExcel || isPowerPoint;
+                                        
+                                        return `
+                                            <div class="attachment-item">
+                                                <div class="attachment-info">
+                                                    <i class="fas fa-${isImage ? 'image' : isPDF ? 'file-pdf' : isWord ? 'file-word' : isExcel ? 'file-excel' : isPowerPoint ? 'file-powerpoint' : 'file'}"></i>
+                                                    <span class="attachment-name">${attachment.original_name}</span>
+                                                    <span class="attachment-size">(${formatFileSize(attachment.file_size)})</span>
+                                                </div>
+                                                <div class="attachment-actions">
+                                                    ${isImage ? `
+                                                        <img src="api/attachment.php?file=${attachment.filename}&action=view" 
+                                                             alt="${attachment.original_name}" 
+                                                             class="attachment-preview"
+                                                             onclick="requestDetailApp.showImageModal('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                             style="cursor: pointer;">
+                                                    ` : ''}
+                                                    ${isViewable ? `
+                                                        <button class="btn btn-sm btn-primary" 
+                                                                onclick="requestDetailApp.viewDocument('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}', '${fileExt}')">
+                                                            <i class="fas fa-eye"></i> Xem
+                                                        </button>
+                                                    ` : ''}
+                                                    <a href="api/attachment.php?file=${attachment.filename}&action=download" 
+                                                       class="btn btn-sm btn-secondary" 
+                                                       target="_blank"
+                                                       download="${attachment.original_name}">
+                                                        <i class="fas fa-download"></i> Tải về
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
-
-
-
                 ` : ''}
 
 
@@ -4677,45 +4633,31 @@ class RequestDetailApp {
 
 
 
+            // Create FormData for file upload
+            const uploadFormData = new FormData();
+            
+            // Add form fields
+            uploadFormData.append('id', requestId);
+            uploadFormData.append('action', 'resolve');
+            uploadFormData.append('error_description', formData.get('error_description'));
+            uploadFormData.append('error_type', formData.get('error_type'));
+            uploadFormData.append('replacement_materials', formData.get('replacement_materials'));
+            uploadFormData.append('solution_method', formData.get('solution_method'));
+            
+            // Add files if any
+            const fileInput = document.getElementById('resolveAttachments');
+            if (fileInput && fileInput.files.length > 0) {
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    uploadFormData.append('attachments[]', fileInput.files[i]);
+                }
+                console.log('Adding', fileInput.files.length, 'files to resolve upload');
+            }
+
             const response = await this.apiCall('api/service_requests.php', {
 
+                method: 'POST',
 
-
-                method: 'PUT',
-
-
-
-                body: JSON.stringify({
-
-
-
-                    id: requestId,
-
-
-
-                    action: 'resolve',
-
-
-
-                    error_description: formData.get('error_description'),
-
-
-
-                    error_type: formData.get('error_type'),
-
-
-
-                    replacement_materials: formData.get('replacement_materials'),
-
-
-
-                    solution_method: formData.get('solution_method')
-
-
-
-                })
-
-
+                body: uploadFormData
 
             });
 
@@ -7786,146 +7728,45 @@ class RequestDetailApp {
 
 
     async apiCall(url, options = {}) {
-
-
-
         const defaultOptions = {
-
-
-
             credentials: 'include'
-
-
-
         };
-
-
-
         
-
-
-
         const finalOptions = { ...defaultOptions, ...options };
-
-
-
         
-
-
-
         if (!finalOptions.headers) {
-
-
-
             finalOptions.headers = {
-
-
-
                 'Content-Type': 'application/json'
-
-
-
             };
-
-
-
         }
-
-
-
         
-
-
-
-        if (finalOptions.body && typeof finalOptions.body === 'object') {
-
-
-
+        // Don't set Content-Type for FormData - let browser set it automatically
+        if (finalOptions.body instanceof FormData) {
+            delete finalOptions.headers['Content-Type'];
+        }
+        
+        if (finalOptions.body && typeof finalOptions.body === 'object' && !(finalOptions.body instanceof FormData)) {
             finalOptions.body = JSON.stringify(finalOptions.body);
-
-
-
         }
-
-
-
         
-
-
-
         const response = await fetch(url, finalOptions);
-
-
-
         
-
-
-
         // Check if response is OK before parsing JSON
-
-
-
         if (!response.ok) {
-
-
-
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-
-
-
         }
-
-
-
         
-
-
-
         const text = await response.text();
-
-
-
         
-
-
-
         // Try to parse JSON, handle errors gracefully
-
-
-
         try {
-
-
-
             return JSON.parse(text);
-
-
-
         } catch (parseError) {
-
-
-
             console.error('JSON Parse Error:', parseError);
-
-
-
             console.error('Response Text:', text);
-
-
-
             throw new Error(`Invalid JSON response: ${parseError.message}`);
-
-
-
         }
-
-
-
     }
-
-
-
-
 
 
 
