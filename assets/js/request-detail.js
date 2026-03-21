@@ -3353,30 +3353,25 @@ class RequestDetailApp {
                         <button class="btn btn-primary" onclick="requestDetailApp.updateRequestStatus(${request.id})">Cập nhật</button>
 
 
-
                     ` : currentUser && currentUser.role === 'staff' ? `
 
+                        ${(() => {
+                            // Debug condition for accept button
+                            const showAcceptBtn = request.status === 'open' && !request.assigned_to;
+                            console.log('=== STAFF ACCEPT BUTTON DEBUG ===');
+                            console.log('Request status:', request.status);
+                            console.log('Request assigned_to:', request.assigned_to);
+                            console.log('Show accept button:', showAcceptBtn);
+                            console.log('===============================');
 
-
-                        ${request.status === 'open' && !request.assigned_to ? `
-
-
-
+                            return showAcceptBtn ? `
                             <button class="btn btn-success" onclick="requestDetailApp.acceptRequest(${request.id})">
-
-
 
                                 <i class="fas fa-check"></i> Nhận yêu cầu
 
-
-
                             </button>
-
-
-
-                        ` : ''}
-
-
+                        ` : '';
+                        })()}
 
                         ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
 
@@ -3862,9 +3857,11 @@ class RequestDetailApp {
 
 
 
-                this.loadRequestDetail();
+                // Reset loading state
+                this.isLoading = false;
 
-
+                // Reload the page to refresh all data
+                window.location.reload();
 
             } else {
 
@@ -4062,7 +4059,11 @@ class RequestDetailApp {
 
 
 
-                this.loadRequestDetail();
+                // Reset loading state
+                this.isLoading = false;
+
+                // Reload the page to refresh all data
+                window.location.reload();
 
 
 
@@ -4262,9 +4263,11 @@ class RequestDetailApp {
 
 
 
-                this.loadRequestDetail();
+                // Reset loading state
+                this.isLoading = false;
 
-
+                // Reload the page to refresh all data
+                window.location.reload();
 
                 this.showNotification('Bình luận đã được thêm', 'success');
 

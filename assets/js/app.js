@@ -519,24 +519,12 @@ class ITServiceApp {
         if (!loadingOverlay) {
             loadingOverlay = document.createElement('div');
             loadingOverlay.id = 'loadingOverlay';
+            loadingOverlay.className = 'loading-overlay';
             loadingOverlay.innerHTML = `
-                <div class="loading-content">
-                    <div class="loading-spinner"></div>
-                    <div class="loading-text">${message}</div>
+                <div class="loading-overlay-content">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p class="loading-text">${message}</p>
                 </div>
-            `;
-            loadingOverlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(255, 255, 255, 0.9);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-                backdrop-filter: blur(2px);
             `;
             document.body.appendChild(loadingOverlay);
         } else {
@@ -1206,7 +1194,16 @@ class ITServiceApp {
 
             if (response.success) {
                 this.showNotification('Yêu cầu đã được nhận thành công', 'success');
-                this.showRequestDetail(id);
+                
+                // Check if we're currently on the detail page
+                if (window.location.pathname.includes('request-detail.html')) {
+                    // Reload the page to refresh data
+                    window.location.reload();
+                } else {
+                    // Navigate to detail page
+                    this.showRequestDetail(id);
+                }
+                
                 if (this.currentPage === 'requests') {
                     this.loadRequests();
                 }
@@ -1237,7 +1234,16 @@ class ITServiceApp {
 
             if (response.success) {
                 this.showNotification('Cập nhật trạng thái thành công', 'success');
-                this.showRequestDetail(id);
+                
+                // Check if we're currently on the detail page
+                if (window.location.pathname.includes('request-detail.html')) {
+                    // Reload the page to refresh data
+                    window.location.reload();
+                } else {
+                    // Navigate to detail page
+                    this.showRequestDetail(id);
+                }
+                
                 if (this.currentPage === 'requests') {
                     this.loadRequests();
                 }
@@ -1275,7 +1281,16 @@ class ITServiceApp {
 
             if (response.success) {
                 document.getElementById('commentText').value = '';
-                this.showRequestDetail(requestId);
+                
+                // Check if we're currently on the detail page
+                if (window.location.pathname.includes('request-detail.html')) {
+                    // Reload the page to refresh data
+                    window.location.reload();
+                } else {
+                    // Navigate to detail page
+                    this.showRequestDetail(requestId);
+                }
+                
                 this.showNotification('Bình luận đã được thêm', 'success');
             } else {
                 this.showNotification(response.message, 'error');
@@ -1366,9 +1381,7 @@ class ITServiceApp {
             this.showNotification('Lỗi kết nối', 'error');
         } finally {
             // Hide loading overlay
-            if (loadingOverlay) {
-                loadingOverlay.style.display = 'none';
-            }
+            this.hideLoadingState();
             
             // Restore button states
             submitBtn.disabled = false;

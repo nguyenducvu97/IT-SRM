@@ -2521,3 +2521,236 @@ Stack trace:
 [20-Mar-2026 11:17:46 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
 [20-Mar-2026 11:17:46 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
 [20-Mar-2026 11:17:53 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 02:25:22 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 02:25:22 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 02:25:22 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 02:25:22 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 02:25:27 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 02:25:28 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:19:30 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 04:19:30 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 04:19:30 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 04:19:30 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 04:19:37 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:19:37 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:19:44 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:20:24 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:20:24 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:20:45 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:20:45 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:24:18 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:24:18 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:28:55 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:29:30 Europe/Berlin] Email sent successfully in 34988.74ms
+[21-Mar-2026 04:29:30 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 04:29:30 Europe/Berlin] Notifications created in 0.012982130050659s for 3 users
+[21-Mar-2026 04:29:30 Europe/Berlin] Total request creation time: 35018.77ms (Request ID: 1)
+[21-Mar-2026 04:29:30 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:45:11 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:45:43 Europe/Berlin] Email sent in 32330.28ms
+[21-Mar-2026 04:45:43 Europe/Berlin] Failed to create new request notifications: SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active.  Consider using PDOStatement::fetchAll().  Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
+[21-Mar-2026 04:45:59 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 04:46:27 Europe/Berlin] Email sent in 28144.45ms
+[21-Mar-2026 04:46:27 Europe/Berlin] Failed to create new request notifications: SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active.  Consider using PDOStatement::fetchAll().  Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
+[21-Mar-2026 04:47:32 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:47:32 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:47:32 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:47:32 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:47:34 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:47:34 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:47:38 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 04:47:39 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:44:28 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:44:33 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:44:33 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:44:36 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:44:36 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:44:39 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:44:39 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:44:44 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:44:44 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:44:44 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:44:46 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:44:46 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:44:47 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:44:47 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:45:04 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:45:05 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:45:06 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:45:08 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:45:09 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:45:12 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:45:39 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:45:42 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:45:42 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:45:49 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 05:45:49 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 05:45:49 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 05:45:49 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 05:46:14 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 05:46:33 Europe/Berlin] Email sent in 18591.76ms
+[21-Mar-2026 05:46:33 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 05:46:33 Europe/Berlin] Notifications created in 0.028355836868286s for 3 users
+[21-Mar-2026 05:46:33 Europe/Berlin] DEBUG: Checking files - isset($_FILES['attachments']): YES
+[21-Mar-2026 05:46:33 Europe/Berlin] DEBUG: FILES data: Array
+(
+    [name] => Array
+        (
+            [0] => GIẢI THÍCH CÁC MỤC TRÊN POP.xlsx
+            [1] => Layout_CCTV_B3_THIÊU KẾT_2026_01_08-Model.pdf
+        )
+
+    [full_path] => Array
+        (
+            [0] => GIẢI THÍCH CÁC MỤC TRÊN POP.xlsx
+            [1] => Layout_CCTV_B3_THIÊU KẾT_2026_01_08-Model.pdf
+        )
+
+    [type] => Array
+        (
+            [0] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+            [1] => application/pdf
+        )
+
+    [tmp_name] => Array
+        (
+            [0] => C:\xampp\tmp\php1575.tmp
+            [1] => C:\xampp\tmp\php1576.tmp
+        )
+
+    [error] => Array
+        (
+            [0] => 0
+            [1] => 0
+        )
+
+    [size] => Array
+        (
+            [0] => 21708
+            [1] => 328634
+        )
+
+)
+
+[21-Mar-2026 05:46:33 Europe/Berlin] Processed 2 attachments in 5.1ms
+[21-Mar-2026 05:46:33 Europe/Berlin] Total request creation time: 18627.9ms (Request ID: 4)
+[21-Mar-2026 05:46:33 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 05:46:41 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 05:46:41 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:46:57 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:46:57 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:46:57 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:46:57 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:47:08 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:47:08 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:47:16 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:47:16 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:47:22 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 05:47:22 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:47:25 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:47:25 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:47:25 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:47:27 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:47:27 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:47:28 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:47:28 Europe/Berlin] PUT raw input: {"action":"accept_request","request_id":1}
+[21-Mar-2026 05:47:28 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => accept_request
+    [request_id] => 1
+)
+
+[21-Mar-2026 05:47:28 Europe/Berlin] PUT action: accept_request
+[21-Mar-2026 05:47:28 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 05:47:28 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[21-Mar-2026 05:47:28 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[21-Mar-2026 05:47:32 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 05:47:32 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 05:47:32 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[21-Mar-2026 05:47:32 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[21-Mar-2026 05:47:45 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:47:45 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:53:31 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:53:31 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:53:32 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:53:32 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:53:32 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:53:35 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:53:35 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 05:53:36 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 05:53:36 Europe/Berlin] PUT raw input: {"action":"accept_request","request_id":4}
+[21-Mar-2026 05:53:36 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => accept_request
+    [request_id] => 4
+)
+
+[21-Mar-2026 05:53:36 Europe/Berlin] PUT action: accept_request
+[21-Mar-2026 05:53:36 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 05:53:36 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[21-Mar-2026 05:53:36 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[21-Mar-2026 05:53:40 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 05:53:40 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 05:53:40 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[21-Mar-2026 05:53:40 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[21-Mar-2026 06:00:22 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 06:00:22 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 06:00:25 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 06:00:25 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 06:00:26 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 06:00:26 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 06:00:31 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 06:00:31 Europe/Berlin] PUT raw input: {"action":"update","id":"4","title":"Abc","description":"sssss","category_id":"3","priority":"medium","status":"open","assigned_to":"2"}
+[21-Mar-2026 06:00:31 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 4
+    [title] => Abc
+    [description] => sssss
+    [category_id] => 3
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 2
+)
+
+[21-Mar-2026 06:00:31 Europe/Berlin] PUT action: update
+[21-Mar-2026 06:00:31 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 06:00:36 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 06:00:36 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 06:00:37 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 06:00:37 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 06:00:38 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 06:00:38 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:01:43 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:01:43 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:01:46 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:01:46 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:01:54 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:01:54 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:01:59 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:02:00 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:02:00 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:02:01 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:02:01 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:16:33 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:16:33 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:21:44 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:21:44 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:21:48 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:21:48 Europe/Berlin] PUT raw input: {"action":"accept_request","request_id":4}
+[21-Mar-2026 07:21:48 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => accept_request
+    [request_id] => 4
+)
+
+[21-Mar-2026 07:21:48 Europe/Berlin] PUT action: accept_request
+[21-Mar-2026 07:21:48 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 07:21:48 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[21-Mar-2026 07:21:48 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[21-Mar-2026 07:21:52 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 07:21:52 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[21-Mar-2026 07:21:52 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$host is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 272
+[21-Mar-2026 07:21:52 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
+[21-Mar-2026 07:21:57 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:21:57 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761

@@ -135,7 +135,7 @@ window.vi = {
     // Messages
     'loading': 'Đang tải...',
     'checking_auth': 'Đang kiểm tra authentication...',
-    'processing_request': 'đang gửi yêu cầu',
+    'processing_request': 'Đang xử lý yêu cầu...',
     'success': 'Thành công',
     'error': 'Lỗi',
     'warning': 'Cảnh báo',

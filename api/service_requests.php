@@ -907,7 +907,21 @@ elseif ($method == 'POST') {
     
 
     try {
-        // Start timing the request creation
+        // Database connection optimization
+$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+$db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+// Note: Removed MYSQL_ATTR_USE_BUFFERED_QUERY=false to fix notification issue
+
+// Cache category lookup to avoid JOIN in main query
+$category_cache = [];
+$category_stmt = $db->prepare("SELECT id, name FROM categories");
+$category_stmt->execute();
+$categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($categories as $cat) {
+    $category_cache[$cat['id']] = $cat['name'];
+}
+
+// Start timing the request creation
         $request_start = microtime(true);
 
         $query = "INSERT INTO service_requests 
@@ -938,25 +952,18 @@ elseif ($method == 'POST') {
 
             
 
-            // Get request details for email notification
-
-            $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, c.name as category
-
+            // Get request details without JOIN for better performance
+            $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email
                               FROM service_requests sr
-
                               LEFT JOIN users u ON sr.user_id = u.id
-
-                              LEFT JOIN categories c ON sr.category_id = c.id
-
                               WHERE sr.id = :request_id";
-
             $request_stmt = $db->prepare($request_query);
-
             $request_stmt->bindParam(":request_id", $request_id);
-
             $request_stmt->execute();
-
             $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Get category from cache
+            $request_data['category'] = $category_cache[$request_data['category_id']] ?? 'Unknown';
 
             
 
@@ -984,28 +991,24 @@ elseif ($method == 'POST') {
             $email_start = microtime(true);
             
             try {
-                // Quick SMTP connectivity check before sending
-                $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 1);
+                // Quick SMTP connectivity check with shorter timeout
+                $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.5);
                 
                 if ($smtp_socket) {
-                    // SMTP is responsive - send email normally
+                    // SMTP is responsive - send email
                     fclose($smtp_socket);
                     $emailHelper = new EmailHelper();
                     $emailHelper->sendNewRequestNotification($email_data);
-                    error_log("Email sent successfully in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
+                    error_log("Email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
                 } else {
                     // SMTP is down - log and continue quickly
-                    error_log("SMTP server down - skipping email ({$errno}: {$errstr})");
+                    error_log("SMTP down - skipping email ({$errno}: {$errstr})");
                 }
             } catch (Exception $e) {
-                error_log("Email notification failed: " . $e->getMessage());
-                // Continue even if email fails
+                error_log("Email error: " . $e->getMessage());
             }
 
-            
-
             // Create in-app notifications for staff and admin (OPTIMIZED)
-
             $notification_start = microtime(true);
 
             try {
@@ -1050,68 +1053,70 @@ elseif ($method == 'POST') {
 
             
 
-            // Handle file uploads if any
-
+            // Handle file uploads if any - OPTIMIZED
+            $attachment_start = microtime(true);
+            $attachment_count = 0;
+            
+            error_log("DEBUG: Checking files - isset(\$_FILES['attachments']): " . (isset($_FILES['attachments']) ? 'YES' : 'NO'));
+            if (isset($_FILES['attachments'])) {
+                error_log("DEBUG: FILES data: " . print_r($_FILES['attachments'], true));
+            }
+            
             if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
-
                 $upload_dir = __DIR__ . '/../uploads/requests/';
-
                 if (!is_dir($upload_dir)) {
-
                     mkdir($upload_dir, 0777, true);
-
                 }
-
-                
 
                 $files = $_FILES['attachments'];
-
+                $attachment_data = [];
+                
+                // Process files first
                 foreach ($files['name'] as $key => $name) {
-
                     if ($files['error'][$key] === UPLOAD_ERR_OK) {
-
                         $tmp_name = $files['tmp_name'][$key];
-
                         $file_extension = pathinfo($name, PATHINFO_EXTENSION);
-
                         $new_filename = uniqid() . '_' . $name;
-
                         $upload_path = $upload_dir . $new_filename;
-
                         
-
                         if (move_uploaded_file($tmp_name, $upload_path)) {
-
-                            // Insert attachment record
-
-                            $attach_query = "INSERT INTO attachments 
-
-                                           (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
-
-                                           VALUES (:request_id, :filename, :original_name, :file_size, :mime_type, :uploaded_by, NOW())";
-
-                            $attach_stmt = $db->prepare($attach_query);
-
-                            $attach_stmt->bindParam(":request_id", $request_id);
-
-                            $attach_stmt->bindParam(":filename", $new_filename);
-
-                            $attach_stmt->bindParam(":original_name", $name);
-
-                            $attach_stmt->bindParam(":file_size", $files['size'][$key]);
-
-                            $attach_stmt->bindParam(":mime_type", $files['type'][$key]);
-
-                            $attach_stmt->bindParam(":uploaded_by", $user_id);
-
-                            $attach_stmt->execute();
-
+                            $attachment_data[] = [
+                                'filename' => $new_filename,
+                                'original_name' => $name,
+                                'file_size' => $files['size'][$key],
+                                'mime_type' => $files['type'][$key]
+                            ];
+                            $attachment_count++;
                         }
-
                     }
-
                 }
-
+                
+                // Batch insert attachments
+                if (!empty($attachment_data)) {
+                    $attach_query = "INSERT INTO attachments 
+                                   (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
+                                   VALUES ";
+                    $values = [];
+                    $params = [];
+                    
+                    foreach ($attachment_data as $attachment) {
+                        $values[] = "(?, ?, ?, ?, ?, ?, NOW())";
+                        $params = array_merge($params, [
+                            $request_id, 
+                            $attachment['filename'],
+                            $attachment['original_name'],
+                            $attachment['file_size'],
+                            $attachment['mime_type'],
+                            $user_id
+                        ]);
+                    }
+                    
+                    $attach_query .= implode(',', $values);
+                    $attach_stmt = $db->prepare($attach_query);
+                    $attach_stmt->execute($params);
+                }
+                
+                error_log("Processed $attachment_count attachments in " . round((microtime(true) - $attachment_start) * 1000, 2) . "ms");
             }
 
             
@@ -1244,21 +1249,8 @@ elseif ($method == 'POST') {
 
     
 
-    // Debug: Log what action we got
-
-    error_log("Final action for POST: '$action'");
-
-    error_log("Action length: " . strlen($action));
-
-    error_log("Action hex: " . bin2hex($action));
-
-    error_log("Checking if action == 'reject_request': " . ($action == 'reject_request' ? 'YES' : 'NO'));
-
-    error_log("Checking if action == 'update': " . ($action == 'update' ? 'YES' : 'NO'));
-
-    error_log("Trimmed action: '" . trim($action) . "'");
-
-    error_log("Trimmed action == 'reject_request': " . (trim($action) == 'reject_request' ? 'YES' : 'NO'));
+    // Debug: Log action only for debugging
+    error_log("POST action: '$action'");
 
     
 
@@ -3255,7 +3247,16 @@ elseif ($method == 'PUT') {
         
         try {
             // Update request status
-            $update_query = "UPDATE service_requests SET status = :status WHERE id = :request_id";
+            // If status is 'open', reset assignment to allow staff to accept again
+            if ($status === 'open') {
+                $update_query = "UPDATE service_requests 
+                               SET status = :status, 
+                                   assigned_to = NULL 
+                               WHERE id = :request_id";
+            } else {
+                $update_query = "UPDATE service_requests SET status = :status WHERE id = :request_id";
+            }
+            
             $update_stmt = $db->prepare($update_query);
             $update_stmt->bindParam(":status", $status);
             $update_stmt->bindParam(":request_id", $request_id);
