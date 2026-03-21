@@ -2920,3 +2920,92 @@ Stack trace:
 [21-Mar-2026 07:41:12 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
 [21-Mar-2026 07:41:18 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
 [21-Mar-2026 07:41:18 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:41:53 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:41:54 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:41:54 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:41:55 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:41:55 Europe/Berlin] PUT raw input: {"action":"accept_request","request_id":4}
+[21-Mar-2026 07:41:55 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => accept_request
+    [request_id] => 4
+)
+
+[21-Mar-2026 07:41:55 Europe/Berlin] PUT action: accept_request
+[21-Mar-2026 07:41:56 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:41:56 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:44:11 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:44:11 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:53:13 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:53:13 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:05:34 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:05:34 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:15:53 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:15:53 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:17:57 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:17:57 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:19:09 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:19:09 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:25:15 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:25:15 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:26:03 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:26:03 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:29:46 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:29:46 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:31:23 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:31:23 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:45:13 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:45:13 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:55:53 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:55:53 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:57:35 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:57:35 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 08:59:01 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 08:59:01 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:03:24 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:03:24 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:03:52 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:03:52 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:05:56 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:05:56 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:07:53 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:07:53 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:08:33 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:08:33 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:10:48 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:10:48 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:11:40 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:11:40 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:12:46 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:12:46 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:20:08 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:20:08 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:26:23 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 09:26:23 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:26:25 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 09:26:25 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 09:26:25 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 09:26:31 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:26:31 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:27:46 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 09:27:46 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:28:41 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:28:41 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:30:19 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:30:19 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:30:44 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:30:44 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:32:59 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:32:59 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:47:08 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:47:08 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:48:20 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:48:20 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:49:42 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:49:42 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:53:48 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:53:48 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:56:56 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:56:56 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 09:58:50 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 09:58:50 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761

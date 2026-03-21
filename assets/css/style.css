@@ -1994,6 +1994,10 @@ body {
 
     margin-bottom: 1.5rem;
 
+    width: 100% !important;
+
+    box-sizing: border-box;
+
 }
 
 
@@ -3405,6 +3409,10 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 .modal-body {
 
     padding: 1.5rem;
+
+    max-height: 70vh;
+
+    overflow-y: auto;
 
 }
 
@@ -6183,6 +6191,8 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     padding: 1.5rem;
 
     margin-bottom: 1.5rem;
+    width: 100% !important;
+    box-sizing: border-box;
 
 }
 
@@ -6241,22 +6251,43 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     color: #6c757d;
 
     font-size: 0.9rem;
+    width: 100% !important;
+    box-sizing: border-box !important;
 
 }
 
 
 
-.attachment-preview.has-files {
+.modal-large .attachment-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    min-height: 60px;
+    max-height: 200px;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
 
+.modal-large .attachment-preview.has-files {
     display: block;
-
-    padding: 0.5rem;
-
+    padding: 0.5rem 1rem;
+    width: 100% !important;
+    margin: 0;
+    box-sizing: border-box !important;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 
-
-.attachment-item {
+.modal-large .attachment-preview.has-files .attachment-item {
 
     display: flex;
 
@@ -6265,14 +6296,12 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     justify-content: space-between;
 
     padding: 0.5rem;
-
     background: white;
-
     border: 1px solid #dee2e6;
-
     border-radius: 4px;
-
     margin-bottom: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
 
 }
 
@@ -6295,6 +6324,8 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     gap: 0.5rem;
 
     flex: 1;
+
+    min-width: 0;
 
 }
 
