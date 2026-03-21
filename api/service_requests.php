@@ -3163,54 +3163,63 @@ elseif ($method == 'PUT') {
             $update_stmt->bindParam(":user_id", $user_id);
             
             if ($update_stmt->execute()) {
-                // Get request details for email notification AFTER the update
-                $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
-                                         staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
-                                  FROM service_requests sr
-                                  LEFT JOIN users u ON sr.user_id = u.id
-                                  LEFT JOIN users staff ON sr.assigned_to = staff.id
-                                  LEFT JOIN categories c ON sr.category_id = c.id
-                                  WHERE sr.id = :request_id";
-                $request_stmt = $db->prepare($request_query);
-                $request_stmt->bindParam(":request_id", $request_id);
-                $request_stmt->execute();
-                $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-                
-                // Send email notification to requester about assignment (only if current user is not the requester)
-                if ($request_data['user_id'] != $user_id) {
-                    try {
-                        $emailHelper = new PHPMailerEmailHelper(); // Use PHPMailerEmailHelper for actual email sending
-                        $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
-                    } catch (Exception $e) {
-                        error_log("Email notification failed: " . $e->getMessage());
-                        // Continue even if email fails
-                    }
-                }
-                
-                // Also notify all admins about the assignment
-                try {
-                    require_once __DIR__ . '/../lib/NotificationHelper.php';
-                    $notificationHelper = new NotificationHelper($db);
-                    
-                    $title = "Yêu cầu #" . $request_id . " đã được nhận";
-                    $message = "Yêu cầu #" . $request_id . " đã được nhận bởi " . ($request_data['assigned_name'] ?? 'Staff member');
-                    
-                    // Get all admin users
-                    $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
-                    $admin_stmt->execute();
-                    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
-                    
-                    if (!empty($admins)) {
-                        foreach ($admins as $admin_id) {
-                            $notificationHelper->createNotification($admin_id, $title, $message, 'info', $request_id, 'request', true);
-                        }
-                    }
-                } catch (Exception $e) {
-                    error_log("Failed to notify admins about assignment: " . $e->getMessage());
-                    // Continue even if notification fails
-                }
-                
+                // Quick response to user
                 serviceJsonResponse(true, "Request accepted successfully");
+                
+                // Send email and notifications asynchronously (after response)
+                // This makes the API response much faster
+                register_shutdown_function(function() use ($request_id, $user_id, $db) {
+                    try {
+                        // Get request details for notifications
+                        $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
+                                                 staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
+                                          FROM service_requests sr
+                                          LEFT JOIN users u ON sr.user_id = u.id
+                                          LEFT JOIN users staff ON sr.assigned_to = staff.id
+                                          LEFT JOIN categories c ON sr.category_id = c.id
+                                          WHERE sr.id = :request_id";
+                        $request_stmt = $db->prepare($request_query);
+                        $request_stmt->bindParam(":request_id", $request_id);
+                        $request_stmt->execute();
+                        $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                        
+                        if ($request_data && $request_data['user_id'] != $user_id) {
+                            // Send email notification to requester
+                            try {
+                                $emailHelper = new PHPMailerEmailHelper();
+                                $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
+                            } catch (Exception $e) {
+                                error_log("Email notification failed: " . $e->getMessage());
+                            }
+                            
+                            // Notify admins about assignment
+                            try {
+                                require_once __DIR__ . '/../lib/NotificationHelper.php';
+                                $notificationHelper = new NotificationHelper($db);
+                                
+                                $title = "Yêu cầu #" . $request_id . " đã được nhận";
+                                $message = "Yêu cầu #" . $request_id . " đã được nhận bởi " . ($request_data['assigned_name'] ?? 'Staff member');
+                                
+                                // Get all admin users
+                                $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
+                                $admin_stmt->execute();
+                                $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                                
+                                if (!empty($admins)) {
+                                    foreach ($admins as $admin_id) {
+                                        $notificationHelper->createNotification($admin_id, $title, $message, 'info', $request_id, 'request', true);
+                                    }
+                                }
+                            } catch (Exception $e) {
+                                error_log("Failed to notify admins about assignment: " . $e->getMessage());
+                            }
+                        }
+                    } catch (Exception $e) {
+                        error_log("Background notification failed: " . $e->getMessage());
+                    }
+                });
+                
+                return; // Exit early to send response faster
             } else {
                 serviceJsonResponse(false, "Failed to accept request");
             }
@@ -3272,6 +3281,9 @@ elseif ($method == 'PUT') {
     }
     elseif ($action == 'update') {
         // Handle full request update (admin only)
+        error_log("=== UPDATE ACTION DEBUG ===");
+        error_log("Raw input: " . file_get_contents('php://input'));
+        
         $request_id = isset($input['id']) ? (int)$input['id'] : 0;
         $title = isset($input['title']) ? trim($input['title']) : '';
         $description = isset($input['description']) ? trim($input['description']) : '';
@@ -3279,6 +3291,9 @@ elseif ($method == 'PUT') {
         $priority = isset($input['priority']) ? $input['priority'] : 'medium';
         $status = isset($input['status']) ? trim($input['status']) : '';
         $assigned_to = isset($input['assigned_to']) ? (int)$input['assigned_to'] : null;
+        
+        error_log("Parsed data - ID: $request_id, Status: '$status', Assigned_to: " . ($assigned_to ?? 'NULL'));
+        error_log("==========================");
         
         if ($request_id <= 0) {
             serviceJsonResponse(false, "Request ID is required");
@@ -3313,6 +3328,11 @@ elseif ($method == 'PUT') {
         
         try {
             // Update request
+            // If status is 'open', reset assignment to allow staff to accept again
+            if ($status === 'open') {
+                $assigned_to = null; // Force reset assignment when status is set to open
+            }
+            
             $update_query = "UPDATE service_requests 
                            SET title = :title, description = :description, category_id = :category_id, 
                                priority = :priority, status = :status, assigned_to = :assigned_to 

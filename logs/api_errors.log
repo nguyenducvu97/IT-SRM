@@ -2754,3 +2754,169 @@ Stack trace:
 [21-Mar-2026 07:21:52 Europe/Berlin] PHP Deprecated:  Creation of dynamic property SMTP::$port is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 273
 [21-Mar-2026 07:21:57 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
 [21-Mar-2026 07:21:57 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:33:13 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:33:13 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:33:13 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:33:15 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:33:15 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:33:20 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:33:20 Europe/Berlin] PUT raw input: {"action":"update","id":"4","title":"Abc","description":"sssss","category_id":"3","priority":"medium","status":"open","assigned_to":"2"}
+[21-Mar-2026 07:33:20 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 4
+    [title] => Abc
+    [description] => sssss
+    [category_id] => 3
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 2
+)
+
+[21-Mar-2026 07:33:20 Europe/Berlin] PUT action: update
+[21-Mar-2026 07:33:20 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:33:32 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:32 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:33:34 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:34 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:34 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:36 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:36 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:33:38 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:38 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:38 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:38 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:39 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:39 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:41 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:41 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:33:47 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:47 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:48 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:48 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:50 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:50 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:33:52 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:52 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:53 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:53 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:54 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:54 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:55 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:55 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:56 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:56 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:57 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:57 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:58 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:58 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:59 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:33:59 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:34:01 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:34:01 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:34:04 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:34:04 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:37:41 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:37:41 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:38:45 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:38:45 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:38:57 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:38:57 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:39:03 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:39:03 Europe/Berlin] PUT raw input: {"action":"accept_request","request_id":4}
+[21-Mar-2026 07:39:03 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => accept_request
+    [request_id] => 4
+)
+
+[21-Mar-2026 07:39:03 Europe/Berlin] PUT action: accept_request
+[21-Mar-2026 07:39:03 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:39:03 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:39:12 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:39:12 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:39:15 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:39:15 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:39:15 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:39:17 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:39:17 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:39:21 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:39:21 Europe/Berlin] PUT raw input: {"action":"update","id":"4","title":"Abc","description":"sssss","category_id":"3","priority":"medium","status":"open","assigned_to":"2"}
+[21-Mar-2026 07:39:21 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 4
+    [title] => Abc
+    [description] => sssss
+    [category_id] => 3
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 2
+)
+
+[21-Mar-2026 07:39:21 Europe/Berlin] PUT action: update
+[21-Mar-2026 07:39:21 Europe/Berlin] === UPDATE ACTION DEBUG ===
+[21-Mar-2026 07:39:21 Europe/Berlin] Raw input: {"action":"update","id":"4","title":"Abc","description":"sssss","category_id":"3","priority":"medium","status":"open","assigned_to":"2"}
+[21-Mar-2026 07:39:21 Europe/Berlin] Parsed data - ID: 4, Status: 'open', Assigned_to: 2
+[21-Mar-2026 07:39:21 Europe/Berlin] ==========================
+[21-Mar-2026 07:39:21 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:39:32 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:39:32 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:39:32 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:39:32 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:39:34 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:39:34 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:39:36 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:39:36 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:39:40 Europe/Berlin] Database session started - ID: bkrcbspsnv08ivqo8veu0ht9o5
+[21-Mar-2026 07:39:40 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:40:11 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:11 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:11 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:11 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:13 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:13 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:14 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:14 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:40:17 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:17 Europe/Berlin] PUT raw input: {"action":"accept_request","request_id":4}
+[21-Mar-2026 07:40:17 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => accept_request
+    [request_id] => 4
+)
+
+[21-Mar-2026 07:40:17 Europe/Berlin] PUT action: accept_request
+[21-Mar-2026 07:40:18 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:18 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:40:23 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:23 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:25 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:26 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:28 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:31 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:40:31 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:40:36 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:40:36 Europe/Berlin] PHP Warning:  Undefined array key "resolution_id" in C:\xampp\htdocs\it-service-request\api\service_requests.php on line 761
+[21-Mar-2026 07:41:12 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:41:12 Europe/Berlin] PUT raw input: {"action":"update","id":"4","title":"Abc","description":"sssss","category_id":"3","priority":"medium","status":"open","assigned_to":"2"}
+[21-Mar-2026 07:41:12 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => update
+    [id] => 4
+    [title] => Abc
+    [description] => sssss
+    [category_id] => 3
+    [priority] => medium
+    [status] => open
+    [assigned_to] => 2
+)
+
+[21-Mar-2026 07:41:12 Europe/Berlin] PUT action: update
+[21-Mar-2026 07:41:12 Europe/Berlin] === UPDATE ACTION DEBUG ===
+[21-Mar-2026 07:41:12 Europe/Berlin] Raw input: {"action":"update","id":"4","title":"Abc","description":"sssss","category_id":"3","priority":"medium","status":"open","assigned_to":"2"}
+[21-Mar-2026 07:41:12 Europe/Berlin] Parsed data - ID: 4, Status: 'open', Assigned_to: 2
+[21-Mar-2026 07:41:12 Europe/Berlin] ==========================
+[21-Mar-2026 07:41:12 Europe/Berlin] Database session started - ID: 8ol8kouvta8anu3ih1jdphhph0
+[21-Mar-2026 07:41:18 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
+[21-Mar-2026 07:41:18 Europe/Berlin] Database session started - ID: qoe11t6mtheoqt5hnmk2i12af5
