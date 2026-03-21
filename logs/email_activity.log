@@ -313,3 +313,11 @@
 [2026-03-21 05:53:44] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu #4 đã được nhận
 [2026-03-21 07:21:52] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #4
 [2026-03-21 07:21:56] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu #4 đã được nhận
+[2026-03-21 10:44:08] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #5
+[2026-03-21 10:44:13] FAILED | To: nguyenducvu561@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #5
+[2026-03-21 10:44:19] FAILED | To: jane.doe@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #5
+[2026-03-21 10:44:19] SENT to 1/3 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #5
+[2026-03-21 10:57:19] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #6
+[2026-03-21 10:57:25] FAILED | To: nguyenducvu561@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #6
+[2026-03-21 10:57:31] FAILED | To: jane.doe@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #6
+[2026-03-21 10:57:31] SENT to 1/3 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #6

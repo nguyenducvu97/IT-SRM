@@ -41,15 +41,25 @@ if (strpos($fileName, '..') !== false || strpos($fileName, '/') !== false || str
     exit;
 }
 
-// Build file path
-$uploadsDir = __DIR__ . '/../uploads/requests/';
-$filePath = $uploadsDir . $fileName;
+// Build file path - check both requests and completed directories
+$requestsDir = __DIR__ . '/../uploads/requests/';
+$completedDir = __DIR__ . '/../uploads/completed/';
+
+// Try requests directory first
+$filePath = $requestsDir . $fileName;
+if (!file_exists($filePath)) {
+    // Try completed directory
+    $filePath = $completedDir . $fileName;
+}
 
 // Security check - ensure file is within uploads directory
-$realBasePath = realpath($uploadsDir);
+$realRequestsPath = realpath($requestsDir);
+$realCompletedPath = realpath($completedDir);
 $realFilePath = realpath($filePath);
 
-if ($realFilePath === false || strpos($realFilePath, $realBasePath) !== 0) {
+if ($realFilePath === false || 
+    (strpos($realFilePath, $realRequestsPath) !== 0 && 
+     strpos($realFilePath, $realCompletedPath) !== 0)) {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Access denied - File path validation failed']);
     exit;

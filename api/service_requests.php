@@ -3491,16 +3491,27 @@ else {
 
 // Function to handle resolve request logic
 function handleResolveRequest($request_id, $error_description, $error_type, $replacement_materials, $solution_method, $attachments, $user_id, $user_role, $db) {
+    error_log("=== HANDLE RESOLVE REQUEST START ===");
+    error_log("Request ID: $request_id");
+    error_log("User ID: $user_id, Role: $user_role");
+    error_log("Error Description: $error_description");
+    error_log("Error Type: $error_type");
+    error_log("Solution Method: $solution_method");
+    error_log("Attachments count: " . count($attachments));
+    
     if ($request_id <= 0 || empty($error_description) || empty($error_type) || empty($solution_method)) {
+        error_log("VALIDATION FAILED - Request ID: $request_id, Error: $error_description, Type: $error_type, Solution: $solution_method");
         serviceJsonResponse(false, "Request ID, error description, error type, and solution method are required");
         return;
     }
     
-    // Only staff can resolve requests
-    if ($user_role != 'staff') {
-        serviceJsonResponse(false, "Access denied. Staff access required.");
+    // Only staff and admin can resolve requests
+    if ($user_role != 'staff' && $user_role != 'admin') {
+        error_log("ACCESS DENIED - User role: $user_role");
+        serviceJsonResponse(false, "Access denied. Staff or admin access required.");
         return;
     }
+    error_log("ACCESS GRANTED - User role: $user_role");
     
     try {
         // Check if request exists and is assigned to current user
