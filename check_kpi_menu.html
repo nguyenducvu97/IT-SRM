@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Menu Test</title>
+</head>
+<body>
+    <h1>Test KPI Menu</h1>
+    
+    <p>Mở file này để kiểm tra:</p>
+    <ol>
+        <li>Mở trang chính: <a href="index.html" target="_blank">index.html</a></li>
+        <li>Đăng nhập với tài khoản admin</li>
+        <li>Kiểm tra sidebar có thấy "Xuất KPI Staff" không</li>
+    </ol>
+    
+    <h2>Kiểm tra thủ công:</h2>
+    <p>Nếu không thấy menu, hãy mở console (F12) và kiểm tra:</p>
+    <ul>
+        <li>Có lỗi JavaScript nào không?</li>
+        <li>Kiểm tra console.log có hiển thị "✅ Showing admin menus" không</li>
+        <li>Kiểm tra element có id="adminKPIMenu" không</li>
+    </ul>
+    
+    <h2>Debug Script:</h2>
+    <button onclick="checkMenu()">Kiểm tra Menu KPI</button>
+    <div id="result"></div>
+    
+    <script>
+        function checkMenu() {
+            const result = document.getElementById('result');
+            const kpiMenu = document.getElementById('adminKPIMenu');
+            
+            if (kpiMenu) {
+                result.innerHTML = `
+                    <p>✅ Menu KPI tồn tại</p>
+                    <p>Display style: ${kpiMenu.style.display}</p>
+                    <p>Visibility: ${window.getComputedStyle(kpiMenu).display}</p>
+                `;
+            } else {
+                result.innerHTML = '<p>❌ Không tìm thấy menu KPI</p>';
+            }
+        }
+    </script>
+</body>
+</html>

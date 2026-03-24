@@ -4,7 +4,7 @@
 
 error_reporting(E_ALL);
 
-ini_set('display_errors', 0);  // Don't display errors in output
+ini_set('display_errors', 1);  // Display errors temporarily for debugging
 
 ini_set('log_errors', 1);
 
@@ -45,10 +45,10 @@ require_once __DIR__ . '/../config/database.php';
 // require_once __DIR__ . '/../config/database_optimizer.php';
 
 require_once __DIR__ . '/../lib/EmailHelper.php'; // Use original EmailHelper
-
 require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php'; // Use PHPMailerEmailHelper for beautiful emails
 
-require_once __DIR__ . '/../lib/NotificationHelper.php'; // Advanced Notification Helper
+// Temporarily comment out NotificationHelper to test
+// require_once __DIR__ . '/../lib/NotificationHelper.php'; // Advanced Notification Helper
 
 
 
@@ -152,6 +152,14 @@ $user_id = getCurrentUserId();
 
 $user_role = getCurrentUserRole();
 
+// Debug logging for authentication
+error_log("=== AUTH DEBUG ===");
+error_log("Session ID: " . session_id());
+error_log("User ID: " . ($user_id ?? 'null'));
+error_log("User Role: " . ($user_role ?? 'null'));
+error_log("Session data: " . json_encode($_SESSION));
+error_log("=================");
+
 
 
 if ($method == 'GET') {
@@ -162,9 +170,9 @@ if ($method == 'GET') {
 
     if ($action == 'list') {
 
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
-        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+        $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
 
         $offset = ($page - 1) * $limit;
 
@@ -1069,8 +1077,8 @@ elseif ($method == 'POST') {
                     $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
                     
                     // Create notifications WITHOUT email for faster response
-                    $notificationHelper = new NotificationHelper($db);
-                    $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
+                    // $notificationHelper = new NotificationHelper($db);
+                    // $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
                     
                     error_log("Notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
                 }
@@ -1571,9 +1579,9 @@ elseif ($method == 'POST') {
 
                                     if (!empty($notify_ids)) {
 
-                                        $notificationHelper = new NotificationHelper($db);
+                                        // $notificationHelper = new NotificationHelper($db);
 
-                                        $notificationHelper->notifyUsers($notify_ids, $accept_title, $accept_message, 'success', $request_id, 'request');
+                                        // $notificationHelper->notifyUsers($notify_ids, $accept_title, $accept_message, 'success', $request_id, 'request');
 
                                     }
 
@@ -1651,9 +1659,9 @@ elseif ($method == 'POST') {
 
                                     if (!empty($notify_ids)) {
 
-                                        $notificationHelper = new NotificationHelper($db);
+                                        // $notificationHelper = new NotificationHelper($db);
 
-                                        $notificationHelper->notifyUsers($notify_ids, $resolve_title, $resolve_message, 'success', $request_id, 'request');
+                                        // $notificationHelper->notifyUsers($notify_ids, $resolve_title, $resolve_message, 'success', $request_id, 'request');
 
                                     }
 
@@ -1731,9 +1739,9 @@ elseif ($method == 'POST') {
 
                                     if (!empty($notify_ids)) {
 
-                                        $notificationHelper = new NotificationHelper($db);
+                                        // $notificationHelper = new NotificationHelper($db);
 
-                                        $notificationHelper->notifyUsers($notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
+                                        // $notificationHelper->notifyUsers($notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
 
                                     }
 
@@ -2155,11 +2163,11 @@ elseif ($method == 'POST') {
 
                     if (!empty($admins)) {
 
-                        $notificationHelper = new NotificationHelper($db);
+                        // $notificationHelper = new NotificationHelper($db);
 
                         foreach ($admins as $admin_id) {
 
-                            $notificationHelper->createNotification($admin_id, $title, $message, 'warning', $request_id, 'reject_request', false);
+                            // $notificationHelper->createNotification($admin_id, $title, $message, 'warning', $request_id, 'reject_request', false);
 
                         }
 
@@ -2383,9 +2391,9 @@ elseif ($method == 'POST') {
 
                 try {
 
-                    require_once __DIR__ . '/../lib/NotificationHelper.php';
+                    // require_once __DIR__ . '/../lib/NotificationHelper.php';
 
-                    $notificationHelper = new NotificationHelper($db);
+                    // $notificationHelper = new NotificationHelper($db);
 
                     
 
@@ -2407,7 +2415,7 @@ elseif ($method == 'POST') {
 
                     if (!empty($admins)) {
 
-                        $notificationHelper->notifyUsers($admins, $title, $message, 'success', $request_id, 'request');
+                        // $notificationHelper->notifyUsers($admins, $title, $message, 'success', $request_id, 'request');
 
                     }
 
@@ -2656,144 +2664,10 @@ elseif ($method == 'POST') {
     }
 
     
-
-    elseif ($action == 'close_request') {
-
-        $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
-
-        $rating = isset($input['rating']) ? (int)$input['rating'] : null;
-
-        $feedback = isset($input['feedback']) ? trim($input['feedback']) : null;
-
-        $software_feedback = isset($input['software_feedback']) ? trim($input['software_feedback']) : null;
-
-        $would_recommend = isset($input['would_recommend']) ? $input['would_recommend'] : null;
-
-        $ease_of_use = isset($input['ease_of_use']) ? (int)$input['ease_of_use'] : null;
-
-        $speed_stability = isset($input['speed_stability']) ? (int)$input['speed_stability'] : null;
-
-        $requirement_meeting = isset($input['requirement_meeting']) ? (int)$input['requirement_meeting'] : null;
-
-        
-
-        if ($request_id <= 0) {
-
-            serviceJsonResponse(false, "Request ID is required");
-
-            return;
-
-        }
-
-        
-
-        try {
-
-            $db->beginTransaction();
-
-            
-
-            // Insert feedback record
-
-            $insert_feedback_query = "INSERT INTO request_feedback 
-
-                                     (service_request_id, created_by, rating, feedback, software_feedback, would_recommend, 
-
-                                      ease_of_use, speed_stability, requirement_meeting) 
-
-                                     VALUES (:request_id, :created_by, :rating, :feedback, :software_feedback, :would_recommend,
-
-                                            :ease_of_use, :speed_stability, :requirement_meeting)";
-
-            $insert_feedback_stmt = $db->prepare($insert_feedback_query);
-
-            $insert_feedback_stmt->bindParam(":request_id", $request_id);
-
-            $insert_feedback_stmt->bindParam(":created_by", $user_id);
-
-            $insert_feedback_stmt->bindParam(":rating", $rating);
-
-            $insert_feedback_stmt->bindParam(":feedback", $feedback);
-
-            $insert_feedback_stmt->bindParam(":software_feedback", $software_feedback);
-
-            $insert_feedback_stmt->bindParam(":would_recommend", $would_recommend);
-
-            $insert_feedback_stmt->bindParam(":ease_of_use", $ease_of_use);
-
-            $insert_feedback_stmt->bindParam(":speed_stability", $speed_stability);
-
-            $insert_feedback_stmt->bindParam(":requirement_meeting", $requirement_meeting);
-
-            
-
-            if (!$insert_feedback_stmt->execute()) {
-
-                $db->rollBack();
-
-                serviceJsonResponse(false, "Failed to create feedback record");
-
-                return;
-
-            }
-
-            
-
-            // Update service request status to closed
-
-            $update_request_query = "UPDATE service_requests 
-
-                                    SET status = 'closed', updated_at = NOW() 
-
-                                    WHERE id = :request_id";
-
-            $update_request_stmt = $db->prepare($update_request_query);
-
-            $update_request_stmt->bindParam(":request_id", $request_id);
-
-            
-
-            if (!$update_request_stmt->execute()) {
-
-                $db->rollBack();
-
-                serviceJsonResponse(false, "Failed to update request status");
-
-                return;
-
-            }
-
-            
-
-            $db->commit();
-
-            serviceJsonResponse(true, "Request closed successfully with feedback");
-
-            
-
-        } catch (Exception $e) {
-
-            $db->rollBack();
-
-            serviceJsonResponse(false, "Database error: " . $e->getMessage());
-
-        }
-
-    }
-
-    
-
-    else {
-
-        serviceJsonResponse(false, "Invalid action");
-
-    }
-
 }
 
 
-
-elseif ($method == 'DELETE') {
+if ($method == 'DELETE') {
 
     // Delete service request (admin only)
 
@@ -3223,8 +3097,8 @@ elseif ($method == 'PUT') {
                             
                             // Notify admins about assignment
                             try {
-                                require_once __DIR__ . '/../lib/NotificationHelper.php';
-                                $notificationHelper = new NotificationHelper($db);
+                                // require_once __DIR__ . '/../lib/NotificationHelper.php';
+                                // $notificationHelper = new NotificationHelper($db);
                                 
                                 $title = "Yêu cầu #" . $request_id . " đã được nhận";
                                 $message = "Yêu cầu #" . $request_id . " đã được nhận bởi " . ($request_data['assigned_name'] ?? 'Staff member');
@@ -3236,7 +3110,7 @@ elseif ($method == 'PUT') {
                                 
                                 if (!empty($admins)) {
                                     foreach ($admins as $admin_id) {
-                                        $notificationHelper->createNotification($admin_id, $title, $message, 'info', $request_id, 'request', true);
+                                        // $notificationHelper->createNotification($admin_id, $title, $message, 'info', $request_id, 'request', true);
                                     }
                                 }
                             } catch (Exception $e) {
@@ -3419,6 +3293,9 @@ elseif ($method == 'PUT') {
                 return;
             }
             
+            // Start transaction
+            $db->beginTransaction();
+            
             // Update request status to resolved
             $update_query = "UPDATE service_requests 
                            SET status = 'resolved', 
@@ -3441,6 +3318,119 @@ elseif ($method == 'PUT') {
                 serviceJsonResponse(false, "Failed to resolve request");
             }
         } catch (Exception $e) {
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
+    elseif ($action == 'close_request') {
+        // Handle request closing (user only)
+        error_log("=== CLOSE REQUEST ACTION DEBUG ===");
+        
+        $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
+        $rating = isset($input['rating']) ? (int)$input['rating'] : null;
+        $feedback = isset($input['feedback']) ? trim($input['feedback']) : null;
+        $software_feedback = isset($input['software_feedback']) ? trim($input['software_feedback']) : null;
+        $would_recommend = isset($input['would_recommend']) ? $input['would_recommend'] : null;
+        $ease_of_use = isset($input['ease_of_use']) ? (int)$input['ease_of_use'] : null;
+        $speed_stability = isset($input['speed_stability']) ? (int)$input['speed_stability'] : null;
+        $requirement_meeting = isset($input['requirement_meeting']) ? (int)$input['requirement_meeting'] : null;
+        
+        error_log("Close request data - ID: $request_id, Rating: $rating");
+        
+        if ($request_id <= 0) {
+            serviceJsonResponse(false, "Request ID is required");
+            return;
+        }
+        
+        try {
+            // Check if request exists and belongs to current user or is staff/admin
+            $check_query = "SELECT id, user_id, status FROM service_requests WHERE id = :request_id";
+            $check_stmt = $db->prepare($check_query);
+            $check_stmt->bindParam(":request_id", $request_id);
+            $check_stmt->execute();
+            
+            $request = $check_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$request) {
+                serviceJsonResponse(false, "Request not found");
+                return;
+            }
+            
+            // Check permissions: users can only close their own requests, staff/admin can close any
+            if ($user_role === 'user' && $request['user_id'] != $user_id) {
+                serviceJsonResponse(false, "Access denied. You can only close your own requests.");
+                return;
+            }
+            
+            // Check if request is in a status that can be closed (resolved)
+            if ($request['status'] !== 'resolved') {
+                serviceJsonResponse(false, "Only resolved requests can be closed");
+                return;
+            }
+            
+            // Start transaction
+            $db->beginTransaction();
+            
+            // Insert feedback into request_feedback table
+            $feedback_query = "INSERT INTO request_feedback 
+                              (service_request_id, rating, feedback, software_feedback, would_recommend, 
+                               ease_of_use, speed_stability, requirement_meeting, created_by) 
+                              VALUES (:request_id, :rating, :feedback, :software_feedback, :would_recommend,
+                                      :ease_of_use, :speed_stability, :requirement_meeting, :created_by)";
+            $feedback_stmt = $db->prepare($feedback_query);
+            $feedback_stmt->bindParam(":request_id", $request_id);
+            $feedback_stmt->bindParam(":rating", $rating, PDO::PARAM_INT);
+            $feedback_stmt->bindParam(":feedback", $feedback);
+            $feedback_stmt->bindParam(":software_feedback", $software_feedback);
+            $feedback_stmt->bindParam(":would_recommend", $would_recommend);
+            $feedback_stmt->bindParam(":ease_of_use", $ease_of_use, PDO::PARAM_INT);
+            $feedback_stmt->bindParam(":speed_stability", $speed_stability, PDO::PARAM_INT);
+            $feedback_stmt->bindParam(":requirement_meeting", $requirement_meeting, PDO::PARAM_INT);
+            $feedback_stmt->bindParam(":created_by", $user_id);
+            
+            // Update request status to closed
+            $update_query = "UPDATE service_requests 
+                           SET status = 'closed', 
+                               closed_at = NOW(),
+                               updated_at = NOW()
+                           WHERE id = :request_id";
+            $update_stmt = $db->prepare($update_query);
+            $update_stmt->bindParam(":request_id", $request_id);
+            
+            if ($feedback_stmt->execute() && $update_stmt->execute()) {
+                // Commit transaction
+                $db->commit();
+                
+                // Create notification for staff/admin that user closed the request
+                try {
+                    $close_title = "Yêu cầu #" . $request_id . " đã được đóng";
+                    $close_message = "Người dùng đã đóng yêu cầu đã giải quyết";
+                    
+                    // Get all staff and admin IDs
+                    $staff_admin_stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
+                    $staff_admin_stmt->execute();
+                    $staff_admins = $staff_admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                    
+                    // Remove the user who closed from notification list
+                    $notify_ids = array_diff($staff_admins, [$user_id]);
+                    
+                    if (!empty($notify_ids)) {
+                        // require_once __DIR__ . '/../lib/NotificationHelper.php';
+                        // $notificationHelper = new NotificationHelper($db);
+                        // $notificationHelper->notifyUsers($notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
+                    }
+                } catch (Exception $e) {
+                    error_log("Failed to create close notification: " . $e->getMessage());
+                }
+                
+                serviceJsonResponse(true, "Request closed successfully");
+            } else {
+                $db->rollBack();
+                serviceJsonResponse(false, "Failed to close request");
+            }
+        } catch (Exception $e) {
+            if (isset($db) && $db->inTransaction()) {
+                $db->rollBack();
+            }
             serviceJsonResponse(false, "Database error: " . $e->getMessage());
         }
     }

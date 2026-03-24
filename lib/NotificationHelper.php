@@ -1,14 +1,18 @@
 <?php
 // Advanced Notification Helper with Email Integration and Browser Push Support
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/PHPMailerEmailHelper.php';
+require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php';
 
 class NotificationHelper {
     private $db;
     private $emailHelper;
     
-    public function __construct() {
-        $this->db = getDatabaseConnection();
+    public function __construct($database = null) {
+        if ($database) {
+            $this->db = $database;
+        } else {
+            $this->db = getDatabaseConnection();
+        }
         $this->emailHelper = new PHPMailerEmailHelper();
     }
     

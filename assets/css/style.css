@@ -8697,3 +8697,257 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 }
 
+
+
+/* KPI Export Page Styles */
+
+.date-range-container {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+
+}
+
+.date-range-container label {
+
+    font-weight: 600;
+
+    color: #555;
+
+    white-space: nowrap;
+
+}
+
+.date-range-container input[type="date"] {
+
+    padding: 8px 12px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 4px;
+
+    font-size: 14px;
+
+    min-width: 150px;
+
+}
+
+.kpi-preview-container {
+
+    display: grid;
+
+    gap: 30px;
+
+    margin-top: 20px;
+
+}
+
+.kpi-summary {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.kpi-summary-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+    gap: 20px;
+
+    margin-top: 15px;
+
+}
+
+.kpi-summary-item {
+
+    text-align: center;
+
+    padding: 15px;
+
+    background: #f8f9fa;
+
+    border-radius: 6px;
+
+    border-left: 4px solid #007bff;
+
+}
+
+.kpi-summary-item .value {
+
+    font-size: 24px;
+
+    font-weight: bold;
+
+    color: #007bff;
+
+    margin-bottom: 5px;
+
+}
+
+.kpi-summary-item .label {
+
+    font-size: 14px;
+
+    color: #666;
+
+}
+
+.kpi-details {
+
+    background: white;
+
+    padding: 20px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.table-container {
+
+    overflow-x: auto;
+
+    margin-top: 15px;
+
+}
+
+#kpiTable {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 14px;
+
+}
+
+#kpiTable th,
+
+#kpiTable td {
+
+    padding: 12px;
+
+    text-align: left;
+
+    border-bottom: 1px solid #eee;
+
+}
+
+#kpiTable th {
+
+    background-color: #f8f9fa;
+
+    font-weight: 600;
+
+    color: #555;
+
+    position: sticky;
+
+    top: 0;
+
+}
+
+#kpiTable tbody tr:hover {
+
+    background-color: #f8f9fa;
+
+}
+
+#kpiTable .numeric {
+
+    text-align: right;
+
+    font-family: 'Courier New', monospace;
+
+}
+
+#kpiTable .performance-good {
+
+    color: #28a745;
+
+    font-weight: 600;
+
+}
+
+#kpiTable .performance-medium {
+
+    color: #ffc107;
+
+    font-weight: 600;
+
+}
+
+#kpiTable .performance-poor {
+
+    color: #dc3545;
+
+    font-weight: 600;
+
+}
+
+/* Responsive Design for KPI Page */
+
+@media (max-width: 768px) {
+
+    .date-range-container {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+    }
+
+    
+
+    .date-range-container label,
+
+    .date-range-container input,
+
+    .date-range-container button {
+
+        width: 100%;
+
+    }
+
+    
+
+    .kpi-summary-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    
+
+    #kpiTable {
+
+        font-size: 12px;
+
+    }
+
+    
+
+    #kpiTable th,
+
+    #kpiTable td {
+
+        padding: 8px;
+
+    }
+
+}
+

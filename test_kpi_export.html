@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPI Export Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .result { margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 4px; }
+        .error { background: #f8d7da; color: #721c24; }
+        .success { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>KPI Export Test</h1>
+    
+    <div class="test-section">
+        <h2>Test KPI Data API</h2>
+        <button onclick="testKPIData()">Test Get KPI Data</button>
+        <div id="kpiResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test KPI Export</h2>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" value="2026-01-01">
+        <br><br>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" value="2026-12-31">
+        <br><br>
+        <button onclick="testKPIExport()">Export KPI (CSV)</button>
+        <div id="exportResult" class="result"></div>
+    </div>
+
+    <script>
+        async function testKPIData() {
+            const resultDiv = document.getElementById('kpiResult');
+            resultDiv.innerHTML = 'Testing...';
+            
+            try {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                
+                const response = await fetch(`api/kpi_export.php?action=get_kpi_data&start_date=${startDate}&end_date=${endDate}`, {
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `<div class="success">
+                        <h3>✅ KPI Data Retrieved Successfully</h3>
+                        <p>Staff Count: ${data.data.length}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="error">
+                        <h3>❌ Error</h3>
+                        <p>${data.message}</p>
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">
+                    <h3>❌ Network Error</h3>
+                    <p>${error.message}</p>
+                </div>`;
+            }
+        }
+        
+        async function testKPIExport() {
+            const resultDiv = document.getElementById('exportResult');
+            resultDiv.innerHTML = 'Testing export...';
+            
+            try {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                
+                const response = await fetch(`api/kpi_export.php?action=export_kpi&start_date=${startDate}&end_date=${endDate}`, {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'KPI_Test_Export.csv';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    resultDiv.innerHTML = `<div class="success">
+                        <h3>✅ Export Successful</h3>
+                        <p>CSV file downloaded successfully!</p>
+                    </div>`;
+                } else {
+                    const errorData = await response.json();
+                    resultDiv.innerHTML = `<div class="error">
+                        <h3>❌ Export Error</h3>
+                        <p>${errorData.message || 'Unknown error'}</p>
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">
+                    <h3>❌ Network Error</h3>
+                    <p>${error.message}</p>
+                </div>`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -350,6 +350,7 @@ class ITServiceApp {
         document.getElementById('adminDepartmentMenu').style.display = 'none';
         document.getElementById('adminSupportMenu').style.display = 'none';
         document.getElementById('adminRejectMenu').style.display = 'none';
+        document.getElementById('adminKPIMenu').style.display = 'none';
         document.getElementById('newRequestMenu').style.display = 'none';
         
         if (this.currentUser.role === 'admin') {
@@ -358,6 +359,7 @@ class ITServiceApp {
             document.getElementById('adminDepartmentMenu').style.display = 'block';
             document.getElementById('adminSupportMenu').style.display = 'block';
             document.getElementById('adminRejectMenu').style.display = 'block';
+            document.getElementById('adminKPIMenu').style.display = 'block';
             // Hide new request menu for admin
             document.getElementById('newRequestMenu').style.display = 'none';
             // Show add category button for admin
@@ -625,6 +627,20 @@ class ITServiceApp {
                         this.hideLoadingState();
                     }
                     // Always hide loading for reject requests page
+                    setTimeout(() => this.hideLoadingState(), 500);
+                    break;
+                case 'kpi-export':
+                    if (this.currentUser && this.currentUser.role === 'admin') {
+                        this.loadKPIExport();
+                    } else {
+                        console.log('❌ User is not admin, denying access to KPI export page');
+                        if (this.currentUser) {
+                            this.showNotification('Chỉ admin mới có quyền xuất KPI', 'error');
+                        }
+                        // Don't redirect to dashboard - just hide loading and show error
+                        this.hideLoadingState();
+                    }
+                    // Always hide loading for KPI export page
                     setTimeout(() => this.hideLoadingState(), 500);
                     break;
                 default:
@@ -3454,3 +3470,199 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Global functions for onclick handlers
 window.closeUserRoleModal = () => app.closeUserRoleModal();
+
+// KPI Export Methods
+ITServiceApp.prototype.loadKPIExport = function() {
+    console.log('Loading KPI Export page...');
+    
+    // Set default date range
+    const today = new Date();
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    
+    if (startDateInput) {
+        startDateInput.value = firstDay.toISOString().split('T')[0];
+    }
+    
+    if (endDateInput) {
+        endDateInput.value = lastDay.toISOString().split('T')[0];
+    }
+    
+    // Bind export button event
+    const exportBtn = document.getElementById('exportKPIBtn');
+    if (exportBtn) {
+        exportBtn.removeEventListener('click', this.exportKPI.bind(this));
+        exportBtn.addEventListener('click', this.exportKPI.bind(this));
+    }
+    
+    // Bind date change events to refresh data
+    const startInput = document.getElementById('startDate');
+    const endInput = document.getElementById('endDate');
+    
+    if (startInput) {
+        startInput.removeEventListener('change', this.loadKPIData.bind(this));
+        startInput.addEventListener('change', this.loadKPIData.bind(this));
+    }
+    
+    if (endInput) {
+        endInput.removeEventListener('change', this.loadKPIData.bind(this));
+        endInput.addEventListener('change', this.loadKPIData.bind(this));
+    }
+    
+    // Load initial KPI data
+    this.loadKPIData();
+};
+
+ITServiceApp.prototype.loadKPIData = async function() {
+    try {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        
+        if (!startDate || !endDate) {
+            this.showNotification('Vui lòng chọn khoảng thời gian', 'error');
+            return;
+        }
+        
+        this.showLoadingState('Đang tải dữ liệu KPI...');
+        
+        const response = await this.apiCall(`api/kpi_export.php?action=get_kpi_data&start_date=${startDate}&end_date=${endDate}`);
+        
+        if (response.success) {
+            this.displayKPIData(response.data);
+            this.displayKPISummary(response.data);
+        } else {
+            this.showNotification('Không thể tải dữ liệu KPI: ' + response.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error loading KPI data:', error);
+        this.showNotification('Lỗi khi tải dữ liệu KPI', 'error');
+    } finally {
+        this.hideLoadingState();
+    }
+};
+
+ITServiceApp.prototype.displayKPIData = function(kpiData) {
+    const tableBody = document.getElementById('kpiTableBody');
+    if (!tableBody) return;
+    
+    tableBody.innerHTML = '';
+    
+    if (kpiData.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="9" class="text-center">Không có dữ liệu KPI trong khoảng thời gian đã chọn</td></tr>';
+        return;
+    }
+    
+    kpiData.forEach(staff => {
+        const row = document.createElement('tr');
+        
+        // Determine performance class for completion rate
+        const completionClass = staff.completion_rate >= 80 ? 'performance-good' : 
+                               staff.completion_rate >= 50 ? 'performance-medium' : 'performance-poor';
+        
+        // Determine performance class for satisfaction rate
+        const satisfactionClass = staff.satisfaction_rate >= 80 ? 'performance-good' : 
+                                 staff.satisfaction_rate >= 50 ? 'performance-medium' : 'performance-poor';
+        
+        // Determine performance class for recommendation rate
+        const recommendationClass = staff.recommendation_rate >= 80 ? 'performance-good' : 
+                                   staff.recommendation_rate >= 50 ? 'performance-medium' : 'performance-poor';
+        
+        row.innerHTML = `
+            <td>${staff.id}</td>
+            <td>${staff.full_name}</td>
+            <td>${staff.department || 'N/A'}</td>
+            <td class="numeric">${staff.total_requests}</td>
+            <td class="numeric">${staff.completed_requests}</td>
+            <td class="numeric">${typeof staff.avg_response_time_hours === 'number' ? staff.avg_response_time_hours.toFixed(1) : 'N/A'}</td>
+            <td class="numeric">${typeof staff.avg_completion_time_hours === 'number' ? staff.avg_completion_time_hours.toFixed(1) : 'N/A'}</td>
+            <td class="numeric">${typeof staff.avg_rating === 'number' ? staff.avg_rating.toFixed(1) : 'N/A'}</td>
+            <td class="numeric ${satisfactionClass}">${typeof staff.satisfaction_rate === 'number' ? staff.satisfaction_rate.toFixed(1) : '0.0'}%</td>
+            <td class="numeric ${recommendationClass}">${typeof staff.recommendation_rate === 'number' ? staff.recommendation_rate.toFixed(1) : '0.0'}%</td>
+        `;
+        
+        tableBody.appendChild(row);
+    });
+};
+
+ITServiceApp.prototype.displayKPISummary = function(kpiData) {
+    const summaryContent = document.getElementById('kpiSummaryContent');
+    if (!summaryContent) return;
+    
+    // Calculate summary statistics
+    const totalStaff = kpiData.length;
+    const totalRequests = kpiData.reduce((sum, staff) => sum + staff.total_requests, 0);
+    const totalCompleted = kpiData.reduce((sum, staff) => sum + staff.completed_requests, 0);
+    const totalFeedback = kpiData.reduce((sum, staff) => sum + staff.total_feedback, 0);
+    const avgRating = kpiData.reduce((sum, staff) => sum + staff.avg_rating, 0) / totalStaff || 0;
+    const avgResponseTime = kpiData.reduce((sum, staff) => sum + staff.avg_response_time_hours, 0) / totalStaff || 0;
+    const avgCompletionTime = kpiData.reduce((sum, staff) => sum + staff.avg_completion_time_hours, 0) / totalStaff || 0;
+    const avgSatisfactionRate = kpiData.reduce((sum, staff) => sum + staff.satisfaction_rate, 0) / totalStaff || 0;
+    const avgRecommendationRate = kpiData.reduce((sum, staff) => sum + staff.recommendation_rate, 0) / totalStaff || 0;
+    
+    summaryContent.innerHTML = `
+        <div class="kpi-summary-item">
+            <div class="value">${totalStaff}</div>
+            <div class="label">Tổng số Staff</div>
+        </div>
+        <div class="kpi-summary-item">
+            <div class="value">${totalRequests}</div>
+            <div class="label">Tổng yêu cầu</div>
+        </div>
+        <div class="kpi-summary-item">
+            <div class="value">${totalCompleted}</div>
+            <div class="label">Đã hoàn thành</div>
+        </div>
+        <div class="kpi-summary-item">
+            <div class="value">${typeof avgResponseTime === 'number' ? avgResponseTime.toFixed(1) : 'N/A'}</div>
+            <div class="label">Phản hồi TB (giờ)</div>
+        </div>
+        <div class="kpi-summary-item">
+            <div class="value">${typeof avgCompletionTime === 'number' ? avgCompletionTime.toFixed(1) : 'N/A'}</div>
+            <div class="label">Hoàn thành TB (giờ)</div>
+        </div>
+        <div class="kpi-summary-item">
+            <div class="value">${typeof avgRating === 'number' ? avgRating.toFixed(1) : '0.0'}</div>
+            <div class="label">Đánh giá TB</div>
+        </div>
+        <div class="kpi-summary-item">
+            <div class="value">${typeof avgSatisfactionRate === 'number' ? avgSatisfactionRate.toFixed(1) : '0.0'}%</div>
+            <div class="label">Hài lòng TB</div>
+        </div>
+    `;
+};
+
+ITServiceApp.prototype.exportKPI = async function() {
+    try {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        
+        if (!startDate || !endDate) {
+            this.showNotification('Vui lòng chọn khoảng thời gian', 'error');
+            return;
+        }
+        
+        this.showLoadingState('Đang xuất file Excel...');
+        
+        // Create download link
+        const downloadUrl = `api/kpi_export.php?action=export_kpi&start_date=${startDate}&end_date=${endDate}`;
+        
+        // Create temporary link and trigger download
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        this.showNotification('File Excel đã được xuất thành công', 'success');
+        
+    } catch (error) {
+        console.error('Error exporting KPI:', error);
+        this.showNotification('Lỗi khi xuất file Excel', 'error');
+    } finally {
+        this.hideLoadingState();
+    }
+};
