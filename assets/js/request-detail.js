@@ -2488,11 +2488,13 @@ class RequestDetailApp {
                                                 </div>
                                                 <div class="attachment-actions">
                                                     ${isImage ? `
-                                                        <img src="api/attachment.php?file=${attachment.filename}&action=view" 
-                                                             alt="${attachment.original_name}" 
-                                                             class="attachment-preview"
-                                                             onclick="requestDetailApp.showImageModal('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
-                                                             style="cursor: pointer;">
+                                                        <div class="image-preview-container" style="position: relative;">
+                                                            <img src="api/attachment.php?file=${attachment.filename}&action=view" 
+                                                                 alt="${attachment.original_name}" 
+                                                                 class="attachment-preview"
+                                                                 onclick="requestDetailApp.showImageModal('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                                 style="cursor: pointer; max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 4px;">
+                                                        </div>
                                                     ` : ''}
                                                     ${isViewable ? `
                                                         <button class="btn btn-sm btn-primary" 
