@@ -67,6 +67,16 @@ function exportKPIExcel($db) {
         $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01');
         $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-t');
         
+        // Convert date format from d/m/Y to Y-m-d if needed
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $start_date)) {
+            $date = DateTime::createFromFormat('d/m/Y', $start_date);
+            $start_date = $date ? $date->format('Y-m-d') : $start_date;
+        }
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $end_date)) {
+            $date = DateTime::createFromFormat('d/m/Y', $end_date);
+            $end_date = $date ? $date->format('Y-m-d') : $end_date;
+        }
+        
         // Validate date format
         if (!DateTime::createFromFormat('Y-m-d', $start_date) || !DateTime::createFromFormat('Y-m-d', $end_date)) {
             http_response_code(400);
@@ -158,6 +168,16 @@ function getKPIData($db) {
         $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01');
         $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-t');
         
+        // Convert date format from d/m/Y to Y-m-d if needed
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $start_date)) {
+            $date = DateTime::createFromFormat('d/m/Y', $start_date);
+            $start_date = $date ? $date->format('Y-m-d') : $start_date;
+        }
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $end_date)) {
+            $date = DateTime::createFromFormat('d/m/Y', $end_date);
+            $end_date = $date ? $date->format('Y-m-d') : $end_date;
+        }
+        
         $kpi_data = getKPIDataArray($db, $start_date, $end_date);
         
         echo json_encode([
@@ -179,10 +199,10 @@ function getKPIData($db) {
 function getKPIDataArray($db, $start_date, $end_date) {
     $kpi_data = [];
     
-    // Get all staff users
+    // Get all staff users (including admin who can handle requests)
     $staff_query = "SELECT id, username, email, full_name, department 
                    FROM users 
-                   WHERE role = 'staff' 
+                   WHERE role IN ('admin', 'staff') 
                    ORDER BY full_name";
     $staff_stmt = $db->prepare($staff_query);
     $staff_stmt->execute();
@@ -200,7 +220,7 @@ function getKPIDataArray($db, $start_date, $end_date) {
             AVG(CASE WHEN status = 'resolved' AND resolved_at IS NOT NULL 
                 THEN TIMESTAMPDIFF(HOUR, created_at, resolved_at) 
                 ELSE NULL END) as avg_completion_time_hours,
-            AVG(CASE WHEN status IN ('in_progress', 'resolved') AND updated_at > created_at
+            AVG(CASE WHEN status IN ('in_progress', 'resolved') AND updated_at IS NOT NULL
                 THEN TIMESTAMPDIFF(HOUR, created_at, updated_at) 
                 ELSE NULL END) as avg_response_time_hours
             FROM service_requests 
@@ -265,12 +285,12 @@ function getKPIDataArray($db, $start_date, $end_date) {
             'completed_requests' => $completed_requests,
             'in_progress_requests' => (int)$stats['in_progress_requests'],
             'open_requests' => (int)$stats['open_requests'],
-            'avg_completion_time_hours' => $stats['avg_completion_time_hours'] ?? 0,
-            'avg_response_time_hours' => $stats['avg_response_time_hours'] ?? 0,
+            'avg_completion_time_hours' => (float)($stats['avg_completion_time_hours'] ?? 0),
+            'avg_response_time_hours' => (float)($stats['avg_response_time_hours'] ?? 0),
             
             // User feedback metrics
             'total_feedback' => $total_feedback,
-            'avg_rating' => $avg_rating,
+            'avg_rating' => (float)$avg_rating,
             'positive_feedback' => $positive_feedback,
             'negative_feedback' => $negative_feedback,
             'would_recommend_count' => $would_recommend_count,

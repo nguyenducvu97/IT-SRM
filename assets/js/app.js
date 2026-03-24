@@ -350,7 +350,8 @@ class ITServiceApp {
         document.getElementById('adminDepartmentMenu').style.display = 'none';
         document.getElementById('adminSupportMenu').style.display = 'none';
         document.getElementById('adminRejectMenu').style.display = 'none';
-        document.getElementById('adminKPIMenu').style.display = 'none';
+        const adminKPIMenu = document.getElementById('adminKPIMenu');
+        if (adminKPIMenu) adminKPIMenu.style.display = 'none';
         document.getElementById('newRequestMenu').style.display = 'none';
         
         if (this.currentUser.role === 'admin') {
@@ -359,7 +360,7 @@ class ITServiceApp {
             document.getElementById('adminDepartmentMenu').style.display = 'block';
             document.getElementById('adminSupportMenu').style.display = 'block';
             document.getElementById('adminRejectMenu').style.display = 'block';
-            document.getElementById('adminKPIMenu').style.display = 'block';
+            if (adminKPIMenu) adminKPIMenu.style.display = 'block';
             // Hide new request menu for admin
             document.getElementById('newRequestMenu').style.display = 'none';
             // Show add category button for admin
@@ -1108,7 +1109,7 @@ class ITServiceApp {
                 ` : ''}
                 <div class="request-meta">
                     <span><strong>Ngày tạo:</strong> ${this.formatDate(request.created_at)}</span>
-                    ${request.accepted_at ? `<span><strong>Ngày nhận:</strong> ${this.formatDate(request.accepted_at)}</span>` : ''}
+                    ${request.assigned_at ? `<span><strong>Ngày nhận:</strong> ${this.formatDate(request.assigned_at)}</span>` : ''}
                     ${request.resolved_at ? `<span><strong>Ngày giải quyết:</strong> ${this.formatDate(request.resolved_at)}</span>` : ''}
                 </div>
                 ${request.resolution ? `

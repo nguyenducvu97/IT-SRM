@@ -59,6 +59,7 @@ window.ko = {
     'created_at': '생성일',
     'created_by': '생성자',
     'assigned_to': '담당자',
+    'assigned_at': '배정일',
     'request_id': '요청 ID',
     
     // Priority Levels

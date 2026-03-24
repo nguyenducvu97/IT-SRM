@@ -4,7 +4,7 @@
 
 error_reporting(E_ALL);
 
-ini_set('display_errors', 1);  // Display errors temporarily for debugging
+ini_set('display_errors', 0);  // Don't display errors in output
 
 ini_set('log_errors', 1);
 
@@ -479,6 +479,7 @@ if ($method == 'GET') {
         $query = "SELECT sr.*, c.name as category_name, u.full_name as requester_name, 
                         u.email as requester_email, u.phone as requester_phone,
                         assigned.full_name as assigned_name, assigned.email as assigned_email,
+                        sr.assigned_at as assigned_at,
                         sreq.id as support_request_id, sreq.support_type, sreq.support_details, 
                         sreq.support_reason, sreq.status as support_status, sreq.admin_reason,
                         sreq.processed_by, sreq.processed_at, sreq.created_at as support_created_at,
@@ -1413,9 +1414,11 @@ elseif ($method == 'POST') {
 
                              SET title = :title, description = :description, category_id = :category_id, 
 
-                                 priority = :priority, status = :status, assigned_to = :assigned_to, 
+                                priority = :priority, status = :status, assigned_to = :assigned_to, 
 
-                                 updated_at = NOW() 
+                                assigned_at = CASE WHEN :assigned_to IS NOT NULL AND :assigned_to != 0 THEN NOW() ELSE assigned_at END,
+
+                                updated_at = NOW() 
 
                              WHERE id = :request_id";
 
@@ -3059,7 +3062,7 @@ elseif ($method == 'PUT') {
             
             // Update request to assign to staff and set to in_progress
             $update_query = "UPDATE service_requests 
-                           SET assigned_to = :user_id, status = 'in_progress', updated_at = NOW() 
+                           SET assigned_to = :user_id, status = 'in_progress', assigned_at = NOW(), updated_at = NOW() 
                            WHERE id = :request_id";
             $update_stmt = $db->prepare($update_query);
             $update_stmt->bindParam(":request_id", $request_id);

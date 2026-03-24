@@ -2166,7 +2166,7 @@ class RequestDetailApp {
 
 
 
-                    ${request.accepted_at ? `
+                    ${request.assigned_at ? `
 
 
 
@@ -2174,7 +2174,7 @@ class RequestDetailApp {
 
 
 
-                            <strong>Ngày nhận:</strong> ${formatDate(request.accepted_at)}
+                            <strong>Ngày nhận:</strong> ${formatDate(request.assigned_at)}
 
 
 

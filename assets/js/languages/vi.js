@@ -59,6 +59,7 @@ window.vi = {
     'created_at': 'Ngày tạo',
     'created_by': 'Người tạo',
     'assigned_to': 'Người nhận',
+    'assigned_at': 'Ngày nhận',
     'request_id': 'ID yêu cầu',
     
     // Priority Levels

@@ -59,6 +59,7 @@ window.en = {
     'created_at': 'Created At',
     'created_by': 'Created By',
     'assigned_to': 'Assigned To',
+    'assigned_at': 'Assigned At',
     'request_id': 'Request ID',
     
     // Priority Levels

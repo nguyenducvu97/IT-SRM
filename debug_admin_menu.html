@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Menu Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Admin Menu Debug</h1>
+    
+    <div class="debug-section">
+        <h2>1. Check Current User</h2>
+        <div id="userInfo">Loading...</div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>2. Check Menu Elements</h2>
+        <div id="menuCheck">Loading...</div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>3. Manual Menu Show</h2>
+        <button onclick="showAdminMenus()">Show Admin Menus</button>
+        <button onclick="hideAdminMenus()">Hide Admin Menus</button>
+        <div id="manualResult"></div>
+    </div>
+    
+    <script>
+        // Load session and check user
+        async function checkCurrentUser() {
+            try {
+                const response = await fetch('/it-service-request/api/auth.php?action=check_session', {
+                    credentials: 'include'
+                });
+                const result = await response.json();
+                
+                const userInfo = document.getElementById('userInfo');
+                if (result.success) {
+                    userInfo.innerHTML = `
+                        <div class="success">✅ User logged in</div>
+                        <div class="info">ID: ${result.data.id}</div>
+                        <div class="info">Username: ${result.data.username}</div>
+                        <div class="info">Role: ${result.data.role}</div>
+                        <div class="info">Full Name: ${result.data.full_name}</div>
+                    `;
+                } else {
+                    userInfo.innerHTML = `<div class="error">❌ Not logged in: ${result.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('userInfo').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Check menu elements exist
+        function checkMenuElements() {
+            const menus = [
+                'adminMenu',
+                'adminDepartmentMenu', 
+                'adminSupportMenu',
+                'adminRejectMenu',
+                'adminKPIMenu',
+                'newRequestMenu'
+            ];
+            
+            let html = '';
+            menus.forEach(menuId => {
+                const element = document.getElementById(menuId);
+                if (element) {
+                    html += `<div class="success">✅ ${menuId}: Found (display: ${element.style.display || 'default'})</div>`;
+                } else {
+                    html += `<div class="error">❌ ${menuId}: Not found</div>`;
+                }
+            });
+            
+            document.getElementById('menuCheck').innerHTML = html;
+        }
+        
+        // Manual show admin menus
+        function showAdminMenus() {
+            const menus = [
+                'adminMenu',
+                'adminDepartmentMenu', 
+                'adminSupportMenu',
+                'adminRejectMenu',
+                'adminKPIMenu'
+            ];
+            
+            menus.forEach(menuId => {
+                const element = document.getElementById(menuId);
+                if (element) {
+                    element.style.display = 'block';
+                }
+            });
+            
+            document.getElementById('manualResult').innerHTML = '<div class="success">✅ Admin menus shown manually</div>';
+        }
+        
+        // Manual hide admin menus
+        function hideAdminMenus() {
+            const menus = [
+                'adminMenu',
+                'adminDepartmentMenu', 
+                'adminSupportMenu',
+                'adminRejectMenu',
+                'adminKPIMenu'
+            ];
+            
+            menus.forEach(menuId => {
+                const element = document.getElementById(menuId);
+                if (element) {
+                    element.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('manualResult').innerHTML = '<div class="info">ℹ️ Admin menus hidden manually</div>';
+        }
+        
+        // Run checks
+        checkCurrentUser();
+        checkMenuElements();
+    </script>
+</body>
+</html>

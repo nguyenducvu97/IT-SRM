@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Assigned Time</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .warning { color: orange; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+        .btn { padding: 8px 12px; margin: 2px; cursor: pointer; }
+        .btn-info { background: #007bff; color: white; border: none; }
+        .btn-success { background: #28a745; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <h1>Debug Assigned Time - Request Detail</h1>
+    
+    <div class="debug-section">
+        <h2>1. Kiểm tra Request #8 trong Database</h2>
+        <button onclick="checkDatabase()" class="btn btn-info">Check Database</button>
+        <div id="dbResult"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>2. Kiểm tra API Response</h2>
+        <button onclick="checkAPI()" class="btn btn-info">Check API</button>
+        <div id="apiResult"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>3. Kiểm tra Request Detail Page</h2>
+        <button onclick="checkDetailPage()" class="btn btn-success">Check Detail Page</button>
+        <div id="detailResult"></div>
+    </div>
+
+    <script>
+        async function checkDatabase() {
+            try {
+                const response = await fetch('/it-service-request/debug_database_request.php?request_id=8');
+                const text = await response.text();
+                document.getElementById('dbResult').innerHTML = `
+                    <h3>Database Record cho Request #8:</h3>
+                    <pre>${text}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('dbResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function checkAPI() {
+            try {
+                const response = await fetch('/it-service-request/api/service_requests.php?action=get&id=8', {
+                    credentials: 'include'
+                });
+                const result = await response.json();
+                
+                const apiResult = document.getElementById('apiResult');
+                if (result.success) {
+                    const request = result.data;
+                    apiResult.innerHTML = `
+                        <h3>API Response cho Request #8:</h3>
+                        <table>
+                            <tr><th>Field</th><th>Value</th><th>Has assigned_at?</th></tr>
+                            <tr><td>id</td><td>${request.id}</td><td>-</td></tr>
+                            <tr><td>title</td><td>${request.title}</td><td>-</td></tr>
+                            <tr><td>status</td><td>${request.status}</td><td>-</td></tr>
+                            <tr><td>assigned_to</td><td>${request.assigned_to || 'NULL'}</td><td>-</td></tr>
+                            <tr><td>assigned_at</td><td>${request.assigned_at || 'NULL'}</td><td>${request.assigned_at ? '✅' : '❌'}</td></tr>
+                            <tr><td>created_at</td><td>${request.created_at}</td><td>-</td></tr>
+                            <tr><td>updated_at</td><td>${request.updated_at}</td><td>-</td></tr>
+                            <tr><td>assigned_name</td><td>${request.assigned_name || 'NULL'}</td><td>-</td></tr>
+                            <tr><td>assigned_email</td><td>${request.assigned_email || 'NULL'}</td><td>-</td></tr>
+                        </table>
+                        
+                        <h4>Full Response:</h4>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                        
+                        <h4>Check assigned_at:</h4>
+                        ${request.assigned_at ? 
+                            '<div class="success">✅ assigned_at có trong API response</div>' : 
+                            '<div class="error">❌ assigned_at KHÔNG có trong API response</div>'
+                        }
+                    `;
+                } else {
+                    apiResult.innerHTML = `<div class="error">❌ API Error: ${result.message}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function checkDetailPage() {
+            try {
+                const detailResult = document.getElementById('detailResult');
+                detailResult.innerHTML = `
+                    <h3>Request Detail Page Analysis:</h3>
+                    
+                    <h4>1. Mở Request Detail #8:</h4>
+                    <a href="/it-service-request/request-detail.html?id=8" target="_blank" class="btn btn-success">
+                        Mở Request Detail #8
+                    </a>
+                    
+                    <h4>2. Kiểm tra JavaScript trong request-detail.js:</h4>
+                    <p>Tìm đoạn code hiển thị "Ngày nhận":</p>
+                    <pre>
+// Dòng 1112 trong app.js
+\${request.assigned_at ? \`&lt;span&gt;&lt;strong&gt;Ngày nhận:&lt;/strong&gt; \${this.formatDate(request.assigned_at)}&lt;/span&gt;\` : ''\}
+
+// Dòng 2177 trong request-detail.js  
+\${request.accepted_at ? \`&lt;strong&gt;Ngày nhận:&lt;/strong&gt; \${formatDate(request.accepted_at)}&lt;/strong&gt;\` : ''}
+                    </pre>
+                    
+                    <h4>3. Vấn đề có thể là:</h4>
+                    <ul>
+                        <li><strong>app.js</strong> dùng <code>request.assigned_at</code> ✅</li>
+                        <li><strong>request-detail.js</strong> dùng <code>request.accepted_at</code> ❌</li>
+                        <li>Cần update request-detail.js để dùng assigned_at</li>
+                    </ul>
+                    
+                    <h4>4. Cách kiểm tra:</h4>
+                    <ol>
+                        <li>Mở request detail #8</li>
+                        <li>Mở Developer Console (F12)</li>
+                        <li>Gõ: <code>console.log(currentRequest)</code></li>
+                        <li>Kiểm tra xem có <code>assigned_at</code> field không</li>
+                    </ol>
+                    
+                    <h4>5. Test ngay:</h4>
+                    <button onclick="testAssignedAt()" class="btn btn-info">Test assigned_at trong console</button>
+                    <div id="consoleTest"></div>
+                `;
+            } catch (error) {
+                document.getElementById('detailResult').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function testAssignedAt() {
+            try {
+                // Mở request detail trong iframe để test
+                const iframe = document.createElement('iframe');
+                iframe.src = '/it-service-request/request-detail.html?id=8';
+                iframe.style.width = '100%';
+                iframe.style.height = '400px';
+                iframe.style.border = '1px solid #ddd';
+                
+                const testDiv = document.getElementById('consoleTest');
+                testDiv.innerHTML = '<h4>Request Detail #8 trong iframe:</h4>';
+                testDiv.appendChild(iframe);
+                
+                // Chờ iframe load rồi kiểm tra
+                iframe.onload = function() {
+                    try {
+                        const iframeDoc = iframe.contentWindow.document;
+                        const consoleInfo = iframeDoc.createElement('div');
+                        consoleInfo.innerHTML = `
+                            <p>Mở console trong iframe và gõ:</p>
+                            <pre>console.log(currentRequest)</pre>
+                            <p>Kiểm tra field <code>assigned_at</code></p>
+                        `;
+                        testDiv.appendChild(consoleInfo);
+                    } catch (e) {
+                        testDiv.innerHTML += '<p class="warning">⚠️ Không thể truy cập iframe do same-origin policy</p>';
+                    }
+                };
+            } catch (error) {
+                document.getElementById('consoleTest').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Auto-run database check
+        checkDatabase();
+    </script>
+</body>
+</html>
