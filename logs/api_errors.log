@@ -3882,3 +3882,789 @@ Stack trace:
 [21-Mar-2026 11:03:12 Europe/Berlin] FILES data: []
 [21-Mar-2026 11:03:12 Europe/Berlin] Raw input: 
 [21-Mar-2026 11:03:12 Europe/Berlin] ========================
+[21-Mar-2026 11:06:25 Europe/Berlin] Database session started - ID: fkjbk3thve3ljedn16hhm9krid
+[21-Mar-2026 11:06:25 Europe/Berlin] === API REQUEST DEBUG ===
+[21-Mar-2026 11:06:25 Europe/Berlin] Method: GET
+[21-Mar-2026 11:06:25 Europe/Berlin] Content-Type: application/json
+[21-Mar-2026 11:06:25 Europe/Berlin] POST data: []
+[21-Mar-2026 11:06:25 Europe/Berlin] FILES data: []
+[21-Mar-2026 11:06:25 Europe/Berlin] Raw input: 
+[21-Mar-2026 11:06:25 Europe/Berlin] ========================
+[24-Mar-2026 02:30:25 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:30:25 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:30:29 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:30:29 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:30:29 Europe/Berlin] Method: GET
+[24-Mar-2026 02:30:29 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:30:29 Europe/Berlin] POST data: []
+[24-Mar-2026 02:30:29 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:30:29 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:30:29 Europe/Berlin] ========================
+[24-Mar-2026 02:30:29 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:30:29 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:30:29 Europe/Berlin] Method: GET
+[24-Mar-2026 02:30:29 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:30:29 Europe/Berlin] POST data: []
+[24-Mar-2026 02:30:29 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:30:29 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:30:29 Europe/Berlin] ========================
+[24-Mar-2026 02:30:31 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:30:31 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:30:31 Europe/Berlin] Method: GET
+[24-Mar-2026 02:30:31 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:30:31 Europe/Berlin] POST data: []
+[24-Mar-2026 02:30:31 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:30:31 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:30:31 Europe/Berlin] ========================
+[24-Mar-2026 02:30:31 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:30:31 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:30:31 Europe/Berlin] Method: GET
+[24-Mar-2026 02:30:31 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:30:31 Europe/Berlin] POST data: []
+[24-Mar-2026 02:30:31 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:30:31 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:30:31 Europe/Berlin] ========================
+[24-Mar-2026 02:30:48 Europe/Berlin] Database session started - ID: 3p5d4tk783vbb1lgrasaal16m9
+[24-Mar-2026 02:30:48 Europe/Berlin] Database session started - ID: 3p5d4tk783vbb1lgrasaal16m9
+[24-Mar-2026 02:30:58 Europe/Berlin] Database session started - ID: 3p5d4tk783vbb1lgrasaal16m9
+[24-Mar-2026 02:30:58 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:30:58 Europe/Berlin] Method: GET
+[24-Mar-2026 02:30:58 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:30:58 Europe/Berlin] POST data: []
+[24-Mar-2026 02:30:58 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:30:58 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:30:58 Europe/Berlin] ========================
+[24-Mar-2026 02:30:58 Europe/Berlin] Database session started - ID: 3p5d4tk783vbb1lgrasaal16m9
+[24-Mar-2026 02:30:58 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:30:58 Europe/Berlin] Method: GET
+[24-Mar-2026 02:30:58 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:30:58 Europe/Berlin] POST data: []
+[24-Mar-2026 02:30:58 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:30:58 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:30:58 Europe/Berlin] ========================
+[24-Mar-2026 02:31:06 Europe/Berlin] Database session started - ID: 3p5d4tk783vbb1lgrasaal16m9
+[24-Mar-2026 02:31:06 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:31:06 Europe/Berlin] Method: GET
+[24-Mar-2026 02:31:06 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:31:06 Europe/Berlin] POST data: []
+[24-Mar-2026 02:31:06 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:31:06 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:31:06 Europe/Berlin] ========================
+[24-Mar-2026 02:31:18 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:31:18 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:31:42 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:31:42 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:31:42 Europe/Berlin] Method: GET
+[24-Mar-2026 02:31:42 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:31:42 Europe/Berlin] POST data: []
+[24-Mar-2026 02:31:42 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:31:42 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:31:42 Europe/Berlin] ========================
+[24-Mar-2026 02:31:42 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:31:42 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:31:42 Europe/Berlin] Method: GET
+[24-Mar-2026 02:31:42 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:31:42 Europe/Berlin] POST data: []
+[24-Mar-2026 02:31:42 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:31:42 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:31:42 Europe/Berlin] ========================
+[24-Mar-2026 02:31:55 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:31:55 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:31:55 Europe/Berlin] Method: GET
+[24-Mar-2026 02:31:55 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:31:55 Europe/Berlin] POST data: []
+[24-Mar-2026 02:31:55 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:31:55 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:31:55 Europe/Berlin] ========================
+[24-Mar-2026 02:31:55 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:31:55 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:31:55 Europe/Berlin] Method: GET
+[24-Mar-2026 02:31:55 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:31:55 Europe/Berlin] POST data: []
+[24-Mar-2026 02:31:55 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:31:55 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:31:55 Europe/Berlin] ========================
+[24-Mar-2026 02:32:21 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:32:21 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:32:21 Europe/Berlin] Method: POST
+[24-Mar-2026 02:32:21 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary74AxRAStLSQq3aEP
+[24-Mar-2026 02:32:21 Europe/Berlin] POST data: {"title":"Hi\u1ec7n danh m\u1ee5c","description":"ABC","category_id":"5","priority":"medium"}
+[24-Mar-2026 02:32:21 Europe/Berlin] FILES data: ["attachments"]
+[24-Mar-2026 02:32:21 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:32:21 Europe/Berlin] ========================
+[24-Mar-2026 02:32:41 Europe/Berlin] Email sent in 19551.51ms
+[24-Mar-2026 02:32:41 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[24-Mar-2026 02:32:41 Europe/Berlin] Notifications created in 0.01889705657959s for 3 users
+[24-Mar-2026 02:32:41 Europe/Berlin] DEBUG: Checking files - isset($_FILES['attachments']): YES
+[24-Mar-2026 02:32:41 Europe/Berlin] DEBUG: FILES data: Array
+(
+    [name] => Array
+        (
+            [0] => diagram_SRM.png
+            [1] => Thông báo lương 02-2026 -V240420.pdf
+            [2] => GIẢI THÍCH CÁC MỤC TRÊN POP - Copy.xlsx
+        )
+
+    [full_path] => Array
+        (
+            [0] => diagram_SRM.png
+            [1] => Thông báo lương 02-2026 -V240420.pdf
+            [2] => GIẢI THÍCH CÁC MỤC TRÊN POP - Copy.xlsx
+        )
+
+    [type] => Array
+        (
+            [0] => image/png
+            [1] => application/pdf
+            [2] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        )
+
+    [tmp_name] => Array
+        (
+            [0] => C:\xampp\tmp\phpA865.tmp
+            [1] => C:\xampp\tmp\phpA876.tmp
+            [2] => C:\xampp\tmp\phpA877.tmp
+        )
+
+    [error] => Array
+        (
+            [0] => 0
+            [1] => 0
+            [2] => 0
+        )
+
+    [size] => Array
+        (
+            [0] => 1529867
+            [1] => 109538
+            [2] => 21708
+        )
+
+)
+
+[24-Mar-2026 02:32:41 Europe/Berlin] Processed 3 attachments in 4.54ms
+[24-Mar-2026 02:32:41 Europe/Berlin] Total request creation time: 19577.71ms (Request ID: 7)
+[24-Mar-2026 02:32:41 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:32:41 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:32:41 Europe/Berlin] Method: GET
+[24-Mar-2026 02:32:41 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:32:41 Europe/Berlin] POST data: []
+[24-Mar-2026 02:32:41 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:32:41 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:32:41 Europe/Berlin] ========================
+[24-Mar-2026 02:32:50 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:32:50 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:32:50 Europe/Berlin] Method: GET
+[24-Mar-2026 02:32:50 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:32:50 Europe/Berlin] POST data: []
+[24-Mar-2026 02:32:50 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:32:50 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:32:50 Europe/Berlin] ========================
+[24-Mar-2026 02:41:04 Europe/Berlin] Database session started - ID: test
+[24-Mar-2026 02:41:35 Europe/Berlin] Database session started - ID: j1dl45fgbjfflubi5iqmf5i8ij
+[24-Mar-2026 02:43:45 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:43:45 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:43:45 Europe/Berlin] Method: GET
+[24-Mar-2026 02:43:45 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:43:45 Europe/Berlin] POST data: []
+[24-Mar-2026 02:43:45 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:43:45 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:43:45 Europe/Berlin] ========================
+[24-Mar-2026 02:43:45 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:43:45 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:43:45 Europe/Berlin] Method: GET
+[24-Mar-2026 02:43:45 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:43:45 Europe/Berlin] POST data: []
+[24-Mar-2026 02:43:45 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:43:45 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:43:45 Europe/Berlin] ========================
+[24-Mar-2026 02:43:45 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:43:45 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:43:45 Europe/Berlin] Method: GET
+[24-Mar-2026 02:43:45 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:43:45 Europe/Berlin] POST data: []
+[24-Mar-2026 02:43:45 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:43:45 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:43:45 Europe/Berlin] ========================
+[24-Mar-2026 02:43:45 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:43:45 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:43:45 Europe/Berlin] Method: GET
+[24-Mar-2026 02:43:45 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:43:45 Europe/Berlin] POST data: []
+[24-Mar-2026 02:43:45 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:43:45 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:43:45 Europe/Berlin] ========================
+[24-Mar-2026 02:44:02 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:44:02 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:44:02 Europe/Berlin] Method: POST
+[24-Mar-2026 02:44:02 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryg4vqG3QZ9W382w8t
+[24-Mar-2026 02:44:02 Europe/Berlin] POST data: {"title":"dddd","description":"aaaaaaa","category_id":"1","priority":"medium"}
+[24-Mar-2026 02:44:02 Europe/Berlin] FILES data: ["attachments"]
+[24-Mar-2026 02:44:02 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:44:02 Europe/Berlin] ========================
+[24-Mar-2026 02:44:21 Europe/Berlin] Email sent in 19344.79ms
+[24-Mar-2026 02:44:21 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[24-Mar-2026 02:44:21 Europe/Berlin] Notifications created in 0.0057830810546875s for 3 users
+[24-Mar-2026 02:44:21 Europe/Berlin] DEBUG: Checking files - isset($_FILES['attachments']): YES
+[24-Mar-2026 02:44:21 Europe/Berlin] DEBUG: FILES data: Array
+(
+    [name] => Array
+        (
+            [0] => Layout_CCTV_B3_THIÊU KẾT_2026_01_08-Model.pdf
+            [1] => Blue Elegant Happy New Year Video.png
+        )
+
+    [full_path] => Array
+        (
+            [0] => Layout_CCTV_B3_THIÊU KẾT_2026_01_08-Model.pdf
+            [1] => Blue Elegant Happy New Year Video.png
+        )
+
+    [type] => Array
+        (
+            [0] => application/pdf
+            [1] => image/png
+        )
+
+    [tmp_name] => Array
+        (
+            [0] => C:\xampp\tmp\php5A33.tmp
+            [1] => C:\xampp\tmp\php5A34.tmp
+        )
+
+    [error] => Array
+        (
+            [0] => 0
+            [1] => 0
+        )
+
+    [size] => Array
+        (
+            [0] => 328634
+            [1] => 566370
+        )
+
+)
+
+[24-Mar-2026 02:44:21 Europe/Berlin] Processed 2 attachments in 2.5ms
+[24-Mar-2026 02:44:21 Europe/Berlin] Total request creation time: 19355.97ms (Request ID: 8)
+[24-Mar-2026 02:44:22 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:44:22 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:44:22 Europe/Berlin] Method: GET
+[24-Mar-2026 02:44:22 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:44:22 Europe/Berlin] POST data: []
+[24-Mar-2026 02:44:22 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:44:22 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:44:22 Europe/Berlin] ========================
+[24-Mar-2026 02:47:39 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:47:39 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:47:39 Europe/Berlin] Method: GET
+[24-Mar-2026 02:47:39 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:47:39 Europe/Berlin] POST data: []
+[24-Mar-2026 02:47:39 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:47:39 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:47:39 Europe/Berlin] ========================
+[24-Mar-2026 02:47:39 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:47:39 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:47:39 Europe/Berlin] Method: GET
+[24-Mar-2026 02:47:39 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:47:39 Europe/Berlin] POST data: []
+[24-Mar-2026 02:47:39 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:47:39 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:47:39 Europe/Berlin] ========================
+[24-Mar-2026 02:47:39 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:47:39 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:47:39 Europe/Berlin] Method: GET
+[24-Mar-2026 02:47:39 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:47:39 Europe/Berlin] POST data: []
+[24-Mar-2026 02:47:39 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:47:39 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:47:39 Europe/Berlin] ========================
+[24-Mar-2026 02:47:39 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:47:39 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:47:39 Europe/Berlin] Method: GET
+[24-Mar-2026 02:47:39 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:47:39 Europe/Berlin] POST data: []
+[24-Mar-2026 02:47:39 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:47:39 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:47:39 Europe/Berlin] ========================
+[24-Mar-2026 02:48:08 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:48:08 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:48:08 Europe/Berlin] Method: POST
+[24-Mar-2026 02:48:08 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryYzgUIoFOYrBnZn48
+[24-Mar-2026 02:48:08 Europe/Berlin] POST data: {"title":"anh y\u00eau em","description":"Y\u00eau em nh\u1ea5t m\u00e0\r\n","category_id":"1","priority":"medium"}
+[24-Mar-2026 02:48:08 Europe/Berlin] FILES data: ["attachments"]
+[24-Mar-2026 02:48:08 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:48:08 Europe/Berlin] ========================
+[24-Mar-2026 02:48:08 Europe/Berlin] Email queued in 25.34ms
+[24-Mar-2026 02:48:08 Europe/Berlin] Batch notifications: 3 users in 2.3ms
+[24-Mar-2026 02:48:08 Europe/Berlin] Batch notifications created in 3.07ms for 3 users
+[24-Mar-2026 02:48:08 Europe/Berlin] Starting file upload processing: 2 files
+[24-Mar-2026 02:48:08 Europe/Berlin] Failed to batch insert attachments: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'it_service_request.service_request_attachments' doesn't exist
+[24-Mar-2026 02:48:08 Europe/Berlin] Using fallback individual attachment inserts
+[24-Mar-2026 02:48:08 Europe/Berlin] Failed to insert attachment: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'it_service_request.service_request_attachments' doesn't exist
+[24-Mar-2026 02:48:08 Europe/Berlin] Failed to insert attachment: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'it_service_request.service_request_attachments' doesn't exist
+[24-Mar-2026 02:48:08 Europe/Berlin] File upload completed: 2 files in 3.94ms
+[24-Mar-2026 02:48:08 Europe/Berlin] File upload optimized: 2 files in 4.64ms
+[24-Mar-2026 02:48:08 Europe/Berlin] Total request creation time: 35.64ms (Request ID: 9)
+[24-Mar-2026 02:48:09 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:48:09 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:48:09 Europe/Berlin] Method: GET
+[24-Mar-2026 02:48:09 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:48:09 Europe/Berlin] POST data: []
+[24-Mar-2026 02:48:09 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:48:09 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:48:09 Europe/Berlin] ========================
+[24-Mar-2026 02:48:12 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:48:12 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:48:12 Europe/Berlin] Method: GET
+[24-Mar-2026 02:48:12 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:48:12 Europe/Berlin] POST data: []
+[24-Mar-2026 02:48:12 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:48:12 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:48:12 Europe/Berlin] ========================
+[24-Mar-2026 02:49:06 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:49:06 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:49:06 Europe/Berlin] Method: GET
+[24-Mar-2026 02:49:06 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:49:06 Europe/Berlin] POST data: []
+[24-Mar-2026 02:49:06 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:49:06 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:49:06 Europe/Berlin] ========================
+[24-Mar-2026 02:49:06 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:49:06 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:49:06 Europe/Berlin] Method: GET
+[24-Mar-2026 02:49:06 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:49:06 Europe/Berlin] POST data: []
+[24-Mar-2026 02:49:06 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:49:06 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:49:06 Europe/Berlin] ========================
+[24-Mar-2026 02:49:06 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:49:06 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:49:06 Europe/Berlin] Method: GET
+[24-Mar-2026 02:49:06 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:49:06 Europe/Berlin] POST data: []
+[24-Mar-2026 02:49:06 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:49:06 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:49:06 Europe/Berlin] ========================
+[24-Mar-2026 02:49:07 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:49:07 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:49:07 Europe/Berlin] Method: GET
+[24-Mar-2026 02:49:07 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:49:07 Europe/Berlin] POST data: []
+[24-Mar-2026 02:49:07 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:49:07 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:49:07 Europe/Berlin] ========================
+[24-Mar-2026 02:49:12 Europe/Berlin] Database session started - ID: 3p5d4tk783vbb1lgrasaal16m9
+[24-Mar-2026 02:49:12 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:49:12 Europe/Berlin] Method: GET
+[24-Mar-2026 02:49:12 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:49:12 Europe/Berlin] POST data: []
+[24-Mar-2026 02:49:12 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:49:12 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:49:12 Europe/Berlin] ========================
+[24-Mar-2026 02:49:14 Europe/Berlin] Database session started - ID: 3p5d4tk783vbb1lgrasaal16m9
+[24-Mar-2026 02:49:14 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:49:14 Europe/Berlin] Method: GET
+[24-Mar-2026 02:49:14 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:49:14 Europe/Berlin] POST data: []
+[24-Mar-2026 02:49:14 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:49:14 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:49:14 Europe/Berlin] ========================
+[24-Mar-2026 02:49:19 Europe/Berlin] Database session started - ID: 3p5d4tk783vbb1lgrasaal16m9
+[24-Mar-2026 02:49:19 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:49:19 Europe/Berlin] Method: GET
+[24-Mar-2026 02:49:19 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:49:19 Europe/Berlin] POST data: []
+[24-Mar-2026 02:49:19 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:49:19 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:49:19 Europe/Berlin] ========================
+[24-Mar-2026 02:50:28 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:50:28 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:50:28 Europe/Berlin] Method: GET
+[24-Mar-2026 02:50:28 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:50:28 Europe/Berlin] POST data: []
+[24-Mar-2026 02:50:28 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:50:28 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:50:28 Europe/Berlin] ========================
+[24-Mar-2026 02:50:28 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:50:28 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:50:28 Europe/Berlin] Method: GET
+[24-Mar-2026 02:50:28 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:50:28 Europe/Berlin] POST data: []
+[24-Mar-2026 02:50:28 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:50:28 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:50:28 Europe/Berlin] ========================
+[24-Mar-2026 02:50:28 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:50:28 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:50:28 Europe/Berlin] Method: GET
+[24-Mar-2026 02:50:28 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:50:28 Europe/Berlin] POST data: []
+[24-Mar-2026 02:50:28 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:50:28 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:50:28 Europe/Berlin] ========================
+[24-Mar-2026 02:50:28 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:50:28 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:50:28 Europe/Berlin] Method: GET
+[24-Mar-2026 02:50:28 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:50:28 Europe/Berlin] POST data: []
+[24-Mar-2026 02:50:28 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:50:28 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:50:28 Europe/Berlin] ========================
+[24-Mar-2026 02:50:30 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:50:30 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:50:30 Europe/Berlin] Method: GET
+[24-Mar-2026 02:50:30 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:50:30 Europe/Berlin] POST data: []
+[24-Mar-2026 02:50:30 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:50:30 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:50:30 Europe/Berlin] ========================
+[24-Mar-2026 02:50:30 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:50:30 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:50:30 Europe/Berlin] Method: GET
+[24-Mar-2026 02:50:30 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:50:30 Europe/Berlin] POST data: []
+[24-Mar-2026 02:50:30 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:50:30 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:50:30 Europe/Berlin] ========================
+[24-Mar-2026 02:50:31 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:50:31 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:50:31 Europe/Berlin] Method: GET
+[24-Mar-2026 02:50:31 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:50:31 Europe/Berlin] POST data: []
+[24-Mar-2026 02:50:31 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:50:31 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:50:31 Europe/Berlin] ========================
+[24-Mar-2026 02:52:16 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:52:16 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:52:16 Europe/Berlin] Method: GET
+[24-Mar-2026 02:52:16 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:52:16 Europe/Berlin] POST data: []
+[24-Mar-2026 02:52:16 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:52:16 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:52:16 Europe/Berlin] ========================
+[24-Mar-2026 02:52:44 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:52:44 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:52:44 Europe/Berlin] Method: POST
+[24-Mar-2026 02:52:44 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundary4mxhmnndFwmqAIH9
+[24-Mar-2026 02:52:44 Europe/Berlin] POST data: {"title":"T\u00ecnh y\u00eau v\u0129nh c\u1eedu","description":"ssssss","category_id":"3","priority":"critical"}
+[24-Mar-2026 02:52:44 Europe/Berlin] FILES data: ["attachments"]
+[24-Mar-2026 02:52:44 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:52:44 Europe/Berlin] ========================
+[24-Mar-2026 02:52:46 Europe/Berlin] Immediate send failed, queuing email to nguyenducvu561@gmail.com
+[24-Mar-2026 02:52:49 Europe/Berlin] Immediate send failed, queuing email to jane.doe@sgitech.com.vn
+[24-Mar-2026 02:52:51 Europe/Berlin] Email sent immediately to ndvu@sgitech.com.vn
+[24-Mar-2026 02:52:51 Europe/Berlin] Email queued in 7304.99ms
+[24-Mar-2026 02:52:51 Europe/Berlin] Batch notifications: 3 users in 1.46ms
+[24-Mar-2026 02:52:51 Europe/Berlin] Batch notifications created in 2.34ms for 3 users
+[24-Mar-2026 02:52:51 Europe/Berlin] Starting file upload processing: 3 files
+[24-Mar-2026 02:52:51 Europe/Berlin] Failed to batch insert attachments: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'it_service_request.service_request_attachments' doesn't exist
+[24-Mar-2026 02:52:51 Europe/Berlin] Using fallback individual attachment inserts
+[24-Mar-2026 02:52:51 Europe/Berlin] Failed to insert attachment: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'it_service_request.service_request_attachments' doesn't exist
+[24-Mar-2026 02:52:51 Europe/Berlin] Failed to insert attachment: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'it_service_request.service_request_attachments' doesn't exist
+[24-Mar-2026 02:52:51 Europe/Berlin] Failed to insert attachment: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'it_service_request.service_request_attachments' doesn't exist
+[24-Mar-2026 02:52:51 Europe/Berlin] File upload completed: 3 files in 5.33ms
+[24-Mar-2026 02:52:51 Europe/Berlin] File upload optimized: 3 files in 5.59ms
+[24-Mar-2026 02:52:51 Europe/Berlin] Total request creation time: 7315.74ms (Request ID: 10)
+[24-Mar-2026 02:52:52 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:52:52 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:52:52 Europe/Berlin] Method: GET
+[24-Mar-2026 02:52:52 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:52:52 Europe/Berlin] POST data: []
+[24-Mar-2026 02:52:52 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:52:52 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:52:52 Europe/Berlin] ========================
+[24-Mar-2026 02:52:56 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:52:56 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:52:56 Europe/Berlin] Method: GET
+[24-Mar-2026 02:52:56 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:52:56 Europe/Berlin] POST data: []
+[24-Mar-2026 02:52:56 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:52:56 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:52:56 Europe/Berlin] ========================
+[24-Mar-2026 02:53:00 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:00 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:00 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:00 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:00 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:00 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:00 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:00 Europe/Berlin] ========================
+[24-Mar-2026 02:53:00 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:00 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:00 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:00 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:00 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:00 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:00 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:00 Europe/Berlin] ========================
+[24-Mar-2026 02:53:00 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:00 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:00 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:00 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:00 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:00 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:00 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:00 Europe/Berlin] ========================
+[24-Mar-2026 02:53:00 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:00 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:00 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:00 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:00 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:00 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:00 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:00 Europe/Berlin] ========================
+[24-Mar-2026 02:53:18 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:18 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:18 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:18 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:18 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:18 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:18 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:18 Europe/Berlin] ========================
+[24-Mar-2026 02:53:18 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:18 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:18 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:18 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:18 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:18 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:18 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:18 Europe/Berlin] ========================
+[24-Mar-2026 02:53:19 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:19 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:19 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:19 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:19 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:19 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:19 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:19 Europe/Berlin] ========================
+[24-Mar-2026 02:53:19 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:19 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:19 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:19 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:19 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:19 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:19 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:19 Europe/Berlin] ========================
+[24-Mar-2026 02:53:23 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:53:23 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:23 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:23 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:23 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:23 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:23 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:23 Europe/Berlin] ========================
+[24-Mar-2026 02:53:23 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:53:23 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:23 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:23 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:23 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:23 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:23 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:23 Europe/Berlin] ========================
+[24-Mar-2026 02:53:23 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:53:23 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:23 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:23 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:23 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:23 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:23 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:23 Europe/Berlin] ========================
+[24-Mar-2026 02:53:28 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:53:28 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:28 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:28 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:28 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:28 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:28 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:28 Europe/Berlin] ========================
+[24-Mar-2026 02:53:42 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:42 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:42 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:42 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:42 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:42 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:42 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:42 Europe/Berlin] ========================
+[24-Mar-2026 02:53:42 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:42 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:42 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:42 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:42 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:42 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:42 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:42 Europe/Berlin] ========================
+[24-Mar-2026 02:53:42 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:42 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:42 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:42 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:42 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:42 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:42 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:42 Europe/Berlin] ========================
+[24-Mar-2026 02:53:42 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:53:42 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:53:42 Europe/Berlin] Method: GET
+[24-Mar-2026 02:53:42 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:53:42 Europe/Berlin] POST data: []
+[24-Mar-2026 02:53:42 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:53:42 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:53:42 Europe/Berlin] ========================
+[24-Mar-2026 02:54:21 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:54:21 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:54:21 Europe/Berlin] Method: POST
+[24-Mar-2026 02:54:21 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryj3vNiNGH7ANCLVr1
+[24-Mar-2026 02:54:21 Europe/Berlin] POST data: {"title":"Nh\u1edb em \u0111\u00f3","description":"!Th\u01b0\u01a1ng em nhi\u1ec1u l\u00f2ng n\u00e0y nh\u00f3i \u0111au, nh\u1edb em nhi\u1ec1u ng\u00e0y th\u00e1ng mau","category_id":"5","priority":"high"}
+[24-Mar-2026 02:54:21 Europe/Berlin] FILES data: ["attachments"]
+[24-Mar-2026 02:54:21 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:54:21 Europe/Berlin] ========================
+[24-Mar-2026 02:54:40 Europe/Berlin] Email sent in 18853.11ms
+[24-Mar-2026 02:54:40 Europe/Berlin] PHP Deprecated:  Creation of dynamic property PHPMailer::$ContentType is deprecated in C:\xampp\htdocs\it-service-request\vendor\phpmailer\phpmailer.php on line 71
+[24-Mar-2026 02:54:40 Europe/Berlin] Notifications created in 0.0068869590759277s for 3 users
+[24-Mar-2026 02:54:40 Europe/Berlin] DEBUG: Checking files - isset($_FILES['attachments']): YES
+[24-Mar-2026 02:54:40 Europe/Berlin] DEBUG: FILES data: Array
+(
+    [name] => Array
+        (
+            [0] => diagram_SRM.png
+            [1] => GIẢI THÍCH CÁC MỤC TRÊN POP - Copy.xlsx
+        )
+
+    [full_path] => Array
+        (
+            [0] => diagram_SRM.png
+            [1] => GIẢI THÍCH CÁC MỤC TRÊN POP - Copy.xlsx
+        )
+
+    [type] => Array
+        (
+            [0] => image/png
+            [1] => application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+        )
+
+    [tmp_name] => Array
+        (
+            [0] => C:\xampp\tmp\phpCD4B.tmp
+            [1] => C:\xampp\tmp\phpCD5C.tmp
+        )
+
+    [error] => Array
+        (
+            [0] => 0
+            [1] => 0
+        )
+
+    [size] => Array
+        (
+            [0] => 1529867
+            [1] => 21708
+        )
+
+)
+
+[24-Mar-2026 02:54:40 Europe/Berlin] Processed 2 attachments in 3.28ms
+[24-Mar-2026 02:54:40 Europe/Berlin] Total request creation time: 18868.24ms (Request ID: 11)
+[24-Mar-2026 02:54:41 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:54:41 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:54:41 Europe/Berlin] Method: GET
+[24-Mar-2026 02:54:41 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:54:41 Europe/Berlin] POST data: []
+[24-Mar-2026 02:54:41 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:54:41 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:54:41 Europe/Berlin] ========================
+[24-Mar-2026 02:54:44 Europe/Berlin] Database session started - ID: pjsgcedms2pnnj58lsb097mdkf
+[24-Mar-2026 02:54:44 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:54:44 Europe/Berlin] Method: GET
+[24-Mar-2026 02:54:44 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:54:44 Europe/Berlin] POST data: []
+[24-Mar-2026 02:54:44 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:54:44 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:54:44 Europe/Berlin] ========================
+[24-Mar-2026 02:55:04 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:04 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:04 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:04 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:04 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:04 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:04 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:04 Europe/Berlin] ========================
+[24-Mar-2026 02:55:05 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:05 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:05 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:05 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:05 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:05 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:05 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:05 Europe/Berlin] ========================
+[24-Mar-2026 02:55:07 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:07 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:07 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:07 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:07 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:07 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:07 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:07 Europe/Berlin] ========================
+[24-Mar-2026 02:55:07 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:07 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:07 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:07 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:07 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:07 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:07 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:07 Europe/Berlin] ========================
+[24-Mar-2026 02:55:08 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:08 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:08 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:08 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:08 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:08 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:08 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:08 Europe/Berlin] ========================
+[24-Mar-2026 02:55:10 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:10 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:10 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:10 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:10 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:10 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:10 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:10 Europe/Berlin] ========================
+[24-Mar-2026 02:55:14 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:14 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:14 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:14 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:14 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:14 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:14 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:14 Europe/Berlin] ========================
+[24-Mar-2026 02:55:15 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:15 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:15 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:15 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:15 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:15 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:15 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:15 Europe/Berlin] ========================
+[24-Mar-2026 02:55:15 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:15 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:15 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:15 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:15 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:15 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:15 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:15 Europe/Berlin] ========================
+[24-Mar-2026 02:55:15 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 02:55:15 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 02:55:15 Europe/Berlin] Method: GET
+[24-Mar-2026 02:55:15 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 02:55:15 Europe/Berlin] POST data: []
+[24-Mar-2026 02:55:15 Europe/Berlin] FILES data: []
+[24-Mar-2026 02:55:15 Europe/Berlin] Raw input: 
+[24-Mar-2026 02:55:15 Europe/Berlin] ========================
+[24-Mar-2026 03:23:07 Europe/Berlin] Database session started - ID: 93c7jfssulp97m0tnbmeth3vtd
+[24-Mar-2026 03:23:07 Europe/Berlin] === API REQUEST DEBUG ===
+[24-Mar-2026 03:23:07 Europe/Berlin] Method: GET
+[24-Mar-2026 03:23:07 Europe/Berlin] Content-Type: application/json
+[24-Mar-2026 03:23:07 Europe/Berlin] POST data: []
+[24-Mar-2026 03:23:07 Europe/Berlin] FILES data: []
+[24-Mar-2026 03:23:07 Europe/Berlin] Raw input: 
+[24-Mar-2026 03:23:07 Europe/Berlin] ========================

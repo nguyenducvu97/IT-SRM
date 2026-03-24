@@ -1341,8 +1341,12 @@ class ITServiceApp {
             
             console.log('Submitting with files:', this.selectedFiles);
             
-            // Update loading text
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi yêu cầu...';
+            // Update loading text - Validating
+            submitBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Đang xác thực...';
+            await new Promise(resolve => setTimeout(resolve, 200));
+            
+            // Update loading text - Creating request
+            submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Đang tạo yêu cầu...';
             
             const response = await fetch('api/service_requests.php', {
                 method: 'POST',
@@ -1350,10 +1354,16 @@ class ITServiceApp {
                 credentials: 'include'
             });
             
+            // Update loading text - Processing
+            submitBtn.innerHTML = '<i class="fas fa-cogs"></i> Đang xử lý phản hồi...';
+            
             const result = await response.json();
             console.log('Create request response:', result);
 
             if (result.success) {
+                // Update loading text - Success
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Thành công!';
+                
                 // Hiển thị toast notification đẹp cho việc tạo yêu cầu thành công
                 if (window.notificationManager) {
                     window.notificationManager.success(
@@ -1368,8 +1378,14 @@ class ITServiceApp {
                 e.target.reset();
                 this.selectedFiles = [];
                 this.updateFileList();
+                
+                // Small delay before redirect
+                await new Promise(resolve => setTimeout(resolve, 500));
                 this.showPage('requests');
             } else {
+                // Update loading text - Error
+                submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Lỗi!';
+                
                 if (window.notificationManager) {
                     window.notificationManager.error(result.message, 'Lỗi tạo yêu cầu');
                 } else {
@@ -1378,15 +1394,20 @@ class ITServiceApp {
             }
         } catch (error) {
             console.error('Create request error:', error);
+            
+            // Update loading text - Connection Error
+            submitBtn.innerHTML = '<i class="fas fa-wifi"></i> Lỗi kết nối!';
             this.showNotification('Lỗi kết nối', 'error');
         } finally {
             // Hide loading overlay
             this.hideLoadingState();
             
-            // Restore button states
-            submitBtn.disabled = false;
-            cancelBtn.disabled = false;
-            submitBtn.innerHTML = originalSubmitText;
+            // Restore button states with delay to show final state
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                cancelBtn.disabled = false;
+                submitBtn.innerHTML = originalSubmitText;
+            }, 1000);
         }
     }
 

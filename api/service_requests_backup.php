@@ -38,11 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../config/database.php';
-// Temporarily comment out optimization files to fix 500 error
-// require_once __DIR__ . '/../config/async_email.php';
-// require_once __DIR__ . '/../config/optimized_notifications.php';
-// require_once __DIR__ . '/../config/optimized_file_upload.php';
-// require_once __DIR__ . '/../config/database_optimizer.php';
+require_once __DIR__ . '/../config/async_email.php';
+require_once __DIR__ . '/../config/optimized_notifications.php';
+require_once __DIR__ . '/../config/optimized_file_upload.php';
+require_once __DIR__ . '/../config/database_optimizer.php';
 
 require_once __DIR__ . '/../lib/EmailHelper.php'; // Use original EmailHelper
 
@@ -976,107 +975,83 @@ elseif ($method == 'POST') {
     
 
     try {
-        // Database connection optimization (original)
-        $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        $db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+        // Initialize optimized components
+        $db_helper = OptimizedDatabaseHelper::getInstance($db);
+        $optimizer = $db_helper->getOptimizer();
         
-        // Cache category lookup to avoid JOIN in main query (original)
+        // Clean old cache periodically
+        if (rand(1, 100) === 1) { // 1% chance
+            $optimizer->cleanCache();
+        }
+        
+        // Cache category lookup to avoid JOIN in main query
+        $categories = $optimizer->getCategories();
         $category_cache = [];
-        $category_stmt = $db->prepare("SELECT id, name FROM categories");
-        $category_stmt->execute();
-        $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($categories as $cat) {
             $category_cache[$cat['id']] = $cat['name'];
         }
         
         // Start timing the request creation
         $request_start = microtime(true);
-
-        $query = "INSERT INTO service_requests 
-                  (user_id, category_id, title, description, priority, status, created_at, updated_at) 
-                  VALUES (:user_id, :category_id, :title, :description, :priority, 'open', NOW(), NOW())";
         
-        $stmt = $db->prepare($query);
-        $stmt->bindParam(":user_id", $user_id);
-        $stmt->bindParam(":category_id", $category_id);
-        $stmt->bindParam(":title", $title);
-        $stmt->bindParam(":description", $description);
-        $stmt->bindParam(":priority", $priority);
+        // Create request using optimized method
+        $request_data = [
+            'user_id' => $user_id,
+            'category_id' => $category_id,
+            'title' => $title,
+            'description' => $description,
+            'priority' => $priority
+        ];
         
-        if ($stmt->execute()) {
-            $request_id = $db->lastInsertId();
+        $request_id = $optimizer->createRequestOptimized($request_data);
 
             
 
-            // Get request details without JOIN for better performance (original)
-            $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email
-                              FROM service_requests sr
-                              LEFT JOIN users u ON sr.user_id = u.id
-                              WHERE sr.id = :request_id";
-            $request_stmt = $db->prepare($request_query);
-            $request_stmt->bindParam(":request_id", $request_id);
-            $request_stmt->execute();
-            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-            
-            // Get category from cache
-            $request_data['category'] = $category_cache[$request_data['category_id']] ?? 'Unknown';
-
-            
-            // Map data to template variables
-            $email_data = array(
-                'id' => $request_data['id'],
-                'title' => $request_data['title'],
-                'requester_name' => $request_data['requester_name'],
-                'category' => $request_data['category'],
-                'priority' => $request_data['priority'],
-                'description' => $request_data['description']
-            );
+            // Get request details using optimized method
+            $user_data = $db_helper->getUser($user_id);
+            $request_data = [
+                'id' => $request_id,
+                'title' => $title,
+                'requester_name' => $user_data['full_name'] ?? 'Unknown',
+                'category' => $category_cache[$category_id] ?? 'Unknown',
+                'priority' => $priority,
+                'description' => $description
+            ];
 
             
 
-            // Send email notification to staff and admin - ORIGINAL
+            // Send email notification using async processing
             $email_start = microtime(true);
             
             try {
-                // Quick SMTP connectivity check with shorter timeout
-                $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.5);
-                
-                if ($smtp_socket) {
-                    // SMTP is responsive - send email
-                    fclose($smtp_socket);
-                    $emailHelper = new EmailHelper();
-                    $emailHelper->sendNewRequestNotification($email_data);
-                    error_log("Email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
-                } else {
-                    // SMTP is down - log and continue quickly
-                    error_log("SMTP down - skipping email ({$errno}: {$errstr})");
-                }
+                $fastEmailSender = new FastEmailSender();
+                $fastEmailSender->queueNewRequestNotification($request_data);
+                error_log("Email queued in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
             } catch (Exception $e) {
-                error_log("Email error: " . $e->getMessage());
+                error_log("Email queueing error: " . $e->getMessage());
             }
 
-            // Create in-app notifications for staff and admin (ORIGINAL)
+            // Create in-app notifications using optimized batch processing
             $notification_start = microtime(true);
 
             try {
-                // Get all staff and admin users ONCE
-                $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
-                $stmt->execute();
-                $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                // Get all staff and admin users efficiently
+                $notification_targets = $db_helper->getNotificationTargets(['staff', 'admin']);
                 
-                if (!empty($staff_admin_users)) {
+                if (!empty($notification_targets)) {
+                    $user_ids = array_column($notification_targets, 'id');
                     $title = "Yêu cầu mới #" . $request_id;
-                    $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
+                    $message = ($user_data['full_name'] ?? 'User') . " tạo yêu cầu: " . $title;
                     
-                    // Create notifications WITHOUT email for faster response
-                    $notificationHelper = new NotificationHelper($db);
-                    $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
+                    // Create notifications using batch processing
+                    $notificationHelper = new OptimizedNotificationHelper($db);
+                    $notificationHelper->notifyUsersBatch($user_ids, $title, $message, 'info', $request_id, 'request', false);
                     
-                    error_log("Notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
+                    error_log("Batch notifications created in " . round((microtime(true) - $notification_start) * 1000, 2) . "ms for " . count($user_ids) . " users");
                 }
 
             } catch (Exception $e) {
-                error_log("Failed to create new request notifications: " . $e->getMessage());
+                error_log("Failed to create batch notifications: " . $e->getMessage());
                 // Continue even if notification creation fails
             }
 
