@@ -217,11 +217,11 @@ function getKPIDataArray($db, $start_date, $end_date) {
             SUM(CASE WHEN status = 'resolved' THEN 1 ELSE 0 END) as completed_requests,
             SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress_requests,
             SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as open_requests,
-            AVG(CASE WHEN status = 'resolved' AND resolved_at IS NOT NULL 
+            AVG(CASE WHEN status = 'resolved' AND resolved_at IS NOT NULL AND resolved_at > created_at
                 THEN TIMESTAMPDIFF(HOUR, created_at, resolved_at) 
                 ELSE NULL END) as avg_completion_time_hours,
-            AVG(CASE WHEN status IN ('in_progress', 'resolved') AND updated_at IS NOT NULL
-                THEN TIMESTAMPDIFF(HOUR, created_at, updated_at) 
+            AVG(CASE WHEN status IN ('in_progress', 'resolved') AND assigned_at IS NOT NULL
+                THEN TIMESTAMPDIFF(HOUR, created_at, assigned_at) 
                 ELSE NULL END) as avg_response_time_hours
             FROM service_requests 
             WHERE assigned_to = :staff_id 

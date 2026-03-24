@@ -3403,106 +3403,122 @@ class RequestDetailApp {
 
                     ` : ''}
 
-                </div>
-                
-                <!-- Feedback section - OUTSIDE request-actions -->
-                ${(request.feedback_rating || request.feedback_text) ? `
-                    <div class="feedback-section">
-                        <h4><i class="fas fa-star"></i> Đánh giá của người dùng</h4>
-                        <div class="feedback-content">
-                            ${request.feedback_rating ? `
-                                <div class="feedback-rating">
-                                    <strong>Đánh giá chung:</strong>
-                                    <div class="stars">
-                                        ${Array.from({length: 5}, (_, i) => 
-                                            `<i class="fas fa-star ${i < request.feedback_rating ? 'active' : ''}"></i>`
-                                        ).join('')}
-                                        <span class="rating-text">(${request.feedback_rating}/5)</span>
+
+
+                    
+
+
+
+                    <!-- Show feedback when request is closed -->
+                    ${request.status === 'closed' && (request.feedback_rating || request.feedback_text) ? `
+                        <div class="feedback-section">
+                            <h4><i class="fas fa-star"></i> Đánh giá của người dùng</h4>
+                            <div class="feedback-content">
+                                ${request.feedback_rating ? `
+                                    <div class="feedback-rating">
+                                        <strong>Đánh giá chung:</strong>
+                                        <div class="stars">
+                                            ${Array.from({length: 5}, (_, i) => 
+                                                `<i class="fas fa-star ${i < request.feedback_rating ? 'active' : ''}"></i>`
+                                            ).join('')}
+                                            <span class="rating-text">(${request.feedback_rating}/5)</span>
+                                        </div>
                                     </div>
-                                </div>
-                            ` : ''}
-                            
-                            ${request.feedback_text ? `
-                                <div class="feedback-item">
-                                    <strong>Nhận xét về dịch vụ:</strong>
-                                    <p>${request.feedback_text}</p>
-                                </div>
-                            ` : ''}
-                            
-                            ${request.software_feedback ? `
-                                <div class="feedback-item">
-                                    <strong>Nhận xét về hệ thống IT SRM:</strong>
-                                    <p>${request.software_feedback}</p>
-                                </div>
-                            ` : ''}
-                            
-                            ${request.would_recommend ? `
-                                <div class="feedback-item">
-                                    <strong>Đề xuất cho người khác:</strong>
-                                    <span class="recommend-badge ${request.would_recommend}">
-                                        ${request.would_recommend === 'yes' ? 'Có đề xuất' : request.would_recommend === 'no' ? 'Không đề xuất' : 'Có thể đề xuất'}
-                                    </span>
-                                </div>
-                            ` : ''}
-                            
-                            ${(request.ease_of_use || request.speed_stability || request.requirement_meeting) ? `
-                                <div class="feedback-ratings-detailed">
-                                    <h5>Đánh giá chi tiết:</h5>
-                                    <div class="rating-grid">
-                                        ${request.ease_of_use ? `
-                                            <div class="rating-item">
-                                                <span class="rating-label">Dễ sử dụng:</span>
-                                                <div class="rating-stars">
-                                                    ${Array.from({length: 5}, (_, i) => 
-                                                        `<i class="fas fa-star ${i < request.ease_of_use ? 'active' : ''}"></i>`
-                                                    ).join('')}
-                                                    <span>(${request.ease_of_use}/5)</span>
-                                                </div>
-                                            </div>
-                                        ` : ''}
-                                        
-                                        ${request.speed_stability ? `
-                                            <div class="rating-item">
-                                                <span class="rating-label">Tốc độ & Ổn định:</span>
-                                                <div class="rating-stars">
-                                                    ${Array.from({length: 5}, (_, i) => 
-                                                        `<i class="fas fa-star ${i < request.speed_stability ? 'active' : ''}"></i>`
-                                                    ).join('')}
-                                                    <span>(${request.speed_stability}/5)</span>
-                                                </div>
-                                            </div>
-                                        ` : ''}
-                                        
-                                        ${request.requirement_meeting ? `
-                                            <div class="rating-item">
-                                                <span class="rating-label">Đáp ứng yêu cầu:</span>
-                                                <div class="rating-stars">
-                                                    ${Array.from({length: 5}, (_, i) => 
-                                                        `<i class="fas fa-star ${i < request.requirement_meeting ? 'active' : ''}"></i>`
-                                                    ).join('')}
-                                                    <span>(${request.requirement_meeting}/5)</span>
-                                                </div>
-                                            </div>
-                                        ` : ''}
+                                ` : ''}
+                                
+                                ${request.feedback_text ? `
+                                    <div class="feedback-item">
+                                        <strong>Nhận xét về dịch vụ:</strong>
+                                        <p>${request.feedback_text}</p>
                                     </div>
-                                </div>
-                            ` : ''}
-                            
-                            ${request.feedback_created_at ? `
-                                <div class="feedback-meta">
-                                    <small><i class="fas fa-clock"></i> Đánh giá vào ${formatDate(request.feedback_created_at)}</small>
-                                </div>
-                            ` : ''}
+                                ` : ''}
+                                
+                                ${request.software_feedback ? `
+                                    <div class="feedback-item">
+                                        <strong>Nhận xét về hệ thống IT SRM:</strong>
+                                        <p>${request.software_feedback}</p>
+                                    </div>
+                                ` : ''}
+                                
+                                ${request.would_recommend ? `
+                                    <div class="feedback-item">
+                                        <strong>Đề xuất cho người khác:</strong>
+                                        <span class="recommend-badge ${request.would_recommend}">
+                                            ${request.would_recommend === 'yes' ? 'Có đề xuất' : request.would_recommend === 'no' ? 'Không đề xuất' : 'Có thể đề xuất'}
+                                        </span>
+                                    </div>
+                                ` : ''}
+                                
+                                ${(request.ease_of_use || request.speed_stability || request.requirement_meeting) ? `
+                                    <div class="feedback-ratings-detailed">
+                                        <h5>Đánh giá chi tiết:</h5>
+                                        <div class="rating-grid">
+                                            ${request.ease_of_use ? `
+                                                <div class="rating-item">
+                                                    <span class="rating-label">Dễ sử dụng:</span>
+                                                    <div class="rating-stars">
+                                                        ${Array.from({length: 5}, (_, i) => 
+                                                            `<i class="fas fa-star ${i < request.ease_of_use ? 'active' : ''}"></i>`
+                                                        ).join('')}
+                                                        <span>(${request.ease_of_use}/5)</span>
+                                                    </div>
+                                                </div>
+                                            ` : ''}
+                                            
+                                            ${request.speed_stability ? `
+                                                <div class="rating-item">
+                                                    <span class="rating-label">Tốc độ & Ổn định:</span>
+                                                    <div class="rating-stars">
+                                                        ${Array.from({length: 5}, (_, i) => 
+                                                            `<i class="fas fa-star ${i < request.speed_stability ? 'active' : ''}"></i>`
+                                                        ).join('')}
+                                                        <span>(${request.speed_stability}/5)</span>
+                                                    </div>
+                                                </div>
+                                            ` : ''}
+                                            
+                                            ${request.requirement_meeting ? `
+                                                <div class="rating-item">
+                                                    <span class="rating-label">Đáp ứng yêu cầu:</span>
+                                                    <div class="rating-stars">
+                                                        ${Array.from({length: 5}, (_, i) => 
+                                                            `<i class="fas fa-star ${i < request.requirement_meeting ? 'active' : ''}"></i>`
+                                                        ).join('')}
+                                                        <span>(${request.requirement_meeting}/5)</span>
+                                                    </div>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                ${request.feedback_created_at ? `
+                                    <div class="feedback-meta">
+                                        <small><i class="fas fa-clock"></i> Đánh giá vào ${formatDate(request.feedback_created_at)}</small>
+                                    </div>
+                                ` : ''}
+                            </div>
                         </div>
-                    </div>
-                ` : ''}
-                
-                <!-- Show closed status when request is closed - OUTSIDE request-actions -->
-                ${request.status === 'closed' ? `
-                    <div class="closed-status">
-                        <i class="fas fa-check-circle"></i> Yêu cầu đã được đóng
-                    </div>
-                ` : ''}
+                    ` : ''}
+
+                    <!-- Show closed status when request is closed -->
+                    ${request.status === 'closed' ? `
+
+
+
+                        <div class="closed-status">
+
+
+
+                            <i class="fas fa-check-circle"></i> Yêu cầu đã được đóng
+
+
+
+                        </div>
+
+
+
+                    ` : ''}
 
 
 
@@ -3550,7 +3566,7 @@ class RequestDetailApp {
 
 
 
-        if (comments.length === 0) {
+        if (comments.length === 0) 
 
 
 
@@ -3634,7 +3650,7 @@ class RequestDetailApp {
 
 
 
-    canDeleteComment(comment) {
+    canDeleteComment(comment) 
 
 
 
@@ -3642,15 +3658,11 @@ class RequestDetailApp {
 
 
 
-        if (this.currentUser.role === 'admin') {
+        if (this.currentUser.role === 'admin') 
 
 
 
             return true;
-
-
-
-        }
 
 
 
@@ -3662,15 +3674,11 @@ class RequestDetailApp {
 
 
 
-        if (this.currentUser.role === 'staff' && comment.user_id === this.currentUser.id) {
+        if (this.currentUser.role === 'staff' && comment.user_id === this.currentUser.id) 
 
 
 
             return true;
-
-
-
-        }
 
 
 
@@ -3682,15 +3690,11 @@ class RequestDetailApp {
 
 
 
-        if (this.currentUser.role === 'user' && comment.user_id === this.currentUser.id) {
+        if (this.currentUser.role === 'user' && comment.user_id === this.currentUser.id) 
 
 
 
             return true;
-
-
-
-        }
 
 
 
@@ -3710,11 +3714,11 @@ class RequestDetailApp {
 
 
 
-    async deleteComment(commentId) {
+    async deleteComment(commentId) 
 
 
 
-        if (!confirm('Bạn có chắc chắn muốn xóa bình luận này?')) {
+        if (!confirm('Bạn có chắc chắn muốn xóa bình luận này?')) 
 
 
 
@@ -3722,19 +3726,15 @@ class RequestDetailApp {
 
 
 
-        }
+        
 
 
 
+        try 
 
 
 
-
-        try {
-
-
-
-            const response = await this.apiCall(`api/comments.php?id=${commentId}`, {
+            const response = await this.apiCall(`api/comments.php?id=${commentId}`, 
 
 
 
@@ -3742,7 +3742,7 @@ class RequestDetailApp {
 
 
 
-            });
+            );
 
 
 
@@ -3750,7 +3750,7 @@ class RequestDetailApp {
 
 
 
-            if (response.success) {
+            if (response.success) 
 
 
 
@@ -3766,7 +3766,7 @@ class RequestDetailApp {
 
 
 
-            } else {
+            } else 
 
 
 
@@ -3774,19 +3774,11 @@ class RequestDetailApp {
 
 
 
-            }
-
-
-
-        } catch (error) {
+        } catch (error) 
 
 
 
             this.showNotification('Lỗi kết nối', 'error');
-
-
-
-        }
 
 
 
@@ -3798,7 +3790,7 @@ class RequestDetailApp {
 
 
 
-    async acceptRequest(id) {
+    async acceptRequest(id) 
 
 
 
@@ -3810,7 +3802,7 @@ class RequestDetailApp {
 
 
 
-        if (acceptBtn) {
+        if (acceptBtn) 
 
 
 
@@ -3819,10 +3811,6 @@ class RequestDetailApp {
 
 
             acceptBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang nhận yêu cầu...';
-
-
-
-        }
 
 
 
@@ -3842,11 +3830,11 @@ class RequestDetailApp {
 
 
 
-        try {
+        try 
 
 
 
-            const response = await this.apiCall('api/service_requests.php', {
+            const response = await this.apiCall('api/service_requests.php', 
 
 
 
@@ -3870,7 +3858,7 @@ class RequestDetailApp {
 
 
 
-            });
+            );
 
 
 
@@ -3878,7 +3866,7 @@ class RequestDetailApp {
 
 
 
-            if (response.success) {
+            if (response.success) 
 
 
 
@@ -3892,7 +3880,7 @@ class RequestDetailApp {
                 // Reload the page to refresh all data
                 window.location.reload();
 
-            } else {
+            } else 
 
 
 
@@ -3904,7 +3892,7 @@ class RequestDetailApp {
 
 
 
-                if (acceptBtn) {
+                if (acceptBtn) 
 
 
 
@@ -3916,15 +3904,7 @@ class RequestDetailApp {
 
 
 
-                }
-
-
-
-            }
-
-
-
-        } catch (error) {
+        } catch (error) 
 
 
 
@@ -3936,7 +3916,7 @@ class RequestDetailApp {
 
 
 
-            if (acceptBtn) {
+            if (acceptBtn) 
 
 
 
@@ -3948,8 +3928,7 @@ class RequestDetailApp {
 
 
 
-            }
-
+        } finally 
 
 
         } finally {

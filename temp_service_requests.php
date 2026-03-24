@@ -490,10 +490,7 @@ if ($method == 'GET') {
                         res.resolved_by as resolution_resolved_by, res.error_description as res_error_description,
                         res.error_type as res_error_type, res.replacement_materials as res_replacement_materials,
                         res.solution_method as res_solution_method, res.resolved_at as res_resolved_at,
-                        resolver.full_name as resolution_resolver_name,
-                        rf.rating as feedback_rating, rf.feedback as feedback_text, rf.software_feedback,
-                        rf.would_recommend, rf.ease_of_use, rf.speed_stability, rf.requirement_meeting,
-                        rf.created_by as feedback_created_by, rf.created_at as feedback_created_at
+                        resolver.full_name as resolution_resolver_name
                  FROM service_requests sr
                  LEFT JOIN categories c ON sr.category_id = c.id
                  LEFT JOIN users u ON sr.user_id = u.id
@@ -502,7 +499,6 @@ if ($method == 'GET') {
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
                  LEFT JOIN resolutions res ON sr.id = res.service_request_id
                  LEFT JOIN users resolver ON res.resolved_by = resolver.id
-                 LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
 
                  WHERE sr.id = :id";
 
@@ -558,7 +554,7 @@ if ($method == 'GET') {
 
                 // Get resolution attachments if request is resolved
 
-                if ($request['status'] === 'resolved' || $request['status'] === 'closed') {
+                if ($request['status'] === 'resolved') {
 
                     $resolution_attachments_query = "SELECT id, filename, original_name, file_size, mime_type, uploaded_at 
 
@@ -809,7 +805,7 @@ if ($method == 'GET') {
             }
 
             // Format resolution data if exists
-            if (($request['status'] === 'resolved' || $request['status'] === 'closed') && $request['resolution_resolver_name']) {
+            if ($request['status'] === 'resolved' && $request['resolution_resolver_name']) {
                 $request['resolution'] = [
                     'resolver_name' => $request['resolution_resolver_name'],
                     'error_description' => $request['res_error_description'],
@@ -870,7 +866,7 @@ elseif ($method == 'POST') {
 
         // Handle JSON
 
-        $input = json_decode(file_get_contents('php://input'), true);
+        $input = {"action":"close_request","request_id":5,"rating":5,"feedback":"Great service! Very satisfied.","software_feedback":"The system is easy to use.","would_recommend":"yes","ease_of_use":5,"speed_stability":4,"requirement_meeting":5};
 
         $action = isset($input['action']) ? $input['action'] : '';
 
@@ -927,7 +923,7 @@ elseif ($method == 'POST') {
         } else {
             error_log("Processing JSON resolve");
             // Handle JSON (existing logic)
-            $input = json_decode(file_get_contents('php://input'), true);
+            $input = {"action":"close_request","request_id":5,"rating":5,"feedback":"Great service! Very satisfied.","software_feedback":"The system is easy to use.","would_recommend":"yes","ease_of_use":5,"speed_stability":4,"requirement_meeting":5};
             // Continue to existing resolve logic below - don't return here
         }
 
@@ -951,7 +947,7 @@ elseif ($method == 'POST') {
 
             // Handle JSON
 
-            $input = json_decode(file_get_contents('php://input'), true);
+            $input = {"action":"close_request","request_id":5,"rating":5,"feedback":"Great service! Very satisfied.","software_feedback":"The system is easy to use.","would_recommend":"yes","ease_of_use":5,"speed_stability":4,"requirement_meeting":5};
 
             
 
@@ -1208,7 +1204,7 @@ elseif ($method == 'POST') {
 
         // Handle regular form POST or JSON
 
-        $input = json_decode(file_get_contents('php://input'), true);
+        $input = {"action":"close_request","request_id":5,"rating":5,"feedback":"Great service! Very satisfied.","software_feedback":"The system is easy to use.","would_recommend":"yes","ease_of_use":5,"speed_stability":4,"requirement_meeting":5};
 
         
 

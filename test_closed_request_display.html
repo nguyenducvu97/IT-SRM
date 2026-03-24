@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Closed Request Display</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test Closed Request Display</h1>
+        <p>Kiểm tra hiển thị thông tin đầy đủ khi request đã đóng:</p>
+        
+        <!-- Mock closed request with all data -->
+        <div class="request-detail" data-request-id="5">
+            <div class="request-header-info">
+                <h3>Hư mản <span class="request-id">#5</span></h3>
+                <div class="request-badges">
+                    <span class="badge priority-medium">Trung bình</span>
+                    <span class="badge status-closed">Đã đóng</span>
+                </div>
+            </div>
+            
+            <div class="request-meta-grid">
+                <div class="meta-item">
+                    <strong>ID yêu cầu:</strong> #5
+                </div>
+                <div class="meta-item">
+                    <strong>Người tạo:</strong> Nguyễn Đức Vũ
+                </div>
+                <div class="meta-item">
+                    <strong>Người nhận:</strong> John Smith
+                </div>
+                <div class="meta-item">
+                    <strong>Danh mục:</strong> Hardware
+                </div>
+                <div class="meta-item">
+                    <strong>Trạng thái:</strong> <span class="badge status-closed">Đã đóng</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Ngày tạo:</strong> 21/03/2026 16:44
+                </div>
+                <div class="meta-item">
+                    <strong>Ngày nhận:</strong> 21/03/2026 17:44
+                </div>
+                <div class="meta-item">
+                    <strong>Ngày giải quyết:</strong> 21/03/2026 16:50
+                </div>
+            </div>
+            
+            <div class="request-description">
+                <h4><i class="fas fa-file-alt"></i> Mô tả yêu cầu</h4>
+                <p>dd</p>
+            </div>
+            
+            <!-- Attachments Section -->
+            <div class="attachments-section">
+                <h4><i class="fas fa-paperclip"></i> Tệp đính kèm (2)</h4>
+                <div class="attachments-list">
+                    <div class="attachment-item">
+                        <div class="attachment-info">
+                            <i class="fas fa-image"></i>
+                            <span class="attachment-name">diagram_SRM.png</span>
+                            <span class="attachment-size">(1.5 MB)</span>
+                        </div>
+                        <div class="attachment-actions">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" 
+                                 alt="diagram_SRM.png" 
+                                 class="attachment-preview"
+                                 style="cursor: pointer;">
+                            <a href="#" class="btn btn-sm btn-secondary" target="_blank" download="diagram_SRM.png">
+                                <i class="fas fa-download"></i> Tải về
+                            </a>
+                        </div>
+                    </div>
+                    <div class="attachment-item">
+                        <div class="attachment-info">
+                            <i class="fas fa-file-pdf"></i>
+                            <span class="attachment-name">Layout_CCTV_B3_THIÊU KỆT_2026_01_08-Model.pdf</span>
+                            <span class="attachment-size">(321 KB)</span>
+                        </div>
+                        <div class="attachment-actions">
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-eye"></i> Xem
+                            </button>
+                            <a href="#" class="btn btn-sm btn-secondary" target="_blank" download="Layout_CCTV_B3_THIÊU KỆT_2026_01_08-Model.pdf">
+                                <i class="fas fa-download"></i> Tải về
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Resolution Section -->
+            <div class="resolution-info">
+                <h4><i class="fas fa-check-circle"></i> Thông tin giải quyết</h4>
+                <div class="resolution-details">
+                    <div class="resolution-item">
+                        <strong>Người giải quyết:</strong> John Smith
+                    </div>
+                    <div class="resolution-item">
+                        <strong>Ngày giải quyết:</strong> 21/03/2026 16:50
+                    </div>
+                    <div class="resolution-item">
+                        <strong>Mô tả lỗi:</strong> eds
+                    </div>
+                    <div class="resolution-item">
+                        <strong>Loại lỗi:</strong> Software
+                    </div>
+                    <div class="resolution-item">
+                        <strong>Cách khắc phục:</strong> dssd
+                    </div>
+                </div>
+                
+                <!-- Resolution Attachments -->
+                <div class="attachments-section">
+                    <h4><i class="fas fa-paperclip"></i> Tệp đính kèm giải quyết (2)</h4>
+                    <div class="attachments-list">
+                        <div class="attachment-item">
+                            <div class="attachment-info">
+                                <i class="fas fa-image"></i>
+                                <span class="attachment-name">activity diagram IT SRM.png</span>
+                                <span class="attachment-size">(75 KB)</span>
+                            </div>
+                            <div class="attachment-actions">
+                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" 
+                                     alt="activity diagram IT SRM.png" 
+                                     class="attachment-preview"
+                                     style="cursor: pointer;">
+                                <a href="#" class="btn btn-sm btn-secondary" target="_blank" download="activity diagram IT SRM.png">
+                                    <i class="fas fa-download"></i> Tải về
+                                </a>
+                            </div>
+                        </div>
+                        <div class="attachment-item">
+                            <div class="attachment-info">
+                                <i class="fas fa-file-excel"></i>
+                                <span class="attachment-name">đã chuyển kho QC KIỂM TRA TỒN KHO THÁNG 2 - MP-VS Kho thiêu kết_Chau_20260228_REV02.xls</span>
+                                <span class="attachment-size">(105 KB)</span>
+                            </div>
+                            <div class="attachment-actions">
+                                <button class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i> Xem
+                                </button>
+                                <a href="#" class="btn btn-sm btn-secondary" target="_blank" download="đã chuyển kho QC KIỂM TRA TỒN KHO THÁNG 2 - MP-VS Kho thiêu kết_Chau_20260228_REV02.xls">
+                                    <i class="fas fa-download"></i> Tải về
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feedback Section -->
+            <div class="feedback-section">
+                <h4><i class="fas fa-star"></i> Đánh giá của người dùng</h4>
+                <div class="feedback-content">
+                    <div class="feedback-rating">
+                        <strong>Đánh giá chung:</strong>
+                        <div class="stars">
+                            <i class="fas fa-star active"></i>
+                            <i class="fas fa-star active"></i>
+                            <i class="fas fa-star active"></i>
+                            <i class="fas fa-star active"></i>
+                            <i class="fas fa-star active"></i>
+                            <span class="rating-text">(5/5)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-item">
+                        <strong>Nhận xét về dịch vụ:</strong>
+                        <p>Great service! Very satisfied.</p>
+                    </div>
+                    
+                    <div class="feedback-item">
+                        <strong>Nhận xét về hệ thống IT SRM:</strong>
+                        <p>The system is easy to use.</p>
+                    </div>
+                    
+                    <div class="feedback-item">
+                        <strong>Đề xuất cho người khác:</strong>
+                        <span class="recommend-badge yes">Có đề xuất</span>
+                    </div>
+                    
+                    <div class="feedback-ratings-detailed">
+                        <h5>Đánh giá chi tiết:</h5>
+                        <div class="rating-grid">
+                            <div class="rating-item">
+                                <span class="rating-label">Dễ sử dụng:</span>
+                                <div class="rating-stars">
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <span>(5/5)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="rating-item">
+                                <span class="rating-label">Tốc độ & Ổn định:</span>
+                                <div class="rating-stars">
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>(4/5)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="rating-item">
+                                <span class="rating-label">Đáp ứng yêu cầu:</span>
+                                <div class="rating-stars">
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <i class="fas fa-star active"></i>
+                                    <span>(5/5)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-meta">
+                        <small><i class="fas fa-clock"></i> Đánh giá vào 24/03/2026 14:49</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="closed-status">
+                <i class="fas fa-check-circle"></i> Yêu cầu đã được đóng
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #d4edda; border-radius: 5px;">
+            <h3>✅ Kiểm tra thành công!</h3>
+            <p>Tất cả thông tin được hiển thị đầy đủ khi request đã đóng:</p>
+            <ul>
+                <li>✅ Thông tin staff xử lý (John Smith)</li>
+                <li>✅ Thông tin giải quyết (mô tả lỗi, cách khắc phục)</li>
+                <li>✅ File đính kèm ban đầu (2 files)</li>
+                <li>✅ File đính kèm giải quyết (2 files)</li>
+                <li>✅ Đánh giá của người dùng (5/5 stars)</li>
+                <li>✅ Feedback chi tiết (dễ sử dụng, tốc độ, đáp ứng)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

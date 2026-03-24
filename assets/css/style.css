@@ -8899,6 +8899,176 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 }
 
+/* Feedback Section Styles */
+.feedback-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.feedback-section h4 {
+    color: #495057;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.feedback-section h4 i {
+    color: #ffc107;
+    margin-right: 8px;
+}
+
+.feedback-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.feedback-rating {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stars {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stars .fa-star {
+    color: #ddd;
+    font-size: 16px;
+    transition: color 0.2s;
+}
+
+.stars .fa-star.active {
+    color: #ffc107;
+}
+
+.rating-text {
+    margin-left: 10px;
+    font-weight: bold;
+    color: #495057;
+}
+
+.feedback-item {
+    border-left: 3px solid #007bff;
+    padding-left: 15px;
+}
+
+.feedback-item strong {
+    color: #495057;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.feedback-item p {
+    color: #6c757d;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.recommend-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.recommend-badge.yes {
+    background: #d4edda;
+    color: #155724;
+}
+
+.recommend-badge.no {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.recommend-badge.maybe {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.feedback-ratings-detailed {
+    margin-top: 15px;
+}
+
+.feedback-ratings-detailed h5 {
+    color: #495057;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.rating-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.rating-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.rating-label {
+    font-weight: bold;
+    color: #495057;
+    font-size: 14px;
+}
+
+.rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.rating-stars .fa-star {
+    color: #ddd;
+    font-size: 14px;
+}
+
+.rating-stars .fa-star.active {
+    color: #ffc107;
+}
+
+.rating-stars span {
+    margin-left: 8px;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.feedback-meta {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #dee2e6;
+}
+
+.feedback-meta small {
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Responsive Design for Feedback Section */
+@media (max-width: 768px) {
+    .feedback-section {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .rating-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stars {
+        flex-wrap: wrap;
+    }
+}
+
 /* Responsive Design for KPI Page */
 
 @media (max-width: 768px) {

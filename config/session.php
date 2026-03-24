@@ -9,8 +9,8 @@ class DatabaseSessionHandler {
         $database = new Database();
         $this->db = $database->getConnection();
         
-        // Create session table if not exists
-        $this->createSessionTable();
+        // Don't create table in constructor to avoid headers issue
+        // Table will be created when first session is accessed
     }
     
     private function createSessionTable() {
@@ -32,6 +32,9 @@ class DatabaseSessionHandler {
     }
     
     public function read($sessionId) {
+        // Create table if not exists (first access)
+        $this->createSessionTable();
+        
         $stmt = $this->db->prepare("SELECT data FROM sessions WHERE id = ?");
         $stmt->execute([$sessionId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -63,25 +66,16 @@ function startSession() {
         // Set database session handler
         $handler = new DatabaseSessionHandler();
         session_set_save_handler(
-            [$handler, 'open'],
-            [$handler, 'close'],
-            [$handler, 'read'],
-            [$handler, 'write'],
-            [$handler, 'destroy'],
-            [$handler, 'gc']
+            array($handler, 'open'),
+            array($handler, 'close'),
+            array($handler, 'read'),
+            array($handler, 'write'),
+            array($handler, 'destroy'),
+            array($handler, 'gc')
         );
         
-        // Start session with standard settings
-        session_start([
-            'cookie_lifetime' => 86400,
-            'cookie_httponly' => true,
-            'cookie_samesite' => 'Lax',
-            'cookie_path' => '/',
-            'cookie_domain' => '',
-            'use_strict_mode' => true,
-            'use_cookies' => true,
-            'use_only_cookies' => true
-        ]);
+        // Start session
+        session_start();
         
         error_log("Database session started - ID: " . session_id());
     }
