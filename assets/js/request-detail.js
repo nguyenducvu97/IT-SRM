@@ -1586,8 +1586,7 @@ class RequestDetailApp {
 
 
 
-        console.log('=== DEBUG CHECK AUTH ===');
-
+        
 
 
         
@@ -1722,19 +1721,6 @@ class RequestDetailApp {
 
 
 
-        console.log('=== DEBUG LOAD REQUEST DETAIL ===');
-
-
-
-        console.log('Request ID:', this.requestId);
-
-
-
-        console.log('Current user:', this.currentUser);
-
-
-
-        
 
 
 
@@ -2254,10 +2240,6 @@ class RequestDetailApp {
 
 
 
-                                console.log('Processing attachment:', attachment);
-
-
-
                                 const isImage = attachment.mime_type.startsWith('image/');
 
 
@@ -2469,7 +2451,6 @@ class RequestDetailApp {
                                 <h4><i class="fas fa-paperclip"></i> Tệp đính kèm giải quyết (${request.resolution_attachments.length})</h4>
                                 <div class="attachments-list">
                                     ${request.resolution_attachments.map(attachment => {
-                                        console.log('Processing resolution attachment:', attachment);
                                         
                                         const isImage = attachment.mime_type.startsWith('image/');
                                         const isPDF = attachment.mime_type === 'application/pdf';
@@ -3311,21 +3292,16 @@ class RequestDetailApp {
                         <button class="btn btn-primary" onclick="requestDetailApp.updateRequestStatus(${request.id})">Cập nhật</button>
 
 
-                    ` : currentUser && currentUser.role === 'staff' ? `
+    ` : currentUser && currentUser.role === 'staff' ? `
 
-                        ${(() => {
-                            // Debug condition for accept button
-                            const showAcceptBtn = request.status === 'open' && !request.assigned_to;
-                            console.log('=== STAFF ACCEPT BUTTON DEBUG ===');
-                            console.log('Request status:', request.status);
-                            console.log('Request assigned_to:', request.assigned_to);
-                            console.log('Show accept button:', showAcceptBtn);
-                            console.log('===============================');
+        ${(() => {
+            // Debug condition for accept button
+            const showAcceptBtn = request.status === 'open' && !request.assigned_to;
 
-                            return showAcceptBtn ? `
-                            <button class="btn btn-success" onclick="requestDetailApp.acceptRequest(${request.id})">
+            return showAcceptBtn ? `
+            <button class="btn btn-success" onclick="requestDetailApp.acceptRequest(${request.id})">
 
-                                <i class="fas fa-check"></i> Nhận yêu cầu
+                <i class="fas fa-check"></i> Nhận yêu cầu
 
                             </button>
                         ` : '';
@@ -4656,8 +4632,7 @@ class RequestDetailApp {
         this.showLoading('Đang giải quyết yêu cầu...');
         
         try {
-            console.log('=== RESOLVE SUBMIT DEBUG ===');
-            console.log('Form data:', formData);
+                        console.log('Form data:', formData);
             console.log('Request ID:', requestId);
             
             // Create FormData for file upload
@@ -5577,8 +5552,7 @@ class RequestDetailApp {
 
 
 
-        console.log('=== DEBUG CLOSE REQUEST ===');
-
+        
 
 
         console.log('Request ID:', requestId);
