@@ -23,9 +23,17 @@ require_once __DIR__ . '/../config/database.php';
 // Start session for authentication
 startSession();
 
+// Debug session information
+error_log("=== KPI EXPORT SESSION DEBUG ===");
+error_log("Session ID: " . session_id());
+error_log("Cookie data: " . json_encode($_COOKIE));
+error_log("Session data: " . json_encode($_SESSION));
+error_log("===============================");
+
 if (!isLoggedIn()) {
+    error_log("KPI Export: User not logged in");
     http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access - Please login first']);
     exit();
 }
 
@@ -43,10 +51,13 @@ $user_role = getCurrentUserRole();
 
 // Only admin can access KPI export
 if ($user_role !== 'admin') {
+    error_log("KPI Export: Access denied - User role: " . $user_role . " (admin required)");
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Access denied - Admin only']);
     exit();
 }
+
+error_log("KPI Export: Access granted - User ID: " . $user_id . ", Role: " . $user_role);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $action = isset($_GET['action']) ? $_GET['action'] : '';
@@ -103,7 +114,7 @@ function exportKPIExcel($db) {
         // Add UTF-8 BOM for proper Excel display
         fwrite($output, "\xEF\xBB\xBF");
         
-        // Add headers
+        // Add headers with proper KPI names and scores (removed satisfaction_rate and recommendation_rate)
         $headers = [
             'Mã NV',
             'Họ và tên',
@@ -113,21 +124,27 @@ function exportKPIExcel($db) {
             'Đã hoàn thành',
             'Đang xử lý',
             'Chờ xử lý',
-            'Thời gian phản hồi TB (giờ)',
-            'Thời gian hoàn thành TB (giờ)',
+            'Thời gian phản hồi TB (phút) - ART',
+            'Thời gian hoàn thành TB (giờ) - ACT',
             'Tổng đánh giá',
-            'Đánh giá TB (1-5)',
+            'Điểm đánh giá TB (1-5) - AR',
             'Đánh giá tích cực',
             'Đánh giá tiêu cực',
-            'Khuyến nghị (%)',
+            'Sẵn sàng giới thiệu (%) - AWR',
             'Tỷ lệ hoàn thành (%)',
-            'Mức độ hài lòng (%)',
-            'Tỷ lệ phản hồi (%)'
+            'Tỷ lệ phản hồi (%)',
+            // Individual KPI Scores
+            'Điểm ART (0-100)',
+            'Điểm ACT (0-100)',
+            'Điểm AR (0-100)',
+            'Điểm AWR (0-100)',
+            // Total KPI Score
+            'Điểm KPI Tổng hợp (0-100)'
         ];
         
         fputcsv($output, $headers);
         
-        // Add data
+        // Add data with proper KPI values and scores (removed satisfaction_rate and recommendation_rate)
         foreach ($kpi_data as $staff) {
             $row = [
                 $staff['id'],
@@ -138,16 +155,22 @@ function exportKPIExcel($db) {
                 $staff['completed_requests'],
                 $staff['in_progress_requests'],
                 $staff['open_requests'],
-                round($staff['avg_response_time_hours'], 2),
-                round($staff['avg_completion_time_hours'], 2),
+                round($staff['avg_response_time_minutes'], 2), // ART in minutes
+                round($staff['avg_completion_time_hours'], 2), // ACT in hours
                 $staff['total_feedback'],
-                round($staff['avg_rating'], 2),
+                round($staff['avg_rating'], 2), // AR
                 $staff['positive_feedback'],
                 $staff['negative_feedback'],
-                round($staff['recommendation_rate'], 2),
+                round($staff['recommendation_rate'], 2), // AWR
                 round($staff['completion_rate'], 2),
-                round($staff['satisfaction_rate'], 2),
-                round($staff['feedback_response_rate'], 2)
+                round($staff['feedback_response_rate'], 2),
+                // Individual KPI Scores
+                round($staff['art_score'], 2),
+                round($staff['act_score'], 2),
+                round($staff['ar_score'], 2),
+                round($staff['awr_score'], 2),
+                // Total KPI Score
+                $staff['total_kpi_score']
             ];
             
             fputcsv($output, $row);
@@ -211,18 +234,20 @@ function getKPIDataArray($db, $start_date, $end_date) {
     foreach ($staff_list as $staff) {
         $staff_id = $staff['id'];
         
-        // Simple request statistics
+        // Enhanced KPI statistics with proper formulas
         $stats_query = "SELECT 
             COUNT(*) as total_requests,
-            SUM(CASE WHEN status = 'resolved' THEN 1 ELSE 0 END) as completed_requests,
+            SUM(CASE WHEN status IN ('resolved', 'closed') THEN 1 ELSE 0 END) as completed_requests,
             SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress_requests,
             SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as open_requests,
-            AVG(CASE WHEN status = 'resolved' AND resolved_at IS NOT NULL AND resolved_at > created_at
+            -- Average Response Time (ART): Time from submitted to acknowledged
+            AVG(CASE WHEN assigned_at IS NOT NULL 
+                THEN TIMESTAMPDIFF(MINUTE, created_at, assigned_at) 
+                ELSE NULL END) as avg_response_time_minutes,
+            -- Average Completion Time (ACT): Time from submitted to closed (includes both resolved and closed)
+            AVG(CASE WHEN status IN ('resolved', 'closed') AND resolved_at IS NOT NULL
                 THEN TIMESTAMPDIFF(HOUR, created_at, resolved_at) 
-                ELSE NULL END) as avg_completion_time_hours,
-            AVG(CASE WHEN status IN ('in_progress', 'resolved') AND assigned_at IS NOT NULL
-                THEN TIMESTAMPDIFF(HOUR, created_at, assigned_at) 
-                ELSE NULL END) as avg_response_time_hours
+                ELSE NULL END) as avg_completion_time_hours
             FROM service_requests 
             WHERE assigned_to = :staff_id 
             AND created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')";
@@ -234,18 +259,19 @@ function getKPIDataArray($db, $start_date, $end_date) {
         $stats_stmt->execute();
         $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Get user feedback ratings
+        // Get user feedback ratings with proper AWR calculation
         $feedback_query = "SELECT 
             COUNT(rf.id) as total_feedback,
             AVG(rf.rating) as avg_rating,
             SUM(CASE WHEN rf.rating >= 4 THEN 1 ELSE 0 END) as positive_feedback,
             SUM(CASE WHEN rf.rating <= 2 THEN 1 ELSE 0 END) as negative_feedback,
-            SUM(CASE WHEN rf.would_recommend = 'yes' THEN 1 ELSE 0 END) as would_recommend_count,
+            -- Average Would Recommend (AWR): Net Promoter Score variation
+            SUM(CASE WHEN rf.would_recommend IN ('yes', '1', '4') THEN 1 ELSE 0 END) as would_recommend_count,
             COUNT(DISTINCT rf.service_request_id) as rated_requests
             FROM request_feedback rf
             JOIN service_requests sr ON rf.service_request_id = sr.id
             WHERE sr.assigned_to = :staff_id
-            AND sr.status = 'resolved'
+            AND sr.status IN ('resolved', 'closed')
             AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')";
         
         $feedback_stmt = $db->prepare($feedback_query);
@@ -255,10 +281,16 @@ function getKPIDataArray($db, $start_date, $end_date) {
         $feedback_stmt->execute();
         $feedback = $feedback_stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Calculate KPI metrics
+        // Calculate KPI metrics with proper formulas
         $total_requests = (int)$stats['total_requests'];
         $completed_requests = (int)$stats['completed_requests'];
         $completion_rate = $total_requests > 0 ? ($completed_requests / $total_requests) * 100 : 0;
+        
+        // Response Time in minutes (ART)
+        $avg_response_time_minutes = (float)($stats['avg_response_time_minutes'] ?? 0);
+        
+        // Completion Time in hours (ACT)
+        $avg_completion_time_hours = (float)($stats['avg_completion_time_hours'] ?? 0);
         
         $total_feedback = (int)$feedback['total_feedback'];
         $avg_rating = $feedback['avg_rating'] ?? 0;
@@ -266,14 +298,53 @@ function getKPIDataArray($db, $start_date, $end_date) {
         $negative_feedback = (int)$feedback['negative_feedback'];
         $would_recommend_count = (int)$feedback['would_recommend_count'];
         
-        // User satisfaction rate based on ratings
-        $satisfaction_rate = $total_feedback > 0 ? ($positive_feedback / $total_feedback) * 100 : 0;
+        // Average Rating (AR)
+        $avg_rating_score = (float)$avg_rating;
         
-        // Recommendation rate
+        // Average Would Recommend (AWR): Net Promoter Score variation
         $recommendation_rate = $total_feedback > 0 ? ($would_recommend_count / $total_feedback) * 100 : 0;
         
         // Feedback response rate (how many completed requests have feedback)
         $feedback_response_rate = $completed_requests > 0 ? ($feedback['rated_requests'] / $completed_requests) * 100 : 0;
+        
+        // Calculate normalized scores for Total KPI Score (0-100 scale)
+        // ART: Lower is better, normalize to 0-100 (target: 15-30 minutes = 100 points)
+        $art_score = 0;
+        if ($avg_response_time_minutes > 0) {
+            if ($avg_response_time_minutes <= 30) {
+                $art_score = 100; // Excellent: <= 30 minutes
+            } elseif ($avg_response_time_minutes <= 60) {
+                $art_score = 80; // Good: 31-60 minutes
+            } elseif ($avg_response_time_minutes <= 120) {
+                $art_score = 60; // Fair: 61-120 minutes
+            } else {
+                $art_score = 40; // Poor: > 120 minutes
+            }
+        }
+        
+        // ACT: Lower is better, normalize to 0-100 (target: SLA dependent)
+        $act_score = 0;
+        if ($avg_completion_time_hours > 0) {
+            if ($avg_completion_time_hours <= 8) {
+                $act_score = 100; // Excellent: <= 8 hours
+            } elseif ($avg_completion_time_hours <= 24) {
+                $act_score = 80; // Good: 9-24 hours
+            } elseif ($avg_completion_time_hours <= 72) {
+                $act_score = 60; // Fair: 25-72 hours
+            } else {
+                $act_score = 40; // Poor: > 72 hours
+            }
+        }
+        
+        // AR: Higher is better, direct scale (0-100)
+        $ar_score = ($avg_rating_score / 5) * 100;
+        
+        // AWR: Higher is better, direct scale (0-100)
+        $awr_score = $recommendation_rate;
+        
+        // Total KPI Score with weighted formula
+        // Score_Total = (ART × 20%) + (ACT × 40%) + (AR × 30%) + (AWR × 10%)
+        $total_kpi_score = ($art_score * 0.20) + ($act_score * 0.40) + ($ar_score * 0.30) + ($awr_score * 0.10);
         
         $kpi_data[] = [
             'id' => $staff['id'],
@@ -285,22 +356,31 @@ function getKPIDataArray($db, $start_date, $end_date) {
             'completed_requests' => $completed_requests,
             'in_progress_requests' => (int)$stats['in_progress_requests'],
             'open_requests' => (int)$stats['open_requests'],
-            'avg_completion_time_hours' => (float)($stats['avg_completion_time_hours'] ?? 0),
-            'avg_response_time_hours' => (float)($stats['avg_response_time_hours'] ?? 0),
             
-            // User feedback metrics
+            // Time Metrics
+            'avg_response_time_minutes' => $avg_response_time_minutes, // ART in minutes
+            'avg_completion_time_hours' => $avg_completion_time_hours, // ACT in hours
+            
+            // Quality Metrics
             'total_feedback' => $total_feedback,
-            'avg_rating' => (float)$avg_rating,
+            'avg_rating' => $avg_rating_score, // AR
             'positive_feedback' => $positive_feedback,
             'negative_feedback' => $negative_feedback,
             'would_recommend_count' => $would_recommend_count,
             'rated_requests' => (int)$feedback['rated_requests'],
             
-            // Calculated KPI rates
+            // Individual KPI Scores (0-100 scale)
+            'art_score' => $art_score, // Response Time Score
+            'act_score' => $act_score, // Completion Time Score
+            'ar_score' => $ar_score, // Rating Score
+            'awr_score' => $awr_score, // Would Recommend Score
+            
+            // Calculated KPI Rates
             'completion_rate' => $completion_rate,
-            'satisfaction_rate' => $satisfaction_rate,
-            'recommendation_rate' => $recommendation_rate,
-            'feedback_response_rate' => $feedback_response_rate
+            'feedback_response_rate' => $feedback_response_rate,
+            
+            // Total KPI Score (weighted)
+            'total_kpi_score' => round($total_kpi_score, 2)
         ];
     }
     

@@ -8942,28 +8942,22 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 }
 
+#kpiTable .performance-excellent {
+    color: #198754;
+    font-weight: bold;
+}
+
 #kpiTable .performance-good {
-
     color: #28a745;
-
-    font-weight: 600;
-
 }
 
 #kpiTable .performance-medium {
-
     color: #ffc107;
-
-    font-weight: 600;
-
 }
 
 #kpiTable .performance-poor {
-
     color: #dc3545;
-
     font-weight: 600;
-
 }
 
 /* Feedback Section Styles */

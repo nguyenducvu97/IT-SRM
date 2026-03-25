@@ -3552,24 +3552,27 @@ ITServiceApp.prototype.displayKPIData = function(kpiData) {
     tableBody.innerHTML = '';
     
     if (kpiData.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="9" class="text-center">Không có dữ liệu KPI trong khoảng thời gian đã chọn</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="12" class="text-center">Không có dữ liệu KPI trong khoảng thời gian đã chọn</td></tr>';
         return;
     }
     
     kpiData.forEach(staff => {
         const row = document.createElement('tr');
         
-        // Determine performance class for completion rate
-        const completionClass = staff.completion_rate >= 80 ? 'performance-good' : 
-                               staff.completion_rate >= 50 ? 'performance-medium' : 'performance-poor';
+        // Determine performance class for total KPI score
+        const kpiScoreClass = staff.total_kpi_score >= 90 ? 'performance-excellent' : 
+                             staff.total_kpi_score >= 80 ? 'performance-good' : 
+                             staff.total_kpi_score >= 70 ? 'performance-medium' : 'performance-poor';
         
-        // Determine performance class for satisfaction rate
-        const satisfactionClass = staff.satisfaction_rate >= 80 ? 'performance-good' : 
-                                 staff.satisfaction_rate >= 50 ? 'performance-medium' : 'performance-poor';
-        
-        // Determine performance class for recommendation rate
-        const recommendationClass = staff.recommendation_rate >= 80 ? 'performance-good' : 
-                                   staff.recommendation_rate >= 50 ? 'performance-medium' : 'performance-poor';
+        // Determine performance class for individual scores
+        const artScoreClass = staff.art_score >= 80 ? 'performance-good' : 
+                             staff.art_score >= 60 ? 'performance-medium' : 'performance-poor';
+        const actScoreClass = staff.act_score >= 80 ? 'performance-good' : 
+                             staff.act_score >= 60 ? 'performance-medium' : 'performance-poor';
+        const arScoreClass = staff.ar_score >= 80 ? 'performance-good' : 
+                            staff.ar_score >= 60 ? 'performance-medium' : 'performance-poor';
+        const awrScoreClass = staff.awr_score >= 80 ? 'performance-good' : 
+                            staff.awr_score >= 60 ? 'performance-medium' : 'performance-poor';
         
         row.innerHTML = `
             <td>${staff.id}</td>
@@ -3577,11 +3580,16 @@ ITServiceApp.prototype.displayKPIData = function(kpiData) {
             <td>${staff.department || 'N/A'}</td>
             <td class="numeric">${staff.total_requests}</td>
             <td class="numeric">${staff.completed_requests}</td>
-            <td class="numeric">${typeof staff.avg_response_time_hours === 'number' ? staff.avg_response_time_hours.toFixed(1) : 'N/A'}</td>
+            <td class="numeric">${typeof staff.avg_response_time_minutes === 'number' ? staff.avg_response_time_minutes.toFixed(1) : 'N/A'}</td>
             <td class="numeric">${typeof staff.avg_completion_time_hours === 'number' ? staff.avg_completion_time_hours.toFixed(1) : 'N/A'}</td>
             <td class="numeric">${typeof staff.avg_rating === 'number' ? staff.avg_rating.toFixed(1) : 'N/A'}</td>
-            <td class="numeric ${satisfactionClass}">${typeof staff.satisfaction_rate === 'number' ? staff.satisfaction_rate.toFixed(1) : '0.0'}%</td>
-            <td class="numeric ${recommendationClass}">${typeof staff.recommendation_rate === 'number' ? staff.recommendation_rate.toFixed(1) : '0.0'}%</td>
+            <td class="numeric">${staff.total_feedback}</td>
+            <td class="numeric">${typeof staff.recommendation_rate === 'number' ? staff.recommendation_rate.toFixed(1) : '0.0'}%</td>
+            <td class="numeric ${kpiScoreClass}">${typeof staff.total_kpi_score === 'number' ? staff.total_kpi_score.toFixed(1) : 'N/A'}</td>
+            <td class="numeric ${artScoreClass}">${typeof staff.art_score === 'number' ? staff.art_score.toFixed(1) : 'N/A'}</td>
+            <td class="numeric ${actScoreClass}">${typeof staff.act_score === 'number' ? staff.act_score.toFixed(1) : 'N/A'}</td>
+            <td class="numeric ${arScoreClass}">${typeof staff.ar_score === 'number' ? staff.ar_score.toFixed(1) : 'N/A'}</td>
+            <td class="numeric ${awrScoreClass}">${typeof staff.awr_score === 'number' ? staff.awr_score.toFixed(1) : 'N/A'}</td>
         `;
         
         tableBody.appendChild(row);
@@ -3598,10 +3606,9 @@ ITServiceApp.prototype.displayKPISummary = function(kpiData) {
     const totalCompleted = kpiData.reduce((sum, staff) => sum + staff.completed_requests, 0);
     const totalFeedback = kpiData.reduce((sum, staff) => sum + staff.total_feedback, 0);
     const avgRating = kpiData.reduce((sum, staff) => sum + staff.avg_rating, 0) / totalStaff || 0;
-    const avgResponseTime = kpiData.reduce((sum, staff) => sum + staff.avg_response_time_hours, 0) / totalStaff || 0;
+    const avgResponseTime = kpiData.reduce((sum, staff) => sum + staff.avg_response_time_minutes, 0) / totalStaff || 0;
     const avgCompletionTime = kpiData.reduce((sum, staff) => sum + staff.avg_completion_time_hours, 0) / totalStaff || 0;
-    const avgSatisfactionRate = kpiData.reduce((sum, staff) => sum + staff.satisfaction_rate, 0) / totalStaff || 0;
-    const avgRecommendationRate = kpiData.reduce((sum, staff) => sum + staff.recommendation_rate, 0) / totalStaff || 0;
+    const avgKPIScore = kpiData.reduce((sum, staff) => sum + staff.total_kpi_score, 0) / totalStaff || 0;
     
     summaryContent.innerHTML = `
         <div class="kpi-summary-item">
@@ -3618,7 +3625,7 @@ ITServiceApp.prototype.displayKPISummary = function(kpiData) {
         </div>
         <div class="kpi-summary-item">
             <div class="value">${typeof avgResponseTime === 'number' ? avgResponseTime.toFixed(1) : 'N/A'}</div>
-            <div class="label">Phản hồi TB (giờ)</div>
+            <div class="label">Phản hồi TB (phút)</div>
         </div>
         <div class="kpi-summary-item">
             <div class="value">${typeof avgCompletionTime === 'number' ? avgCompletionTime.toFixed(1) : 'N/A'}</div>
@@ -3629,8 +3636,12 @@ ITServiceApp.prototype.displayKPISummary = function(kpiData) {
             <div class="label">Đánh giá TB</div>
         </div>
         <div class="kpi-summary-item">
-            <div class="value">${typeof avgSatisfactionRate === 'number' ? avgSatisfactionRate.toFixed(1) : '0.0'}%</div>
-            <div class="label">Hài lòng TB</div>
+            <div class="value">${totalFeedback}</div>
+            <div class="label">Tổng đánh giá</div>
+        </div>
+        <div class="kpi-summary-item">
+            <div class="value">${typeof avgKPIScore === 'number' ? avgKPIScore.toFixed(1) : 'N/A'}</div>
+            <div class="label">Điểm KPI TB</div>
         </div>
     `;
 };
