@@ -1699,30 +1699,25 @@ class RequestDetailApp {
 
         }
 
-
-
     }
 
-
-
-
-
-
+    // Function to convert would_recommend number to text
+    getRecommendationText(value) {
+        const texts = {
+            1: 'Rất không hài lòng',
+            2: 'Không hài lòng',
+            3: 'Bình thường',
+            4: 'Khá tốt',
+            5: 'Rất hài lòng'
+        };
+        return texts[value] || 'Không có đánh giá';
+    }
 
     async loadRequestDetail() {
-
-
-
         // Prevent infinite loops and flickering
-
         if (this.isLoading) return;
-
         this.isLoading = true;
-
-
-
-
-
+        
 
         // Show loading state
 
@@ -3416,9 +3411,9 @@ class RequestDetailApp {
                             
                             ${request.would_recommend ? `
                                 <div class="feedback-item">
-                                    <strong>Đề xuất cho người khác:</strong>
+                                    <strong>Đánh giá về xử lý yêu cầu:</strong>
                                     <span class="recommend-badge ${request.would_recommend}">
-                                        ${request.would_recommend === 'yes' ? 'Có đề xuất' : request.would_recommend === 'no' ? 'Không đề xuất' : 'Có thể đề xuất'}
+                                        ${this.getRecommendationText(request.would_recommend)}
                                     </span>
                                 </div>
                             ` : ''}
@@ -5712,20 +5707,50 @@ class RequestDetailApp {
 
 
             if (response.success) {
-
-
+                
+                // Submit feedback to database if provided
+                const wouldRecommend = formData.get('would_recommend');
+                if (wouldRecommend && this.currentUser) {
+                    try {
+                        const feedbackData = {
+                            service_request_id: requestId,
+                            rating: parseInt(wouldRecommend),
+                            feedback: formData.get('feedback_service') || '',
+                            software_feedback: formData.get('feedback_software') || '',
+                            ease_of_use: formData.get('ease_of_use') ? parseInt(formData.get('ease_of_use')) : null,
+                            speed_stability: formData.get('speed_stability') ? parseInt(formData.get('speed_stability')) : null,
+                            requirement_meeting: formData.get('requirement_meeting') ? parseInt(formData.get('requirement_meeting')) : null,
+                            created_by: this.currentUser.id
+                        };
+                        
+                        console.log('Submitting detailed feedback on close:', feedbackData);
+                        
+                        const feedbackResponse = await this.apiCall('api/feedback.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(feedbackData)
+                        });
+                        
+                        console.log('Feedback response:', feedbackResponse);
+                        
+                        if (feedbackResponse.success) {
+                            console.log('Feedback saved successfully');
+                        } else {
+                            console.warn('Failed to save feedback:', feedbackResponse.message);
+                        }
+                    } catch (feedbackError) {
+                        console.error('Error submitting feedback:', feedbackError);
+                        // Don't fail the whole process if feedback fails
+                    }
+                }
 
                 this.showNotification('Yêu cầu đã được đóng thành công!', 'success');
 
-
-
                 this.closeCloseRequestModal();
 
-
-
                 
-
-
 
                 // Reload entire page to refresh all data
 

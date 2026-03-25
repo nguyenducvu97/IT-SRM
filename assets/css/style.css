@@ -24,6 +24,73 @@ body {
 
 }
 
+/* Feedback Rating Styles */
+.rating-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.rating-option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.rating-option:hover {
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.rating-option input[type="radio"] {
+    margin-right: 12px;
+    transform: scale(1.2);
+}
+
+.rating-option input[type="radio"]:checked + .rating-label {
+    color: #007bff;
+}
+
+.rating-option input[type="radio"]:checked ~ .rating-label {
+    font-weight: 600;
+}
+
+.rating-option.selected {
+    border-color: #007bff;
+    background-color: #e3f2fd;
+}
+
+.rating-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.rating-stars {
+    font-size: 18px;
+    color: #ffc107;
+}
+
+.rating-text {
+    font-size: 14px;
+    color: #495057;
+}
+
+.rating-option:hover .rating-text {
+    color: #007bff;
+}
+
+.rating-option input[type="radio"]:checked ~ .rating-label .rating-text {
+    color: #007bff;
+}
+
 
 
 /* Toast Notifications */
