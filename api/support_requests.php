@@ -813,22 +813,25 @@ function handlePut($pdo, $action, $current_user, $user_role) {
                     ]);
                     
                 } elseif ($decision === 'rejected') {
-                    // Set service request to rejected status
+                    // Set service request to in_progress with rejection info (similar to approved logic)
                     $update_stmt = $pdo->prepare("
                         UPDATE service_requests 
-                        SET status = 'rejected'
+                        SET status = 'in_progress'
                         WHERE id = ?
                     ");
                     $update_result = $update_stmt->execute([$service_request_id]);
                     
+                    error_log("DEBUG: Updating service request $service_request_id to in_progress (rejected support)");
+                    error_log("DEBUG: Update result: " . ($update_result ? 'SUCCESS' : 'FAILED'));
+                    
                     echo json_encode([
                         'success' => true,
-                        'message' => 'Support request rejected, request marked as rejected',
+                        'message' => 'Support request rejected, request continues with staff',
                         'data' => [
                             'decision' => $decision,
                             'reason' => $reason,
                             'service_request_id' => $service_request_id,
-                            'service_request_status' => 'rejected'
+                            'service_request_status' => 'in_progress'
                         ]
                     ]);
                     

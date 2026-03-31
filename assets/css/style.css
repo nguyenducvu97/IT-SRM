@@ -3389,7 +3389,7 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     position: fixed;
 
-    z-index: 1000;
+    z-index: 10000;
 
     left: 0;
 

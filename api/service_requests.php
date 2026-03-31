@@ -288,17 +288,14 @@ if ($method == 'GET') {
             
 
             // Calculate actual status counts
-
             $status_query = "SELECT status, COUNT(*) as count FROM service_requests";
 
+            // For dashboard stats, admin/staff should see ALL requests
+            // Only filter by user for regular users viewing their own dashboard
+            $is_dashboard_stats = (empty($status_filter) && empty($priority_filter) && empty($category_filter) && empty($category_id_filter));
             
-
-            // Only filter by user for non-admin/non-staff
-
             if ($user_role != 'admin' && $user_role != 'staff') {
-
                 $status_query .= " WHERE user_id = :user_id";
-
             }
 
             $status_query .= " GROUP BY status";
@@ -326,6 +323,10 @@ if ($method == 'GET') {
                 $status_counts_array[$result['status']] = $result['count'];
 
             }
+            
+            // Debug log to check status counts
+            error_log("Status counts debug: " . json_encode($status_counts_array));
+            error_log("User role: {$user_role}, Status query: {$status_query}");
 
             
 

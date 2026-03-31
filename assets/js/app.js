@@ -663,6 +663,11 @@ class ITServiceApp {
                 const allRequests = statsResponse.data.requests;
                 let recentRequests = recentResponse.data.requests;
                 
+                // Use status_counts from API for accurate dashboard stats
+                const apiStats = statsResponse.data.status_counts || {};
+                console.log('Dashboard API stats:', apiStats);
+                console.log('Dashboard all requests count:', allRequests.length);
+                
                 // Prioritize support requests in recent requests
                 const supportRequests = recentRequests.filter(r => r.status === 'request_support');
                 const otherRequests = recentRequests.filter(r => r.status !== 'request_support');
@@ -670,15 +675,15 @@ class ITServiceApp {
                 // Put support requests first, then other requests, limit to 5 total
                 recentRequests = [...supportRequests, ...otherRequests].slice(0, 5);
                 
-                // Update stats from all requests
+                // Use API stats for dashboard (more accurate than client-side calculation)
                 const stats = {
-                    total: allRequests.length,
-                    open: allRequests.filter(r => r.status === 'open').length,
-                    in_progress: allRequests.filter(r => r.status === 'in_progress').length,
-                    resolved: allRequests.filter(r => r.status === 'resolved').length,
-                    rejected: allRequests.filter(r => r.status === 'rejected').length,
-                    request_support: allRequests.filter(r => r.status === 'request_support').length,
-                    closed: allRequests.filter(r => r.status === 'closed').length
+                    total: apiStats.total || allRequests.length,
+                    open: apiStats.open || allRequests.filter(r => r.status === 'open').length,
+                    in_progress: apiStats.in_progress || allRequests.filter(r => r.status === 'in_progress').length,
+                    resolved: apiStats.resolved || allRequests.filter(r => r.status === 'resolved').length,
+                    rejected: apiStats.rejected || allRequests.filter(r => r.status === 'rejected').length,
+                    request_support: apiStats.request_support || allRequests.filter(r => r.status === 'request_support').length,
+                    closed: apiStats.closed || allRequests.filter(r => r.status === 'closed').length
                 };
 
                 // Update stats from all requests

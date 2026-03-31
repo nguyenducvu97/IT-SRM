@@ -4413,6 +4413,178 @@ class RequestDetailApp {
 
 
 
+    showRejectModal(requestId) {
+        console.log('showRejectModal called with requestId:', requestId);
+        console.log('requestDetailApp object:', window.requestDetailApp);
+        
+        // Debug CSS loading
+        const cssLink = document.querySelector('link[href*="style.css"]');
+        console.log('CSS link element:', cssLink);
+        if (cssLink) {
+            console.log('CSS href:', cssLink.href);
+            console.log('CSS loaded:', cssLink.sheet ? true : false);
+        } else {
+            console.error('CSS link not found!');
+        }
+        
+        try {
+            document.getElementById('rejectRequestId').value = requestId;
+            document.getElementById('rejectForm').reset();
+            document.getElementById('rejectAttachmentPreview').innerHTML = '<div class="no-files">Chưa có tệp nào được chọn</div>';
+            document.getElementById('rejectAttachmentPreview').classList.remove('has-files');
+            
+            const modal = document.getElementById('rejectModal');
+            console.log('rejectModal element:', modal);
+            
+            if (modal) {
+                modal.style.display = 'block';
+                console.log('Modal display set to block');
+                
+                // Debug computed styles
+                const computedStyles = window.getComputedStyle(modal);
+                console.log('Computed display:', computedStyles.display);
+                console.log('Computed z-index:', computedStyles.zIndex);
+                console.log('Computed position:', computedStyles.position);
+                console.log('Computed visibility:', computedStyles.visibility);
+                console.log('Computed opacity:', computedStyles.opacity);
+                
+                // Check if modal is actually visible
+                const rect = modal.getBoundingClientRect();
+                console.log('Modal dimensions:', {
+                    width: rect.width,
+                    height: rect.height,
+                    top: rect.top,
+                    left: rect.left
+                });
+                
+                // Check if modal is in viewport
+                const isInViewport = rect.width > 0 && rect.height > 0;
+                console.log('Modal is in viewport:', isInViewport);
+                
+                // Force visibility
+                modal.style.visibility = 'visible';
+                modal.style.opacity = '1';
+                modal.style.zIndex = '10000';
+                
+                // Force modal dimensions
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.position = 'fixed';
+                
+                console.log('Modal forced dimensions applied');
+                
+                // Debug parent container
+                const parent = modal.parentElement;
+                console.log('Modal parent element:', parent);
+                if (parent) {
+                    const parentStyles = window.getComputedStyle(parent);
+                    console.log('Parent display:', parentStyles.display);
+                    console.log('Parent position:', parentStyles.position);
+                    console.log('Parent overflow:', parentStyles.overflow);
+                    console.log('Parent dimensions:', {
+                        width: parent.offsetWidth,
+                        height: parent.offsetHeight
+                    });
+                    
+                    // Check if parent is body
+                    if (parent !== document.body) {
+                        console.log('Modal is not in body, moving to body');
+                        document.body.appendChild(modal);
+                    }
+                }
+                
+                // Debug viewport
+                console.log('Viewport dimensions:', {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    scrollX: window.scrollX,
+                    scrollY: window.scrollY
+                });
+                
+                // Debug all CSS rules affecting modal
+                try {
+                    const cssRules = [];
+                    if (modal.sheet) {
+                        for (let i = 0; i < modal.sheet.cssRules.length; i++) {
+                            const rule = modal.sheet.cssRules[i];
+                            if (rule.selectorText && rule.selectorText.includes('.modal')) {
+                                cssRules.push({
+                                    selector: rule.selectorText,
+                                    styles: rule.style.cssText
+                                });
+                            }
+                        }
+                    }
+                    console.log('CSS rules affecting modal:', cssRules);
+                } catch (e) {
+                    console.log('Cannot access CSS rules:', e.message);
+                }
+                
+                // Re-check dimensions after forcing
+                const newRect = modal.getBoundingClientRect();
+                console.log('Modal dimensions after forcing:', {
+                    width: newRect.width,
+                    height: newRect.height,
+                    top: newRect.top,
+                    left: newRect.left
+                });
+                
+                const isNowInViewport = newRect.width > 0 && newRect.height > 0;
+                console.log('Modal is now in viewport:', isNowInViewport);
+                
+                // Debug modal content
+                const modalContent = modal.querySelector('.modal-content');
+                if (modalContent) {
+                    console.log('Modal content element found:', modalContent);
+                    const contentStyles = window.getComputedStyle(modalContent);
+                    console.log('Modal content display:', contentStyles.display);
+                    console.log('Modal content visibility:', contentStyles.visibility);
+                    console.log('Modal content opacity:', contentStyles.opacity);
+                    
+                    // Force modal content visibility
+                    modalContent.style.display = 'block';
+                    modalContent.style.visibility = 'visible';
+                    modalContent.style.opacity = '1';
+                } else {
+                    console.error('Modal content element not found!');
+                }
+                
+                console.log('Modal should be visible now - forced styles applied');
+                
+                // Try creating a test modal to verify HTML structure
+                if (!isNowInViewport) {
+                    console.log('Creating test modal to verify HTML structure...');
+                    const testModal = document.createElement('div');
+                    testModal.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: red;
+                        z-index: 99999;
+                        display: block;
+                    `;
+                    testModal.innerHTML = '<div style="color: white; padding: 20px;">TEST MODAL - If you see this, HTML structure works</div>';
+                    document.body.appendChild(testModal);
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(testModal);
+                        console.log('Test modal removed');
+                    }, 3000);
+                }
+            } else {
+                console.error('rejectModal element not found!');
+            }
+        } catch (error) {
+            console.error('Error in showRejectModal:', error);
+        }
+    }
+
+
+
 
 
     closeResolveModal() {
@@ -4420,6 +4592,46 @@ class RequestDetailApp {
 
 
         const modal = document.getElementById('resolveModal');
+
+
+
+        if (modal) {
+
+
+
+            // Move modal to body if it's nested
+
+
+
+            if (modal.parentElement !== document.body) {
+
+
+
+                document.body.appendChild(modal);
+
+
+
+            }
+
+
+
+            modal.style.display = 'none';
+
+
+
+        }
+
+
+
+    }
+
+
+
+    closeRejectModal() {
+
+
+
+        const modal = document.getElementById('rejectModal');
 
 
 
@@ -4683,6 +4895,75 @@ class RequestDetailApp {
             if (submitBtn) {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Đã giải quyết';
+            }
+        } finally {
+            this.hideLoading();
+        }
+    }
+
+    async handleRejectSubmit(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const requestId = document.getElementById('rejectRequestId').value;
+        
+        // Disable submit button and show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang từ chối...';
+        }
+        
+        // Show loading state
+        this.showLoading('Đang từ chối yêu cầu...');
+        
+        try {
+            console.log('Reject form data:', formData);
+            console.log('Request ID:', requestId);
+            
+            // Create FormData for file upload
+            const uploadFormData = new FormData();
+            
+            // Add form fields
+            uploadFormData.append('id', requestId);
+            uploadFormData.append('action', 'reject_request');
+            uploadFormData.append('reason', formData.get('reason'));
+            
+            // Add files if any
+            const fileInput = document.getElementById('rejectAttachments');
+            if (fileInput && fileInput.files.length > 0) {
+                console.log('Adding', fileInput.files.length, 'files to reject upload');
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    uploadFormData.append('attachments[]', fileInput.files[i]);
+                }
+            }
+            
+            const response = await this.apiCall('api/service_requests.php', {
+                method: 'POST',
+                body: uploadFormData
+            });
+            
+            console.log('Reject API Response:', response);
+            
+            if (response.success) {
+                this.showNotification('Yêu cầu đã bị từ chối', 'success');
+                this.closeRejectModal();
+                // Force page refresh to ensure latest data is displayed
+                window.location.reload();
+            } else {
+                this.showNotification(response.message, 'error');
+                // Re-enable button if failed
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-times"></i> Từ chối yêu cầu';
+                }
+            }
+        } catch (error) {
+            console.error('Reject submit error:', error);
+            this.showNotification('Lỗi kết nối', 'error');
+            // Re-enable button if error
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-times"></i> Từ chối yêu cầu';
             }
         } finally {
             this.hideLoading();
@@ -7509,102 +7790,33 @@ class RequestDetailApp {
 
 
     getRejectStatusText(status) {
-
-
-
         const statuses = {
-
-
-
             'pending': 'Chờ duyệt',
-
-
-
             'approved': 'Đã phê duyệt',
-
-
-
             'rejected': 'Đã từ chối'
-
-
-
         };
-
-
-
         return statuses[status] || status;
-
-
-
     }
-
-
-
 }
 
-
-
-
-
-
-
 // Initialize request detail app when DOM is loaded
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
-
-
-
     console.log('DOM loaded, initializing request detail app...');
-
-
-
-    window.requestDetailApp = new RequestDetailApp();
-
-
-
     
-
-
-
+    try {
+        window.requestDetailApp = new RequestDetailApp();
+        console.log('requestDetailApp created:', window.requestDetailApp);
+        console.log('showRejectModal method exists:', typeof window.requestDetailApp.showRejectModal);
+    } catch (error) {
+        console.error('Error creating requestDetailApp:', error);
+    }
+    
     // Wait for translation system to be ready
-
-
-
     setTimeout(() => {
-
-
-
         if (window.t && window.translationSystem) {
-
-
-
             console.log('Translation system is ready');
-
-
-
-            // Translation system already initialized by translation.js
-
-
-
         } else {
-
-
-
             console.log('Translation system not ready yet');
-
-
-
         }
-
-
-
     }, 1000);
-
-
-
 });
-
-
-
