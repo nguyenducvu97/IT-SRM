@@ -1003,7 +1003,7 @@ class ITServiceApp {
             <div class="request-item support-request status-${support.status}" data-support-id="${support.id}">
                 <div class="request-header">
                     <div class="request-title">
-                        <a href="request-detail.html?id=${support.service_request_id}" target="_blank">
+                        <a href="request-detail.html?id=${support.service_request_id}">
                             <span class="request-id">ID: ${support.service_request_id}</span> - ${support.request_title}
                         </a>
                     </div>
@@ -2743,7 +2743,7 @@ class ITServiceApp {
             <div class="request-item reject-request" data-reject-id="${reject.id}">
                 <div class="request-header">
                     <h4>
-                        <a href="request-detail.html?id=${reject.service_request_id}" target="_blank">
+                        <a href="request-detail.html?id=${reject.service_request_id}">
                             ID: ${reject.service_request_id} - ${reject.request_title}
                         </a>
                     </h4>
@@ -3062,8 +3062,8 @@ class ITServiceApp {
                 
                 const serviceRequestId = card.dataset.serviceRequestId;
                 if (serviceRequestId) {
-                    // Open request detail in new tab
-                    window.open(`request-detail.html?id=${serviceRequestId}`, '_blank');
+                    // Open request detail in same tab
+                    window.location.href = `request-detail.html?id=${serviceRequestId}`;
                 }
             });
             
