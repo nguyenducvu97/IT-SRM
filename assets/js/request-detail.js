@@ -2852,7 +2852,7 @@ class RequestDetailApp {
 
 
 
-                ${request.support_request ? `
+                ${request.support_request && currentUser && ['admin', 'staff'].includes(currentUser.role) ? `
 
 
 
