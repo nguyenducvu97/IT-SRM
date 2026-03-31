@@ -14,6 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once '../config/session.php';
 require_once '../config/database.php';
+require_once '../config/email.php';
+require_once '../lib/PHPMailerEmailHelper.php';
 
 // Start session
 startSession();
@@ -384,7 +386,7 @@ function handlePost($pdo, $action, $current_user, $user_role) {
     $stmt = $pdo->prepare("
         SELECT id, assigned_to, status 
         FROM service_requests 
-        WHERE id = ? AND assigned_to = ? AND status = 'in_progress'
+        WHERE id = ? AND assigned_to = ?
     ");
     $stmt->execute([$service_request_id, $current_user]);
     $service_request = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -392,6 +394,14 @@ function handlePost($pdo, $action, $current_user, $user_role) {
     if (!$service_request) {
         http_response_code(404);
         echo json_encode(['success' => false, 'message' => 'Service request not found or not assigned to you']);
+        return;
+    }
+    
+    // Check if service request is already completed, resolved, or closed
+    $completed_statuses = ['resolved', 'closed', 'cancelled'];
+    if (in_array($service_request['status'], $completed_statuses)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Cannot submit support request for completed service request']);
         return;
     }
     
@@ -430,83 +440,88 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         
         // Handle file uploads if any
         $uploaded_files = [];
-        if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
-            error_log("Processing file uploads for support request $support_id");
-            
-            $uploads_dir = __DIR__ . '/../uploads/support_requests/';
-            if (!file_exists($uploads_dir)) {
-                mkdir($uploads_dir, 0755, true);
-            }
-            
-            $file_attachments = $_FILES['attachments'];
-            $file_count = count($file_attachments['name']);
-            
-            for ($i = 0; $i < $file_count; $i++) {
-                if ($file_attachments['error'][$i] === UPLOAD_ERR_OK) {
-                    $original_name = $file_attachments['name'][$i];
-                    $file_size = $file_attachments['size'][$i];
-                    $file_tmp = $file_attachments['tmp_name'][$i];
-                    $file_type = $file_attachments['type'][$i];
-                    
-                    // Generate unique filename
-                    $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
-                    $unique_filename = uniqid('support_', true) . '.' . $file_extension;
-                    $file_path = $uploads_dir . $unique_filename;
-                    
-                    // Validate file (size, type)
-                    $max_size = 10 * 1024 * 1024; // 10MB
-                    $allowed_types = [
-                        'image/jpeg', 'image/png', 'image/gif',
-                        'application/pdf', 'application/msword',
-                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        'application/vnd.ms-excel',
-                        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        'application/vnd.ms-powerpoint',
-                        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                        'text/plain', 'application/zip'
-                    ];
-                    
-                    if ($file_size > $max_size) {
-                        error_log("File too large: $original_name ($file_size bytes)");
-                        continue;
-                    }
-                    
-                    if (!in_array($file_type, $allowed_types)) {
-                        error_log("File type not allowed: $original_name ($file_type)");
-                        continue;
-                    }
-                    
-                    // Move file
-                    if (move_uploaded_file($file_tmp, $file_path)) {
-                        // Save to database
-                        $attachment_stmt = $pdo->prepare("
-                            INSERT INTO support_request_attachments 
-                            (support_request_id, original_name, filename, file_size, mime_type, uploaded_at)
-                            VALUES (?, ?, ?, ?, ?, NOW())
-                        ");
+        try {
+            if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+                error_log("Processing file uploads for support request $support_id");
+                
+                $uploads_dir = __DIR__ . '/../uploads/support_requests/';
+                if (!file_exists($uploads_dir)) {
+                    mkdir($uploads_dir, 0755, true);
+                }
+                
+                $file_attachments = $_FILES['attachments'];
+                $file_count = count($file_attachments['name']);
+                
+                for ($i = 0; $i < $file_count; $i++) {
+                    if ($file_attachments['error'][$i] === UPLOAD_ERR_OK) {
+                        $original_name = $file_attachments['name'][$i];
+                        $file_size = $file_attachments['size'][$i];
+                        $file_tmp = $file_attachments['tmp_name'][$i];
+                        $file_type = $file_attachments['type'][$i];
                         
-                        if ($attachment_stmt->execute([$support_id, $original_name, $unique_filename, $file_size, $file_type])) {
-                            $uploaded_files[] = [
-                                'original_name' => $original_name,
-                                'filename' => $unique_filename,
-                                'file_size' => $file_size,
-                                'mime_type' => $file_type
-                            ];
-                            error_log("Successfully uploaded: $original_name");
+                        // Generate unique filename
+                        $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
+                        $unique_filename = uniqid('support_', true) . '.' . $file_extension;
+                        $file_path = $uploads_dir . $unique_filename;
+                        
+                        // Validate file (size, type)
+                        $max_size = 10 * 1024 * 1024; // 10MB
+                        $allowed_types = [
+                            'image/jpeg', 'image/png', 'image/gif',
+                            'application/pdf', 'application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/vnd.ms-excel',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            'application/vnd.ms-powerpoint',
+                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                            'text/plain', 'application/zip'
+                        ];
+                        
+                        if ($file_size > $max_size) {
+                            error_log("File too large: $original_name ($file_size bytes)");
+                            continue;
+                        }
+                        
+                        if (!in_array($file_type, $allowed_types)) {
+                            error_log("File type not allowed: $original_name ($file_type)");
+                            continue;
+                        }
+                        
+                        // Move file
+                        if (move_uploaded_file($file_tmp, $file_path)) {
+                            // Save to database
+                            $attachment_stmt = $pdo->prepare("
+                                INSERT INTO support_request_attachments 
+                                (support_request_id, original_name, filename, file_size, mime_type, uploaded_at)
+                                VALUES (?, ?, ?, ?, ?, NOW())
+                            ");
+                            
+                            if ($attachment_stmt->execute([$support_id, $original_name, $unique_filename, $file_size, $file_type])) {
+                                $uploaded_files[] = [
+                                    'original_name' => $original_name,
+                                    'filename' => $unique_filename,
+                                    'file_size' => $file_size,
+                                    'mime_type' => $file_type
+                                ];
+                                error_log("Successfully uploaded: $original_name");
+                            } else {
+                                error_log("Failed to save attachment to database: $original_name");
+                                // Clean up uploaded file
+                                unlink($file_path);
+                            }
                         } else {
-                            error_log("Failed to save attachment to database: $original_name");
-                            // Clean up uploaded file
-                            unlink($file_path);
+                            error_log("Failed to move uploaded file: $original_name");
                         }
                     } else {
-                        error_log("Failed to move uploaded file: $original_name");
+                        error_log("Upload error for file $i: " . $file_attachments['error'][$i]);
                     }
-                } else {
-                    error_log("Upload error for file $i: " . $file_attachments['error'][$i]);
                 }
+                
+                error_log("Uploaded " . count($uploaded_files) . " files for support request $support_id");
             }
-            
-            error_log("Uploaded " . count($uploaded_files) . " files for support request $support_id");
+        } catch (Exception $e) {
+            error_log("File upload error: " . $e->getMessage());
+            // Continue without files - don't fail the whole request
         }
         
         // Update service request status to 'request_support'
@@ -517,7 +532,7 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         ");
         $update_result = $update_stmt->execute([$service_request_id]);
         
-        // Enable email sending with fixed template
+        // Enable email sending with fixed template (non-blocking)
         try {
             // Get staff name and request details
             $staff_stmt = $pdo->prepare("SELECT full_name FROM users WHERE id = ?");
@@ -543,7 +558,7 @@ function handlePost($pdo, $action, $current_user, $user_role) {
                 foreach ($admins as $admin_id) {
                     createNotification($pdo, $admin_id, $title, $message, 'warning', $service_request_id, 'request');
                     
-                    // Send email notification to admin
+                    // Send email notification to admin (non-blocking)
                     try {
                         $emailHelper = new PHPMailerEmailHelper();
                         
@@ -565,12 +580,13 @@ function handlePost($pdo, $action, $current_user, $user_role) {
                         }
                     } catch (Exception $e) {
                         error_log("Failed to send support request email to admin {$admin_id}: " . $e->getMessage());
+                        // Continue even if email fails
                     }
                 }
             }
         } catch (Exception $e) {
             error_log("Failed to create support request notifications: " . $e->getMessage());
-            // Continue even if notification creation fails
+            // Continue even if notification creation fails - don't fail the whole request
         }
         
         echo json_encode([

@@ -1718,11 +1718,11 @@ class RequestDetailApp {
         if (this.isLoading) return;
         this.isLoading = true;
         
-
+        console.log('=== LOAD REQUEST DETAIL ===');
+        console.log('Current user:', this.currentUser);
+        console.log('Request ID:', this.requestId);
+        
         // Show loading state
-
-
-
         this.showLoading('Đang tải chi tiết yêu cầu...');
 
 
@@ -1730,48 +1730,6 @@ class RequestDetailApp {
         
 
 
-
-        try {
-
-
-
-            const response = await this.apiCall(`api/service_requests.php?action=get&id=${this.requestId}`);
-
-
-
-            
-
-
-
-            if (response.success) {
-
-
-
-                this.request = response.data;
-
-
-
-                
-
-
-
-                // Load reject request status for staff BEFORE displaying
-
-
-
-                if (this.currentUser && this.currentUser.role === 'staff') {
-
-
-
-                    await this.checkRejectRequestStatus();
-
-
-
-                }
-
-
-
-                
 
 
 
@@ -1855,95 +1813,43 @@ class RequestDetailApp {
 
 
 
+            if (response.success) {
+            this.request = response.data;
+            
+            // Load reject request and support request status for staff and admin BEFORE displaying
+            if (this.currentUser && ['staff', 'admin'].includes(this.currentUser.role)) {
+                await this.checkRejectRequestStatus();
+                await this.checkSupportRequestStatus();
             }
-
-
-
-        } catch (error) {
-
-
-
-            console.error('Request detail error:', error);
-
-
-
-            this.showNotification('Lỗi tải chi tiết yêu cầu', 'error');
-
-
-
-        } finally {
-
-
-
-            this.hideLoading();
-
-
-
+            
+            this.displayRequestDetail(this.request);
+        } else {
+            console.log('Request detail failed:', response.message);
+            this.showNotification(response.message, 'error');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
         }
-
-
-
+    } catch (error) {
+        console.error('Request detail error:', error);
+        this.showNotification('Lỗi tải chi tiết yêu cầu', 'error');
+    } finally {
+        this.isLoading = false;
+        this.hideLoading();
     }
-
-
-
-
-
-
-
-    displayRequestDetail(request) {
-
-
-
-        console.log('=== DISPLAY REQUEST DETAIL ===');
-
-
-
-        console.log('Request ID:', request.id);
-
-
-
-        console.log('Request title:', request.title);
-
-
-
-        
-
-
-
-        const container = document.getElementById('requestDetails');
-
-
-
-        if (!container) {
-
-
-
-            console.error('Request details container not found!');
-
-
-
-            return;
-
-
-
+    
+    // Show notification for reject request decision (moved outside try-catch)
+    if (this.request && this.request.reject_request && this.request.reject_request.status !== 'pending') {
+        if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
+            const decision = this.request.reject_request.status === 'approved' ? 'đã được phê duyệt' : 'đã bị từ chối';
+            const message = `📢 Yêu cầu từ chối ${decision} bởi admin!`;
+            this.showNotification(message, this.request.reject_request.status === 'approved' ? 'success' : 'warning');
+        } else {
+            // Regular users see generic message
+            const message = '📢 Yêu cầu của bạn đã được xử lý!';
+            this.showNotification(message, 'info');
         }
-
-
-
-        
-
-
-
-        // Extract all values before template to avoid 'this' context issues
-
-
-
-        const priorityText = this.getPriorityText(request.priority);
-
-
-
-        const statusText = this.getStatusText(request.status);
+    }
 
 
 
@@ -3217,41 +3123,6 @@ class RequestDetailApp {
 
 
                             </button>
-
-
-
-                        ` : ''}
-
-
-
-                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
-
-
-
-                            <button class="btn btn-primary" onclick="requestDetailApp.showResolveModal(${request.id})">
-
-
-
-                                <i class="fas fa-check-circle"></i> Đã giải quyết
-
-
-
-                            </button>
-
-
-
-                            <button class="btn btn-warning" onclick="requestDetailApp.showNeedSupportModal(${request.id})">
-
-
-
-                                <i class="fas fa-hands-helping"></i> Cần hỗ trợ
-
-
-
-                            </button>
-
-
-
                         ` : ''}
 
 
@@ -3269,6 +3140,10 @@ class RequestDetailApp {
 
 
                             <option value="in_progress" ${request.status === 'in_progress' ? 'selected' : ''}>Đang xử lý</option>
+
+
+
+                            <option value="request_support" ${request.status === 'request_support' ? 'selected' : ''}>Cần hỗ trợ</option>
 
 
 
@@ -3302,7 +3177,7 @@ class RequestDetailApp {
                         ` : '';
                         })()}
 
-                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
+                        ${(request.status === 'in_progress' || request.status === 'request_support') && request.assigned_to == currentUser.id ? `
 
 
 
@@ -3426,9 +3301,13 @@ class RequestDetailApp {
                                             <div class="rating-item">
                                                 <span class="rating-label">Dễ sử dụng:</span>
                                                 <div class="rating-stars">
-                                                    ${Array.from({length: 5}, (_, i) => 
-                                                        `<i class="fas fa-star ${i < request.ease_of_use ? 'active' : ''}"></i>`
-                                                    ).join('')}
+                                                    ${(() => {
+                                                    let stars = '';
+                                                    for (let i = 0; i < 5; i++) {
+                                                        stars += `<i class="fas fa-star ${i < request.ease_of_use ? 'active' : ''}"></i>`;
+                                                    }
+                                                    return stars;
+                                                })()}
                                                     <span>(${request.ease_of_use}/5)</span>
                                                 </div>
                                             </div>
@@ -3438,9 +3317,13 @@ class RequestDetailApp {
                                             <div class="rating-item">
                                                 <span class="rating-label">Tốc độ & Ổn định:</span>
                                                 <div class="rating-stars">
-                                                    ${Array.from({length: 5}, (_, i) => 
-                                                        `<i class="fas fa-star ${i < request.speed_stability ? 'active' : ''}"></i>`
-                                                    ).join('')}
+                                                    ${(() => {
+                                                    let stars = '';
+                                                    for (let i = 0; i < 5; i++) {
+                                                        stars += `<i class="fas fa-star ${i < request.speed_stability ? 'active' : ''}"></i>`;
+                                                    }
+                                                    return stars;
+                                                })()}
                                                     <span>(${request.speed_stability}/5)</span>
                                                 </div>
                                             </div>
@@ -3450,9 +3333,13 @@ class RequestDetailApp {
                                             <div class="rating-item">
                                                 <span class="rating-label">Đáp ứng yêu cầu:</span>
                                                 <div class="rating-stars">
-                                                    ${Array.from({length: 5}, (_, i) => 
-                                                        `<i class="fas fa-star ${i < request.requirement_meeting ? 'active' : ''}"></i>`
-                                                    ).join('')}
+                                                    ${(() => {
+                                                    let stars = '';
+                                                    for (let i = 0; i < 5; i++) {
+                                                        stars += `<i class="fas fa-star ${i < request.requirement_meeting ? 'active' : ''}"></i>`;
+                                                    }
+                                                    return stars;
+                                                })()}
                                                     <span>(${request.requirement_meeting}/5)</span>
                                                 </div>
                                             </div>
@@ -3567,7 +3454,7 @@ class RequestDetailApp {
 
 
 
-                        <button class="delete-comment-btn" onclick="requestDetail.deleteComment(${comment.id})" title="Xóa bình luận">
+                        <button class="delete-comment-btn" onclick="requestDetailApp.deleteComment(${comment.id})" title="Xóa bình luận">
 
 
 
@@ -7101,32 +6988,131 @@ class RequestDetailApp {
 
 
     async checkRejectRequestStatus() {
+
+
+
         try {
+
+
+
             const response = await this.apiCall(`api/reject_requests.php?action=check_status&service_request_id=${this.requestId}`);
+
+
+
             
+
+
+
             if (response.success && response.data) {
+
+
+
                 this.rejectRequestStatus = response.data;
+
+
+
                 
+
+
+
                 // Thông báo cho staff nếu admin đã quyết định
+
+
+
                 if (this.rejectRequestStatus.status !== 'pending') {
+
+
+
                     if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
+
+
+
                         const decision = this.rejectRequestStatus.status === 'approved' ? 'được đồng ý' : 'bị từ chối';
+
+
+
                         const message = `📢 Yêu cầu từ chối đã ${decision} bởi admin!`;
+
+
+
                         this.showNotification(message, this.rejectRequestStatus.status === 'approved' ? 'success' : 'warning');
+
+
+
                     } else {
+
+
+
                         // Regular users see generic message
+
+
+
                         const message = '📢 Yêu cầu từ chối của bạn đã được xử lý!';
+
+
+
                         this.showNotification(message, 'info');
+
+
+
                     }
+
+
+
                 }
+
+
+
             } else {
+
+
+
                 this.rejectRequestStatus = null;
+
+
+
             }
+
+
+
         } catch (error) {
             console.error('Error checking reject request status:', error);
             this.rejectRequestStatus = null;
         }
-    };
+    }
+
+
+
+    async checkSupportRequestStatus() {
+        try {
+            const response = await this.apiCall(`api/support_requests.php?action=check_status&service_request_id=${this.requestId}`);
+            
+            if (response.success && response.data) {
+                this.supportRequestStatus = response.data;
+                
+                // Thông báo cho staff nếu admin đã quyết định
+                if (this.supportRequestStatus.status !== 'pending') {
+                    if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
+                        const decision = this.supportRequestStatus.status === 'approved' ? 'được đồng ý' : 'bị từ chối';
+                        const message = `📢 Yêu cầu hỗ trợ đã ${decision} bởi admin!`;
+                        this.showNotification(message, this.supportRequestStatus.status === 'approved' ? 'success' : 'warning');
+                    } else {
+                        // Regular users see generic message
+                        const message = '📢 Yêu cầu hỗ trợ của bạn đã được xử lý!';
+                        this.showNotification(message, 'info');
+                    }
+                }
+            } else {
+                this.supportRequestStatus = null;
+            }
+        } catch (error) {
+            console.error('Error checking support request status:', error);
+            this.supportRequestStatus = null;
+        }
+    }
+
+
+
 
 
 
