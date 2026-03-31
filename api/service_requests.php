@@ -59,7 +59,7 @@ startSession();
 
 // Helper function for JSON responses (avoid conflict with database.php)
 
-function serviceJsonResponse($success, $message, $data = null) {
+function serviceJsonResponse($success, $message, $data = null, $exit = true) {
 
     header('Content-Type: application/json');
 
@@ -82,8 +82,10 @@ function serviceJsonResponse($success, $message, $data = null) {
     
 
     echo json_encode($response);
-
-    exit();
+    
+    if ($exit) {
+        exit();
+    }
 
 }
 
@@ -1046,55 +1048,7 @@ elseif ($method == 'POST') {
 
             
 
-            // Send email notification to staff and admin - ORIGINAL
-            $email_start = microtime(true);
-            
-            try {
-                // Quick SMTP connectivity check with shorter timeout
-                $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.5);
-                
-                if ($smtp_socket) {
-                    // SMTP is responsive - send email
-                    fclose($smtp_socket);
-                    $emailHelper = new EmailHelper();
-                    $emailHelper->sendNewRequestNotification($email_data);
-                    error_log("Email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
-                } else {
-                    // SMTP is down - log and continue quickly
-                    error_log("SMTP down - skipping email ({$errno}: {$errstr})");
-                }
-            } catch (Exception $e) {
-                error_log("Email error: " . $e->getMessage());
-            }
-
-            // Create in-app notifications for staff and admin (ORIGINAL)
-            $notification_start = microtime(true);
-
-            try {
-                // Get all staff and admin users ONCE
-                $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
-                $stmt->execute();
-                $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
-                
-                if (!empty($staff_admin_users)) {
-                    $title = "Yêu cầu mới #" . $request_id;
-                    $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
-                    
-                    // Create notifications WITHOUT email for faster response
-                    $notificationHelper = new NotificationHelper($db);
-                    $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
-                    
-                    error_log("Notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
-                }
-
-            } catch (Exception $e) {
-                error_log("Failed to create new request notifications: " . $e->getMessage());
-                // Continue even if notification creation fails
-            }
-
-            
-
-            // Handle file uploads if any - OPTIMIZED
+            // Handle file uploads FIRST - OPTIMIZED
             $attachment_start = microtime(true);
             $attachment_count = 0;
             
@@ -1160,18 +1114,21 @@ elseif ($method == 'POST') {
                 error_log("Processed $attachment_count attachments in " . round((microtime(true) - $attachment_start) * 1000, 2) . "ms");
             }
 
-            
-
-            // Log total execution time
+            // Return response IMMEDIATELY after creating request and attachments
             $total_time = round((microtime(true) - $request_start) * 1000, 2);
-            error_log("Total request creation time: {$total_time}ms (Request ID: {$request_id})");
+            error_log("Request creation completed in {$total_time}ms (Request ID: {$request_id})");
             
-            serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id]);
-
+            serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id], false);
+            
+            // Register background processing to run AFTER response is sent
+            register_shutdown_function(function() use ($db, $request_data, $request_id, $email_data) {
+                processBackgroundNotifications($db, $request_data, $request_id, $email_data);
+            });
+            
+            exit();
+            
         } else {
-
             serviceJsonResponse(false, "Failed to create service request");
-
         }
 
     } catch (Exception $e) {
@@ -3563,6 +3520,64 @@ function handleResolveRequest($request_id, $error_description, $error_type, $rep
     } catch (Exception $e) {
         $db->rollBack();
         serviceJsonResponse(false, "Database error: " . $e->getMessage());
+    }
+}
+
+// Background processing function for email and notifications
+function processBackgroundNotifications($db, $request_data, $request_id, $email_data) {
+    try {
+        // Ignore user abort to allow background processing
+        ignore_user_abort(true);
+        
+        // Send email notification to staff and admin
+        $email_start = microtime(true);
+        
+        try {
+            // Quick SMTP connectivity check with very short timeout
+            $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.1);
+            
+            if ($smtp_socket) {
+                // SMTP is responsive - send email
+                fclose($smtp_socket);
+                $emailHelper = new EmailHelper();
+                $emailHelper->sendNewRequestNotification($email_data);
+                error_log("Background email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
+            } else {
+                // SMTP is down - log and continue quickly
+                error_log("Background SMTP down - skipping email ({$errno}: {$errstr})");
+            }
+        } catch (Exception $e) {
+            error_log("Background email error: " . $e->getMessage());
+        }
+
+        // Create in-app notifications for staff and admin
+        $notification_start = microtime(true);
+
+        try {
+            // Get all staff and admin users ONCE
+            $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
+            $stmt->execute();
+            $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            
+            if (!empty($staff_admin_users)) {
+                $title = "Yêu cầu mới #" . $request_id;
+                $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
+                
+                // Create notifications WITHOUT email for faster response
+                $notificationHelper = new NotificationHelper($db);
+                $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
+                
+                error_log("Background notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
+            }
+
+        } catch (Exception $e) {
+            error_log("Failed to create background notifications: " . $e->getMessage());
+        }
+        
+        error_log("Background processing completed for request #{$request_id}");
+        
+    } catch (Exception $e) {
+        error_log("Background processing error for request #{$request_id}: " . $e->getMessage());
     }
 }
 

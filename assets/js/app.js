@@ -1337,8 +1337,8 @@ class ITServiceApp {
         cancelBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
         
-        // Add a small delay to ensure UI updates
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Add a very small delay to ensure UI updates
+        await new Promise(resolve => setTimeout(resolve, 50));
         
         const formData = new FormData(e.target);
         console.log('Form data:', Object.fromEntries(formData));
@@ -1360,7 +1360,6 @@ class ITServiceApp {
             
             // Update loading text - Validating
             submitBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Đang xác thực...';
-            await new Promise(resolve => setTimeout(resolve, 200));
             
             // Update loading text - Creating request
             submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Đang tạo yêu cầu...';
@@ -1396,8 +1395,8 @@ class ITServiceApp {
                 this.selectedFiles = [];
                 this.updateFileList();
                 
-                // Small delay before redirect
-                await new Promise(resolve => setTimeout(resolve, 500));
+                // Very small delay before redirect
+                await new Promise(resolve => setTimeout(resolve, 200));
                 this.showPage('requests');
             } else {
                 // Update loading text - Error
@@ -1419,12 +1418,12 @@ class ITServiceApp {
             // Hide loading overlay
             this.hideLoadingState();
             
-            // Restore button states with delay to show final state
+            // Restore button states with shorter delay
             setTimeout(() => {
                 submitBtn.disabled = false;
                 cancelBtn.disabled = false;
                 submitBtn.innerHTML = originalSubmitText;
-            }, 1000);
+            }, 500);
         }
     }
 
