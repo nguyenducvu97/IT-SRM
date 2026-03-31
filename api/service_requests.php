@@ -125,21 +125,7 @@ if ($db === null) {
 
 
 
-// Debug logging
-
-error_log("=== API REQUEST DEBUG ===");
-
-error_log("Method: " . $_SERVER['REQUEST_METHOD']);
-
-error_log("Content-Type: " . ($_SERVER['CONTENT_TYPE'] ?? 'not set'));
-
-error_log("POST data: " . json_encode($_POST));
-
-error_log("FILES data: " . json_encode(array_keys($_FILES ?? [])));
-
-error_log("Raw input: " . file_get_contents('php://input'));
-
-error_log("========================");
+// Minimal logging for production
 
 
 
@@ -153,13 +139,7 @@ $user_id = getCurrentUserId();
 
 $user_role = getCurrentUserRole();
 
-// Debug logging for authentication
-error_log("=== AUTH DEBUG ===");
-error_log("Session ID: " . session_id());
-error_log("User ID: " . ($user_id ?? 'null'));
-error_log("User Role: " . ($user_role ?? 'null'));
-error_log("Session data: " . json_encode($_SESSION));
-error_log("=================");
+// Essential logging only
 
 
 
@@ -851,51 +831,196 @@ if ($method == 'GET') {
 }
 
 
-
 elseif ($method == 'POST') {
 
-    // Check if this is FormData (file upload) or JSON
-
+    // Handle POST requests (including reject requests with file uploads)
     $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
-
     
-
-    // Get action first
-
     if (strpos($content_type, 'multipart/form-data') !== false) {
-
         // Handle FormData (file upload)
-
         $action = isset($_POST['action']) ? $_POST['action'] : '';
-
     } else {
-
-        // Handle JSON
-
+        // Handle regular form POST or JSON
         $input = json_decode(file_get_contents('php://input'), true);
-
+        
+        // If JSON parsing failed, try to use POST data (regular form)
+        if ($input === null && !empty($_POST)) {
+            $input = $_POST;
+        }
+        
         $action = isset($input['action']) ? $input['action'] : '';
-
     }
 
-    
-
-    // Handle different actions
-
-    if ($action === 'reject_request') {
-
-        // This will be handled by the second POST block below
-
-        // Continue to next block
-
-    } elseif ($action === 'resolve') {
-        
-        error_log("Resolve action detected - Content-Type: " . $content_type);
-        error_log("Is FormData: " . (strpos($content_type, 'multipart/form-data') !== false ? 'Yes' : 'No'));
-        
-        // Handle resolve action with FormData
+    // Handle different POST actions
+    if (empty($action) || $action === 'create') {
+        // Handle create request (OPTIMIZED LOGIC)
         if (strpos($content_type, 'multipart/form-data') !== false) {
-            error_log("Processing FormData resolve");
+            // Handle FormData (file upload)
+            $title = isset($_POST['title']) ? trim($_POST['title']) : '';
+            $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+            $category_id = isset($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
+            $priority = isset($_POST['priority']) ? $_POST['priority'] : 'medium';
+        } else {
+            // Handle JSON
+            $input = json_decode(file_get_contents('php://input'), true);
+            
+            if (!$input) {
+                serviceJsonResponse(false, "Invalid JSON data");
+                return;
+            }
+            
+            $title = isset($input['title']) ? trim($input['title']) : '';
+            $description = isset($input['description']) ? trim($input['description']) : '';
+            $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
+            $priority = isset($input['priority']) ? $input['priority'] : 'medium';
+        }
+
+        if (empty($title) || empty($description) || $category_id <= 0) {
+            serviceJsonResponse(false, "Title, description, and category are required");
+            return;
+        }
+
+        try {
+            // Database connection optimization
+            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+            
+            // Cache category lookup
+            $category_cache = [];
+            $category_stmt = $db->prepare("SELECT id, name FROM categories");
+            $category_stmt->execute();
+            $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($categories as $cat) {
+                $category_cache[$cat['id']] = $cat['name'];
+            }
+            
+            // Start timing
+            $request_start = microtime(true);
+
+            $query = "INSERT INTO service_requests 
+                      (user_id, category_id, title, description, priority, status, created_at, updated_at) 
+                      VALUES (:user_id, :category_id, :title, :description, :priority, 'open', NOW(), NOW())";
+            
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->bindParam(":category_id", $category_id);
+            $stmt->bindParam(":title", $title);
+            $stmt->bindParam(":description", $description);
+            $stmt->bindParam(":priority", $priority);
+            
+            if ($stmt->execute()) {
+                $request_id = $db->lastInsertId();
+
+                // Get request details
+                $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email
+                                  FROM service_requests sr
+                                  LEFT JOIN users u ON sr.user_id = u.id
+                                  WHERE sr.id = :request_id";
+                $request_stmt = $db->prepare($request_query);
+                $request_stmt->bindParam(":request_id", $request_id);
+                $request_stmt->execute();
+                $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                
+                // Get category from cache
+                $request_data['category'] = $category_cache[$request_data['category_id']] ?? 'Unknown';
+
+                // Map data to template variables
+                $email_data = array(
+                    'id' => $request_data['id'],
+                    'title' => $request_data['title'],
+                    'requester_name' => $request_data['requester_name'],
+                    'category' => $request_data['category'],
+                    'priority' => $request_data['priority'],
+                    'description' => $request_data['description']
+                );
+
+                // Process files IMMEDIATELY but optimized
+                $attachment_start = microtime(true);
+                $attachment_count = 0;
+                $attachment_data = [];
+                
+                if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+                    $upload_dir = __DIR__ . '/../uploads/requests/';
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0777, true);
+                    }
+
+                    $files = $_FILES['attachments'];
+                    
+                    // Process files with optimized approach
+                    foreach ($files['name'] as $key => $name) {
+                        if ($files['error'][$key] === UPLOAD_ERR_OK) {
+                            $tmp_name = $files['tmp_name'][$key];
+                            $file_extension = pathinfo($name, PATHINFO_EXTENSION);
+                            $new_filename = uniqid() . '_' . $name;
+                            $upload_path = $upload_dir . $new_filename;
+                            
+                            // Fast move operation
+                            if (move_uploaded_file($tmp_name, $upload_path)) {
+                                $attachment_data[] = [
+                                    'filename' => $new_filename,
+                                    'original_name' => $name,
+                                    'file_size' => $files['size'][$key],
+                                    'mime_type' => $files['type'][$key]
+                                ];
+                                $attachment_count++;
+                            }
+                        }
+                    }
+                    
+                    // Batch insert attachments - OPTIMIZED
+                    if (!empty($attachment_data)) {
+                        $attach_query = "INSERT INTO attachments 
+                                       (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
+                                       VALUES ";
+                        $values = [];
+                        $params = [];
+                        
+                        foreach ($attachment_data as $attachment) {
+                            $values[] = "(?, ?, ?, ?, ?, ?, NOW())";
+                            $params = array_merge($params, [
+                                $request_id, 
+                                $attachment['filename'],
+                                $attachment['original_name'],
+                                $attachment['file_size'],
+                                $attachment['mime_type'],
+                                $user_id
+                            ]);
+                        }
+                        
+                        $attach_query .= implode(',', $values);
+                        $attach_stmt = $db->prepare($attach_query);
+                        $attach_stmt->execute($params);
+                    }
+                    
+                    error_log("Processed $attachment_count attachments in " . round((microtime(true) - $attachment_start) * 1000, 2) . "ms");
+                }
+
+                // Return response AFTER file processing but BEFORE email/notifications
+                $total_time = round((microtime(true) - $request_start) * 1000, 2);
+                error_log("Request creation with files completed in {$total_time}ms (Request ID: {$request_id}) - Files: $attachment_count");
+                
+                serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id], false);
+                
+                // Register background processing for email and notifications ONLY
+                register_shutdown_function(function() use ($db, $request_data, $request_id, $email_data) {
+                    error_log("Background email/notifications processing for request #{$request_id}");
+                    processBackgroundNotifications($db, $request_data, $request_id, $email_data);
+                });
+                
+                exit();
+                
+            } else {
+                serviceJsonResponse(false, "Failed to create service request");
+            }
+
+// ...
+        } catch (Exception $e) {
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    } elseif ($action === 'resolve') {
+        // Handle resolve action
+        if (strpos($content_type, 'multipart/form-data') !== false) {
             // Handle FormData (file upload)
             $request_id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
             $error_description = isset($_POST['error_description']) ? trim($_POST['error_description']) : '';
@@ -903,13 +1028,10 @@ elseif ($method == 'POST') {
             $replacement_materials = isset($_POST['replacement_materials']) ? trim($_POST['replacement_materials']) : '';
             $solution_method = isset($_POST['solution_method']) ? trim($_POST['solution_method']) : '';
             
-            error_log("Resolve data - ID: $request_id, Error: $error_description");
-            
             // Handle file uploads
             $attachments = [];
             if (isset($_FILES['attachments']) && is_array($_FILES['attachments']['name'])) {
                 $file_count = count($_FILES['attachments']['name']);
-                error_log("Found $file_count files to upload");
                 for ($i = 0; $i < $file_count; $i++) {
                     if ($_FILES['attachments']['error'][$i] === UPLOAD_ERR_OK) {
                         $attachments[] = [
@@ -923,336 +1045,15 @@ elseif ($method == 'POST') {
                 }
             }
             
-            // Use the same resolve logic as below
+            // Use the same resolve logic
             handleResolveRequest($request_id, $error_description, $error_type, $replacement_materials, $solution_method, $attachments, $user_id, $user_role, $db);
             
         } else {
-            error_log("Processing JSON resolve");
             // Handle JSON (existing logic)
             $input = json_decode(file_get_contents('php://input'), true);
             // Continue to existing resolve logic below - don't return here
         }
-
-    } else {
-
-        // Handle create request (original logic)
-
-        if (strpos($content_type, 'multipart/form-data') !== false) {
-
-            // Handle FormData (file upload)
-
-            $title = isset($_POST['title']) ? trim($_POST['title']) : '';
-
-            $description = isset($_POST['description']) ? trim($_POST['description']) : '';
-
-            $category_id = isset($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
-
-            $priority = isset($_POST['priority']) ? $_POST['priority'] : 'medium';
-
-        } else {
-
-            // Handle JSON
-
-            $input = json_decode(file_get_contents('php://input'), true);
-
-            
-
-            if (!$input) {
-
-                serviceJsonResponse(false, "Invalid JSON data");
-
-                return;
-
-            }
-
-            
-
-            $title = isset($input['title']) ? trim($input['title']) : '';
-
-            $description = isset($input['description']) ? trim($input['description']) : '';
-
-            $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
-
-            $priority = isset($input['priority']) ? $input['priority'] : 'medium';
-
-        }
-
-    
-
-    if (empty($title) || empty($description) || $category_id <= 0) {
-
-        serviceJsonResponse(false, "Title, description, and category are required");
-
-        return;
-
-    }
-
-    
-
-    try {
-        // Database connection optimization (original)
-        $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        $db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
-        
-        // Cache category lookup to avoid JOIN in main query (original)
-        $category_cache = [];
-        $category_stmt = $db->prepare("SELECT id, name FROM categories");
-        $category_stmt->execute();
-        $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($categories as $cat) {
-            $category_cache[$cat['id']] = $cat['name'];
-        }
-        
-        // Start timing the request creation
-        $request_start = microtime(true);
-
-        $query = "INSERT INTO service_requests 
-                  (user_id, category_id, title, description, priority, status, created_at, updated_at) 
-                  VALUES (:user_id, :category_id, :title, :description, :priority, 'open', NOW(), NOW())";
-        
-        $stmt = $db->prepare($query);
-        $stmt->bindParam(":user_id", $user_id);
-        $stmt->bindParam(":category_id", $category_id);
-        $stmt->bindParam(":title", $title);
-        $stmt->bindParam(":description", $description);
-        $stmt->bindParam(":priority", $priority);
-        
-        if ($stmt->execute()) {
-            $request_id = $db->lastInsertId();
-
-            
-
-            // Get request details without JOIN for better performance (original)
-            $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email
-                              FROM service_requests sr
-                              LEFT JOIN users u ON sr.user_id = u.id
-                              WHERE sr.id = :request_id";
-            $request_stmt = $db->prepare($request_query);
-            $request_stmt->bindParam(":request_id", $request_id);
-            $request_stmt->execute();
-            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-            
-            // Get category from cache
-            $request_data['category'] = $category_cache[$request_data['category_id']] ?? 'Unknown';
-
-            
-            // Map data to template variables
-            $email_data = array(
-                'id' => $request_data['id'],
-                'title' => $request_data['title'],
-                'requester_name' => $request_data['requester_name'],
-                'category' => $request_data['category'],
-                'priority' => $request_data['priority'],
-                'description' => $request_data['description']
-            );
-
-            
-
-            // Handle file uploads FIRST - OPTIMIZED
-            $attachment_start = microtime(true);
-            $attachment_count = 0;
-            
-            error_log("DEBUG: Checking files - isset(\$_FILES['attachments']): " . (isset($_FILES['attachments']) ? 'YES' : 'NO'));
-            if (isset($_FILES['attachments'])) {
-                error_log("DEBUG: FILES data: " . print_r($_FILES['attachments'], true));
-            }
-            
-            if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
-                $upload_dir = __DIR__ . '/../uploads/requests/';
-                if (!is_dir($upload_dir)) {
-                    mkdir($upload_dir, 0777, true);
-                }
-
-                $files = $_FILES['attachments'];
-                $attachment_data = [];
-                
-                // Process files first
-                foreach ($files['name'] as $key => $name) {
-                    if ($files['error'][$key] === UPLOAD_ERR_OK) {
-                        $tmp_name = $files['tmp_name'][$key];
-                        $file_extension = pathinfo($name, PATHINFO_EXTENSION);
-                        $new_filename = uniqid() . '_' . $name;
-                        $upload_path = $upload_dir . $new_filename;
-                        
-                        if (move_uploaded_file($tmp_name, $upload_path)) {
-                            $attachment_data[] = [
-                                'filename' => $new_filename,
-                                'original_name' => $name,
-                                'file_size' => $files['size'][$key],
-                                'mime_type' => $files['type'][$key]
-                            ];
-                            $attachment_count++;
-                        }
-                    }
-                }
-                
-                // Batch insert attachments
-                if (!empty($attachment_data)) {
-                    $attach_query = "INSERT INTO attachments 
-                                   (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
-                                   VALUES ";
-                    $values = [];
-                    $params = [];
-                    
-                    foreach ($attachment_data as $attachment) {
-                        $values[] = "(?, ?, ?, ?, ?, ?, NOW())";
-                        $params = array_merge($params, [
-                            $request_id, 
-                            $attachment['filename'],
-                            $attachment['original_name'],
-                            $attachment['file_size'],
-                            $attachment['mime_type'],
-                            $user_id
-                        ]);
-                    }
-                    
-                    $attach_query .= implode(',', $values);
-                    $attach_stmt = $db->prepare($attach_query);
-                    $attach_stmt->execute($params);
-                }
-                
-                error_log("Processed $attachment_count attachments in " . round((microtime(true) - $attachment_start) * 1000, 2) . "ms");
-            }
-
-            // Return response IMMEDIATELY after creating request and attachments
-            $total_time = round((microtime(true) - $request_start) * 1000, 2);
-            error_log("Request creation completed in {$total_time}ms (Request ID: {$request_id})");
-            
-            serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id], false);
-            
-            // Register background processing to run AFTER response is sent
-            register_shutdown_function(function() use ($db, $request_data, $request_id, $email_data) {
-                processBackgroundNotifications($db, $request_data, $request_id, $email_data);
-            });
-            
-            exit();
-            
-        } else {
-            serviceJsonResponse(false, "Failed to create service request");
-        }
-
-    } catch (Exception $e) {
-
-        serviceJsonResponse(false, "Database error: " . $e->getMessage());
-
-    }
-
-    } // Close else block for non-reject requests
-
-}
-
-
-
-elseif ($method == 'POST') {
-
-    // Handle POST requests (including reject requests with file uploads)
-
-    $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
-
-    
-
-    if (strpos($content_type, 'multipart/form-data') !== false) {
-
-        // Handle FormData (file upload)
-
-        $action = isset($_POST['action']) ? $_POST['action'] : '';
-
-        error_log("POST FormData action: '$action'");
-
-        error_log("POST all data: " . print_r($_POST, true));
-
-    } else {
-
-        // Handle regular form POST or JSON
-
-        $input = json_decode(file_get_contents('php://input'), true);
-
-        
-
-        // If JSON parsing failed, try to use POST data (regular form)
-
-        if ($input === null && !empty($_POST)) {
-
-            $input = $_POST;
-
-        }
-
-        
-
-        $action = isset($input['action']) ? $input['action'] : '';
-
-        error_log("POST JSON/Form action: '$action'");
-
-    }
-
-    
-
-    // CRITICAL DEBUG: Check what's happening
-
-    error_log("=== CRITICAL DEBUG ===");
-
-    error_log("Method: POST");
-
-    error_log("Raw action: '$action'");
-
-    error_log("Trimmed action: '" . trim($action) . "'");
-
-    error_log("Action == 'update': " . ($action == 'update' ? 'YES' : 'NO'));
-
-    error_log("Action == 'reject_request': " . ($action == 'reject_request' ? 'YES' : 'NO'));
-
-    error_log("Trimmed action == 'update': " . (trim($action) == 'update' ? 'YES' : 'NO'));
-
-    error_log("Trimmed action == 'reject_request': " . (trim($action) == 'reject_request' ? 'YES' : 'NO'));
-
-    error_log("=== END CRITICAL DEBUG ===");
-
-    
-
-    // DIRECT DEBUG RESPONSE
-
-    if (isset($_POST['debug_mode']) && $_POST['debug_mode'] === 'true') {
-
-        header('Content-Type: application/json');
-
-        echo json_encode([
-
-            'debug_mode' => true,
-
-            'raw_action' => $action,
-
-            'trimmed_action' => trim($action),
-
-            'post_data' => $_POST,
-
-            'files_data' => $_FILES,
-
-            'comparisons' => [
-
-                'raw_equals_update' => ($action == 'update'),
-
-                'raw_equals_reject' => ($action == 'reject_request'),
-
-                'trimmed_equals_update' => (trim($action) == 'update'),
-
-                'trimmed_equals_reject' => (trim($action) == 'reject_request')
-
-            ]
-
-        ]);
-
-        exit;
-
-    }
-
-    
-
-    // Debug: Log action only for debugging
-    error_log("POST action: '$action'");
-
-    
-
-    if (trim($action) == 'update') {
+    } elseif (trim($action) == 'update') {
 
         // Update service request (admin only)
 
@@ -3523,27 +3324,198 @@ function handleResolveRequest($request_id, $error_description, $error_type, $rep
     }
 }
 
-// Background processing function for email and notifications
+// Queue email for later processing function
+function queueEmailForLater($request_id, $email_data) {
+    try {
+        // Create email queue directory if not exists
+        $queue_dir = __DIR__ . '/../logs/email_queue/';
+        if (!is_dir($queue_dir)) {
+            mkdir($queue_dir, 0777, true);
+        }
+        
+        // Create queue file with timestamp
+        $queue_file = $queue_dir . 'email_' . $request_id . '_' . time() . '.json';
+        $queue_data = [
+            'request_id' => $request_id,
+            'email_data' => $email_data,
+            'queued_at' => date('Y-m-d H:i:s'),
+            'type' => 'new_request_notification'
+        ];
+        
+        file_put_contents($queue_file, json_encode($queue_data, JSON_PRETTY_PRINT));
+        error_log("Email queued for request #{$request_id} - {$queue_file}");
+        
+    } catch (Exception $e) {
+        error_log("Failed to queue email for request #{$request_id}: " . $e->getMessage());
+    }
+}
+
+// Background processing function for email and notifications ONLY
 function processBackgroundNotifications($db, $request_data, $request_id, $email_data) {
     try {
         // Ignore user abort to allow background processing
         ignore_user_abort(true);
+        set_time_limit(60); // 1 minute for email/notifications only
+        
+        error_log("Starting background email/notifications for request #{$request_id}");
         
         // Send email notification to staff and admin
         $email_start = microtime(true);
         
         try {
-            // Quick SMTP connectivity check with very short timeout
-            $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.1);
+            // ULTRA-fast SMTP check with shorter timeout
+            $smtp_start = microtime(true);
+            $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.01);
             
             if ($smtp_socket) {
-                // SMTP is responsive - send email
+                fclose($smtp_socket);
+                
+                // Check if SMTP is responsive enough
+                $smtp_check_time = round((microtime(true) - $smtp_start) * 1000, 2);
+                error_log("SMTP check took {$smtp_check_time}ms");
+                
+                if ($smtp_check_time < 50) { // Only send if SMTP is fast
+                    // Set shorter timeout for email sending
+                    $original_timeout = ini_get('default_socket_timeout');
+                    ini_set('default_socket_timeout', 2); // 2 seconds max
+                    
+                    try {
+                        $emailHelper = new EmailHelper();
+                        $emailHelper->sendNewRequestNotification($email_data);
+                        error_log("Background email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
+                    } catch (Exception $e) {
+                        error_log("Email sending failed: " . $e->getMessage());
+                        // Queue email for later
+                        queueEmailForLater($request_id, $email_data);
+                    } finally {
+                        // Restore original timeout
+                        ini_set('default_socket_timeout', $original_timeout);
+                    }
+                } else {
+                    error_log("SMTP too slow ({$smtp_check_time}ms) - queueing email for later");
+                    queueEmailForLater($request_id, $email_data);
+                }
+            } else {
+                error_log("Background SMTP down - queueing email for later ({$errno}: {$errstr})");
+                queueEmailForLater($request_id, $email_data);
+            }
+        } catch (Exception $e) {
+            error_log("Background email error: " . $e->getMessage());
+            queueEmailForLater($request_id, $email_data);
+        }
+
+        // Create in-app notifications for staff and admin
+        $notification_start = microtime(true);
+
+        try {
+            $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
+            $stmt->execute();
+            $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            
+            if (!empty($staff_admin_users)) {
+                $title = "Yêu cầu mới #" . $request_id;
+                $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
+                
+                $notificationHelper = new NotificationHelper($db);
+                $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
+                
+                error_log("Background notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
+            }
+
+        } catch (Exception $e) {
+            error_log("Failed to create background notifications: " . $e->getMessage());
+        }
+        
+        error_log("Background email/notifications completed for request #{$request_id}");
+        
+    } catch (Exception $e) {
+        error_log("Background email/notifications error for request #{$request_id}: " . $e->getMessage());
+    }
+}
+
+// Background processing function for file upload, email and notifications
+function processBackgroundTasks($db, $request_data, $request_id, $email_data) {
+    try {
+        // Ignore user abort to allow background processing
+        ignore_user_abort(true);
+        set_time_limit(300); // 5 minutes for background processing
+        
+        error_log("Starting background processing for request #{$request_id}");
+        
+        // Process file uploads FIRST
+        $attachment_start = microtime(true);
+        $attachment_count = 0;
+        
+        if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+            $upload_dir = __DIR__ . '/../uploads/requests/';
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+
+            $files = $_FILES['attachments'];
+            $attachment_data = [];
+            
+            // Process files
+            foreach ($files['name'] as $key => $name) {
+                if ($files['error'][$key] === UPLOAD_ERR_OK) {
+                    $tmp_name = $files['tmp_name'][$key];
+                    $file_extension = pathinfo($name, PATHINFO_EXTENSION);
+                    $new_filename = uniqid() . '_' . $name;
+                    $upload_path = $upload_dir . $new_filename;
+                    
+                    if (move_uploaded_file($tmp_name, $upload_path)) {
+                        $attachment_data[] = [
+                            'filename' => $new_filename,
+                            'original_name' => $name,
+                            'file_size' => $files['size'][$key],
+                            'mime_type' => $files['type'][$key]
+                        ];
+                        $attachment_count++;
+                    }
+                }
+            }
+            
+            // Batch insert attachments
+            if (!empty($attachment_data)) {
+                $attach_query = "INSERT INTO attachments 
+                               (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
+                               VALUES ";
+                $values = [];
+                $params = [];
+                
+                foreach ($attachment_data as $attachment) {
+                    $values[] = "(?, ?, ?, ?, ?, ?, NOW())";
+                    $params = array_merge($params, [
+                        $request_id, 
+                        $attachment['filename'],
+                        $attachment['original_name'],
+                        $attachment['file_size'],
+                        $attachment['mime_type'],
+                        $_SESSION['user_id'] // Get from session
+                    ]);
+                }
+                
+                $attach_query .= implode(',', $values);
+                $attach_stmt = $db->prepare($attach_query);
+                $attach_stmt->execute($params);
+            }
+            
+            error_log("Background processed $attachment_count attachments in " . round((microtime(true) - $attachment_start) * 1000, 2) . "ms");
+        }
+        
+        // Send email notification to staff and admin
+        $email_start = microtime(true);
+        
+        try {
+            // Very quick SMTP check
+            $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.05);
+            
+            if ($smtp_socket) {
                 fclose($smtp_socket);
                 $emailHelper = new EmailHelper();
                 $emailHelper->sendNewRequestNotification($email_data);
                 error_log("Background email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
             } else {
-                // SMTP is down - log and continue quickly
                 error_log("Background SMTP down - skipping email ({$errno}: {$errstr})");
             }
         } catch (Exception $e) {
@@ -3554,7 +3526,6 @@ function processBackgroundNotifications($db, $request_data, $request_id, $email_
         $notification_start = microtime(true);
 
         try {
-            // Get all staff and admin users ONCE
             $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
             $stmt->execute();
             $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -3563,7 +3534,6 @@ function processBackgroundNotifications($db, $request_data, $request_id, $email_
                 $title = "Yêu cầu mới #" . $request_id;
                 $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
                 
-                // Create notifications WITHOUT email for faster response
                 $notificationHelper = new NotificationHelper($db);
                 $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
                 

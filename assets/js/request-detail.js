@@ -5008,7 +5008,12 @@ class RequestDetailApp {
             if (response.success) {
                 this.showNotification('Yêu cầu hỗ trợ đã được gửi thành công!', 'success');
                 this.closeNeedSupportModal();
-                this.loadRequestDetail();
+                // Add small delay to ensure server updates before reload
+                setTimeout(() => {
+                    // Force reload by resetting loading flag
+                    this.isLoading = false;
+                    this.loadRequestDetail();
+                }, 500);
             } else {
                 this.showNotification(response.message, 'error');
                 // Re-enable button if failed

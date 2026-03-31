@@ -1358,20 +1358,21 @@ class ITServiceApp {
             
             console.log('Submitting with files:', this.selectedFiles);
             
-            // Update loading text - Validating
-            submitBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Đang xác thực...';
-            
             // Update loading text - Creating request
             submitBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Đang tạo yêu cầu...';
+            
+            // Create request with timeout protection
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout for large files
             
             const response = await fetch('api/service_requests.php', {
                 method: 'POST',
                 body: submitData,
-                credentials: 'include'
+                credentials: 'include',
+                signal: controller.signal
             });
             
-            // Update loading text - Processing
-            submitBtn.innerHTML = '<i class="fas fa-cogs"></i> Đang xử lý phản hồi...';
+            clearTimeout(timeoutId);
             
             const result = await response.json();
             console.log('Create request response:', result);
@@ -1385,7 +1386,7 @@ class ITServiceApp {
                     window.notificationManager.success(
                         `Yêu cầu #${result.data?.id || 'mới'} đã được tạo thành công!`,
                         'Tạo yêu cầu thành công',
-                        5000
+                        3000
                     );
                 } else {
                     this.showNotification('Yêu cầu đã được tạo thành công', 'success');
@@ -1396,7 +1397,7 @@ class ITServiceApp {
                 this.updateFileList();
                 
                 // Very small delay before redirect
-                await new Promise(resolve => setTimeout(resolve, 200));
+                await new Promise(resolve => setTimeout(resolve, 100));
                 this.showPage('requests');
             } else {
                 // Update loading text - Error
@@ -1411,9 +1412,15 @@ class ITServiceApp {
         } catch (error) {
             console.error('Create request error:', error);
             
-            // Update loading text - Connection Error
-            submitBtn.innerHTML = '<i class="fas fa-wifi"></i> Lỗi kết nối!';
-            this.showNotification('Lỗi kết nối', 'error');
+            if (error.name === 'AbortError') {
+                this.showNotification('Yêu cầu hết thời gian chờ (30s). File có thể quá lớn (>10MB) hoặc mạng chậm. Vui lòng thử lại với file nhỏ hơn hoặc kiểm tra kết nối.', 'error');
+            } else if (error.message && error.message.includes('NetworkError')) {
+                this.showNotification('Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.', 'error');
+            } else {
+                // Update loading text - Connection Error
+                submitBtn.innerHTML = '<i class="fas fa-wifi"></i> Lỗi kết nối!';
+                this.showNotification('Lỗi kết nối: ' + (error.message || 'Không xác định'), 'error');
+            }
         } finally {
             // Hide loading overlay
             this.hideLoadingState();
@@ -1423,7 +1430,7 @@ class ITServiceApp {
                 submitBtn.disabled = false;
                 cancelBtn.disabled = false;
                 submitBtn.innerHTML = originalSubmitText;
-            }, 500);
+            }, 300);
         }
     }
 
