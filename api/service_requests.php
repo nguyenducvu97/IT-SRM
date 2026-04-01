@@ -244,18 +244,16 @@ if ($method == 'GET') {
 
         
 
-        $query = "SELECT sr.*, u.username as requester_name, c.name as category_name 
-
+        $query = "SELECT sr.*, u.username as requester_name, c.name as category_name,
+                  req.id as reject_request_id, req.status as reject_status,
+                  sreq.id as support_request_id, sreq.status as support_status
                   FROM service_requests sr 
-
                   LEFT JOIN users u ON sr.user_id = u.id 
-
                   LEFT JOIN categories c ON sr.category_id = c.id 
-
+                  LEFT JOIN reject_requests req ON sr.id = req.service_request_id
+                  LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id
                   $where_clause 
-
                   ORDER BY sr.created_at DESC 
-
                   LIMIT :limit OFFSET :offset";
 
         

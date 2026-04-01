@@ -757,6 +757,8 @@ class ITServiceApp {
                     <div class="request-badges">
                         <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
                         <span class="badge priority-${request.priority}">${this.getPriorityText(request.priority)}</span>
+                        ${request.reject_status ? `<span class="badge badge-reject">Đang từ chối</span>` : ''}
+                        ${request.support_status ? `<span class="badge badge-support">Đang yêu cầu hỗ trợ</span>` : ''}
                     </div>
                 </div>
                 <div class="request-meta">
@@ -823,6 +825,8 @@ class ITServiceApp {
                     <div class="request-badges">
                         <span class="badge status-${request.status}">${this.getStatusText(request.status)}</span>
                         <span class="badge priority-${request.priority}">${this.getPriorityText(request.priority)}</span>
+                        ${request.reject_status ? `<span class="badge badge-reject">Đang từ chối</span>` : ''}
+                        ${request.support_status ? `<span class="badge badge-support">Đang yêu cầu hỗ trợ</span>` : ''}
                     </div>
                 </div>
                 <div class="request-meta">

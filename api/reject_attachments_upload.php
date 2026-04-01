@@ -28,6 +28,7 @@ if (!isLoggedIn()) {
 
 // Only staff and admin can upload files
 $user_role = getCurrentUserRole();
+
 if (!in_array($user_role, ['staff', 'admin'])) {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Access denied']);

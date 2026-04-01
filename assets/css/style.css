@@ -4051,6 +4051,26 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 
 
+.badge-reject {
+
+    background-color: #dc3545;
+
+    color: white;
+
+}
+
+
+
+.badge-support {
+
+    background-color: #17a2b8;
+
+    color: white;
+
+}
+
+
+
 .request-body {
 
     color: #6c757d;
