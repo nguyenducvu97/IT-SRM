@@ -112,11 +112,22 @@ if ($db === null) {
 $current_user = getCurrentUserId();
 $user_role = getCurrentUserRole();
 
-// Only admin can access reject requests, except for check_status
+// Only admin can access reject requests for admin operations, except for check_status
+// Staff can create reject requests and update their own reject requests
 if ($user_role !== 'admin' && $_SERVER['REQUEST_METHOD'] !== 'GET') {
-    http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Access denied']);
-    exit;
+    // Allow staff to create reject requests (POST) and update their own (PUT)
+    // But not process reject decisions (that's admin only)
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    // Check if this is a reject decision processing (admin only)
+    if ($input && isset($input['decision'])) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Chỉ admin mới có quyền xử lý quyết định từ chối']);
+        exit;
+    }
+    
+    // Staff can create/update reject requests
+    // Continue processing...
 }
 
 // For GET requests, allow staff to access list, check_status, and get
@@ -137,6 +148,9 @@ try {
     switch ($_SERVER['REQUEST_METHOD']) {
         case 'GET':
             handleGet($db, $current_user, $user_role);
+            break;
+        case 'POST':
+            handlePost($db, $current_user, $user_role);
             break;
         case 'PUT':
             handlePut($db, $current_user);
@@ -336,6 +350,132 @@ function handleGet($db, $current_user, $user_role) {
             'pages' => ceil($total / $limit)
         ]
     ]);
+}
+
+function handlePost($db, $current_user, $user_role) {
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    if (!$input) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Invalid JSON data']);
+        return;
+    }
+    
+    $service_request_id = $input['service_request_id'] ?? null;
+    $reject_reason = $input['reject_reason'] ?? null;
+    $reject_details = $input['reject_details'] ?? '';
+    
+    if (!$service_request_id || !$reject_reason) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Service request ID and reject reason are required']);
+        return;
+    }
+    
+    try {
+        // Check if service request exists and is in correct status
+        $stmt = $db->prepare("
+            SELECT id, status, assigned_to 
+            FROM service_requests 
+            WHERE id = ? AND status IN ('in_progress', 'resolved')
+        ");
+        $stmt->execute([$service_request_id]);
+        $service_request = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$service_request) {
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'Service request not found or cannot be rejected']);
+            return;
+        }
+        
+        // Check if user is assigned to this request (for staff) or is admin
+        if ($user_role !== 'admin' && $service_request['assigned_to'] != $current_user) {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'You can only reject requests assigned to you']);
+            return;
+        }
+        
+        // Check if reject request already exists
+        $stmt = $db->prepare("
+            SELECT id FROM reject_requests 
+            WHERE service_request_id = ? AND status = 'pending'
+        ");
+        $stmt->execute([$service_request_id]);
+        $existing = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($existing) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'Reject request already exists for this service request']);
+            return;
+        }
+        
+        // Create reject request
+        $stmt = $db->prepare("
+            INSERT INTO reject_requests (
+                service_request_id, 
+                rejected_by, 
+                reject_reason, 
+                reject_details, 
+                status, 
+                created_at, 
+                updated_at
+            ) VALUES (?, ?, ?, ?, 'pending', NOW(), NOW())
+        ");
+        
+        try {
+            $result = $stmt->execute([
+                $service_request_id,
+                $current_user,
+                $reject_reason,
+                $reject_details
+            ]);
+        } catch (PDOException $e) {
+            // Check for duplicate constraint error
+            if ($e->getCode() == 23000 && strpos($e->getMessage(), 'unique_reject_per_request') !== false) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Bạn đã gửi yêu cầu từ chối cho yêu cầu này rồi.']);
+                return;
+            }
+            throw $e;
+        }
+        
+        if ($result) {
+            $reject_id = $db->lastInsertId();
+            
+            // Handle attachments if provided
+            if (isset($input['attachments']) && is_array($input['attachments'])) {
+                foreach ($input['attachments'] as $attachment) {
+                    $attachStmt = $db->prepare("
+                        UPDATE reject_request_attachments 
+                        SET reject_request_id = ? 
+                        WHERE id = ? AND reject_request_id IS NULL
+                    ");
+                    $attachStmt->execute([$reject_id, $attachment['id']]);
+                }
+            }
+            
+            // Notify admins about new reject request
+            notifyRole($db, 'admin', 
+                'Yêu cầu từ chối mới', 
+                'Có yêu cầu từ chối mới cho yêu cầu #' . $service_request_id,
+                'warning',
+                $reject_id,
+                'reject_request'
+            );
+            
+            echo json_encode([
+                'success' => true, 
+                'message' => 'Reject request created successfully',
+                'reject_id' => $reject_id
+            ]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to create reject request']);
+        }
+        
+    } catch (Exception $e) {
+        error_log("Error creating reject request: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Internal server error']);
+    }
 }
 
 function handlePut($db, $current_user) {

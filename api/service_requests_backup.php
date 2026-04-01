@@ -38,13 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once __DIR__ . '/../config/session.php';
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../config/async_email.php';
-require_once __DIR__ . '/../config/optimized_notifications.php';
-require_once __DIR__ . '/../config/optimized_file_upload.php';
-require_once __DIR__ . '/../config/database_optimizer.php';
+// Temporarily comment out optimization files to fix 500 error
+// require_once __DIR__ . '/../config/async_email.php';
+// require_once __DIR__ . '/../config/optimized_notifications.php';
+// require_once __DIR__ . '/../config/optimized_file_upload.php';
+// require_once __DIR__ . '/../config/database_optimizer.php';
 
 require_once __DIR__ . '/../lib/EmailHelper.php'; // Use original EmailHelper
-
 require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php'; // Use PHPMailerEmailHelper for beautiful emails
 
 require_once __DIR__ . '/../lib/NotificationHelper.php'; // Advanced Notification Helper
@@ -59,7 +59,7 @@ startSession();
 
 // Helper function for JSON responses (avoid conflict with database.php)
 
-function serviceJsonResponse($success, $message, $data = null) {
+function serviceJsonResponse($success, $message, $data = null, $exit = true) {
 
     header('Content-Type: application/json');
 
@@ -82,8 +82,10 @@ function serviceJsonResponse($success, $message, $data = null) {
     
 
     echo json_encode($response);
-
-    exit();
+    
+    if ($exit) {
+        exit();
+    }
 
 }
 
@@ -123,21 +125,7 @@ if ($db === null) {
 
 
 
-// Debug logging
-
-error_log("=== API REQUEST DEBUG ===");
-
-error_log("Method: " . $_SERVER['REQUEST_METHOD']);
-
-error_log("Content-Type: " . ($_SERVER['CONTENT_TYPE'] ?? 'not set'));
-
-error_log("POST data: " . json_encode($_POST));
-
-error_log("FILES data: " . json_encode(array_keys($_FILES ?? [])));
-
-error_log("Raw input: " . file_get_contents('php://input'));
-
-error_log("========================");
+// Minimal logging for production
 
 
 
@@ -151,6 +139,8 @@ $user_id = getCurrentUserId();
 
 $user_role = getCurrentUserRole();
 
+// Essential logging only
+
 
 
 if ($method == 'GET') {
@@ -161,9 +151,9 @@ if ($method == 'GET') {
 
     if ($action == 'list') {
 
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
-        $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+        $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
 
         $offset = ($page - 1) * $limit;
 
@@ -298,17 +288,14 @@ if ($method == 'GET') {
             
 
             // Calculate actual status counts
-
             $status_query = "SELECT status, COUNT(*) as count FROM service_requests";
 
+            // For dashboard stats, admin/staff should see ALL requests
+            // Only filter by user for regular users viewing their own dashboard
+            $is_dashboard_stats = (empty($status_filter) && empty($priority_filter) && empty($category_filter) && empty($category_id_filter));
             
-
-            // Only filter by user for non-admin/non-staff
-
             if ($user_role != 'admin' && $user_role != 'staff') {
-
                 $status_query .= " WHERE user_id = :user_id";
-
             }
 
             $status_query .= " GROUP BY status";
@@ -336,6 +323,10 @@ if ($method == 'GET') {
                 $status_counts_array[$result['status']] = $result['count'];
 
             }
+            
+            // Debug log to check status counts
+            error_log("Status counts debug: " . json_encode($status_counts_array));
+            error_log("User role: {$user_role}, Status query: {$status_query}");
 
             
 
@@ -470,6 +461,7 @@ if ($method == 'GET') {
         $query = "SELECT sr.*, c.name as category_name, u.full_name as requester_name, 
                         u.email as requester_email, u.phone as requester_phone,
                         assigned.full_name as assigned_name, assigned.email as assigned_email,
+                        sr.assigned_at as assigned_at,
                         sreq.id as support_request_id, sreq.support_type, sreq.support_details, 
                         sreq.support_reason, sreq.status as support_status, sreq.admin_reason,
                         sreq.processed_by, sreq.processed_at, sreq.created_at as support_created_at,
@@ -481,7 +473,10 @@ if ($method == 'GET') {
                         res.resolved_by as resolution_resolved_by, res.error_description as res_error_description,
                         res.error_type as res_error_type, res.replacement_materials as res_replacement_materials,
                         res.solution_method as res_solution_method, res.resolved_at as res_resolved_at,
-                        resolver.full_name as resolution_resolver_name
+                        resolver.full_name as resolution_resolver_name,
+                        rf.rating as feedback_rating, rf.feedback as feedback_text, rf.software_feedback,
+                        rf.would_recommend, rf.ease_of_use, rf.speed_stability, rf.requirement_meeting,
+                        rf.created_by as feedback_created_by, rf.created_at as feedback_created_at
                  FROM service_requests sr
                  LEFT JOIN categories c ON sr.category_id = c.id
                  LEFT JOIN users u ON sr.user_id = u.id
@@ -490,6 +485,7 @@ if ($method == 'GET') {
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
                  LEFT JOIN resolutions res ON sr.id = res.service_request_id
                  LEFT JOIN users resolver ON res.resolved_by = resolver.id
+                 LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
 
                  WHERE sr.id = :id";
 
@@ -545,7 +541,7 @@ if ($method == 'GET') {
 
                 // Get resolution attachments if request is resolved
 
-                if ($request['status'] === 'resolved') {
+                if ($request['status'] === 'resolved' || $request['status'] === 'closed') {
 
                     $resolution_attachments_query = "SELECT id, filename, original_name, file_size, mime_type, uploaded_at 
 
@@ -656,34 +652,32 @@ if ($method == 'GET') {
                 
 
                 // Get attachments for this reject request
-
                 if ($request['reject_request']) {
-
                     try {
-
+                        error_log("Reject request found: " . json_encode($request['reject_request']));
+                        
                         $reject_attachments_query = "SELECT id, filename, original_name, file_size, mime_type, created_at 
                                                      FROM reject_request_attachments 
                                                      WHERE reject_request_id = :id 
                                                      ORDER BY created_at ASC";
 
                         $reject_attachments_stmt = $db->prepare($reject_attachments_query);
-
                         $reject_attachments_stmt->bindParam(":id", $request['reject_request']['id']);
-
                         $reject_attachments_stmt->execute();
 
-                        
-
                         $reject_attachments = $reject_attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                        
+                        error_log("Reject attachments found: " . count($reject_attachments) . " files");
+                        
                         $request['reject_request']['attachments'] = $reject_attachments;
-
+                        
+                        error_log("Final reject request data: " . json_encode($request['reject_request']));
                     } catch (Exception $e) {
-
+                        error_log("Error fetching reject attachments: " . $e->getMessage());
                         $request['reject_request']['attachments'] = [];
-
                     }
-
+                } else {
+                    error_log("No reject request found for service request ID: " . $id);
                 }
 
                 
@@ -796,7 +790,7 @@ if ($method == 'GET') {
             }
 
             // Format resolution data if exists
-            if ($request['status'] === 'resolved' && $request['resolution_resolver_name']) {
+            if (($request['status'] === 'resolved' || $request['status'] === 'closed') && $request['resolution_resolver_name']) {
                 $request['resolution'] = [
                     'resolver_name' => $request['resolution_resolver_name'],
                     'error_description' => $request['res_error_description'],
@@ -836,51 +830,196 @@ if ($method == 'GET') {
 }
 
 
-
 elseif ($method == 'POST') {
 
-    // Check if this is FormData (file upload) or JSON
-
+    // Handle POST requests (including reject requests with file uploads)
     $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
-
     
-
-    // Get action first
-
     if (strpos($content_type, 'multipart/form-data') !== false) {
-
         // Handle FormData (file upload)
-
         $action = isset($_POST['action']) ? $_POST['action'] : '';
-
     } else {
-
-        // Handle JSON
-
+        // Handle regular form POST or JSON
         $input = json_decode(file_get_contents('php://input'), true);
-
+        
+        // If JSON parsing failed, try to use POST data (regular form)
+        if ($input === null && !empty($_POST)) {
+            $input = $_POST;
+        }
+        
         $action = isset($input['action']) ? $input['action'] : '';
-
     }
 
-    
-
-    // Handle different actions
-
-    if ($action === 'reject_request') {
-
-        // This will be handled by the second POST block below
-
-        // Continue to next block
-
-    } elseif ($action === 'resolve') {
-        
-        error_log("Resolve action detected - Content-Type: " . $content_type);
-        error_log("Is FormData: " . (strpos($content_type, 'multipart/form-data') !== false ? 'Yes' : 'No'));
-        
-        // Handle resolve action with FormData
+    // Handle different POST actions
+    if (empty($action) || $action === 'create') {
+        // Handle create request (OPTIMIZED LOGIC)
         if (strpos($content_type, 'multipart/form-data') !== false) {
-            error_log("Processing FormData resolve");
+            // Handle FormData (file upload)
+            $title = isset($_POST['title']) ? trim($_POST['title']) : '';
+            $description = isset($_POST['description']) ? trim($_POST['description']) : '';
+            $category_id = isset($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
+            $priority = isset($_POST['priority']) ? $_POST['priority'] : 'medium';
+        } else {
+            // Handle JSON
+            $input = json_decode(file_get_contents('php://input'), true);
+            
+            if (!$input) {
+                serviceJsonResponse(false, "Invalid JSON data");
+                return;
+            }
+            
+            $title = isset($input['title']) ? trim($input['title']) : '';
+            $description = isset($input['description']) ? trim($input['description']) : '';
+            $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
+            $priority = isset($input['priority']) ? $input['priority'] : 'medium';
+        }
+
+        if (empty($title) || empty($description) || $category_id <= 0) {
+            serviceJsonResponse(false, "Title, description, and category are required");
+            return;
+        }
+
+        try {
+            // Database connection optimization
+            $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $db->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+            
+            // Cache category lookup
+            $category_cache = [];
+            $category_stmt = $db->prepare("SELECT id, name FROM categories");
+            $category_stmt->execute();
+            $categories = $category_stmt->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($categories as $cat) {
+                $category_cache[$cat['id']] = $cat['name'];
+            }
+            
+            // Start timing
+            $request_start = microtime(true);
+
+            $query = "INSERT INTO service_requests 
+                      (user_id, category_id, title, description, priority, status, created_at, updated_at) 
+                      VALUES (:user_id, :category_id, :title, :description, :priority, 'open', NOW(), NOW())";
+            
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->bindParam(":category_id", $category_id);
+            $stmt->bindParam(":title", $title);
+            $stmt->bindParam(":description", $description);
+            $stmt->bindParam(":priority", $priority);
+            
+            if ($stmt->execute()) {
+                $request_id = $db->lastInsertId();
+
+                // Get request details
+                $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email
+                                  FROM service_requests sr
+                                  LEFT JOIN users u ON sr.user_id = u.id
+                                  WHERE sr.id = :request_id";
+                $request_stmt = $db->prepare($request_query);
+                $request_stmt->bindParam(":request_id", $request_id);
+                $request_stmt->execute();
+                $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                
+                // Get category from cache
+                $request_data['category'] = $category_cache[$request_data['category_id']] ?? 'Unknown';
+
+                // Map data to template variables
+                $email_data = array(
+                    'id' => $request_data['id'],
+                    'title' => $request_data['title'],
+                    'requester_name' => $request_data['requester_name'],
+                    'category' => $request_data['category'],
+                    'priority' => $request_data['priority'],
+                    'description' => $request_data['description']
+                );
+
+                // Process files IMMEDIATELY but optimized
+                $attachment_start = microtime(true);
+                $attachment_count = 0;
+                $attachment_data = [];
+                
+                if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+                    $upload_dir = __DIR__ . '/../uploads/requests/';
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0777, true);
+                    }
+
+                    $files = $_FILES['attachments'];
+                    
+                    // Process files with optimized approach
+                    foreach ($files['name'] as $key => $name) {
+                        if ($files['error'][$key] === UPLOAD_ERR_OK) {
+                            $tmp_name = $files['tmp_name'][$key];
+                            $file_extension = pathinfo($name, PATHINFO_EXTENSION);
+                            $new_filename = uniqid() . '_' . $name;
+                            $upload_path = $upload_dir . $new_filename;
+                            
+                            // Fast move operation
+                            if (move_uploaded_file($tmp_name, $upload_path)) {
+                                $attachment_data[] = [
+                                    'filename' => $new_filename,
+                                    'original_name' => $name,
+                                    'file_size' => $files['size'][$key],
+                                    'mime_type' => $files['type'][$key]
+                                ];
+                                $attachment_count++;
+                            }
+                        }
+                    }
+                    
+                    // Batch insert attachments - OPTIMIZED
+                    if (!empty($attachment_data)) {
+                        $attach_query = "INSERT INTO attachments 
+                                       (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
+                                       VALUES ";
+                        $values = [];
+                        $params = [];
+                        
+                        foreach ($attachment_data as $attachment) {
+                            $values[] = "(?, ?, ?, ?, ?, ?, NOW())";
+                            $params = array_merge($params, [
+                                $request_id, 
+                                $attachment['filename'],
+                                $attachment['original_name'],
+                                $attachment['file_size'],
+                                $attachment['mime_type'],
+                                $user_id
+                            ]);
+                        }
+                        
+                        $attach_query .= implode(',', $values);
+                        $attach_stmt = $db->prepare($attach_query);
+                        $attach_stmt->execute($params);
+                    }
+                    
+                    error_log("Processed $attachment_count attachments in " . round((microtime(true) - $attachment_start) * 1000, 2) . "ms");
+                }
+
+                // Return response AFTER file processing but BEFORE email/notifications
+                $total_time = round((microtime(true) - $request_start) * 1000, 2);
+                error_log("Request creation with files completed in {$total_time}ms (Request ID: {$request_id}) - Files: $attachment_count");
+                
+                serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id], false);
+                
+                // Register background processing for email and notifications ONLY
+                register_shutdown_function(function() use ($db, $request_data, $request_id, $email_data) {
+                    error_log("Background email/notifications processing for request #{$request_id}");
+                    processBackgroundNotifications($db, $request_data, $request_id, $email_data);
+                });
+                
+                exit();
+                
+            } else {
+                serviceJsonResponse(false, "Failed to create service request");
+            }
+
+// ...
+        } catch (Exception $e) {
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    } elseif ($action === 'resolve') {
+        // Handle resolve action
+        if (strpos($content_type, 'multipart/form-data') !== false) {
             // Handle FormData (file upload)
             $request_id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
             $error_description = isset($_POST['error_description']) ? trim($_POST['error_description']) : '';
@@ -888,13 +1027,10 @@ elseif ($method == 'POST') {
             $replacement_materials = isset($_POST['replacement_materials']) ? trim($_POST['replacement_materials']) : '';
             $solution_method = isset($_POST['solution_method']) ? trim($_POST['solution_method']) : '';
             
-            error_log("Resolve data - ID: $request_id, Error: $error_description");
-            
             // Handle file uploads
             $attachments = [];
             if (isset($_FILES['attachments']) && is_array($_FILES['attachments']['name'])) {
                 $file_count = count($_FILES['attachments']['name']);
-                error_log("Found $file_count files to upload");
                 for ($i = 0; $i < $file_count; $i++) {
                     if ($_FILES['attachments']['error'][$i] === UPLOAD_ERR_OK) {
                         $attachments[] = [
@@ -908,357 +1044,15 @@ elseif ($method == 'POST') {
                 }
             }
             
-            // Use the same resolve logic as below
+            // Use the same resolve logic
             handleResolveRequest($request_id, $error_description, $error_type, $replacement_materials, $solution_method, $attachments, $user_id, $user_role, $db);
             
         } else {
-            error_log("Processing JSON resolve");
             // Handle JSON (existing logic)
             $input = json_decode(file_get_contents('php://input'), true);
             // Continue to existing resolve logic below - don't return here
         }
-
-    } else {
-
-        // Handle create request (original logic)
-
-        if (strpos($content_type, 'multipart/form-data') !== false) {
-
-            // Handle FormData (file upload)
-
-            $title = isset($_POST['title']) ? trim($_POST['title']) : '';
-
-            $description = isset($_POST['description']) ? trim($_POST['description']) : '';
-
-            $category_id = isset($_POST['category_id']) ? (int)$_POST['category_id'] : 0;
-
-            $priority = isset($_POST['priority']) ? $_POST['priority'] : 'medium';
-
-        } else {
-
-            // Handle JSON
-
-            $input = json_decode(file_get_contents('php://input'), true);
-
-            
-
-            if (!$input) {
-
-                serviceJsonResponse(false, "Invalid JSON data");
-
-                return;
-
-            }
-
-            
-
-            $title = isset($input['title']) ? trim($input['title']) : '';
-
-            $description = isset($input['description']) ? trim($input['description']) : '';
-
-            $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
-
-            $priority = isset($input['priority']) ? $input['priority'] : 'medium';
-
-        }
-
-    
-
-    if (empty($title) || empty($description) || $category_id <= 0) {
-
-        serviceJsonResponse(false, "Title, description, and category are required");
-
-        return;
-
-    }
-
-    
-
-    try {
-        // Initialize optimized components
-        $db_helper = OptimizedDatabaseHelper::getInstance($db);
-        $optimizer = $db_helper->getOptimizer();
-        
-        // Clean old cache periodically
-        if (rand(1, 100) === 1) { // 1% chance
-            $optimizer->cleanCache();
-        }
-        
-        // Cache category lookup to avoid JOIN in main query
-        $categories = $optimizer->getCategories();
-        $category_cache = [];
-        foreach ($categories as $cat) {
-            $category_cache[$cat['id']] = $cat['name'];
-        }
-        
-        // Start timing the request creation
-        $request_start = microtime(true);
-        
-        // Create request using optimized method
-        $request_data = [
-            'user_id' => $user_id,
-            'category_id' => $category_id,
-            'title' => $title,
-            'description' => $description,
-            'priority' => $priority
-        ];
-        
-        $request_id = $optimizer->createRequestOptimized($request_data);
-
-            
-
-            // Get request details using optimized method
-            $user_data = $db_helper->getUser($user_id);
-            $request_data = [
-                'id' => $request_id,
-                'title' => $title,
-                'requester_name' => $user_data['full_name'] ?? 'Unknown',
-                'category' => $category_cache[$category_id] ?? 'Unknown',
-                'priority' => $priority,
-                'description' => $description
-            ];
-
-            
-
-            // Send email notification using async processing
-            $email_start = microtime(true);
-            
-            try {
-                $fastEmailSender = new FastEmailSender();
-                $fastEmailSender->queueNewRequestNotification($request_data);
-                error_log("Email queued in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
-            } catch (Exception $e) {
-                error_log("Email queueing error: " . $e->getMessage());
-            }
-
-            // Create in-app notifications using optimized batch processing
-            $notification_start = microtime(true);
-
-            try {
-                // Get all staff and admin users efficiently
-                $notification_targets = $db_helper->getNotificationTargets(['staff', 'admin']);
-                
-                if (!empty($notification_targets)) {
-                    $user_ids = array_column($notification_targets, 'id');
-                    $title = "Yêu cầu mới #" . $request_id;
-                    $message = ($user_data['full_name'] ?? 'User') . " tạo yêu cầu: " . $title;
-                    
-                    // Create notifications using batch processing
-                    $notificationHelper = new OptimizedNotificationHelper($db);
-                    $notificationHelper->notifyUsersBatch($user_ids, $title, $message, 'info', $request_id, 'request', false);
-                    
-                    error_log("Batch notifications created in " . round((microtime(true) - $notification_start) * 1000, 2) . "ms for " . count($user_ids) . " users");
-                }
-
-            } catch (Exception $e) {
-                error_log("Failed to create batch notifications: " . $e->getMessage());
-                // Continue even if notification creation fails
-            }
-
-            
-
-            // Handle file uploads if any - OPTIMIZED
-            $attachment_start = microtime(true);
-            $attachment_count = 0;
-            
-            error_log("DEBUG: Checking files - isset(\$_FILES['attachments']): " . (isset($_FILES['attachments']) ? 'YES' : 'NO'));
-            if (isset($_FILES['attachments'])) {
-                error_log("DEBUG: FILES data: " . print_r($_FILES['attachments'], true));
-            }
-            
-            if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
-                $upload_dir = __DIR__ . '/../uploads/requests/';
-                if (!is_dir($upload_dir)) {
-                    mkdir($upload_dir, 0777, true);
-                }
-
-                $files = $_FILES['attachments'];
-                $attachment_data = [];
-                
-                // Process files first
-                foreach ($files['name'] as $key => $name) {
-                    if ($files['error'][$key] === UPLOAD_ERR_OK) {
-                        $tmp_name = $files['tmp_name'][$key];
-                        $file_extension = pathinfo($name, PATHINFO_EXTENSION);
-                        $new_filename = uniqid() . '_' . $name;
-                        $upload_path = $upload_dir . $new_filename;
-                        
-                        if (move_uploaded_file($tmp_name, $upload_path)) {
-                            $attachment_data[] = [
-                                'filename' => $new_filename,
-                                'original_name' => $name,
-                                'file_size' => $files['size'][$key],
-                                'mime_type' => $files['type'][$key]
-                            ];
-                            $attachment_count++;
-                        }
-                    }
-                }
-                
-                // Batch insert attachments
-                if (!empty($attachment_data)) {
-                    $attach_query = "INSERT INTO attachments 
-                                   (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
-                                   VALUES ";
-                    $values = [];
-                    $params = [];
-                    
-                    foreach ($attachment_data as $attachment) {
-                        $values[] = "(?, ?, ?, ?, ?, ?, NOW())";
-                        $params = array_merge($params, [
-                            $request_id, 
-                            $attachment['filename'],
-                            $attachment['original_name'],
-                            $attachment['file_size'],
-                            $attachment['mime_type'],
-                            $user_id
-                        ]);
-                    }
-                    
-                    $attach_query .= implode(',', $values);
-                    $attach_stmt = $db->prepare($attach_query);
-                    $attach_stmt->execute($params);
-                }
-                
-                error_log("Processed $attachment_count attachments in " . round((microtime(true) - $attachment_start) * 1000, 2) . "ms");
-            }
-
-            
-
-            // Log total execution time
-            $total_time = round((microtime(true) - $request_start) * 1000, 2);
-            error_log("Total request creation time: {$total_time}ms (Request ID: {$request_id})");
-            
-            serviceJsonResponse(true, "Service request created successfully", ['id' => $request_id]);
-
-        } else {
-
-            serviceJsonResponse(false, "Failed to create service request");
-
-        }
-
-    } catch (Exception $e) {
-
-        serviceJsonResponse(false, "Database error: " . $e->getMessage());
-
-    }
-
-    } // Close else block for non-reject requests
-
-}
-
-
-
-elseif ($method == 'POST') {
-
-    // Handle POST requests (including reject requests with file uploads)
-
-    $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
-
-    
-
-    if (strpos($content_type, 'multipart/form-data') !== false) {
-
-        // Handle FormData (file upload)
-
-        $action = isset($_POST['action']) ? $_POST['action'] : '';
-
-        error_log("POST FormData action: '$action'");
-
-        error_log("POST all data: " . print_r($_POST, true));
-
-    } else {
-
-        // Handle regular form POST or JSON
-
-        $input = json_decode(file_get_contents('php://input'), true);
-
-        
-
-        // If JSON parsing failed, try to use POST data (regular form)
-
-        if ($input === null && !empty($_POST)) {
-
-            $input = $_POST;
-
-        }
-
-        
-
-        $action = isset($input['action']) ? $input['action'] : '';
-
-        error_log("POST JSON/Form action: '$action'");
-
-    }
-
-    
-
-    // CRITICAL DEBUG: Check what's happening
-
-    error_log("=== CRITICAL DEBUG ===");
-
-    error_log("Method: POST");
-
-    error_log("Raw action: '$action'");
-
-    error_log("Trimmed action: '" . trim($action) . "'");
-
-    error_log("Action == 'update': " . ($action == 'update' ? 'YES' : 'NO'));
-
-    error_log("Action == 'reject_request': " . ($action == 'reject_request' ? 'YES' : 'NO'));
-
-    error_log("Trimmed action == 'update': " . (trim($action) == 'update' ? 'YES' : 'NO'));
-
-    error_log("Trimmed action == 'reject_request': " . (trim($action) == 'reject_request' ? 'YES' : 'NO'));
-
-    error_log("=== END CRITICAL DEBUG ===");
-
-    
-
-    // DIRECT DEBUG RESPONSE
-
-    if (isset($_POST['debug_mode']) && $_POST['debug_mode'] === 'true') {
-
-        header('Content-Type: application/json');
-
-        echo json_encode([
-
-            'debug_mode' => true,
-
-            'raw_action' => $action,
-
-            'trimmed_action' => trim($action),
-
-            'post_data' => $_POST,
-
-            'files_data' => $_FILES,
-
-            'comparisons' => [
-
-                'raw_equals_update' => ($action == 'update'),
-
-                'raw_equals_reject' => ($action == 'reject_request'),
-
-                'trimmed_equals_update' => (trim($action) == 'update'),
-
-                'trimmed_equals_reject' => (trim($action) == 'reject_request')
-
-            ]
-
-        ]);
-
-        exit;
-
-    }
-
-    
-
-    // Debug: Log action only for debugging
-    error_log("POST action: '$action'");
-
-    
-
-    if (trim($action) == 'update') {
+    } elseif (trim($action) == 'update') {
 
         // Update service request (admin only)
 
@@ -1380,9 +1174,11 @@ elseif ($method == 'POST') {
 
                              SET title = :title, description = :description, category_id = :category_id, 
 
-                                 priority = :priority, status = :status, assigned_to = :assigned_to, 
+                                priority = :priority, status = :status, assigned_to = :assigned_to, 
 
-                                 updated_at = NOW() 
+                                assigned_at = CASE WHEN :assigned_to IS NOT NULL AND :assigned_to != 0 THEN NOW() ELSE assigned_at END,
+
+                                updated_at = NOW() 
 
                              WHERE id = :request_id";
 
@@ -1546,9 +1342,9 @@ elseif ($method == 'POST') {
 
                                     if (!empty($notify_ids)) {
 
-                                        $notificationHelper = new NotificationHelper($db);
+                                        // $notificationHelper = new NotificationHelper($db);
 
-                                        $notificationHelper->notifyUsers($notify_ids, $accept_title, $accept_message, 'success', $request_id, 'request');
+                                        // $notificationHelper->notifyUsers($notify_ids, $accept_title, $accept_message, 'success', $request_id, 'request');
 
                                     }
 
@@ -1626,9 +1422,9 @@ elseif ($method == 'POST') {
 
                                     if (!empty($notify_ids)) {
 
-                                        $notificationHelper = new NotificationHelper($db);
+                                        // $notificationHelper = new NotificationHelper($db);
 
-                                        $notificationHelper->notifyUsers($notify_ids, $resolve_title, $resolve_message, 'success', $request_id, 'request');
+                                        // $notificationHelper->notifyUsers($notify_ids, $resolve_title, $resolve_message, 'success', $request_id, 'request');
 
                                     }
 
@@ -1706,9 +1502,9 @@ elseif ($method == 'POST') {
 
                                     if (!empty($notify_ids)) {
 
-                                        $notificationHelper = new NotificationHelper($db);
+                                        // $notificationHelper = new NotificationHelper($db);
 
-                                        $notificationHelper->notifyUsers($notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
+                                        // $notificationHelper->notifyUsers($notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
 
                                     }
 
@@ -1782,9 +1578,9 @@ elseif ($method == 'POST') {
 
             // Handle FormData (file upload)
 
-            $request_id = isset($_POST['request_id']) ? (int)$_POST['request_id'] : 0;
+            $request_id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
 
-            $reject_reason = isset($_POST['reject_reason']) ? trim($_POST['reject_reason']) : '';
+            $reject_reason = isset($_POST['reason']) ? trim($_POST['reason']) : '';
 
             $reject_details = isset($_POST['reject_details']) ? trim($_POST['reject_details']) : '';
 
@@ -1796,9 +1592,9 @@ elseif ($method == 'POST') {
 
             // Handle JSON
 
-            $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
+            $request_id = isset($input['id']) ? (int)$input['id'] : 0;
 
-            $reject_reason = isset($input['reject_reason']) ? trim($input['reject_reason']) : '';
+            $reject_reason = isset($input['reason']) ? trim($input['reason']) : '';
 
             $reject_details = isset($input['reject_details']) ? trim($input['reject_details']) : '';
 
@@ -1839,8 +1635,6 @@ elseif ($method == 'POST') {
             $check_stmt = $db->prepare($check_query);
 
             $check_stmt->bindParam(":request_id", $request_id);
-
-            $check_stmt->bindParam(":user_id", $user_id);
 
             $check_stmt->execute();
 
@@ -1906,13 +1700,16 @@ elseif ($method == 'POST') {
 
             $insert_stmt = $db->prepare($insert_query);
 
+            // Set reject_details to null if empty
+            $reject_details_empty = empty($reject_details) ? null : $reject_details;
+
             $insert_stmt->bindParam(":request_id", $request_id);
 
             $insert_stmt->bindParam(":rejected_by", $user_id);
 
             $insert_stmt->bindParam(":reject_reason", $reject_reason);
 
-            $insert_stmt->bindParam(":reject_details", $reject_details);
+            $insert_stmt->bindParam(":reject_details", $reject_details_empty);
 
             
 
@@ -2079,102 +1876,221 @@ elseif ($method == 'POST') {
                     
 
                     error_log("Uploaded " . count($uploaded_files) . " files for reject request $reject_id");
-
                 }
 
-                
+    // Create notifications for admin users - DISABLED to prevent duplicates
+    try {
+        /*
+        // Get staff name and request details
+        $staff_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+        $staff_stmt->execute([$user_id]);
+        $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $request_stmt = $db->prepare("SELECT title FROM service_requests WHERE id = ?");
+        $request_stmt->execute([$request_id]);
+        $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $staff_name = $staff_data['full_name'] ?? 'Staff';
+        $request_title = $request_data['title'] ?? 'Unknown';
+        
+        $title = "Yêu cầu từ chối mới #" . $db->lastInsertId();
+        $message = $staff_name . " từ chối yêu cầu: " . $request_title;
+        
+        // Notify all admin users
+        $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
+        $admin_stmt->execute();
+        $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+        
+        if (!empty($admins)) {
+            // $notificationHelper = new NotificationHelper($db);
+            foreach ($admins as $admin_id) {
+                // $notificationHelper->createNotification($admin_id, $title, $message, 'warning', $request_id, 'reject_request', false);
+            }
+        }
+        */
+    } catch (Exception $e) {
+        error_log("Failed to create reject request notifications: " . $e->getMessage());
+        // Continue even if notification creation fails
+    }
 
-                // Create notifications for admin users
+    // Get staff information for response
+    $staff_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE id = ?");
+    $staff_stmt->execute([$user_id]);
+    $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Include uploaded files information if any
+    if (!empty($uploaded_files)) {
+        serviceJsonResponse(true, 'Reject request submitted successfully with ' . count($uploaded_files) . ' file(s) attached', [
+            'reject_id' => $reject_id,
+            'uploaded_files' => $uploaded_files,
+            'staff_info' => $staff_data
+        ]);
+    } else {
+        serviceJsonResponse(false, "Failed to submit reject request");
+    }
+
+} catch (Exception $e) {
+    serviceJsonResponse(false, "Database error: " . $e->getMessage());
+}
+
+elseif ($action == 'accept_request') {
+
+    $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
+
+    if ($request_id <= 0) {
+
+        serviceJsonResponse(false, "Request ID is required");
+
+        return;
+
+    }
+
+    // Only staff can accept requests
+
+    if ($user_role != 'staff') {
+
+        serviceJsonResponse(false, "Access denied");
+
+        return;
+
+    }
+
+    // Additional session check to ensure $user_id is properly set
+
+    if (!$user_id) {
+
+        serviceJsonResponse(false, "Session expired");
+
+        return;
+
+    }
+
+    try {
+
+        // Check if request exists and is available for assignment
+//Why not check if request is already assigned to someone else?
+// 
+        // Available statuses: 'open' or 'request_support' (when support request is rejected)
+
+        $check_query = "SELECT id, assigned_to, status FROM service_requests 
+
+                       WHERE id = :request_id AND (status = 'open' OR status = 'request_support') 
+
+                       AND (assigned_to IS NULL OR assigned_to = 0)";
+
+        $check_stmt = $db->prepare($check_query);
+
+        $check_stmt->bindParam(":request_id", $request_id);
+
+        $check_stmt->execute();
+
+        if ($check_stmt->rowCount() == 0) {
+
+            // Get detailed info for debugging
+
+            $debug_query = "SELECT id, assigned_to, status FROM service_requests WHERE id = :request_id";
+
+            $debug_stmt = $db->prepare($debug_query);
+
+            $debug_stmt->bindParam(":request_id", $request_id);
+
+            $debug_stmt->execute();
+
+            $debug_info = $debug_stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($debug_info) {
+
+                $status = $debug_info['status'];
+
+                $assigned = $debug_info['assigned_to'];
+
+                serviceJsonResponse(false, "Request not available for assignment. Current status: '$status', Assigned to: '$assigned'");
+
+            } else {
+
+                serviceJsonResponse(false, "Request not found with ID: $request_id");
+
+            }
+
+            return;
+
+        }
+
+        // Update request to assign to staff and set to in_progress
+
+        $update_query = "UPDATE service_requests 
+
+                       SET assigned_to = :user_id, status = 'in_progress', updated_at = NOW() 
+
+                       WHERE id = :request_id";
+
+        $update_stmt = $db->prepare($update_query);
+
+        $update_stmt->bindParam(":request_id", $request_id);
+
+        $update_stmt->bindParam(":user_id", $user_id);
+
+        if ($update_stmt->execute()) {
+
+            // Get request details for email notification AFTER the update
+
+            $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
+
+                                     staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
+
+                              FROM service_requests sr
+
+                              LEFT JOIN users u ON sr.user_id = u.id
+
+                              LEFT JOIN users staff ON sr.assigned_to = staff.id
+
+                              LEFT JOIN categories c ON sr.category_id = c.id
+
+                              WHERE sr.id = :request_id";
+
+            $request_stmt = $db->prepare($request_query);
+
+            $request_stmt->bindParam(":request_id", $request_id);
+
+            $request_stmt->execute();
+
+            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Send email notification to requester about assignment (only if current user is not the requester)
+
+            if ($request_data['user_id'] != $user_id) {
 
                 try {
 
-                    // Get staff name and request details
+                    $emailHelper = new PHPMailerEmailHelper(); // Use PHPMailerEmailHelper for actual email sending
 
-                    $staff_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
-
-                    $staff_stmt->execute([$user_id]);
-
-                    $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
-
-                    
-
-                    $request_stmt = $db->prepare("SELECT title FROM service_requests WHERE id = ?");
-
-                    $request_stmt->execute([$request_id]);
-
-                    $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-
-                    
-
-                    $staff_name = $staff_data['full_name'] ?? 'Staff';
-
-                    $request_title = $request_data['title'] ?? 'Unknown';
-
-                    
-
-                    $title = "Yêu cầu từ chối mới #" . $db->lastInsertId();
-
-                    $message = $staff_name . " từ chối yêu cầu: " . $request_title;
-
-                    
-
-                    // Notify all admin users
-
-                    $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
-
-                    $admin_stmt->execute();
-
-                    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
-
-                    
-
-                    if (!empty($admins)) {
-
-                        $notificationHelper = new NotificationHelper($db);
-
-                        foreach ($admins as $admin_id) {
-
-                            $notificationHelper->createNotification($admin_id, $title, $message, 'warning', $request_id, 'reject_request', false);
-
-                        }
-
-                    }
+                    $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
 
                 } catch (Exception $e) {
 
-                    error_log("Failed to create reject request notifications: " . $e->getMessage());
+                    error_log("Email notification failed: " . $e->getMessage());
 
-                    // Continue even if notification creation fails
+                    // Continue even if email fails
 
                 }
 
+                $staff_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE id = ?");
+                $staff_stmt->execute([$user_id]);
+                $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
                 
-
-                $response_data = [
-
-                    'success' => true,
-
-                    'message' => 'Reject request submitted successfully',
-
-                    'reject_id' => $reject_id
-
-                ];
-
-                
-
                 // Include uploaded files information if any
-
                 if (!empty($uploaded_files)) {
-
-                    $response_data['uploaded_files'] = $uploaded_files;
-
-                    $response_data['message'] .= ' with ' . count($uploaded_files) . ' file(s) attached';
-
+                    serviceJsonResponse(true, 'Reject request submitted successfully with ' . count($uploaded_files) . ' file(s) attached', [
+                        'reject_id' => $reject_id,
+                        'uploaded_files' => $uploaded_files,
+                        'staff_info' => $staff_data
+                    ]);
+                } else {
+                    serviceJsonResponse(true, 'Reject request submitted successfully', [
+                        'reject_id' => $reject_id,
+                        'staff_info' => $staff_data
+                    ]);
                 }
-
-                
-
-                echo json_encode($response_data);
 
             } else {
 
@@ -2358,9 +2274,9 @@ elseif ($method == 'POST') {
 
                 try {
 
-                    require_once __DIR__ . '/../lib/NotificationHelper.php';
+                    // require_once __DIR__ . '/../lib/NotificationHelper.php';
 
-                    $notificationHelper = new NotificationHelper($db);
+                    // $notificationHelper = new NotificationHelper($db);
 
                     
 
@@ -2382,7 +2298,7 @@ elseif ($method == 'POST') {
 
                     if (!empty($admins)) {
 
-                        $notificationHelper->notifyUsers($admins, $title, $message, 'success', $request_id, 'request');
+                        // $notificationHelper->notifyUsers($admins, $title, $message, 'success', $request_id, 'request');
 
                     }
 
@@ -2631,144 +2547,10 @@ elseif ($method == 'POST') {
     }
 
     
-
-    elseif ($action == 'close_request') {
-
-        $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
-
-        $rating = isset($input['rating']) ? (int)$input['rating'] : null;
-
-        $feedback = isset($input['feedback']) ? trim($input['feedback']) : null;
-
-        $software_feedback = isset($input['software_feedback']) ? trim($input['software_feedback']) : null;
-
-        $would_recommend = isset($input['would_recommend']) ? $input['would_recommend'] : null;
-
-        $ease_of_use = isset($input['ease_of_use']) ? (int)$input['ease_of_use'] : null;
-
-        $speed_stability = isset($input['speed_stability']) ? (int)$input['speed_stability'] : null;
-
-        $requirement_meeting = isset($input['requirement_meeting']) ? (int)$input['requirement_meeting'] : null;
-
-        
-
-        if ($request_id <= 0) {
-
-            serviceJsonResponse(false, "Request ID is required");
-
-            return;
-
-        }
-
-        
-
-        try {
-
-            $db->beginTransaction();
-
-            
-
-            // Insert feedback record
-
-            $insert_feedback_query = "INSERT INTO request_feedback 
-
-                                     (service_request_id, created_by, rating, feedback, software_feedback, would_recommend, 
-
-                                      ease_of_use, speed_stability, requirement_meeting) 
-
-                                     VALUES (:request_id, :created_by, :rating, :feedback, :software_feedback, :would_recommend,
-
-                                            :ease_of_use, :speed_stability, :requirement_meeting)";
-
-            $insert_feedback_stmt = $db->prepare($insert_feedback_query);
-
-            $insert_feedback_stmt->bindParam(":request_id", $request_id);
-
-            $insert_feedback_stmt->bindParam(":created_by", $user_id);
-
-            $insert_feedback_stmt->bindParam(":rating", $rating);
-
-            $insert_feedback_stmt->bindParam(":feedback", $feedback);
-
-            $insert_feedback_stmt->bindParam(":software_feedback", $software_feedback);
-
-            $insert_feedback_stmt->bindParam(":would_recommend", $would_recommend);
-
-            $insert_feedback_stmt->bindParam(":ease_of_use", $ease_of_use);
-
-            $insert_feedback_stmt->bindParam(":speed_stability", $speed_stability);
-
-            $insert_feedback_stmt->bindParam(":requirement_meeting", $requirement_meeting);
-
-            
-
-            if (!$insert_feedback_stmt->execute()) {
-
-                $db->rollBack();
-
-                serviceJsonResponse(false, "Failed to create feedback record");
-
-                return;
-
-            }
-
-            
-
-            // Update service request status to closed
-
-            $update_request_query = "UPDATE service_requests 
-
-                                    SET status = 'closed', updated_at = NOW() 
-
-                                    WHERE id = :request_id";
-
-            $update_request_stmt = $db->prepare($update_request_query);
-
-            $update_request_stmt->bindParam(":request_id", $request_id);
-
-            
-
-            if (!$update_request_stmt->execute()) {
-
-                $db->rollBack();
-
-                serviceJsonResponse(false, "Failed to update request status");
-
-                return;
-
-            }
-
-            
-
-            $db->commit();
-
-            serviceJsonResponse(true, "Request closed successfully with feedback");
-
-            
-
-        } catch (Exception $e) {
-
-            $db->rollBack();
-
-            serviceJsonResponse(false, "Database error: " . $e->getMessage());
-
-        }
-
-    }
-
-    
-
-    else {
-
-        serviceJsonResponse(false, "Invalid action");
-
-    }
-
 }
 
 
-
-elseif ($method == 'DELETE') {
+if ($method == 'DELETE') {
 
     // Delete service request (admin only)
 
@@ -3160,7 +2942,7 @@ elseif ($method == 'PUT') {
             
             // Update request to assign to staff and set to in_progress
             $update_query = "UPDATE service_requests 
-                           SET assigned_to = :user_id, status = 'in_progress', updated_at = NOW() 
+                           SET assigned_to = :user_id, status = 'in_progress', assigned_at = NOW(), updated_at = NOW() 
                            WHERE id = :request_id";
             $update_stmt = $db->prepare($update_query);
             $update_stmt->bindParam(":request_id", $request_id);
@@ -3198,8 +2980,8 @@ elseif ($method == 'PUT') {
                             
                             // Notify admins about assignment
                             try {
-                                require_once __DIR__ . '/../lib/NotificationHelper.php';
-                                $notificationHelper = new NotificationHelper($db);
+                                // require_once __DIR__ . '/../lib/NotificationHelper.php';
+                                // $notificationHelper = new NotificationHelper($db);
                                 
                                 $title = "Yêu cầu #" . $request_id . " đã được nhận";
                                 $message = "Yêu cầu #" . $request_id . " đã được nhận bởi " . ($request_data['assigned_name'] ?? 'Staff member');
@@ -3211,7 +2993,7 @@ elseif ($method == 'PUT') {
                                 
                                 if (!empty($admins)) {
                                     foreach ($admins as $admin_id) {
-                                        $notificationHelper->createNotification($admin_id, $title, $message, 'info', $request_id, 'request', true);
+                                        // $notificationHelper->createNotification($admin_id, $title, $message, 'info', $request_id, 'request', true);
                                     }
                                 }
                             } catch (Exception $e) {
@@ -3394,6 +3176,9 @@ elseif ($method == 'PUT') {
                 return;
             }
             
+            // Start transaction
+            $db->beginTransaction();
+            
             // Update request status to resolved
             $update_query = "UPDATE service_requests 
                            SET status = 'resolved', 
@@ -3416,6 +3201,119 @@ elseif ($method == 'PUT') {
                 serviceJsonResponse(false, "Failed to resolve request");
             }
         } catch (Exception $e) {
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
+    elseif ($action == 'close_request') {
+        // Handle request closing (user only)
+        error_log("=== CLOSE REQUEST ACTION DEBUG ===");
+        
+        $request_id = isset($input['request_id']) ? (int)$input['request_id'] : 0;
+        $rating = isset($input['rating']) ? (int)$input['rating'] : null;
+        $feedback = isset($input['feedback']) ? trim($input['feedback']) : null;
+        $software_feedback = isset($input['software_feedback']) ? trim($input['software_feedback']) : null;
+        $would_recommend = isset($input['would_recommend']) ? $input['would_recommend'] : null;
+        $ease_of_use = isset($input['ease_of_use']) ? (int)$input['ease_of_use'] : null;
+        $speed_stability = isset($input['speed_stability']) ? (int)$input['speed_stability'] : null;
+        $requirement_meeting = isset($input['requirement_meeting']) ? (int)$input['requirement_meeting'] : null;
+        
+        error_log("Close request data - ID: $request_id, Rating: $rating");
+        
+        if ($request_id <= 0) {
+            serviceJsonResponse(false, "Request ID is required");
+            return;
+        }
+        
+        try {
+            // Check if request exists and belongs to current user or is staff/admin
+            $check_query = "SELECT id, user_id, status FROM service_requests WHERE id = :request_id";
+            $check_stmt = $db->prepare($check_query);
+            $check_stmt->bindParam(":request_id", $request_id);
+            $check_stmt->execute();
+            
+            $request = $check_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$request) {
+                serviceJsonResponse(false, "Request not found");
+                return;
+            }
+            
+            // Check permissions: users can only close their own requests, staff/admin can close any
+            if ($user_role === 'user' && $request['user_id'] != $user_id) {
+                serviceJsonResponse(false, "Access denied. You can only close your own requests.");
+                return;
+            }
+            
+            // Check if request is in a status that can be closed (resolved)
+            if ($request['status'] !== 'resolved') {
+                serviceJsonResponse(false, "Only resolved requests can be closed");
+                return;
+            }
+            
+            // Start transaction
+            $db->beginTransaction();
+            
+            // Insert feedback into request_feedback table
+            $feedback_query = "INSERT INTO request_feedback 
+                              (service_request_id, rating, feedback, software_feedback, would_recommend, 
+                               ease_of_use, speed_stability, requirement_meeting, created_by) 
+                              VALUES (:request_id, :rating, :feedback, :software_feedback, :would_recommend,
+                                      :ease_of_use, :speed_stability, :requirement_meeting, :created_by)";
+            $feedback_stmt = $db->prepare($feedback_query);
+            $feedback_stmt->bindParam(":request_id", $request_id);
+            $feedback_stmt->bindParam(":rating", $rating, PDO::PARAM_INT);
+            $feedback_stmt->bindParam(":feedback", $feedback);
+            $feedback_stmt->bindParam(":software_feedback", $software_feedback);
+            $feedback_stmt->bindParam(":would_recommend", $would_recommend);
+            $feedback_stmt->bindParam(":ease_of_use", $ease_of_use, PDO::PARAM_INT);
+            $feedback_stmt->bindParam(":speed_stability", $speed_stability, PDO::PARAM_INT);
+            $feedback_stmt->bindParam(":requirement_meeting", $requirement_meeting, PDO::PARAM_INT);
+            $feedback_stmt->bindParam(":created_by", $user_id);
+            
+            // Update request status to closed
+            $update_query = "UPDATE service_requests 
+                           SET status = 'closed', 
+                               closed_at = NOW(),
+                               updated_at = NOW()
+                           WHERE id = :request_id";
+            $update_stmt = $db->prepare($update_query);
+            $update_stmt->bindParam(":request_id", $request_id);
+            
+            if ($feedback_stmt->execute() && $update_stmt->execute()) {
+                // Commit transaction
+                $db->commit();
+                
+                // Create notification for staff/admin that user closed the request
+                try {
+                    $close_title = "Yêu cầu #" . $request_id . " đã được đóng";
+                    $close_message = "Người dùng đã đóng yêu cầu đã giải quyết";
+                    
+                    // Get all staff and admin IDs
+                    $staff_admin_stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
+                    $staff_admin_stmt->execute();
+                    $staff_admins = $staff_admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                    
+                    // Remove the user who closed from notification list
+                    $notify_ids = array_diff($staff_admins, [$user_id]);
+                    
+                    if (!empty($notify_ids)) {
+                        // require_once __DIR__ . '/../lib/NotificationHelper.php';
+                        // $notificationHelper = new NotificationHelper($db);
+                        // $notificationHelper->notifyUsers($notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
+                    }
+                } catch (Exception $e) {
+                    error_log("Failed to create close notification: " . $e->getMessage());
+                }
+                
+                serviceJsonResponse(true, "Request closed successfully");
+            } else {
+                $db->rollBack();
+                serviceJsonResponse(false, "Failed to close request");
+            }
+        } catch (Exception $e) {
+            if (isset($db) && $db->inTransaction()) {
+                $db->rollBack();
+            }
             serviceJsonResponse(false, "Database error: " . $e->getMessage());
         }
     }
@@ -3542,6 +3440,233 @@ function handleResolveRequest($request_id, $error_description, $error_type, $rep
     } catch (Exception $e) {
         $db->rollBack();
         serviceJsonResponse(false, "Database error: " . $e->getMessage());
+    }
+}
+
+// Queue email for later processing function
+function queueEmailForLater($request_id, $email_data) {
+    try {
+        // Create email queue directory if not exists
+        $queue_dir = __DIR__ . '/../logs/email_queue/';
+        if (!is_dir($queue_dir)) {
+            mkdir($queue_dir, 0777, true);
+        }
+        
+        // Create queue file with timestamp
+        $queue_file = $queue_dir . 'email_' . $request_id . '_' . time() . '.json';
+        $queue_data = [
+            'request_id' => $request_id,
+            'email_data' => $email_data,
+            'queued_at' => date('Y-m-d H:i:s'),
+            'type' => 'new_request_notification'
+        ];
+        
+        file_put_contents($queue_file, json_encode($queue_data, JSON_PRETTY_PRINT));
+        error_log("Email queued for request #{$request_id} - {$queue_file}");
+        
+    } catch (Exception $e) {
+        error_log("Failed to queue email for request #{$request_id}: " . $e->getMessage());
+    }
+}
+
+// Background processing function for email and notifications ONLY
+function processBackgroundNotifications($db, $request_data, $request_id, $email_data) {
+    try {
+        // Ignore user abort to allow background processing
+        ignore_user_abort(true);
+        set_time_limit(60); // 1 minute for email/notifications only
+        
+        error_log("Starting background email/notifications for request #{$request_id}");
+        
+        // Send email notification to staff and admin
+        $email_start = microtime(true);
+        
+        try {
+            // ULTRA-fast SMTP check with shorter timeout
+            $smtp_start = microtime(true);
+            $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.01);
+            
+            if ($smtp_socket) {
+                fclose($smtp_socket);
+                
+                // Check if SMTP is responsive enough
+                $smtp_check_time = round((microtime(true) - $smtp_start) * 1000, 2);
+                error_log("SMTP check took {$smtp_check_time}ms");
+                
+                if ($smtp_check_time < 50) { // Only send if SMTP is fast
+                    // Set shorter timeout for email sending
+                    $original_timeout = ini_get('default_socket_timeout');
+                    ini_set('default_socket_timeout', 2); // 2 seconds max
+                    
+                    try {
+                        $emailHelper = new EmailHelper();
+                        $emailHelper->sendNewRequestNotification($email_data);
+                        error_log("Background email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
+                    } catch (Exception $e) {
+                        error_log("Email sending failed: " . $e->getMessage());
+                        // Queue email for later
+                        queueEmailForLater($request_id, $email_data);
+                    } finally {
+                        // Restore original timeout
+                        ini_set('default_socket_timeout', $original_timeout);
+                    }
+                } else {
+                    error_log("SMTP too slow ({$smtp_check_time}ms) - queueing email for later");
+                    queueEmailForLater($request_id, $email_data);
+                }
+            } else {
+                error_log("Background SMTP down - queueing email for later ({$errno}: {$errstr})");
+                queueEmailForLater($request_id, $email_data);
+            }
+        } catch (Exception $e) {
+            error_log("Background email error: " . $e->getMessage());
+            queueEmailForLater($request_id, $email_data);
+        }
+
+        // Create in-app notifications for staff and admin
+        $notification_start = microtime(true);
+
+        try {
+            $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
+            $stmt->execute();
+            $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            
+            if (!empty($staff_admin_users)) {
+                $title = "Yêu cầu mới #" . $request_id;
+                $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
+                
+                $notificationHelper = new NotificationHelper($db);
+                $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
+                
+                error_log("Background notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
+            }
+
+        } catch (Exception $e) {
+            error_log("Failed to create background notifications: " . $e->getMessage());
+        }
+        
+        error_log("Background email/notifications completed for request #{$request_id}");
+        
+    } catch (Exception $e) {
+        error_log("Background email/notifications error for request #{$request_id}: " . $e->getMessage());
+    }
+}
+
+// Background processing function for file upload, email and notifications
+function processBackgroundTasks($db, $request_data, $request_id, $email_data) {
+    try {
+        // Ignore user abort to allow background processing
+        ignore_user_abort(true);
+        set_time_limit(300); // 5 minutes for background processing
+        
+        error_log("Starting background processing for request #{$request_id}");
+        
+        // Process file uploads FIRST
+        $attachment_start = microtime(true);
+        $attachment_count = 0;
+        
+        if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+            $upload_dir = __DIR__ . '/../uploads/requests/';
+            if (!is_dir($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+
+            $files = $_FILES['attachments'];
+            $attachment_data = [];
+            
+            // Process files
+            foreach ($files['name'] as $key => $name) {
+                if ($files['error'][$key] === UPLOAD_ERR_OK) {
+                    $tmp_name = $files['tmp_name'][$key];
+                    $file_extension = pathinfo($name, PATHINFO_EXTENSION);
+                    $new_filename = uniqid() . '_' . $name;
+                    $upload_path = $upload_dir . $new_filename;
+                    
+                    if (move_uploaded_file($tmp_name, $upload_path)) {
+                        $attachment_data[] = [
+                            'filename' => $new_filename,
+                            'original_name' => $name,
+                            'file_size' => $files['size'][$key],
+                            'mime_type' => $files['type'][$key]
+                        ];
+                        $attachment_count++;
+                    }
+                }
+            }
+            
+            // Batch insert attachments
+            if (!empty($attachment_data)) {
+                $attach_query = "INSERT INTO attachments 
+                               (service_request_id, filename, original_name, file_size, mime_type, uploaded_by, uploaded_at) 
+                               VALUES ";
+                $values = [];
+                $params = [];
+                
+                foreach ($attachment_data as $attachment) {
+                    $values[] = "(?, ?, ?, ?, ?, ?, NOW())";
+                    $params = array_merge($params, [
+                        $request_id, 
+                        $attachment['filename'],
+                        $attachment['original_name'],
+                        $attachment['file_size'],
+                        $attachment['mime_type'],
+                        $_SESSION['user_id'] // Get from session
+                    ]);
+                }
+                
+                $attach_query .= implode(',', $values);
+                $attach_stmt = $db->prepare($attach_query);
+                $attach_stmt->execute($params);
+            }
+            
+            error_log("Background processed $attachment_count attachments in " . round((microtime(true) - $attachment_start) * 1000, 2) . "ms");
+        }
+        
+        // Send email notification to staff and admin
+        $email_start = microtime(true);
+        
+        try {
+            // Very quick SMTP check
+            $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.05);
+            
+            if ($smtp_socket) {
+                fclose($smtp_socket);
+                $emailHelper = new EmailHelper();
+                $emailHelper->sendNewRequestNotification($email_data);
+                error_log("Background email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
+            } else {
+                error_log("Background SMTP down - skipping email ({$errno}: {$errstr})");
+            }
+        } catch (Exception $e) {
+            error_log("Background email error: " . $e->getMessage());
+        }
+
+        // Create in-app notifications for staff and admin
+        $notification_start = microtime(true);
+
+        try {
+            $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
+            $stmt->execute();
+            $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            
+            if (!empty($staff_admin_users)) {
+                $title = "Yêu cầu mới #" . $request_id;
+                $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
+                
+                $notificationHelper = new NotificationHelper($db);
+                $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
+                
+                error_log("Background notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
+            }
+
+        } catch (Exception $e) {
+            error_log("Failed to create background notifications: " . $e->getMessage());
+        }
+        
+        error_log("Background processing completed for request #{$request_id}");
+        
+    } catch (Exception $e) {
+        error_log("Background processing error for request #{$request_id}: " . $e->getMessage());
     }
 }
 

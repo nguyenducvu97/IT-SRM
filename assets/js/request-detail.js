@@ -3224,7 +3224,7 @@ class RequestDetailApp {
 
 
 
-                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
+                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || request.reject_request.status === 'approved') ? `
 
 
 
@@ -3302,7 +3302,7 @@ class RequestDetailApp {
                         ` : '';
                         })()}
 
-                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id ? `
+                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || request.reject_request.status === 'approved') ? `
 
 
 
@@ -4920,26 +4920,53 @@ class RequestDetailApp {
             console.log('Reject form data:', formData);
             console.log('Request ID:', requestId);
             
-            // Create FormData for file upload
-            const uploadFormData = new FormData();
+            // Create data for reject request
+            const rejectData = {
+                service_request_id: requestId,
+                reject_reason: formData.get('reject_reason'),
+                reject_details: formData.get('reject_details') || ''
+            };
             
-            // Add form fields
-            uploadFormData.append('id', requestId);
-            uploadFormData.append('action', 'reject_request');
-            uploadFormData.append('reason', formData.get('reason'));
+            console.log('Reject data to send:', rejectData);
+            console.log('Current user:', this.currentUser);
             
-            // Add files if any
+            // Handle file upload
             const fileInput = document.getElementById('rejectAttachments');
             if (fileInput && fileInput.files.length > 0) {
-                console.log('Adding', fileInput.files.length, 'files to reject upload');
+                console.log('Uploading', fileInput.files.length, 'files...');
+                
+                // Upload files first
+                const fileFormData = new FormData();
                 for (let i = 0; i < fileInput.files.length; i++) {
-                    uploadFormData.append('attachments[]', fileInput.files[i]);
+                    fileFormData.append('attachments[]', fileInput.files[i]);
+                }
+                
+                try {
+                    const fileResponse = await this.apiCall('api/reject_attachments_upload.php', {
+                        method: 'POST',
+                        body: fileFormData
+                    });
+                    
+                    if (fileResponse.success && fileResponse.attachments) {
+                        rejectData.attachments = fileResponse.attachments;
+                        console.log('Files uploaded successfully:', fileResponse.attachments);
+                    } else {
+                        console.warn('File upload failed:', fileResponse.message);
+                    }
+                } catch (fileError) {
+                    console.error('Error uploading files:', fileError);
+                    // Continue without files, but log the error
                 }
             }
             
-            const response = await this.apiCall('api/service_requests.php', {
+            console.log('Reject data sent to API:', rejectData);
+            
+            const response = await this.apiCall('api/reject_requests.php', {
                 method: 'POST',
-                body: uploadFormData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(rejectData)
             });
             
             console.log('Reject API Response:', response);
