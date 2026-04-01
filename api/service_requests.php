@@ -1823,6 +1823,8 @@ elseif ($method == 'POST') {
 
             error_log("FormData reject request - request_id: $request_id, reject_reason: $reject_reason");
 
+            error_log("FILES data: " . print_r($_FILES, true));
+
         } else {
 
             // Handle JSON

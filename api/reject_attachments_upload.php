@@ -64,11 +64,18 @@ try {
         $fileCount = count($_FILES['attachments']['name']);
         
         for ($i = 0; $i < $fileCount; $i++) {
-            if ($_FILES['attachments']['error'][$i] === UPLOAD_ERR_OK) {
+            $fileError = $_FILES['attachments']['error'][$i];
+            
+            if ($fileError === UPLOAD_ERR_OK) {
                 $fileName = $_FILES['attachments']['name'][$i];
                 $fileTmpName = $_FILES['attachments']['tmp_name'][$i];
                 $fileSize = $_FILES['attachments']['size'][$i];
                 $fileType = $_FILES['attachments']['type'][$i];
+                
+                // Check if file actually exists
+                if (!file_exists($fileTmpName)) {
+                    continue;
+                }
                 
                 // Generate unique filename
                 $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -80,11 +87,11 @@ try {
                 $maxFileSize = 10 * 1024 * 1024; // 10MB
                 
                 if (!in_array($fileType, $allowedTypes)) {
-                    continue; // Skip invalid file types
+                    continue;
                 }
                 
                 if ($fileSize > $maxFileSize) {
-                    continue; // Skip files that are too large
+                    continue;
                 }
                 
                 // Move file to uploads directory

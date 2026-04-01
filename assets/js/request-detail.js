@@ -4429,7 +4429,12 @@ class RequestDetailApp {
         
         try {
             document.getElementById('rejectRequestId').value = requestId;
-            document.getElementById('rejectForm').reset();
+            
+            // Reset only text fields, not file input
+            document.getElementById('rejectReason').value = '';
+            document.getElementById('rejectDetails').value = '';
+            
+            // Reset attachment preview
             document.getElementById('rejectAttachmentPreview').innerHTML = '<div class="no-files">Chưa có tệp nào được chọn</div>';
             document.getElementById('rejectAttachmentPreview').classList.remove('has-files');
             
@@ -4920,53 +4925,35 @@ class RequestDetailApp {
             console.log('Reject form data:', formData);
             console.log('Request ID:', requestId);
             
-            // Create data for reject request
-            const rejectData = {
-                service_request_id: requestId,
-                reject_reason: formData.get('reject_reason'),
-                reject_details: formData.get('reject_details') || ''
-            };
+            // Create FormData for API call with file upload support
+            const apiFormData = new FormData();
+            apiFormData.append('request_id', requestId);
+            apiFormData.append('action', 'reject_request');
+            apiFormData.append('reject_reason', formData.get('reject_reason'));
+            apiFormData.append('reject_details', formData.get('reject_details') || '');
             
-            console.log('Reject data to send:', rejectData);
-            console.log('Current user:', this.currentUser);
-            
-            // Handle file upload
+            // Add files if any
             const fileInput = document.getElementById('rejectAttachments');
+            console.log('File input element:', fileInput);
+            console.log('Files in input:', fileInput ? fileInput.files : 'Input not found');
+            console.log('Files length:', fileInput ? fileInput.files.length : 'N/A');
+            
             if (fileInput && fileInput.files.length > 0) {
-                console.log('Uploading', fileInput.files.length, 'files...');
+                console.log('Adding', fileInput.files.length, 'files to FormData...');
+                console.log('File details:', Array.from(fileInput.files).map(f => ({name: f.name, size: f.size, type: f.type})));
                 
-                // Upload files first
-                const fileFormData = new FormData();
                 for (let i = 0; i < fileInput.files.length; i++) {
-                    fileFormData.append('attachments[]', fileInput.files[i]);
+                    apiFormData.append('attachments[]', fileInput.files[i]);
                 }
-                
-                try {
-                    const fileResponse = await this.apiCall('api/reject_attachments_upload.php', {
-                        method: 'POST',
-                        body: fileFormData
-                    });
-                    
-                    if (fileResponse.success && fileResponse.attachments) {
-                        rejectData.attachments = fileResponse.attachments;
-                        console.log('Files uploaded successfully:', fileResponse.attachments);
-                    } else {
-                        console.warn('File upload failed:', fileResponse.message);
-                    }
-                } catch (fileError) {
-                    console.error('Error uploading files:', fileError);
-                    // Continue without files, but log the error
-                }
+            } else {
+                console.log('No files found to upload');
             }
             
-            console.log('Reject data sent to API:', rejectData);
+            console.log('Sending FormData to service_requests API...');
             
-            const response = await this.apiCall('api/reject_requests.php', {
+            const response = await this.apiCall('api/service_requests.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(rejectData)
+                body: apiFormData
             });
             
             console.log('Reject API Response:', response);
