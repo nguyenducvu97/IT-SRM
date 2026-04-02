@@ -873,14 +873,8 @@ elseif ($method == 'POST') {
     
 
     // Handle different actions
-
-    if ($action === 'reject_request') {
-
-        // This will be handled by the second POST block below
-
-        // Continue to next block
-
-    } elseif ($action === 'resolve') {
+    
+    if ($action === 'resolve') {
         
         error_log("Resolve action detected - Content-Type: " . $content_type);
         error_log("Is FormData: " . (strpos($content_type, 'multipart/form-data') !== false ? 'Yes' : 'No'));
@@ -925,8 +919,289 @@ elseif ($method == 'POST') {
             // Continue to existing resolve logic below - don't return here
         }
 
+    } elseif ($action === 'reject_request') {
+        
+        error_log("Reject request action detected in first POST block");
+        
+        // Handle reject request with FormData (file upload)
+        if (strpos($content_type, 'multipart/form-data') !== false) {
+            error_log("Processing FormData reject request");
+            // Handle FormData (file upload)
+            $request_id = isset($_POST['request_id']) ? (int)$_POST['request_id'] : 0;
+            $reject_reason = isset($_POST['reject_reason']) ? trim($_POST['reject_reason']) : '';
+            $reject_details = isset($_POST['reject_details']) ? trim($_POST['reject_details']) : '';
+            
+            error_log("Reject data - ID: $request_id, Reason: $reject_reason");
+            
+            // Validate required fields
+            if ($request_id <= 0 || empty($reject_reason)) {
+                serviceJsonResponse(false, "Request ID and reject reason are required");
+                return;
+            }
+            
+            // Only staff can reject requests
+            if ($user_role != 'staff') {
+                serviceJsonResponse(false, "Access denied");
+                return;
+            }
+            
+            try {
+                // Check if request exists
+                $check_query = "SELECT id FROM service_requests WHERE id = :request_id";
+                $check_stmt = $db->prepare($check_query);
+                $check_stmt->bindParam(":request_id", $request_id);
+                $check_stmt->execute();
+                
+                if ($check_stmt->rowCount() == 0) {
+                    serviceJsonResponse(false, "Request not found");
+                    return;
+                }
+                
+                // Check if user already submitted a reject request for this request
+                $duplicate_check_query = "SELECT id, status, reject_reason, reject_details FROM reject_requests 
+                                        WHERE service_request_id = :request_id AND rejected_by = :rejected_by
+                                        ORDER BY created_at DESC LIMIT 1";
+                $duplicate_check_stmt = $db->prepare($duplicate_check_query);
+                $duplicate_check_stmt->bindParam(":request_id", $request_id);
+                $duplicate_check_stmt->bindParam(":rejected_by", $user_id);
+                $duplicate_check_stmt->execute();
+                
+                if ($duplicate_check_stmt->rowCount() > 0) {
+                    $existing_request = $duplicate_check_stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    // Allow update if request is still pending (not processed by admin)
+                    if ($existing_request['status'] === 'pending') {
+                        // Update existing reject request
+                        $update_query = "UPDATE reject_requests 
+                                       SET reject_reason = :reject_reason, reject_details = :reject_details, updated_at = NOW()
+                                       WHERE id = :existing_id";
+                        
+                        $update_stmt = $db->prepare($update_query);
+                        $update_stmt->bindParam(":reject_reason", $reject_reason);
+                        $update_stmt->bindParam(":reject_details", $reject_details);
+                        $update_stmt->bindParam(":existing_id", $existing_request['id']);
+                        
+                        if ($update_stmt->execute()) {
+                            $reject_id = $existing_request['id'];
+                            
+                            // Handle file uploads if any (add new files)
+                            $uploaded_files = [];
+                            if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+                                error_log("Processing file uploads for updated reject request $reject_id");
+                                
+                                $uploads_dir = __DIR__ . '/../uploads/reject_requests/';
+                                if (!file_exists($uploads_dir)) {
+                                    mkdir($uploads_dir, 0755, true);
+                                }
+                                
+                                $file_attachments = $_FILES['attachments'];
+                                $file_count = count($file_attachments['name']);
+                                
+                                for ($i = 0; $i < $file_count; $i++) {
+                                    if ($file_attachments['error'][$i] === UPLOAD_ERR_OK) {
+                                        $original_name = $file_attachments['name'][$i];
+                                        $file_size = $file_attachments['size'][$i];
+                                        $file_tmp = $file_attachments['tmp_name'][$i];
+                                        $file_type = $file_attachments['type'][$i];
+                                        
+                                        // Generate unique filename
+                                        $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
+                                        $unique_filename = uniqid('reject_', true) . '.' . $file_extension;
+                                        $file_path = $uploads_dir . $unique_filename;
+                                        
+                                        // Validate file (size, type)
+                                        $max_size = 10 * 1024 * 1024; // 10MB
+                                        $allowed_types = [
+                                            'image/jpeg', 'image/png', 'image/gif',
+                                            'application/pdf', 'application/msword',
+                                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                            'application/vnd.ms-excel',
+                                            'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                                            'application/vnd.ms-powerpoint',
+                                            'text/plain', 'application/zip'
+                                        ];
+                                        
+                                        if ($file_size > $max_size) {
+                                            error_log("File too large: $original_name ($file_size bytes)");
+                                            continue;
+                                        }
+                                        
+                                        if (!in_array($file_type, $allowed_types)) {
+                                            error_log("File type not allowed: $original_name ($file_type)");
+                                            continue;
+                                        }
+                                        
+                                        // Move file
+                                        if (move_uploaded_file($file_tmp, $file_path)) {
+                                            // Save to database
+                                            $attachment_stmt = $db->prepare("
+                                                INSERT INTO reject_request_attachments 
+                                                (reject_request_id, original_name, filename, file_size, file_type, uploaded_at)
+                                                VALUES (:reject_id, :original_name, :filename, :file_size, :file_type, NOW())
+                                            ");
+                                            
+                                            $attachment_stmt->bindParam(":reject_id", $reject_id);
+                                            $attachment_stmt->bindParam(":original_name", $original_name);
+                                            $attachment_stmt->bindParam(":filename", $unique_filename);
+                                            $attachment_stmt->bindParam(":file_size", $file_size);
+                                            $attachment_stmt->bindParam(":file_type", $file_type);
+                                            
+                                            if ($attachment_stmt->execute()) {
+                                                $uploaded_files[] = [
+                                                    'original_name' => $original_name,
+                                                    'filename' => $unique_filename,
+                                                    'file_size' => $file_size,
+                                                    'file_type' => $file_type
+                                                ];
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            $response_data = [
+                                'success' => true,
+                                'message' => 'Reject request updated successfully',
+                                'reject_id' => $reject_id,
+                                'updated' => true
+                            ];
+                            
+                            if (!empty($uploaded_files)) {
+                                $response_data['uploaded_files'] = $uploaded_files;
+                                $response_data['message'] .= ' with ' . count($uploaded_files) . ' new file(s) attached';
+                            }
+                            
+                            echo json_encode($response_data);
+                            return; // Prevent double response
+                        } else {
+                            serviceJsonResponse(false, "Failed to update reject request");
+                            return; // Prevent double response
+                        }
+                    } else {
+                        // Request already processed by admin, cannot modify
+                        serviceJsonResponse(false, "Your reject request has already been processed by admin and cannot be modified");
+                        return; // Prevent double response
+                    }
+                }
+                
+                // Insert reject request
+                $insert_query = "INSERT INTO reject_requests 
+                                 (service_request_id, rejected_by, reject_reason, reject_details, status, created_at) 
+                                 VALUES (:request_id, :rejected_by, :reject_reason, :reject_details, 'pending', NOW())";
+                
+                $insert_stmt = $db->prepare($insert_query);
+                $insert_stmt->bindParam(":request_id", $request_id);
+                $insert_stmt->bindParam(":rejected_by", $user_id);
+                $insert_stmt->bindParam(":reject_reason", $reject_reason);
+                $insert_stmt->bindParam(":reject_details", $reject_details);
+                
+                if ($insert_stmt->execute()) {
+                    $reject_id = $db->lastInsertId();
+                    
+                    // Handle file uploads if any
+                    $uploaded_files = [];
+                    if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+                        error_log("Processing file uploads for reject request $reject_id");
+                        
+                        $uploads_dir = __DIR__ . '/../uploads/reject_requests/';
+                        if (!file_exists($uploads_dir)) {
+                            mkdir($uploads_dir, 0755, true);
+                        }
+                        
+                        $file_attachments = $_FILES['attachments'];
+                        $file_count = count($file_attachments['name']);
+                        
+                        for ($i = 0; $i < $file_count; $i++) {
+                            if ($file_attachments['error'][$i] === UPLOAD_ERR_OK) {
+                                $original_name = $file_attachments['name'][$i];
+                                $file_size = $file_attachments['size'][$i];
+                                $file_tmp = $file_attachments['tmp_name'][$i];
+                                $file_type = $file_attachments['type'][$i];
+                                
+                                // Generate unique filename
+                                $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
+                                $unique_filename = uniqid('reject_', true) . '.' . $file_extension;
+                                $file_path = $uploads_dir . $unique_filename;
+                                
+                                // Validate file (size, type)
+                                $max_size = 10 * 1024 * 1024; // 10MB
+                                $allowed_types = [
+                                    'image/jpeg', 'image/png', 'image/gif',
+                                    'application/pdf', 'application/msword',
+                                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                    'application/vnd.ms-excel',
+                                    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                                    'application/vnd.ms-powerpoint',
+                                    'text/plain', 'application/zip'
+                                ];
+                                
+                                if ($file_size > $max_size) {
+                                    error_log("File too large: $original_name ($file_size bytes)");
+                                    continue;
+                                }
+                                
+                                if (!in_array($file_type, $allowed_types)) {
+                                    error_log("File type not allowed: $original_name ($file_type)");
+                                    continue;
+                                }
+                                
+                                // Move file
+                                if (move_uploaded_file($file_tmp, $file_path)) {
+                                    // Save to database
+                                    $attachment_stmt = $db->prepare("
+                                        INSERT INTO reject_request_attachments 
+                                        (reject_request_id, original_name, filename, file_size, mime_type, uploaded_at)
+                                        VALUES (:reject_id, :original_name, :filename, :file_size, :mime_type, NOW())
+                                    ");
+                                    
+                                    $attachment_stmt->bindParam(":reject_id", $reject_id);
+                                    $attachment_stmt->bindParam(":original_name", $original_name);
+                                    $attachment_stmt->bindParam(":filename", $unique_filename);
+                                    $attachment_stmt->bindParam(":file_size", $file_size);
+                                    $attachment_stmt->bindParam(":mime_type", $file_type);
+                                    
+                                    if ($attachment_stmt->execute()) {
+                                        $uploaded_files[] = [
+                                            'original_name' => $original_name,
+                                            'filename' => $unique_filename,
+                                            'file_size' => $file_size,
+                                            'mime_type' => $file_type
+                                        ];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    $response_data = [
+                        'success' => true,
+                        'message' => 'Reject request submitted successfully',
+                        'reject_id' => $reject_id
+                    ];
+                    
+                    if (!empty($uploaded_files)) {
+                        $response_data['uploaded_files'] = $uploaded_files;
+                        $response_data['message'] .= ' with ' . count($uploaded_files) . ' file(s) attached';
+                    }
+                    
+                    echo json_encode($response_data);
+                    return; // Prevent double response
+                } else {
+                    serviceJsonResponse(false, "Failed to submit reject request");
+                    return; // Prevent double response
+                }
+            } catch (Exception $e) {
+                serviceJsonResponse(false, "Database error: " . $e->getMessage());
+                return; // Prevent double response
+            }
+        } else {
+            serviceJsonResponse(false, "Reject request requires FormData");
+            return; // Prevent double response
+        }
+        
     } else {
-
         // Handle create request (original logic)
 
         if (strpos($content_type, 'multipart/form-data') !== false) {
@@ -971,12 +1246,15 @@ elseif ($method == 'POST') {
 
     
 
-    if (empty($title) || empty($description) || $category_id <= 0) {
+    // Skip validation for reject_request and resolve actions (they have their own validation)
+    if ($action !== 'reject_request' && $action !== 'resolve') {
+        if (empty($title) || empty($description) || $category_id <= 0) {
 
-        serviceJsonResponse(false, "Title, description, and category are required");
+            serviceJsonResponse(false, "Title, description, and category are required");
 
-        return;
+            return;
 
+        }
     }
 
     
@@ -995,21 +1273,23 @@ elseif ($method == 'POST') {
             $category_cache[$cat['id']] = $cat['name'];
         }
         
-        // Start timing the request creation
-        $request_start = microtime(true);
+        // Only execute INSERT for create actions (not for reject_request, resolve, update, etc.)
+        if ($action === '' || $action === 'create') {
+            // Start timing the request creation
+            $request_start = microtime(true);
 
-        $query = "INSERT INTO service_requests 
-                  (user_id, category_id, title, description, priority, status, created_at, updated_at) 
-                  VALUES (:user_id, :category_id, :title, :description, :priority, 'open', NOW(), NOW())";
-        
-        $stmt = $db->prepare($query);
-        $stmt->bindParam(":user_id", $user_id);
-        $stmt->bindParam(":category_id", $category_id);
-        $stmt->bindParam(":title", $title);
-        $stmt->bindParam(":description", $description);
-        $stmt->bindParam(":priority", $priority);
-        
-        if ($stmt->execute()) {
+            $query = "INSERT INTO service_requests 
+                      (user_id, category_id, title, description, priority, status, created_at, updated_at) 
+                      VALUES (:user_id, :category_id, :title, :description, :priority, 'open', NOW(), NOW())";
+            
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->bindParam(":category_id", $category_id);
+            $stmt->bindParam(":title", $title);
+            $stmt->bindParam(":description", $description);
+            $stmt->bindParam(":priority", $priority);
+            
+            if ($stmt->execute()) {
             $request_id = $db->lastInsertId();
 
             
@@ -1167,6 +1447,11 @@ elseif ($method == 'POST') {
             serviceJsonResponse(false, "Failed to create service request");
 
         }
+
+    } else {
+        // For other actions (reject_request, resolve, update, etc.), continue to next block
+        // This allows the second POST block to handle these actions properly
+    }
 
     } catch (Exception $e) {
 

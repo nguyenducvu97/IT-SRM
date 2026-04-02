@@ -2235,7 +2235,7 @@ class RequestDetailApp {
 
 
 
-                                const isImage = attachment.mime_type.startsWith('image/');
+                                const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
 
 
 
@@ -2447,11 +2447,11 @@ class RequestDetailApp {
                                 <div class="attachments-list">
                                     ${request.resolution_attachments.map(attachment => {
                                         
-                                        const isImage = attachment.mime_type.startsWith('image/');
+                                        const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
                                         const isPDF = attachment.mime_type === 'application/pdf';
-                                        const isWord = attachment.mime_type.includes('word') || attachment.mime_type.includes('document');
-                                        const isExcel = attachment.mime_type.includes('sheet') || attachment.mime_type.includes('excel');
-                                        const isPowerPoint = attachment.mime_type.includes('presentation') || attachment.mime_type.includes('powerpoint');
+                                        const isWord = attachment.mime_type && (attachment.mime_type.includes('word') || attachment.mime_type.includes('document'));
+                                        const isExcel = attachment.mime_type && (attachment.mime_type.includes('sheet') || attachment.mime_type.includes('excel'));
+                                        const isPowerPoint = attachment.mime_type && (attachment.mime_type.includes('presentation') || attachment.mime_type.includes('powerpoint'));
                                         const fileExt = attachment.original_name.split('.').pop().toLowerCase();
                                         const isViewable = isPDF || isWord || isExcel || isPowerPoint;
                                         
@@ -2656,7 +2656,7 @@ class RequestDetailApp {
 
 
 
-                                        const isImage = attachment.mime_type.startsWith('image/');
+                                        const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
 
 
 
@@ -3000,7 +3000,7 @@ class RequestDetailApp {
 
 
 
-                                        const isImage = attachment.mime_type.startsWith('image/');
+                                        const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
 
 
 
@@ -4959,7 +4959,8 @@ class RequestDetailApp {
             console.log('Reject API Response:', response);
             
             if (response.success) {
-                this.showNotification('Yêu cầu đã bị từ chối', 'success');
+                const message = response.updated ? 'Yêu cầu từ chối đã được cập nhật' : 'Yêu cầu đã bị từ chối';
+                this.showNotification(message, 'success');
                 this.closeRejectModal();
                 // Force page refresh to ensure latest data is displayed
                 window.location.reload();

@@ -386,3 +386,7 @@
 [2026-03-31 10:43:11] SENT to 1/3 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #24
 [2026-03-31 10:44:30] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ mới cho yêu cầu #16
 [2026-03-31 10:49:44] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ mới cho yêu cầu #17
+[2026-04-02 10:30:38] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #27
+[2026-04-02 10:30:45] FAILED | To: nguyenducvu561@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #27
+[2026-04-02 10:30:52] FAILED | To: jane.doe@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #27
+[2026-04-02 10:30:52] SENT to 1/3 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #27
