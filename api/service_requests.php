@@ -685,36 +685,8 @@ if ($method == 'GET') {
 
                 
 
-                // Get attachments for this reject request
-
-                if ($request['reject_request']) {
-
-                    try {
-
-                        $reject_attachments_query = "SELECT id, filename, original_name, file_size, mime_type, created_at 
-                                                     FROM reject_request_attachments 
-                                                     WHERE reject_request_id = :id 
-                                                     ORDER BY created_at ASC";
-
-                        $reject_attachments_stmt = $db->prepare($reject_attachments_query);
-
-                        $reject_attachments_stmt->bindParam(":id", $request['reject_request']['id']);
-
-                        $reject_attachments_stmt->execute();
-
-                        
-
-                        $reject_attachments = $reject_attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        $request['reject_request']['attachments'] = $reject_attachments;
-
-                    } catch (Exception $e) {
-
-                        $request['reject_request']['attachments'] = [];
-
-                    }
-
-                }
+                // Note: Attachments are fetched separately from reject_requests.php API when needed
+                // This prevents duplicate attachment display in admin view
 
                 
 
