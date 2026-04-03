@@ -4,6 +4,11 @@
 
 header("Content-Type: application/json; charset=UTF-8");
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+error_log("=== AUTH.PH P DEBUG START ===");
+
 // Dynamic CORS origin
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : 'http://localhost';
 error_log("HTTP_ORIGIN: " . $origin);
@@ -27,14 +32,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit();
 }
 
-require_once '../config/database.php';
-require_once '../config/session.php';
+try {
+    require_once '../config/database.php';
+    require_once '../config/session.php';
+    error_log("✅ Config files loaded successfully");
+} catch (Exception $e) {
+    error_log("❌ Error loading config: " . $e->getMessage());
+    header('Content-Type: application/json');
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Server configuration error']);
+    exit();
+}
 
 // Start session for all requests
-startSession();
+try {
+    startSession();
+    error_log("✅ Session started successfully");
+} catch (Exception $e) {
+    error_log("❌ Error starting session: " . $e->getMessage());
+    header('Content-Type: application/json');
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Session error']);
+    exit();
+}
 
-$database = new Database();
-$db = $database->getConnection();
+try {
+    $database = new Database();
+    $db = $database->getConnection();
+    error_log("✅ Database connection established");
+} catch (Exception $e) {
+    error_log("❌ Database connection error: " . $e->getMessage());
+    header('Content-Type: application/json');
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database connection error']);
+    exit();
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -94,10 +126,16 @@ if ($method == 'POST') {
     $action = isset($data->action) ? $data->action : '';
     
     if ($action == 'login') {
+        error_log("=== LOGIN DEBUG ===");
+        
         $username = sanitizeInput($data->username);
         $password = $data->password;
         
+        error_log("Username received: " . $username);
+        error_log("Password received: " . ($password ? "YES" : "NO"));
+        
         if (empty($username) || empty($password)) {
+            error_log("Login failed: Empty username or password");
 header('Content-Type: application/json');
 echo json_encode([
     'success' => false,
@@ -111,8 +149,11 @@ exit();
         $stmt->bindParam(':username', $username);
         $stmt->execute();
         
+        error_log("Query executed, row count: " . $stmt->rowCount());
+        
         if ($stmt->rowCount() > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            error_log("User found: " . json_encode($row));
             
             if (verifyPassword($password, $row['password_hash'])) {
                 $_SESSION['user_id'] = $row['id'];
@@ -136,6 +177,7 @@ echo json_encode([
 ]);
 exit();
             } else {
+                error_log("Login failed: Invalid password");
 header('Content-Type: application/json');
 echo json_encode([
     'success' => false,

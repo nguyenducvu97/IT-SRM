@@ -617,12 +617,24 @@ class ITServiceApp {
                     setTimeout(() => this.hideLoadingState(), 500);
                     break;
                 case 'reject-requests':
+                    console.log('=== REJECT REQUESTS ACCESS DEBUG ===');
+                    console.log('Current user:', this.currentUser);
+                    console.log('User role:', this.currentUser ? this.currentUser.role : 'NO USER');
+                    console.log('Is admin/staff?', this.currentUser && ['admin', 'staff'].includes(this.currentUser.role));
+                    
                     if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
+                        console.log('✅ Access granted, loading reject requests');
                         this.loadRejectRequests();
                     } else {
                         console.log('❌ User is not admin/staff or user not loaded, denying access to reject requests page');
                         if (this.currentUser) {
                             this.showNotification('Chỉ admin và staff mới có quyền xem yêu cầu từ chối', 'error');
+                        } else {
+                            this.showNotification('Vui lòng đăng nhập lại', 'error');
+                            // Redirect to login after a delay
+                            setTimeout(() => {
+                                this.showLoginScreen();
+                            }, 2000);
                         }
                         // Don't redirect to dashboard - just hide loading and show error
                         this.hideLoadingState();
@@ -1981,16 +1993,22 @@ class ITServiceApp {
             
             // Check if user session exists on server
             const response = await this.apiCall('api/auth.php?action=check_session');
+            console.log('=== AUTH CHECK DEBUG ===');
             console.log('Auth check response:', response);
+            console.log('Response success:', response.success);
+            console.log('Response data:', response.data);
             
             if (response.success && response.data) {
                 // User is logged in, set current user and show dashboard
                 this.currentUser = response.data;
                 console.log('✅ User is logged in:', this.currentUser);
+                console.log('User role:', this.currentUser.role);
+                console.log('User ID:', this.currentUser.id);
                 this.showDashboard();
             } else {
                 // No active session, show login screen
                 console.log('❌ No active session, showing login');
+                console.log('Response message:', response.message);
                 this.showLoginScreen();
             }
         } catch (error) {
@@ -2724,22 +2742,45 @@ class ITServiceApp {
     // Reject Request Functions
     async loadRejectRequests() {
         try {
+            console.log('=== LOAD REJECT REQUESTS DEBUG ===');
+            
             const statusFilter = document.getElementById('rejectStatusFilter');
             const status = statusFilter ? statusFilter.value : 'pending';
+            
+            console.log('Status filter:', status);
+            console.log('Status filter element:', statusFilter);
             
             // If "all" is selected, don't pass status parameter to get all requests
             const url = status === 'all' 
                 ? 'api/reject_requests.php?action=list'
                 : `api/reject_requests.php?action=list&status=${status}`;
             
+            console.log('API URL:', url);
+            console.log('Current user before API call:', this.currentUser);
+            
             const response = await this.apiCall(url);
             
+            console.log('=== API RESPONSE DEBUG ===');
+            console.log('API Response:', response);
+            console.log('Response success:', response?.success);
+            console.log('Response message:', response?.message);
+            console.log('Response data:', response?.data);
+            
             if (response.success) {
-                this.displayRejectRequests(response.data);
+                console.log('✅ API call successful, displaying requests');
+                this.displayRejectRequests(response.data.reject_requests || response.data);
             } else {
+                console.log('❌ API call failed:', response.message);
                 this.showNotification(response.message, 'error');
             }
+            
         } catch (error) {
+            console.error('=== LOAD REJECT REQUESTS ERROR ===');
+            console.error('Error:', error);
+            console.error('Error message:', error.message);
+            console.error('Error stack:', error.stack);
+            console.error('Current user:', this.currentUser);
+            
             this.showNotification('Lỗi tải yêu cầu từ chối', 'error');
         } finally {
             this.hideLoadingState();
@@ -2759,7 +2800,7 @@ class ITServiceApp {
                 <div class="request-header">
                     <h4>
                         <a href="request-detail.html?id=${reject.service_request_id}">
-                            ID: ${reject.service_request_id} - ${reject.request_title}
+                            ID: ${reject.service_request_id} - ${reject.service_request_title}
                         </a>
                     </h4>
                     <div class="request-badges">
@@ -2769,7 +2810,7 @@ class ITServiceApp {
                 
                 <div class="request-meta">
                     <div class="meta-item">
-                        <strong>Người từ chối:</strong> ${reject.requester_name}
+                        <strong>Người từ chối:</strong> ${reject.rejecter_name}
                     </div>
                     <div class="meta-item">
                         <strong>Ngày tạo:</strong> ${this.formatDate(reject.created_at)}
