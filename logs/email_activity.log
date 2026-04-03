@@ -415,3 +415,11 @@
 [2026-04-03 08:46:14] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu từ chối cần xác nhận
 [2026-04-03 08:46:18] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ kỹ thuật (Escalation)
 [2026-04-03 09:11:14] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu từ chối cần xác nhận
+[2026-04-03 11:09:02] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #29
+[2026-04-03 11:09:16] FAILED | To: nguyenducvu561@gmail.com | Subject: 🔔 Yêu cầu dịch vụ mới #29
+[2026-04-03 11:09:30] FAILED | To: jane.doe@sgitech.com.vn | Subject: 🔔 Yêu cầu dịch vụ mới #29
+[2026-04-03 11:09:30] SENT to 1/3 admin/staff recipients | To: multiple | Subject: 🔔 Yêu cầu dịch vụ mới #29
+[2026-04-03 11:09:34] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-03 11:09:38] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-03 11:09:42] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-03 11:09:46] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống

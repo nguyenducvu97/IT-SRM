@@ -171,7 +171,15 @@ if ($method == 'GET') {
 
         $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
-        $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
+        // For dashboard stats (no filters), use high limit to get all requests
+        $has_filters = isset($_GET['status']) || isset($_GET['priority']) || isset($_GET['category']) || isset($_GET['category_id']);
+        
+        if ($has_filters) {
+            $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
+        } else {
+            // Dashboard stats - get all requests without limit
+            $limit = 10000; // High enough to get all requests
+        }
 
         $offset = ($page - 1) * $limit;
 
@@ -243,6 +251,7 @@ if ($method == 'GET') {
 
         
 
+        // Build the base query
         $query = "SELECT sr.*, u.username as requester_name, c.name as category_name,
                   req.id as reject_request_id, req.status as reject_status,
                   sreq.id as support_request_id, sreq.status as support_status,
@@ -254,8 +263,19 @@ if ($method == 'GET') {
                   LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id
                   LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
                   $where_clause 
-                  ORDER BY sr.created_at DESC 
-                  LIMIT :limit OFFSET :offset";
+                  ORDER BY sr.created_at DESC";
+        
+        // Special handling for dashboard stats - don't apply limit for total count
+        $is_dashboard_stats = !$has_filters; // True when no filters are applied
+        
+        error_log("Dashboard stats check - is_dashboard_stats: " . ($is_dashboard_stats ? 'true' : 'false'));
+        error_log("Has filters: " . ($has_filters ? 'true' : 'false'));
+        error_log("Filters - status: " . ($status_filter ?? 'none') . ", priority: " . ($priority_filter ?? 'none') . ", category: " . ($category_filter ?? 'none'));
+        
+        if (!$is_dashboard_stats) {
+            // Apply limit only for non-dashboard requests
+            $query .= " LIMIT :limit OFFSET :offset";
+        }
 
         
 
@@ -268,10 +288,12 @@ if ($method == 'GET') {
             $stmt->bindValue($key, $value);
 
         }
-
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        
+        // Only bind limit/offset for non-dashboard requests
+        if (!$is_dashboard_stats) {
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        }
 
         
 
@@ -296,6 +318,9 @@ if ($method == 'GET') {
             $count_stmt->execute();
 
             $total = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'];
+            
+            error_log("Total requests count: " . $total);
+            error_log("Requests fetched count: " . count($requests));
 
             
 
@@ -344,6 +369,8 @@ if ($method == 'GET') {
                 $status_counts_array[$result['status']] = $result['count'];
 
             }
+            
+            error_log("Status counts: " . json_encode($status_counts_array));
 
             
 
