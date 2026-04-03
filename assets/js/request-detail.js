@@ -1770,8 +1770,11 @@ class RequestDetailApp {
 
                 // Load reject request details with attachments if reject request exists
                 if (this.request.reject_request && this.request.reject_request.id) {
+                    console.log('=== REJECT REQUEST DEBUG ===');
                     console.log('Reject request found, loading details with attachments...');
+                    console.log('Current attachments before load:', this.request.reject_request.attachments);
                     await this.loadRejectRequestDetails();
+                    console.log('Attachments after load:', this.request.reject_request.attachments);
                     console.log('Reject request details loaded, now displaying...');
                 }
 
@@ -1894,6 +1897,12 @@ class RequestDetailApp {
     async loadRejectRequestDetails() {
         try {
             console.log('Loading reject request details for ID:', this.request.reject_request.id);
+            
+            if (!this.request.reject_request.id) {
+                console.error('Reject request ID is missing or invalid');
+                return;
+            }
+            
             const response = await this.apiCall(`api/reject_requests.php?action=get&id=${this.request.reject_request.id}`);
             
             console.log('Reject request API response:', response);
@@ -1905,6 +1914,8 @@ class RequestDetailApp {
                 console.log('Attachments found:', response.data.attachments ? response.data.attachments.length : 0);
             } else {
                 console.error('Reject request API failed:', response.message);
+                console.error('API Response:', response);
+                // Don't overwrite reject request data if API fails
             }
         } catch (error) {
             console.error('Failed to load reject request details:', error);
