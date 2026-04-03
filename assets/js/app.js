@@ -3042,6 +3042,13 @@ class ITServiceApp {
         const formData = new FormData(e.target);
         const rejectId = document.getElementById('adminRejectId').value;
         
+        // Show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Đang xử lý...';
+        submitBtn.disabled = true;
+        this.showLoadingState('Đang xử lý yêu cầu từ chối...');
+        
         try {
             const response = await this.apiCall('api/reject_requests.php', {
                 method: 'PUT',
@@ -3063,6 +3070,11 @@ class ITServiceApp {
             }
         } catch (error) {
             this.showNotification('Lỗi xử lý yêu cầu từ chối', 'error');
+        } finally {
+            // Hide loading state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            this.hideLoadingState();
         }
     }
 
@@ -3291,6 +3303,13 @@ class ITServiceApp {
         const formData = new FormData(e.target);
         const supportId = document.getElementById('adminSupportId').value;
         
+        // Show loading state
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Đang xử lý...';
+        submitBtn.disabled = true;
+        this.showLoadingState('Đang xử lý yêu cầu hỗ trợ...');
+        
         try {
             const response = await this.apiCall('api/support_requests.php', {
                 method: 'PUT',
@@ -3323,6 +3342,11 @@ class ITServiceApp {
             }
         } catch (error) {
             this.showNotification('Lỗi kết nối', 'error');
+        } finally {
+            // Hide loading state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            this.hideLoadingState();
         }
     }
 

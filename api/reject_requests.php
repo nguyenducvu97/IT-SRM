@@ -6,9 +6,9 @@ header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
 
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Disable error display to prevent JSON corruption
+error_reporting(0);
+ini_set('display_errors', 0);
 error_log("=== REJECT_REQUESTS.PHP DEBUG START ===");
 
 // Handle preflight OPTIONS request
@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 try {
     require_once '../config/session.php';
     require_once '../config/database.php';
+    require_once '../lib/ServiceRequestNotificationHelper.php';
     error_log("✅ Config files loaded successfully");
 } catch (Exception $e) {
     error_log("❌ Error loading config: " . $e->getMessage());
@@ -306,21 +307,55 @@ if ($method == 'GET') {
         $update_stmt->bindValue(':processed_by', $user_id, PDO::PARAM_INT);
         
         if ($update_stmt->execute()) {
-            // Also update the original service request if needed
-            if ($decision === 'approved') {
-                // Update service request to reflect that rejection was approved
-                $service_update_query = "UPDATE service_requests 
-                                       SET status = 'rejected',
-                                           updated_at = NOW()
-                                       WHERE id = :service_request_id";
-                $service_update_stmt = $db->prepare($service_update_query);
-                $service_update_stmt->bindValue(':service_request_id', $reject_request['service_request_id'], PDO::PARAM_INT);
-                $service_update_stmt->execute();
+            // Send role-based notifications
+            try {
+                $notificationHelper = new ServiceRequestNotificationHelper();
                 
-                rejectJsonResponse(true, 'Yêu cầu từ chối đã được duyệt. Yêu cầu gốc đã được chuyển sang trạng thái đã từ chối.');
-            } else {
-                // Rejection was denied, service request continues normally
-                rejectJsonResponse(true, 'Yêu cầu từ chối đã bị từ chối. Yêu cầu gốc sẽ tiếp tục xử lý bình thường.');
+                // Get request details for notifications
+                $requestDetails = $notificationHelper->getRequestDetails($reject_request['service_request_id']);
+                
+                if ($decision === 'approved') {
+                    // Update service request to reflect that rejection was approved
+                    $service_update_query = "UPDATE service_requests 
+                                           SET status = 'rejected',
+                                               updated_at = NOW()
+                                           WHERE id = :service_request_id";
+                    $service_update_stmt = $db->prepare($service_update_query);
+                    $service_update_stmt->bindValue(':service_request_id', $reject_request['service_request_id'], PDO::PARAM_INT);
+                    $service_update_stmt->execute();
+                    
+                    // Notify user that their request was rejected
+                    $notificationHelper->notifyUserRequestRejected(
+                        $reject_request['service_request_id'], 
+                        $requestDetails['user_id'], 
+                        $admin_reason . " (Yêu cầu từ chối đã được Admin duyệt)"
+                    );
+                    
+                    // Notify staff about admin approval
+                    $notificationHelper->notifyStaffAdminRejected(
+                        $reject_request['service_request_id'], 
+                        $requestDetails['title'], 
+                        $_SESSION['full_name'] ?? 'Admin', 
+                        $admin_reason
+                    );
+                    
+                    rejectJsonResponse(true, 'Yêu cầu từ chối đã được duyệt. Yêu cầu gốc đã được chuyển sang trạng thái đã từ chối.');
+                } else {
+                    // Rejection was denied, service request continues normally
+                    // Notify staff that rejection was denied
+                    $notificationHelper->notifyStaffAdminRejected(
+                        $reject_request['service_request_id'], 
+                        $requestDetails['title'], 
+                        $_SESSION['full_name'] ?? 'Admin', 
+                        $admin_reason
+                    );
+                    
+                    rejectJsonResponse(true, 'Yêu cầu từ chối đã bị từ chối. Yêu cầu gốc sẽ tiếp tục xử lý bình thường.');
+                }
+                
+            } catch (Exception $e) {
+                error_log("Failed to send reject request notifications: " . $e->getMessage());
+                // Continue even if notification fails
             }
         } else {
             rejectJsonResponse(false, 'Cập nhật yêu cầu từ chối thất bại');

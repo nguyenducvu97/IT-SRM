@@ -1,5 +1,9 @@
 <?php
 // PHPMailer-based Email Helper for better SMTP support
+// Suppress PHP warnings to prevent JSON corruption
+error_reporting(0);
+ini_set('display_errors', 0);
+
 require_once __DIR__ . '/../vendor/phpmailer/phpmailer.php';
 
 class PHPMailerEmailHelper {

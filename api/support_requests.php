@@ -6,6 +6,10 @@ header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
 
+// Disable error display to prevent JSON corruption
+error_reporting(0);
+ini_set('display_errors', 0);
+
 // Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -16,6 +20,7 @@ require_once '../config/session.php';
 require_once '../config/database.php';
 require_once '../config/email.php';
 require_once '../lib/PHPMailerEmailHelper.php';
+require_once '../lib/ServiceRequestNotificationHelper.php';
 
 // Start session
 startSession();
@@ -438,6 +443,26 @@ function handlePost($pdo, $action, $current_user, $user_role) {
     if ($result) {
         $support_id = $pdo->lastInsertId();
         
+        // Send notification to admin about new support request
+        try {
+            $notificationHelper = new ServiceRequestNotificationHelper();
+            
+            // Get request details for notification
+            $requestDetails = $notificationHelper->getRequestDetails($service_request_id);
+            
+            // Notify admin about support request (escalation)
+            $notificationHelper->notifyAdminSupportRequest(
+                $service_request_id, 
+                $support_details . ($support_reason ? " - Lý do: " . $support_reason : ""), 
+                $_SESSION['full_name'] ?? 'Staff', 
+                $requestDetails['title']
+            );
+            
+        } catch (Exception $e) {
+            error_log("Failed to send support request notification: " . $e->getMessage());
+            // Continue even if notification fails
+        }
+        
         // Handle file uploads if any
         $uploaded_files = [];
         try {
@@ -731,8 +756,10 @@ function handlePut($pdo, $action, $current_user, $user_role) {
     $result = $stmt->execute([$decision, $reason, $current_user, $support_id]);
     
     if ($result) {
-        // Create notifications for support request decision
+        // Send role-based notifications for support request decision
         try {
+            $notificationHelper = new ServiceRequestNotificationHelper();
+            
             // Get support request details
             $support_stmt = $pdo->prepare("
                 SELECT sr.*, u.username as requester_name 
@@ -743,113 +770,98 @@ function handlePut($pdo, $action, $current_user, $user_role) {
             $support_stmt->execute([$support_id]);
             $support_data = $support_stmt->fetch(PDO::FETCH_ASSOC);
             
-            // Get service request ID
-            $service_req_stmt = $pdo->prepare("
-                SELECT service_request_id FROM support_requests WHERE id = ?
-            ");
-            $service_req_stmt->execute([$support_id]);
-            $service_req_data = $service_req_stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if ($service_req_data) {
-                $service_request_id = $service_req_data['service_request_id'];
+            if ($support_data) {
+                $service_request_id = $support_data['service_request_id'];
                 
-                // Notify all staff and admin about support request decision
-                $title = "Yêu cầu hỗ trợ #" . $support_id . " đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối');
-                $message = "Yêu cầu hỗ trợ từ " . $support_data['requester_name'] . " đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối') . ". Lý do: " . $reason;
-                $type = $decision === 'approved' ? 'success' : 'warning';
+                // Get service request details for proper title
+                $requestDetails = $notificationHelper->getRequestDetails($service_request_id);
+                $requestTitle = $requestDetails['title'];
                 
-                // Notify all staff EXCEPT the requester (they get separate notification)
-                $stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'staff' AND id != ?");
-                $stmt->execute([$support_data['requester_id']]);
-                $staffUsers = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                // Notify staff about admin decision
+                if ($decision === 'approved') {
+                    $notificationHelper->notifyStaffAdminApproved(
+                        $service_request_id, 
+                        $requestTitle, 
+                        $_SESSION['full_name'] ?? 'Admin'
+                    );
+                } else {
+                    $notificationHelper->notifyStaffAdminRejected(
+                        $service_request_id, 
+                        $requestTitle, 
+                        $_SESSION['full_name'] ?? 'Admin', 
+                        $reason
+                    );
+                }
                 
-                if (!empty($staffUsers)) {
-                    $notifyStmt = $pdo->prepare("
-                        INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
-                        VALUES (?, ?, ?, ?, ?, ?)
-                    ");
-                    
-                    foreach ($staffUsers as $userId) {
-                        try {
-                            $notifyStmt->execute([$userId, $title, $message, $type, $support_id, 'support_request']);
-                        } catch (Exception $e) {
-                            error_log("Failed to notify staff user $userId: " . $e->getMessage());
-                        }
+                // Notify original requester
+                if ($support_data['requester_id'] != $current_user) {
+                    if ($decision === 'approved') {
+                        // User gets notification that escalation was approved
+                        $notificationHelper->notifyUserRequestPendingApproval(
+                            $service_request_id, 
+                            $support_data['requester_id']
+                        );
+                    } else {
+                        // User gets notification that escalation was rejected
+                        $notificationHelper->notifyUserRequestRejected(
+                            $service_request_id, 
+                            $support_data['requester_id'], 
+                            "Yêu cầu hỗ trợ đã bị từ chối: " . $reason
+                        );
                     }
                 }
-                
-                // Notify all admin
-                notifyRole($pdo, 'admin', $title, $message, $type, $support_id, 'support_request');
-                
-                // Notify original requester with different message
-                if ($support_data['requester_id'] != $current_user) {
-                    $requesterTitle = "Yêu cầu hỗ trợ #" . $support_id . " của bạn đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối');
-                    $requesterMessage = "Yêu cầu hỗ trợ của bạn đã được " . ($decision === 'approved' ? 'duyệt' : 'từ chối') . ". Lý do: " . $reason;
-                    createNotification($pdo, $support_data['requester_id'], $requesterTitle, $requesterMessage, $type, $support_id, 'support_request');
-                }
-                
-                // Update service request based on decision
-                if ($decision === 'approved') {
-                    // Keep with staff but set to in_progress with approval info
-                    $update_stmt = $pdo->prepare("
-                        UPDATE service_requests 
-                        SET status = 'in_progress'
-                        WHERE id = ?
-                    ");
-                    $update_result = $update_stmt->execute([$service_request_id]);
-                    
-                    error_log("DEBUG: Updating service request $service_request_id to in_progress (approved support)");
-                    error_log("DEBUG: Update result: " . ($update_result ? 'SUCCESS' : 'FAILED'));
-                    
-                    echo json_encode([
-                        'success' => true,
-                        'message' => 'Support request approved, request continues with staff',
-                        'data' => [
-                            'decision' => $decision,
-                            'reason' => $reason,
-                            'service_request_id' => $service_request_id,
-                            'service_request_status' => 'in_progress'
-                        ]
-                    ]);
-                    
-                } elseif ($decision === 'rejected') {
-                    // Set service request to in_progress with rejection info (similar to approved logic)
-                    $update_stmt = $pdo->prepare("
-                        UPDATE service_requests 
-                        SET status = 'in_progress'
-                        WHERE id = ?
-                    ");
-                    $update_result = $update_stmt->execute([$service_request_id]);
-                    
-                    error_log("DEBUG: Updating service request $service_request_id to in_progress (rejected support)");
-                    error_log("DEBUG: Update result: " . ($update_result ? 'SUCCESS' : 'FAILED'));
-                    
-                    echo json_encode([
-                        'success' => true,
-                        'message' => 'Support request rejected, request continues with staff',
-                        'data' => [
-                            'decision' => $decision,
-                            'reason' => $reason,
-                            'service_request_id' => $service_request_id,
-                            'service_request_status' => 'in_progress'
-                        ]
-                    ]);
-                    
-                } else {
-                    echo json_encode([
-                        'success' => true,
-                        'message' => 'Support request processed',
-                        'data' => [
-                            'decision' => $decision,
-                            'reason' => $reason,
-                            'service_request_id' => $service_request_id,
-                            'service_request_status' => 'processed'
-                        ]
-                    ]);
-                }
             }
+            
         } catch (Exception $e) {
-            error_log("Failed to create support request notifications: " . $e->getMessage());
+            error_log("Failed to send support request notifications: " . $e->getMessage());
+            // Continue even if notification fails
+        }
+        
+        // Update service request based on decision
+        if ($decision === 'approved') {
+            // Keep with staff but set to in_progress with approval info
+            $update_stmt = $pdo->prepare("
+                UPDATE service_requests 
+                SET status = 'in_progress'
+                WHERE id = ?
+            ");
+            $update_result = $update_stmt->execute([$service_request_id]);
+            
+            error_log("DEBUG: Updating service request $service_request_id to in_progress (approved support)");
+            error_log("DEBUG: Update result: " . ($update_result ? 'SUCCESS' : 'FAILED'));
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Support request approved, request continues with staff',
+                'data' => [
+                    'decision' => $decision,
+                    'reason' => $reason,
+                    'service_request_id' => $service_request_id,
+                    'service_request_status' => 'in_progress'
+                ]
+            ]);
+            
+        } elseif ($decision === 'rejected') {
+            // Set service request to in_progress with rejection info (similar to approved logic)
+            $update_stmt = $pdo->prepare("
+                UPDATE service_requests 
+                SET status = 'in_progress'
+                WHERE id = ?
+            ");
+            $update_result = $update_stmt->execute([$service_request_id]);
+            
+            error_log("DEBUG: Updating service request $service_request_id to in_progress (rejected support)");
+            error_log("DEBUG: Update result: " . ($update_result ? 'SUCCESS' : 'FAILED'));
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Support request rejected, request continues with staff',
+                'data' => [
+                    'decision' => $decision,
+                    'service_request_id' => $service_request_id,
+                    'service_request_status' => 'in_progress'
+                ]
+            ]);
         }
     } else {
         http_response_code(500);

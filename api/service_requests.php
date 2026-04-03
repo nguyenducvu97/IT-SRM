@@ -46,9 +46,8 @@ require_once __DIR__ . '/../config/database.php';
 
 require_once __DIR__ . '/../lib/EmailHelper.php'; // Use original EmailHelper
 require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php'; // Use PHPMailerEmailHelper for beautiful emails
-
-// Temporarily comment out NotificationHelper to test
-// require_once __DIR__ . '/../lib/NotificationHelper.php'; // Advanced Notification Helper
+require_once __DIR__ . '/../lib/NotificationHelper.php'; // Advanced Notification Helper
+require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php'; // Role-based Service Request Notifications
 
 
 
@@ -1105,6 +1104,26 @@ elseif ($method == 'POST') {
                 if ($insert_stmt->execute()) {
                     $reject_id = $db->lastInsertId();
                     
+                    // Send notification to admin about new reject request
+                    try {
+                        $notificationHelper = new ServiceRequestNotificationHelper();
+                        
+                        // Get request details for notification
+                        $requestDetails = $notificationHelper->getRequestDetails($request_id);
+                        
+                        // Notify admin about rejection request
+                        $notificationHelper->notifyAdminRejectionRequest(
+                            $request_id, 
+                            $reject_reason . ($reject_details ? " - " . $reject_details : ""), 
+                            $_SESSION['full_name'] ?? 'Staff', 
+                            $requestDetails['title']
+                        );
+                        
+                    } catch (Exception $e) {
+                        error_log("Failed to send reject request notification: " . $e->getMessage());
+                        // Continue even if notification fails
+                    }
+                    
                     // Handle file uploads if any
                     $uploaded_files = [];
                     if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
@@ -1347,28 +1366,32 @@ elseif ($method == 'POST') {
                 error_log("Email error: " . $e->getMessage());
             }
 
-            // Create in-app notifications for staff and admin (ORIGINAL)
+            // Create role-based notifications for staff and admin
             $notification_start = microtime(true);
 
             try {
-                // Get all staff and admin users ONCE
-                $stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
-                $stmt->execute();
-                $staff_admin_users = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                $notificationHelper = new ServiceRequestNotificationHelper();
                 
-                if (!empty($staff_admin_users)) {
-                    $title = "Yêu cầu mới #" . $request_id;
-                    $message = $request_data['requester_name'] . " tạo yêu cầu: " . $request_data['title'];
-                    
-                    // Create notifications WITHOUT email for faster response
-                    // $notificationHelper = new NotificationHelper($db);
-                    // $notificationHelper->notifyUsers($staff_admin_users, $title, $message, 'info', $request_id, 'request', false);
-                    
-                    error_log("Notifications created in " . (microtime(true) - $notification_start) . "s for " . count($staff_admin_users) . " users");
-                }
+                // Notify staff about new request
+                $notificationHelper->notifyStaffNewRequest(
+                    $request_id, 
+                    $request_data['title'], 
+                    $request_data['requester_name'], 
+                    $request_data['category']
+                );
+                
+                // Notify admin about new request (for monitoring)
+                $notificationHelper->notifyAdminNewRequest(
+                    $request_id, 
+                    $request_data['title'], 
+                    $request_data['requester_name'], 
+                    $request_data['category']
+                );
+                
+                error_log("Role-based notifications created in " . (microtime(true) - $notification_start) . "s");
 
             } catch (Exception $e) {
-                error_log("Failed to create new request notifications: " . $e->getMessage());
+                error_log("Failed to create role-based notifications: " . $e->getMessage());
                 // Continue even if notification creation fails
             }
 
@@ -2678,42 +2701,28 @@ elseif ($method == 'POST') {
 
                 
 
-                // Also notify all admins about the assignment
-
+                // Send role-based notifications
                 try {
-
-                    // require_once __DIR__ . '/../lib/NotificationHelper.php';
-
-                    // $notificationHelper = new NotificationHelper($db);
-
+                    $notificationHelper = new ServiceRequestNotificationHelper();
                     
-
-                    $title = "Yêu cầu #" . $request_id . " đã được nhận";
-
-                    $message = $request_data['assigned_name'] . " đã nhận yêu cầu: " . $request_data['title'];
-
+                    // Notify user that their request is now in progress
+                    $notificationHelper->notifyUserRequestInProgress(
+                        $request_id, 
+                        $request_data['user_id'], 
+                        $request_data['assigned_name']
+                    );
                     
-
-                    // Get all admin IDs
-
-                    $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
-
-                    $admin_stmt->execute();
-
-                    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
-
+                    // Notify admin about staff acceptance
+                    $notificationHelper->notifyAdminStatusChange(
+                        $request_id, 
+                        'open', 
+                        'in_progress', 
+                        $request_data['assigned_name'], 
+                        $request_data['title']
+                    );
                     
-
-                    if (!empty($admins)) {
-
-                        // $notificationHelper->notifyUsers($admins, $title, $message, 'success', $request_id, 'request');
-
-                    }
-
                 } catch (Exception $e) {
-
-                    error_log("Failed to notify admins about staff acceptance: " . $e->getMessage());
-
+                    error_log("Failed to send role-based notifications for staff acceptance: " . $e->getMessage());
                 }
 
                 
@@ -3449,6 +3458,26 @@ elseif ($method == 'PUT') {
         }
         
         try {
+            // Get current request details before update
+            $request_details_query = "SELECT sr.*, u.full_name as requester_name, c.name as category_name,
+                                      assigned.full_name as assigned_name
+                                      FROM service_requests sr
+                                      LEFT JOIN users u ON sr.user_id = u.id
+                                      LEFT JOIN categories c ON sr.category_id = c.id
+                                      LEFT JOIN users assigned ON sr.assigned_to = assigned.id
+                                      WHERE sr.id = :request_id";
+            $details_stmt = $db->prepare($request_details_query);
+            $details_stmt->bindParam(":request_id", $request_id);
+            $details_stmt->execute();
+            $requestDetails = $details_stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$requestDetails) {
+                serviceJsonResponse(false, "Request not found");
+                return;
+            }
+            
+            $oldStatus = $requestDetails['status'];
+            
             // Update request status
             // If status is 'open', reset assignment to allow staff to accept again
             if ($status === 'open') {
@@ -3465,6 +3494,55 @@ elseif ($method == 'PUT') {
             $update_stmt->bindParam(":request_id", $request_id);
             
             if ($update_stmt->execute()) {
+                // Send role-based notifications based on status change
+                $notificationHelper = new ServiceRequestNotificationHelper();
+                
+                // User notifications
+                if ($oldStatus !== $status) {
+                    switch ($status) {
+                        case 'in_progress':
+                            $notificationHelper->notifyUserRequestInProgress(
+                                $request_id, 
+                                $requestDetails['user_id'], 
+                                $requestDetails['assigned_name']
+                            );
+                            break;
+                        case 'resolved':
+                            $notificationHelper->notifyUserRequestResolved(
+                                $request_id, 
+                                $requestDetails['user_id'], 
+                                $requestDetails['error_description']
+                            );
+                            break;
+                        case 'closed':
+                        case 'cancelled':
+                            // Handle closed/cancelled notifications if needed
+                            break;
+                    }
+                }
+                
+                // Staff notifications - notify about admin decisions
+                if ($oldStatus !== $status) {
+                    switch ($status) {
+                        case 'in_progress':
+                            // Admin approved request, notify staff to start working
+                            $notificationHelper->notifyStaffAdminApproved(
+                                $request_id, 
+                                $requestDetails['title'], 
+                                $_SESSION['full_name'] ?? 'Admin'
+                            );
+                            break;
+                        case 'rejected':
+                            // Admin rejected request, notify staff to stop working
+                            $notificationHelper->notifyStaffAdminRejected(
+                                $request_id, 
+                                $requestDetails['title'], 
+                                $_SESSION['full_name'] ?? 'Admin'
+                            );
+                            break;
+                    }
+                }
+                
                 serviceJsonResponse(true, "Request status updated successfully");
             } else {
                 serviceJsonResponse(false, "Failed to update request status");
@@ -3691,26 +3769,24 @@ elseif ($method == 'PUT') {
                 // Commit transaction
                 $db->commit();
                 
-                // Create notification for staff/admin that user closed the request
+                // Create role-based notifications for user feedback
                 try {
-                    $close_title = "Yêu cầu #" . $request_id . " đã được đóng";
-                    $close_message = "Người dùng đã đóng yêu cầu đã giải quyết";
+                    $notificationHelper = new ServiceRequestNotificationHelper();
                     
-                    // Get all staff and admin IDs
-                    $staff_admin_stmt = $db->prepare("SELECT id FROM users WHERE role IN ('staff', 'admin')");
-                    $staff_admin_stmt->execute();
-                    $staff_admins = $staff_admin_stmt->fetchAll(PDO::FETCH_COLUMN);
+                    // Get request details for notifications
+                    $requestDetails = $notificationHelper->getRequestDetails($request_id);
                     
-                    // Remove the user who closed from notification list
-                    $notify_ids = array_diff($staff_admins, [$user_id]);
+                    // Notify staff about user feedback
+                    $notificationHelper->notifyStaffUserFeedback(
+                        $request_id, 
+                        $user_id, 
+                        $rating, 
+                        $feedback, 
+                        $requestDetails['requester_name'] ?? 'Người dùng'
+                    );
                     
-                    if (!empty($notify_ids)) {
-                        // require_once __DIR__ . '/../lib/NotificationHelper.php';
-                        // $notificationHelper = new NotificationHelper($db);
-                        // $notificationHelper->notifyUsers($notify_ids, $close_title, $close_message, 'info', $request_id, 'request');
-                    }
                 } catch (Exception $e) {
-                    error_log("Failed to create close notification: " . $e->getMessage());
+                    error_log("Failed to create feedback notifications: " . $e->getMessage());
                 }
                 
                 serviceJsonResponse(true, "Request closed successfully");
