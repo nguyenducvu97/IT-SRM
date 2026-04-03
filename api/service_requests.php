@@ -246,12 +246,14 @@ if ($method == 'GET') {
 
         $query = "SELECT sr.*, u.username as requester_name, c.name as category_name,
                   req.id as reject_request_id, req.status as reject_status,
-                  sreq.id as support_request_id, sreq.status as support_status
+                  sreq.id as support_request_id, sreq.status as support_status,
+                  rf.rating as feedback_rating
                   FROM service_requests sr 
                   LEFT JOIN users u ON sr.user_id = u.id 
                   LEFT JOIN categories c ON sr.category_id = c.id 
                   LEFT JOIN reject_requests req ON sr.id = req.service_request_id
                   LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id
+                  LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
                   $where_clause 
                   ORDER BY sr.created_at DESC 
                   LIMIT :limit OFFSET :offset";
@@ -481,6 +483,9 @@ if ($method == 'GET') {
                         sreq.support_reason, sreq.status as support_status, sreq.admin_reason,
                         sreq.processed_by, sreq.processed_at, sreq.created_at as support_created_at,
                         sreq_admin.full_name as support_admin_name,
+                        rf.rating as feedback_rating, rf.feedback as feedback_text, 
+                        rf.software_feedback, rf.ease_of_use, rf.speed_stability, 
+                        rf.requirement_meeting, rf.would_recommend, rf.created_at as feedback_created_at,
                         sr.error_description as resolution_error_description,
                         sr.error_type as resolution_error_type, sr.replacement_materials as resolution_replacement_materials,
                         sr.solution_method as resolution_solution_method, 
@@ -495,6 +500,7 @@ if ($method == 'GET') {
                  LEFT JOIN users assigned ON sr.assigned_to = assigned.id
                  LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
+                 LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
                  LEFT JOIN resolutions res ON sr.id = res.service_request_id
                  LEFT JOIN users resolver ON res.resolved_by = resolver.id
 

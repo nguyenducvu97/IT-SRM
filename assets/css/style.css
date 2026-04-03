@@ -4069,6 +4069,17 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 }
 
+.badge-feedback {
+    background-color: #ffc107;
+    color: #212529;
+    font-weight: 500;
+}
+
+.badge-feedback i {
+    margin-right: 4px;
+    color: #212529;
+}
+
 
 
 .request-body {
