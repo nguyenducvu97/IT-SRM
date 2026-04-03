@@ -286,7 +286,7 @@ class ServiceRequestNotificationHelper {
                 $message, 
                 'warning', 
                 $requestId, 
-                'support_request'
+                'service_request'
             );
         }
         
@@ -312,7 +312,7 @@ class ServiceRequestNotificationHelper {
                 $message, 
                 'warning', 
                 $requestId, 
-                'reject_request'
+                'service_request'
             );
         }
         

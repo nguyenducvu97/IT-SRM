@@ -301,6 +301,7 @@ class AdvancedNotificationManager {
         if (notification.related_id) {
             switch (notification.related_type) {
                 case 'request':
+                case 'service_request':
                     window.location.href = `request-detail.html?id=${notification.related_id}`;
                     break;
                 case 'support_request':

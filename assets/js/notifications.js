@@ -281,6 +281,7 @@ class NotificationManager {
     navigateToRelatedItem(type, id) {
         switch (type) {
             case 'request':
+            case 'service_request':
                 // Navigate to request detail page
                 if (window.location.pathname.includes('request-detail.html')) {
                     // Already on detail page, just reload with new request
