@@ -689,7 +689,7 @@ class ITServiceApp {
                 
                 // Use API stats for dashboard (more accurate than client-side calculation)
                 const stats = {
-                    total: apiStats.total || allRequests.length,
+                    total: apiStats.pagination?.total || allRequests.length,
                     open: apiStats.open || allRequests.filter(r => r.status === 'open').length,
                     in_progress: apiStats.in_progress || allRequests.filter(r => r.status === 'in_progress').length,
                     resolved: apiStats.resolved || allRequests.filter(r => r.status === 'resolved').length,

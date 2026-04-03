@@ -21714,3 +21714,44 @@ Stack trace:
 [03-Apr-2026 11:13:39 Europe/Berlin] User Role: staff
 [03-Apr-2026 11:13:39 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
 [03-Apr-2026 11:13:39 Europe/Berlin] =================
+[03-Apr-2026 11:14:29 Europe/Berlin] Database session started - ID: m5nnkeoor7g16qq1icfoj8r285
+[03-Apr-2026 11:14:53 Europe/Berlin] Database session started - ID: 7vg03em23s47a4p3etcfrks9jg
+[03-Apr-2026 11:14:53 Europe/Berlin] === API REQUEST DEBUG ===
+[03-Apr-2026 11:14:53 Europe/Berlin] Method: GET
+[03-Apr-2026 11:14:53 Europe/Berlin] Content-Type: application/json
+[03-Apr-2026 11:14:53 Europe/Berlin] POST data: []
+[03-Apr-2026 11:14:53 Europe/Berlin] FILES data: []
+[03-Apr-2026 11:14:53 Europe/Berlin] Raw input: 
+[03-Apr-2026 11:14:53 Europe/Berlin] ========================
+[03-Apr-2026 11:14:53 Europe/Berlin] === AUTH DEBUG ===
+[03-Apr-2026 11:14:53 Europe/Berlin] Session ID: 7vg03em23s47a4p3etcfrks9jg
+[03-Apr-2026 11:14:53 Europe/Berlin] User ID: 2
+[03-Apr-2026 11:14:53 Europe/Berlin] User Role: staff
+[03-Apr-2026 11:14:53 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[03-Apr-2026 11:14:53 Europe/Berlin] =================
+[03-Apr-2026 11:14:53 Europe/Berlin] Dashboard stats check - is_dashboard_stats: true
+[03-Apr-2026 11:14:53 Europe/Berlin] Has filters: false
+[03-Apr-2026 11:14:53 Europe/Berlin] Filters - status: , priority: , category: 
+[03-Apr-2026 11:14:53 Europe/Berlin] Total requests count: 16
+[03-Apr-2026 11:14:53 Europe/Berlin] Requests fetched count: 16
+[03-Apr-2026 11:14:53 Europe/Berlin] Status counts: {"open":1,"in_progress":7,"resolved":2,"rejected":1,"request_support":0,"closed":5}
+[03-Apr-2026 11:14:53 Europe/Berlin] Database session started - ID: 7vg03em23s47a4p3etcfrks9jg
+[03-Apr-2026 11:14:53 Europe/Berlin] === API REQUEST DEBUG ===
+[03-Apr-2026 11:14:53 Europe/Berlin] Method: GET
+[03-Apr-2026 11:14:53 Europe/Berlin] Content-Type: application/json
+[03-Apr-2026 11:14:53 Europe/Berlin] POST data: []
+[03-Apr-2026 11:14:53 Europe/Berlin] FILES data: []
+[03-Apr-2026 11:14:53 Europe/Berlin] Raw input: 
+[03-Apr-2026 11:14:53 Europe/Berlin] ========================
+[03-Apr-2026 11:14:53 Europe/Berlin] === AUTH DEBUG ===
+[03-Apr-2026 11:14:53 Europe/Berlin] Session ID: 7vg03em23s47a4p3etcfrks9jg
+[03-Apr-2026 11:14:53 Europe/Berlin] User ID: 2
+[03-Apr-2026 11:14:53 Europe/Berlin] User Role: staff
+[03-Apr-2026 11:14:53 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[03-Apr-2026 11:14:53 Europe/Berlin] =================
+[03-Apr-2026 11:14:53 Europe/Berlin] Dashboard stats check - is_dashboard_stats: true
+[03-Apr-2026 11:14:53 Europe/Berlin] Has filters: false
+[03-Apr-2026 11:14:53 Europe/Berlin] Filters - status: , priority: , category: 
+[03-Apr-2026 11:14:53 Europe/Berlin] Total requests count: 16
+[03-Apr-2026 11:14:53 Europe/Berlin] Requests fetched count: 16
+[03-Apr-2026 11:14:53 Europe/Berlin] Status counts: {"open":1,"in_progress":7,"resolved":2,"rejected":1,"request_support":0,"closed":5}
