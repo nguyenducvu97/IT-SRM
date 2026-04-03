@@ -2956,6 +2956,22 @@ class ITServiceApp {
                             <div class="reject-item">
                                 <strong>Ngày tạo:</strong> ${this.formatDate(reject.created_at)}
                             </div>
+                            ${reject.admin_reason ? `
+                                <div class="reject-item admin-decision">
+                                    <strong><i class="fas fa-gavel"></i> Quyết định của Admin:</strong>
+                                    <div class="admin-reason-text">${reject.admin_reason}</div>
+                                    ${reject.processed_at ? `
+                                        <div class="processed-info">
+                                            <small><i class="fas fa-clock"></i> Thời gian xử lý: ${this.formatDate(reject.processed_at)}</small>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            ` : ''}
+                            ${reject.status !== 'pending' && !reject.admin_reason ? `
+                                <div class="reject-item">
+                                    <strong><i class="fas fa-info-circle"></i> Trạng thái:</strong> Đã được xử lý
+                                </div>
+                            ` : ''}
                         </div>
                         
                         ${reject.attachments && reject.attachments.length > 0 ? `
@@ -3028,6 +3044,7 @@ class ITServiceApp {
             const response = await this.apiCall('api/reject_requests.php', {
                 method: 'PUT',
                 body: JSON.stringify({
+                    action: 'update',
                     reject_id: rejectId,
                     decision: formData.get('decision'),
                     admin_reason: formData.get('reason')

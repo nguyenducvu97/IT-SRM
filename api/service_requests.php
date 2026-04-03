@@ -488,10 +488,7 @@ if ($method == 'GET') {
                         res.resolved_by as resolution_resolved_by, res.error_description as res_error_description,
                         res.error_type as res_error_type, res.replacement_materials as res_replacement_materials,
                         res.solution_method as res_solution_method, res.resolved_at as res_resolved_at,
-                        resolver.full_name as resolution_resolver_name,
-                        rf.rating as feedback_rating, rf.feedback as feedback_text, rf.software_feedback,
-                        rf.would_recommend, rf.ease_of_use, rf.speed_stability, rf.requirement_meeting,
-                        rf.created_by as feedback_created_by, rf.created_at as feedback_created_at
+                        resolver.full_name as resolution_resolver_name
                  FROM service_requests sr
                  LEFT JOIN categories c ON sr.category_id = c.id
                  LEFT JOIN users u ON sr.user_id = u.id
@@ -500,7 +497,6 @@ if ($method == 'GET') {
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
                  LEFT JOIN resolutions res ON sr.id = res.service_request_id
                  LEFT JOIN users resolver ON res.resolved_by = resolver.id
-                 LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
 
                  WHERE sr.id = :id";
 

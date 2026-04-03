@@ -177,7 +177,8 @@ if ($method == 'GET') {
                     }
                 }
                 $request['attachments'] = $attachments;
-                unset($request['attachments']); // Remove the raw attachment string
+                // Remove the raw attachment string field (not the processed one)
+                unset($request['attachments_raw']);
             }
             
             rejectJsonResponse(true, 'Lấy danh sách yêu cầu từ chối thành công', [
@@ -229,7 +230,7 @@ if ($method == 'GET') {
         }
         
         // Get attachments
-        $attachment_query = "SELECT original_filename, file_path, file_size, mime_type 
+        $attachment_query = "SELECT original_name, filename, file_size, mime_type 
                             FROM reject_request_attachments 
                             WHERE reject_request_id = :id";
         $attachment_stmt = $db->prepare($attachment_query);
@@ -261,20 +262,24 @@ if ($method == 'GET') {
             rejectJsonResponse(false, 'Chỉ admin mới có quyền cập nhật yêu cầu từ chối');
         }
         
-        $id = isset($input['id']) ? (int)$input['id'] : 0;
-        $reject_reason = isset($input['reject_reason']) ? trim($input['reject_reason']) : '';
-        $reject_details = isset($input['reject_details']) ? trim($input['reject_details']) : '';
+        $id = isset($input['reject_id']) ? (int)$input['reject_id'] : 0;
+        $decision = isset($input['decision']) ? trim($input['decision']) : '';
+        $admin_reason = isset($input['admin_reason']) ? trim($input['admin_reason']) : '';
         
         if ($id <= 0) {
             rejectJsonResponse(false, 'ID yêu cầu từ chối không hợp lệ');
         }
         
-        if (empty($reject_reason)) {
-            rejectJsonResponse(false, 'Lý do từ chối không được để trống');
+        if (!in_array($decision, ['approved', 'rejected'])) {
+            rejectJsonResponse(false, 'Quyết định không hợp lệ (phải là approved hoặc rejected)');
+        }
+        
+        if (empty($admin_reason)) {
+            rejectJsonResponse(false, 'Lý do xử lý của admin không được để trống');
         }
         
         // Check if reject request exists
-        $check_query = "SELECT id FROM reject_requests WHERE id = :id";
+        $check_query = "SELECT id, status, service_request_id FROM reject_requests WHERE id = :id";
         $check_stmt = $db->prepare($check_query);
         $check_stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $check_stmt->execute();
@@ -283,20 +288,40 @@ if ($method == 'GET') {
             rejectJsonResponse(false, 'Không tìm thấy yêu cầu từ chối');
         }
         
-        // Update reject request
+        $reject_request = $check_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Update reject request with admin decision
         $update_query = "UPDATE reject_requests 
-                        SET reject_reason = :reject_reason, 
-                            reject_details = :reject_details,
+                        SET status = :status,
+                            admin_reason = :admin_reason,
+                            processed_by = :processed_by,
+                            processed_at = NOW(),
                             updated_at = NOW()
                         WHERE id = :id";
         
         $update_stmt = $db->prepare($update_query);
         $update_stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $update_stmt->bindValue(':reject_reason', $reject_reason);
-        $update_stmt->bindValue(':reject_details', $reject_details);
+        $update_stmt->bindValue(':status', $decision);
+        $update_stmt->bindValue(':admin_reason', $admin_reason);
+        $update_stmt->bindValue(':processed_by', $user_id, PDO::PARAM_INT);
         
         if ($update_stmt->execute()) {
-            rejectJsonResponse(true, 'Cập nhật yêu cầu từ chối thành công');
+            // Also update the original service request if needed
+            if ($decision === 'approved') {
+                // Update service request to reflect that rejection was approved
+                $service_update_query = "UPDATE service_requests 
+                                       SET status = 'rejected',
+                                           updated_at = NOW()
+                                       WHERE id = :service_request_id";
+                $service_update_stmt = $db->prepare($service_update_query);
+                $service_update_stmt->bindValue(':service_request_id', $reject_request['service_request_id'], PDO::PARAM_INT);
+                $service_update_stmt->execute();
+                
+                rejectJsonResponse(true, 'Yêu cầu từ chối đã được duyệt. Yêu cầu gốc đã được chuyển sang trạng thái đã từ chối.');
+            } else {
+                // Rejection was denied, service request continues normally
+                rejectJsonResponse(true, 'Yêu cầu từ chối đã bị từ chối. Yêu cầu gốc sẽ tiếp tục xử lý bình thường.');
+            }
         } else {
             rejectJsonResponse(false, 'Cập nhật yêu cầu từ chối thất bại');
         }
