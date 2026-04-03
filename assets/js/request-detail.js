@@ -1761,11 +1761,8 @@ class RequestDetailApp {
 
                 if (this.currentUser && this.currentUser.role === 'staff') {
 
-
-
                     await this.checkRejectRequestStatus();
-
-
+                    await this.checkSupportRequestStatus();
 
                 }
 
@@ -3224,7 +3221,7 @@ class RequestDetailApp {
 
 
 
-                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || request.reject_request.status === 'approved') ? `
+                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || ['rejected', 'approved'].includes(request.reject_request.status)) ? `
 
 
 
@@ -3302,7 +3299,7 @@ class RequestDetailApp {
                         ` : '';
                         })()}
 
-                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || request.reject_request.status === 'approved') ? `
+                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || ['rejected', 'approved'].includes(request.reject_request.status)) ? `
 
 
 
@@ -7428,6 +7425,36 @@ class RequestDetailApp {
             this.rejectRequestStatus = null;
         }
     };
+
+    // Support Request Functions
+
+    async checkSupportRequestStatus() {
+        try {
+            const response = await this.apiCall(`api/support_requests.php?action=check_status&service_request_id=${this.requestId}`);
+            
+            if (response.success && response.data) {
+                this.supportRequestStatus = response.data;
+                
+                // Thông báo cho staff nếu admin đã quyết định
+                if (this.supportRequestStatus.status !== 'pending') {
+                    if (this.currentUser && ['admin', 'staff'].includes(this.currentUser.role)) {
+                        const decision = this.supportRequestStatus.status === 'approved' ? 'được đồng ý' : 'bị từ chối';
+                        const message = `📢 Yêu cầu hỗ trợ đã ${decision} bởi admin!`;
+                        this.showNotification(message, this.supportRequestStatus.status === 'approved' ? 'success' : 'warning');
+                    } else {
+                        // Regular users see generic message
+                        const message = '📢 Yêu cầu hỗ trợ của bạn đã được xử lý!';
+                        this.showNotification(message, 'info');
+                    }
+                }
+            } else {
+                this.supportRequestStatus = null;
+            }
+        } catch (error) {
+            console.error('Error checking support request status:', error);
+            this.supportRequestStatus = null;
+        }
+    }
 
 
 
