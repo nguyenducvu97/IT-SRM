@@ -1021,12 +1021,12 @@ class ITServiceApp {
 
         console.log('Container found, rendering HTML...');
         container.innerHTML = supportRequests.map(support => `
-            <div class="request-item support-request status-${support.status}" data-support-id="${support.id}">
+            <div class="request-item support-request clickable-card status-${support.status}" data-support-id="${support.id}" data-service-request-id="${support.service_request_id}">
                 <div class="request-header">
                     <div class="request-title">
-                        <a href="request-detail.html?id=${support.service_request_id}">
+                        <span class="request-link">
                             <span class="request-id">ID: ${support.service_request_id}</span> - ${support.request_title}
-                        </a>
+                        </span>
                     </div>
                     <div class="request-badges">
                         <span class="badge status-${support.status}">${this.getSupportStatusText(support.status)}</span>
@@ -1039,11 +1039,31 @@ class ITServiceApp {
                     <span><i class="fas fa-clock"></i> ${this.formatDate(support.created_at)}</span>
                 </div>
                 
-            <div class="request-description">
+                <div class="request-description">
                     <p>${support.support_details ? support.support_details.substring(0, 150) + (support.support_details.length > 150 ? '...' : '') : 'Không có chi tiết'}</p>
                 </div>
             </div>
         `).join('');
+        
+        // Add click event listeners for clickable support request cards
+        const clickableCards = container.querySelectorAll('.clickable-card');
+        console.log('Found clickable support request cards:', clickableCards.length);
+        
+        clickableCards.forEach((card, index) => {
+            console.log(`Binding clickable support card ${index}:`, card.dataset.serviceRequestId);
+            card.addEventListener('click', (e) => {
+                // Don't navigate if clicking on buttons or links
+                if (e.target.closest('button') || e.target.closest('a')) {
+                    return;
+                }
+                
+                console.log('Support request card clicked:', card.dataset.serviceRequestId);
+                const serviceRequestId = card.dataset.serviceRequestId;
+                
+                // Navigate to original request detail page
+                window.location.href = `request-detail.html?id=${serviceRequestId}`;
+            });
+        });
     }
 
     async showRequestDetail(id) {
@@ -2796,12 +2816,10 @@ class ITServiceApp {
         }
 
         container.innerHTML = rejectRequests.map(reject => `
-            <div class="request-item reject-request" data-reject-id="${reject.id}">
+            <div class="request-item reject-request clickable-card" data-reject-id="${reject.id}" data-service-request-id="${reject.service_request_id}">
                 <div class="request-header">
                     <h4>
-                        <a href="request-detail.html?id=${reject.service_request_id}">
-                            ID: ${reject.service_request_id} - ${reject.service_request_title}
-                        </a>
+                        <span class="request-link">ID: ${reject.service_request_id} - ${reject.service_request_title}</span>
                     </h4>
                     <div class="request-badges">
                         <span class="badge status-${reject.status}">${this.getRejectStatusText(reject.status)}</span>
@@ -2848,9 +2866,30 @@ class ITServiceApp {
             console.log(`Binding reject button ${index}:`, btn.dataset.rejectId);
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation(); // Prevent card click when button is clicked
                 console.log('Reject button clicked:', btn.dataset.rejectId);
                 const rejectId = btn.dataset.rejectId;
                 this.showAdminRejectModal(rejectId);
+            });
+        });
+        
+        // Add click event listeners for clickable cards
+        const clickableCards = container.querySelectorAll('.clickable-card');
+        console.log('Found clickable cards:', clickableCards.length);
+        
+        clickableCards.forEach((card, index) => {
+            console.log(`Binding clickable card ${index}:`, card.dataset.serviceRequestId);
+            card.addEventListener('click', (e) => {
+                // Don't navigate if clicking on buttons or links
+                if (e.target.closest('button') || e.target.closest('a')) {
+                    return;
+                }
+                
+                console.log('Reject request card clicked:', card.dataset.serviceRequestId);
+                const serviceRequestId = card.dataset.serviceRequestId;
+                
+                // Navigate to original request detail page
+                window.location.href = `request-detail.html?id=${serviceRequestId}`;
             });
         });
     }

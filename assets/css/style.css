@@ -8482,6 +8482,107 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 }
 
+/* Clickable reject request cards */
+.reject-request.clickable-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.reject-request.clickable-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #007bff;
+}
+
+.reject-request.clickable-card .request-link {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.reject-request.clickable-card:hover .request-link {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.reject-request.clickable-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 123, 255, 0.05);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.reject-request.clickable-card:hover::after {
+    opacity: 1;
+}
+
+/* Prevent action buttons from triggering card click */
+.reject-request.clickable-card .request-actions {
+    position: relative;
+    z-index: 10;
+}
+
+.reject-request.clickable-card .request-actions button {
+    pointer-events: auto;
+}
+
+/* Clickable support request cards */
+.support-request.clickable-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.support-request.clickable-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #007bff;
+}
+
+.support-request.clickable-card .request-link {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.support-request.clickable-card:hover .request-link {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.support-request.clickable-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 123, 255, 0.05);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.support-request.clickable-card:hover::after {
+    opacity: 1;
+}
+
+/* Prevent action buttons from triggering card click */
+.support-request.clickable-card .request-actions {
+    position: relative;
+    z-index: 10;
+}
+
+.support-request.clickable-card .request-actions button {
+    pointer-events: auto;
+}
 
 
 #categoryRequestsList .badge.status-open {
