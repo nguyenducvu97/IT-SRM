@@ -1389,6 +1389,7 @@ class ITServiceApp {
         try {
             // Create FormData for file upload
             const submitData = new FormData();
+            submitData.append('action', 'create'); // Add action parameter for quick fix
             submitData.append('title', formData.get('title'));
             submitData.append('description', formData.get('description'));
             submitData.append('category_id', formData.get('category_id'));

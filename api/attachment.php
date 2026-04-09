@@ -57,25 +57,45 @@ foreach ($dangerousPatterns as $pattern) {
     }
 }
 
-// Build file path - check both requests and completed directories
+// Build file path - check requests, completed, and attachments directories
 $requestsDir = __DIR__ . '/../uploads/requests/';
 $completedDir = __DIR__ . '/../uploads/completed/';
+$attachmentsDir = __DIR__ . '/../uploads/attachments/';
 
 // Try requests directory first
 $filePath = $requestsDir . $fileName;
 if (!file_exists($filePath)) {
     // Try completed directory
     $filePath = $completedDir . $fileName;
+    if (!file_exists($filePath)) {
+        // Try attachments directory - search subdirectories
+        $found = false;
+        if (is_dir($attachmentsDir)) {
+            $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($attachmentsDir));
+            foreach ($iterator as $file) {
+                if ($file->isFile() && $file->getFilename() === $fileName) {
+                    $filePath = $file->getPathname();
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        if (!$found) {
+            $filePath = ''; // File not found anywhere
+        }
+    }
 }
 
 // Security check - ensure file is within uploads directory
 $realRequestsPath = realpath($requestsDir);
 $realCompletedPath = realpath($completedDir);
+$realAttachmentsPath = realpath($attachmentsDir);
 $realFilePath = realpath($filePath);
 
 if ($realFilePath === false || 
     (strpos($realFilePath, $realRequestsPath) !== 0 && 
-     strpos($realFilePath, $realCompletedPath) !== 0)) {
+     strpos($realFilePath, $realCompletedPath) !== 0 &&
+     strpos($realFilePath, $realAttachmentsPath) !== 0)) {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Access denied - File path validation failed']);
     exit;
