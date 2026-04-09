@@ -1,0 +1,281 @@
+/* Vietnamese Font Override - Force Local Fonts */
+
+/* Override all Bootstrap and custom fonts */
+* {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Specific overrides for Vietnamese text */
+body {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Override Bootstrap components */
+.alert, .btn, .card, .navbar, .modal, .form-control, .table, .dropdown-menu {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override text elements */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+p, span, div, li, td, th, a, strong, em {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Vietnamese specific classes */
+.vietnamese-text, .vietnamese-title, .vietnamese-body {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Force Vietnamese character display */
+.force-vietnamese {
+    unicode-bidi: embed;
+    direction: ltr;
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override notification styles */
+.notification-item, .notification-title, .notification-message {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override form elements */
+input, textarea, select, button {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override modal elements */
+.modal-title, .modal-body, .modal-header, .modal-footer {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override table elements */
+.table th, .table td {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override card elements */
+.card-title, .card-text, .card-header, .card-body {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override navbar elements */
+.navbar-brand, .nav-link {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override button elements */
+.btn {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override form labels and controls */
+.form-label, .form-control {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override alert elements */
+.alert {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override dropdown elements */
+.dropdown-menu, .dropdown-item {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override pagination elements */
+.pagination {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override breadcrumb elements */
+.breadcrumb {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override badge elements */
+.badge {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override progress elements */
+.progress-bar {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override list group elements */
+.list-group-item {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override toast elements */
+.toast {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override tooltip elements */
+.tooltip {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override popover elements */
+.popover {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override carousel elements */
+.carousel-caption {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override jumbotron elements */
+.jumbotron {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override footer elements */
+footer {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override code elements */
+code, pre {
+    font-family: "Courier New", "Courier", monospace !important;
+}
+
+/* Override blockquote elements */
+blockquote {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override address elements */
+address {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override time elements */
+time {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override details elements */
+details summary {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override figure elements */
+figcaption {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override input placeholder */
+::placeholder {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override selection */
+::selection {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Override focus */
+:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* Override disabled elements */
+:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Override required elements */
+.required::after {
+    content: " *";
+    color: #dc3545;
+}
+
+/* Override optional elements */
+.optional::after {
+    content: " (tùy chá»n)";
+    color: #6c757d;
+    font-size: 0.875em;
+}
+
+/* Override help text */
+.help-text {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+    font-size: 0.875em;
+    color: #6c757d;
+}
+
+/* Override validation feedback */
+.valid-feedback, .invalid-feedback {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override status text */
+.status-text {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+    font-weight: 500;
+}
+
+/* Override message types */
+.error-message, .success-message, .warning-message, .info-message {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+}
+
+/* Override loading text */
+.loading-text {
+    font-family: "Arial Unicode MS", "Arial", "Helvetica", "Times New Roman", "Times", serif !important;
+    font-style: italic;
+}
+
+/* Print styles */
+@media print {
+    * {
+        font-family: "Times New Roman", "Times", serif !important;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    * {
+        font-size: 14px !important;
+    }
+}
+
+/* High DPI styles */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+    * {
+        color: #e9ecef;
+    }
+}
+
+/* Reduced motion styles */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

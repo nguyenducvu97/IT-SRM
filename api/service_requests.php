@@ -7024,66 +7024,79 @@ elseif ($method == 'PUT') {
 
                         
 
-                        if ($request_data && $request_data['user_id'] != $user_id) {
-
-                            // Send email notification to requester
-
-                            try {
-
-                                $emailHelper = new PHPMailerEmailHelper();
-
-                                $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
-
-                            } catch (Exception $e) {
-
-                                error_log("Email notification failed: " . $e->getMessage());
-
-                            }
-
+                        // Send notifications using ServiceRequestNotificationHelper
+                        
+                        try {
                             
-
-                            // Notify admins about assignment
-
-                            try {
-
-                                // require_once __DIR__ . '/../lib/NotificationHelper.php';
-
-                                // $notificationHelper = new NotificationHelper($db);
-
+                            require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                            
+                            $notificationHelper = new ServiceRequestNotificationHelper();
+                            
+                            
+                            // 1. Notify user that request is in progress
+                            
+                            $notificationHelper->notifyUserRequestInProgress(
                                 
-
-                                $title = "Yêu cầu #" . $request_id . " đã được nhận";
-
-                                $message = "Yêu cầu #" . $request_id . " đã được nhận bởi " . ($request_data['assigned_name'] ?? 'Staff member');
-
+                                $request_id, 
                                 
-
-                                // Get all admin users
-
-                                $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
-
-                                $admin_stmt->execute();
-
-                                $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
-
+                                $request_data['user_id'], 
                                 
-
-                                if (!empty($admins)) {
-
-                                    foreach ($admins as $admin_id) {
-
-                                        // $notificationHelper->createNotification($admin_id, $title, $message, 'info', $request_id, 'request', true);
-
-                                    }
-
-                                }
-
-                            } catch (Exception $e) {
-
-                                error_log("Failed to notify admins about assignment: " . $e->getMessage());
-
-                            }
-
+                                $request_data['assigned_name']
+                                
+                            );
+                            
+                            
+                            // 2. Notify admins about assignment
+                            
+                            $notificationHelper->notifyAdminStatusChange(
+                                
+                                $request_id, 
+                                
+                                'open', 
+                                
+                                'in_progress', 
+                                
+                                $request_data['assigned_name'], 
+                                
+                                $request_data['title']
+                                
+                            );
+                            
+                            
+                            // 3. Notify other staff (excluding the assigned staff)
+                            
+                            $notificationHelper->notifyStaffAdminApproved(
+                                
+                                $request_id, 
+                                
+                                $request_data['title'], 
+                                
+                                $request_data['assigned_name']
+                                
+                            );
+                            
+                            
+                            error_log("Notifications sent for request #$request_id acceptance");
+                            
+                        } catch (Exception $e) {
+                            
+                            error_log("Failed to send notifications for request #$request_id: " . $e->getMessage());
+                            
+                        }
+                        
+                        
+                        // Send email notification to requester
+                        
+                        try {
+                            
+                            $emailHelper = new PHPMailerEmailHelper();
+                            
+                            $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
+                            
+                        } catch (Exception $e) {
+                            
+                            error_log("Email notification failed: " . $e->getMessage());
+                            
                         }
 
                     } catch (Exception $e) {
