@@ -350,9 +350,10 @@ class NotificationHelper {
      */
     public function getUserNotifications($userId, $limit = 20, $offset = 0) {
         try {
-            error_log("getUserNotifications called with userId: $userId, limit: $limit, offset: $offset");
+            // Use simple query without parameterized LIMIT/OFFSET for MySQL compatibility
+            $limit = (int)$limit;
+            $offset = (int)$offset;
             
-            // Use simpler query without LIMIT/OFFSET parameters
             $stmt = $this->db->prepare("
                 SELECT id, title, message, type, related_id, related_type, 
                        is_read, created_at, read_at
@@ -364,12 +365,39 @@ class NotificationHelper {
             $stmt->execute([$userId]);
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            error_log("getUserNotifications result: " . json_encode($result));
+            // Add time_ago calculation for each notification
+            foreach ($result as &$notif) {
+                $notif['time_ago'] = $this->getTimeAgo($notif['created_at']);
+            }
             
             return $result;
         } catch (Exception $e) {
             error_log("Failed to get user notifications: " . $e->getMessage());
             return [];
+        }
+    }
+    
+    /**
+     * Calculate time ago string
+     */
+    private function getTimeAgo($datetime) {
+        $time = strtotime($datetime);
+        $now = time();
+        $diff = $now - $time;
+        
+        if ($diff < 60) {
+            return "Vài giây";
+        } elseif ($diff < 3600) {
+            $minutes = floor($diff / 60);
+            return $minutes . " phút";
+        } elseif ($diff < 86400) {
+            $hours = floor($diff / 3600);
+            return $hours . " giây";
+        } elseif ($diff < 604800) {
+            $days = floor($diff / 86400);
+            return $days . " ngày";
+        } else {
+            return date('d/m/Y', $time);
         }
     }
 }

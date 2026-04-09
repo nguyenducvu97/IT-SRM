@@ -63,7 +63,7 @@ try {
                     'is_read' => (bool)$notif['is_read'],
                     'created_at' => $notif['created_at'],
                     'read_at' => $notif['read_at'],
-                    'time_ago' => 'Vừa xong'
+                    'time_ago' => $notif['time_ago'] ?? 'Vừa xong'
                 ];
             }
             

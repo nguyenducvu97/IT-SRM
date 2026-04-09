@@ -1931,6 +1931,54 @@ elseif ($method == 'POST') {
                     $response_data['message'] = 'Request created successfully';
                 }
                 
+                // Create notifications for staff and admin
+                error_log("DEBUG: Starting notification creation for request $request_id");
+                try {
+                    require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                    $notificationHelper = new ServiceRequestNotificationHelper();
+                    
+                    // Get user details for notifications
+                    $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+                    $user_stmt->execute([$user_id]);
+                    $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
+                    $requester_name = $user_data['full_name'] ?? 'Unknown User';
+                    
+                    // Get category name
+                    $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
+                    $cat_stmt->execute([$category_id]);
+                    $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
+                    $category_name = $cat_data['name'] ?? 'Unknown';
+                    
+                    error_log("DEBUG: Request data for notifications - Title: $title, Requester: $requester_name, Category: $category_name");
+                    
+                    // Notify staff
+                    error_log("DEBUG: Calling notifyStaffNewRequest");
+                    $staffResult = $notificationHelper->notifyStaffNewRequest(
+                        $request_id, 
+                        $title, 
+                        $requester_name, 
+                        $category_name
+                    );
+                    error_log("DEBUG: Staff notification result: " . ($staffResult ? 'SUCCESS' : 'FAILED'));
+                    
+                    // Notify admin
+                    error_log("DEBUG: Calling notifyAdminNewRequest");
+                    $adminResult = $notificationHelper->notifyAdminNewRequest(
+                        $request_id, 
+                        $title, 
+                        $requester_name, 
+                        $category_name
+                    );
+                    error_log("DEBUG: Admin notification result: " . ($adminResult ? 'SUCCESS' : 'FAILED'));
+                    
+                    error_log("Role-based notifications created for request $request_id");
+                    
+                } catch (Exception $e) {
+                    error_log("Failed to create role-based notifications: " . $e->getMessage());
+                    error_log("Notification exception trace: " . $e->getTraceAsString());
+                    // Continue even if notification creation fails
+                }
+                
                 serviceJsonResponse(true, $response_data['message'], $response_data);
             } else {
                 error_log("QUICK FIX: Failed to create request");
@@ -1944,7 +1992,7 @@ elseif ($method == 'POST') {
     
     // Handle different actions
 
-    if ($action === 'resolve') {
+    elseif ($action === 'resolve') {
 
         
 
@@ -2922,17 +2970,27 @@ elseif ($method == 'POST') {
 
             $notification_start = microtime(true);
 
+            error_log("DEBUG: Starting notification creation for request $request_id");
+
 
 
             try {
+
+                error_log("DEBUG: Creating ServiceRequestNotificationHelper");
 
                 $notificationHelper = new ServiceRequestNotificationHelper();
 
                 
 
+                error_log("DEBUG: Request data for notifications - Title: " . $request_data['title'] . ", Requester: " . $request_data['requester_name'] . ", Category: " . $request_data['category']);
+
+                
+
                 // Notify staff about new request
 
-                $notificationHelper->notifyStaffNewRequest(
+                error_log("DEBUG: Calling notifyStaffNewRequest");
+
+                $staffResult = $notificationHelper->notifyStaffNewRequest(
 
                     $request_id, 
 
@@ -2943,12 +3001,16 @@ elseif ($method == 'POST') {
                     $request_data['category']
 
                 );
+
+                error_log("DEBUG: Staff notification result: " . ($staffResult ? 'SUCCESS' : 'FAILED'));
 
                 
 
                 // Notify admin about new request (for monitoring)
 
-                $notificationHelper->notifyAdminNewRequest(
+                error_log("DEBUG: Calling notifyAdminNewRequest");
+
+                $adminResult = $notificationHelper->notifyAdminNewRequest(
 
                     $request_id, 
 
@@ -2959,6 +3021,8 @@ elseif ($method == 'POST') {
                     $request_data['category']
 
                 );
+
+                error_log("DEBUG: Admin notification result: " . ($adminResult ? 'SUCCESS' : 'FAILED'));
 
                 
 
@@ -2969,6 +3033,8 @@ elseif ($method == 'POST') {
             } catch (Exception $e) {
 
                 error_log("Failed to create role-based notifications: " . $e->getMessage());
+
+                error_log("Notification exception trace: " . $e->getTraceAsString());
 
                 // Continue even if notification creation fails
 
