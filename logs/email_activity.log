@@ -512,3 +512,33 @@
 [2026-04-09 12:54:26] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu
 [2026-04-09 12:54:30] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu được Admin phê duyệt
 [2026-04-09 12:54:34] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu được Admin phê duyệt
+[2026-04-09 13:28:05] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu đang được xử lý
+[2026-04-09 13:32:42] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu đang được xử lý
+[2026-04-09 13:32:46] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu
+[2026-04-09 13:32:50] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu được Admin phê duyệt
+[2026-04-09 13:32:54] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu được Admin phê duyệt
+[2026-04-09 13:40:07] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 13:40:11] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 13:40:15] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 13:40:20] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-09 13:42:51] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ kỹ thuật (Escalation)
+[2026-04-09 13:42:55] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ mới cho yêu cầu #80
+[2026-04-09 13:46:34] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đang được xử lý
+[2026-04-09 13:46:38] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu
+[2026-04-09 13:46:42] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu được Admin phê duyệt
+[2026-04-09 13:46:46] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu được Admin phê duyệt
+[2026-04-09 14:03:31] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 14:03:35] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 14:03:39] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 14:03:43] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-09 14:05:41] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu
+[2026-04-09 14:13:08] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 14:13:12] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 14:13:16] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 14:13:20] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-09 14:51:29] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 14:51:33] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 14:51:37] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-09 16:01:23] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 16:01:27] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-09 16:01:31] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống

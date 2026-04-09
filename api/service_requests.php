@@ -3006,23 +3006,8 @@ elseif ($method == 'POST') {
 
                 
 
-                // Notify admin about new request (for monitoring)
-
-                error_log("DEBUG: Calling notifyAdminNewRequest");
-
-                $adminResult = $notificationHelper->notifyAdminNewRequest(
-
-                    $request_id, 
-
-                    $request_data['title'], 
-
-                    $request_data['requester_name'], 
-
-                    $request_data['category']
-
-                );
-
-                error_log("DEBUG: Admin notification result: " . ($adminResult ? 'SUCCESS' : 'FAILED'));
+                // Admin notification already sent in the first code path (line 1966)
+                // Remove duplicate to prevent sending 2 notifications to admin
 
                 
 

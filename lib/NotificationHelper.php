@@ -392,7 +392,7 @@ class NotificationHelper {
             return $minutes . " phút";
         } elseif ($diff < 86400) {
             $hours = floor($diff / 3600);
-            return $hours . " giây";
+            return $hours . " phút";
         } elseif ($diff < 604800) {
             $days = floor($diff / 86400);
             return $days . " ngày";

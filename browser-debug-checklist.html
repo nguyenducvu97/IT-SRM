@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Debug Checklist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .checklist {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .step {
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+        }
+        .success {
+            border-left-color: #28a745;
+            background-color: #d4edda;
+        }
+        .warning {
+            border-left-color: #ffc107;
+            background-color: #fff3cd;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        .code {
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="checklist">
+        <h1>🔍 BROWSER DEBUG CHECKLIST</h1>
+        <p><strong>Vấn đề:</strong> Staff nhận yêu cầu nhưng admin và user không nhận được thông báo</p>
+        <p><strong>Nguyên nhân:</strong> Browser session/authentication issue</p>
+        
+        <h2>📋 STEP-BY-STEP DEBUG</h2>
+        
+        <div class="step">
+            <h3>1️⃣ Clear Browser Cache</h3>
+            <p>Nhấn <strong>Ctrl + Shift + Delete</strong> và chọn "All time"</p>
+            <button class="button" onclick="testCache()">Test Cache Cleared</button>
+            <div id="cacheResult"></div>
+        </div>
+        
+        <div class="step">
+            <h3>2️⃣ Login as Staff</h3>
+            <p>Đi đến trang login và nhập:</p>
+            <div class="code">
+                Username: staff1<br>
+                Password: password123
+            </div>
+            <button class="button" onclick="testLogin()">Test Login Status</button>
+            <div id="loginResult"></div>
+        </div>
+        
+        <div class="step">
+            <h3>3️⃣ Check Session</h3>
+            <p>Kiểm tra session có hoạt động không</p>
+            <button class="button" onclick="testSession()">Check Session</button>
+            <div id="sessionResult"></div>
+        </div>
+        
+        <div class="step">
+            <h3>4️⃣ Test API Call</h3>
+            <p>Test API call trực tiếp</p>
+            <button class="button" onclick="testAPI()">Test Accept Request API</button>
+            <div id="apiResult"></div>
+        </div>
+        
+        <div class="step">
+            <h3>5️⃣ Check Console Errors</h3>
+            <p>Mở F12 và kiểm tra console có lỗi không</p>
+            <button class="button" onclick="checkConsole()">Check Console</button>
+            <div id="consoleResult"></div>
+        </div>
+        
+        <div class="step">
+            <h3>6️⃣ Test Accept Request</h3>
+            <p>Đi đến trang chi tiết yêu cầu và click "Nhận yêu cầu"</p>
+            <button class="button" onclick="window.open('index.php?page=request-detail&id=72', '_blank')">Open Request #72</button>
+        </div>
+        
+        <h2>🔧 TROUBLESHOOTING</h2>
+        
+        <div class="step error">
+            <h3>❌ Common Issues</h3>
+            <ul>
+                <li><strong>Session expired:</strong> Login lại</li>
+                <li><strong>Wrong credentials:</strong> Đảm bảo dùng staff1/password123</li>
+                <li><strong>Cache issues:</strong> Clear cache hoàn toàn</li>
+                <li><strong>Network errors:</strong> Kiểm tra internet connection</li>
+                <li><strong>JavaScript errors:</strong> Kiểm tra console F12</li>
+            </ul>
+        </div>
+        
+        <div class="step success">
+            <h3>✅ Expected Results</h3>
+            <ul>
+                <li>Login thành công và thấy dashboard</li>
+                <li>Có thể xem danh sách yêu cầu</li>
+                <li>Click "Nhận yêu cầu" không có lỗi</li>
+                <li>Request status chuyển thành "in_progress"</li>
+                <li>Admin và user nhận được thông báo</li>
+            </ul>
+        </div>
+        
+        <h2>📞 Contact Support</h2>
+        <p>Nếu vẫn không hoạt động, cung cấp:</p>
+        <ul>
+            <li>Screenshot của console errors</li>
+            <li>Screenshot của Network tab</li>
+            <li>Browser version và OS</li>
+            <li>Steps đã thực hiện</li>
+        </ul>
+    </div>
+
+    <script>
+        function testCache() {
+            document.getElementById('cacheResult').innerHTML = 
+                '<div class="result success">✅ Cache cleared test - Please refresh page</div>';
+        }
+        
+        async function testLogin() {
+            try {
+                const response = await fetch('api/auth.php?action=check_session');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('loginResult').innerHTML = 
+                        '<div class="result success">✅ Logged in as: ' + data.data.username + ' (' + data.data.role + ')</div>';
+                } else {
+                    document.getElementById('loginResult').innerHTML = 
+                        '<div class="result error">❌ Not logged in: ' + data.message + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('loginResult').innerHTML = 
+                    '<div class="result error">❌ Error checking login: ' + error.message + '</div>';
+            }
+        }
+        
+        async function testSession() {
+            try {
+                const response = await fetch('debug-session-api.php');
+                const html = await response.text();
+                document.getElementById('sessionResult').innerHTML = 
+                    '<div class="result"><iframe src="debug-session-api.php" width="100%" height="200"></iframe></div>';
+            } catch (error) {
+                document.getElementById('sessionResult').innerHTML = 
+                    '<div class="result error">❌ Error checking session: ' + error.message + '</div>';
+            }
+        }
+        
+        async function testAPI() {
+            try {
+                const response = await fetch('api/service_requests.php', {
+                    method: 'PUT',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'accept_request',
+                        request_id: 72
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('apiResult').innerHTML = 
+                        '<div class="result success">✅ API Call Successful: ' + data.message + '</div>';
+                } else {
+                    document.getElementById('apiResult').innerHTML = 
+                        '<div class="result error">❌ API Call Failed: ' + data.message + '</div>';
+                }
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = 
+                    '<div class="result error">❌ API Error: ' + error.message + '</div>';
+            }
+        }
+        
+        function checkConsole() {
+            document.getElementById('consoleResult').innerHTML = 
+                '<div class="result warning">⚠️ Please check F12 Console manually for any red error messages</div>';
+        }
+    </script>
+</body>
+</html>

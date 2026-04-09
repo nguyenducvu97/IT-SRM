@@ -106,8 +106,8 @@ class ServiceRequestNotificationHelper {
      * Notify staff when user creates new request
      */
     public function notifyStaffNewRequest($requestId, $requestTitle, $requesterName, $categoryName = null) {
-        // Get all staff users
-        $staffUsers = $this->getUsersByRole(['staff', 'admin']);
+        // Get all staff users (exclude admin - they get separate notification)
+        $staffUsers = $this->getUsersByRole(['staff']);
         $title = "Yêu cầu mới cần xử lý";
         $message = "Người dùng {$requesterName} đã tạo yêu cầu mới: #{$requestId} - {$requestTitle}" .
                    ($categoryName ? " (Danh mục: {$categoryName})" : "");
