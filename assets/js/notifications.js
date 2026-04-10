@@ -96,12 +96,17 @@ class NotificationManager {
             console.log('NotificationManager: Loading notifications...');
             
             // Load notifications list
-            const response = await fetch('api/notifications.php?action=list');
+            const response = await fetch('api/notifications.php?action=get');
             console.log('NotificationManager: Response status:', response.status);
             
             if (!response.ok) throw new Error('Failed to load notifications');
             
-            this.notifications = await response.json();
+            const data = await response.json();
+            if (data.success && data.data) {
+                this.notifications = data.data;
+            } else {
+                this.notifications = [];
+            }
             console.log('NotificationManager: Loaded notifications:', this.notifications);
             
             this.renderNotifications();
@@ -160,6 +165,12 @@ class NotificationManager {
     
     renderNotifications() {
         if (!this.notificationList) return;
+        
+        // Ensure notifications is an array
+        if (!Array.isArray(this.notifications)) {
+            console.error('NotificationManager: notifications is not an array:', this.notifications);
+            this.notifications = [];
+        }
         
         if (this.notifications.length === 0) {
             this.notificationList.innerHTML = `

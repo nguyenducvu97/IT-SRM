@@ -67,7 +67,11 @@ try {
                 ];
             }
             
-            echo json_encode($formattedNotifications);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Notifications retrieved successfully',
+                'data' => $formattedNotifications
+            ]);
         }
     } else if ($method == 'PUT') {
         $input = json_decode(file_get_contents('php://input'), true);

@@ -5515,7 +5515,8 @@ elseif ($method == 'POST') {
 
 
 
-                           SET assigned_to = :user_id, status = 'in_progress', updated_at = NOW() 
+                           SET assigned_to = :user_id, status = 'in_progress', 
+                               assigned_at = NOW(), accepted_at = NOW(), updated_at = NOW() 
 
 
 
@@ -6951,17 +6952,16 @@ elseif ($method == 'PUT') {
 
             
 
-            // Update request to assign to staff and set to in_progress
+// Update request to assign to staff and set to in_progress
 
-            $update_query = "UPDATE service_requests 
-
-                           SET assigned_to = :user_id, status = 'in_progress', updated_at = NOW() 
-
+$update_query = "UPDATE service_requests 
+                           SET assigned_to = :user_id, status = 'in_progress', 
+                               assigned_at = NOW(), accepted_at = NOW(), updated_at = NOW() 
                            WHERE id = :request_id";
 
-            $update_stmt = $db->prepare($update_query);
+$update_stmt = $db->prepare($update_query);
 
-            $update_stmt->bindParam(":request_id", $request_id);
+$update_stmt->bindParam(":request_id", $request_id);
 
             $update_stmt->bindParam(":user_id", $user_id);
 
