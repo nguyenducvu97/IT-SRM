@@ -2066,6 +2066,8 @@ elseif ($method == 'POST') {
 
             handleResolveRequest($request_id, $error_description, $error_type, $replacement_materials, $solution_method, $attachments, $user_id, $user_role, $db);
 
+            return; // Prevent duplicate execution
+
             
 
         } else {
@@ -7514,131 +7516,15 @@ elseif ($method == 'PUT') {
 
     }
 
-    elseif ($action == 'resolve') {
+    // elseif ($action == 'resolve') {
 
-        // Handle request resolution (staff only)
+    //     // Handle request resolution (staff only) - DISABLED - Using handleResolveRequest instead
 
-        $request_id = isset($input['id']) ? (int)$input['id'] : 0;
+    //     error_log("LEGACY RESOLVE HANDLER - DISABLED");
 
-        $error_description = isset($input['error_description']) ? trim($input['error_description']) : '';
+    //     serviceJsonResponse(false, "Legacy resolve handler disabled");
 
-        $error_type = isset($input['error_type']) ? trim($input['error_type']) : '';
-
-        $replacement_materials = isset($input['replacement_materials']) ? trim($input['replacement_materials']) : '';
-
-        $solution_method = isset($input['solution_method']) ? trim($input['solution_method']) : '';
-
-        
-
-        if ($request_id <= 0) {
-
-            serviceJsonResponse(false, "Request ID is required");
-
-            return;
-
-        }
-
-        
-
-        // Only staff can resolve requests
-
-        if ($user_role != 'staff') {
-
-            serviceJsonResponse(false, "Access denied");
-
-            return;
-
-        }
-
-        
-
-        try {
-
-            // Check if request exists and is assigned to current staff
-
-            $check_query = "SELECT id, assigned_to, status FROM service_requests 
-
-                           WHERE id = :request_id AND assigned_to = :user_id AND status = 'in_progress'";
-
-            $check_stmt = $db->prepare($check_query);
-
-            $check_stmt->bindParam(":request_id", $request_id);
-
-            $check_stmt->bindParam(":user_id", $user_id);
-
-            $check_stmt->execute();
-
-            
-
-            $request = $check_stmt->fetch(PDO::FETCH_ASSOC);
-
-            
-
-            if (!$request) {
-
-                serviceJsonResponse(false, "Request not found or not assigned to you");
-
-                return;
-
-            }
-
-            
-
-            // Start transaction
-
-            $db->beginTransaction();
-
-            
-
-            // Update request status to resolved
-
-            $update_query = "UPDATE service_requests 
-
-                           SET status = 'resolved', 
-
-                               error_description = :error_description,
-
-                               error_type = :error_type,
-
-                               replacement_materials = :replacement_materials,
-
-                               solution_method = :solution_method,
-
-                               resolved_at = NOW()
-
-                           WHERE id = :request_id";
-
-            $update_stmt = $db->prepare($update_query);
-
-            $update_stmt->bindParam(":error_description", $error_description);
-
-            $update_stmt->bindParam(":error_type", $error_type);
-
-            $update_stmt->bindParam(":replacement_materials", $replacement_materials);
-
-            $update_stmt->bindParam(":solution_method", $solution_method);
-
-            $update_stmt->bindParam(":request_id", $request_id);
-
-            
-
-            if ($update_stmt->execute()) {
-
-                serviceJsonResponse(true, "Request resolved successfully");
-
-            } else {
-
-                serviceJsonResponse(false, "Failed to resolve request");
-
-            }
-
-        } catch (Exception $e) {
-
-            serviceJsonResponse(false, "Database error: " . $e->getMessage());
-
-        }
-
-    }
+    // }
 
     elseif ($action == 'close_request') {
 
@@ -8098,87 +7984,21 @@ function handleResolveRequest($request_id, $error_description, $error_type, $rep
 
         
 
-        // Send notifications to user and admin
+        // Send notifications to user and admin - DISABLED TO FIX HTTP 500
 
-        try {
+        error_log("RESOLVE NOTIFICATIONS DISABLED - Fixing HTTP 500 error");
 
-            require_once __DIR__ . '/../lib/NotificationHelper.php';
+        // TODO: Fix NotificationHelper to prevent HTTP 500
 
-            $notificationHelper = new NotificationHelper($db);
-
-            
-
-            // Get request details for notification
-
-            $request_query = "SELECT sr.title, sr.user_id, u.full_name as user_name, u.email as user_email
-
-                             FROM service_requests sr
-
-                             LEFT JOIN users u ON sr.user_id = u.id
-
-                             WHERE sr.id = :request_id";
-
-            $request_stmt = $db->prepare($request_query);
-
-            $request_stmt->bindParam(":request_id", $request_id);
-
-            $request_stmt->execute();
-
-            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-
-            
-
-            if ($request_data) {
-
-                // Get staff name
-
-                $staff_query = "SELECT full_name FROM users WHERE id = :user_id";
-
-                $staff_stmt = $db->prepare($staff_query);
-
-                $staff_stmt->bindParam(":user_id", $user_id);
-
-                $staff_stmt->execute();
-
-                $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
-
-                $staff_name = $staff_data['full_name'] ?? 'Staff';
-
-                
-
-                // Notify user that request is resolved
-
-                $user_title = "Yêu yêu #{$request_id} yêu yêu yêu yêu";
-
-                $user_message = "{$staff_name} yêu yêu yêu yêu: {$request_data['title']}";
-
-                $notificationHelper->notifyUser($request_data['user_id'], $user_title, $user_message, 'success', $request_id, 'request');
-
-                
-
-                // Notify all admins
-
-                $admin_title = "Yêu yêu #{$request_id} yêu yêu yêu yêu";
-
-                $admin_message = "{$staff_name} yêu yêu yêu yêu: {$request_data['title']}";
-
-                $notificationHelper->notifyAdmins($admin_title, $admin_message, 'success', $request_id, 'request');
-
-                
-
-                error_log("RESOLVE NOTIFICATIONS SENT - User: {$request_data['user_id']}, Admins notified");
-
-            }
-
-        } catch (Exception $e) {
-
-            error_log("RESOLVE NOTIFICATION ERROR: " . $e->getMessage());
-
-        }
+        // The issue is likely in notifyUser or notifyAdmins methods
 
         
 
-        serviceJsonResponse(true, "Yêu cầu đã được giải quyết thành công");
+        error_log("RESOLVE SUCCESS - About to send JSON response");
+        
+        serviceJsonResponse(true, "Yêu yêu yêu yêu yêu yêu");
+        
+        error_log("RESOLVE SUCCESS - JSON response sent");
 
         
 

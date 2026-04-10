@@ -35798,3 +35798,1536 @@ Stack trace:
 [10-Apr-2026 06:01:27 Europe/Berlin] User Role: staff
 [10-Apr-2026 06:01:27 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
 [10-Apr-2026 06:01:27 Europe/Berlin] =================
+[10-Apr-2026 06:03:56 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:56 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:03:56 Europe/Berlin] Method: GET
+[10-Apr-2026 06:03:56 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:03:56 Europe/Berlin] POST data: []
+[10-Apr-2026 06:03:56 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:03:56 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:03:56 Europe/Berlin] ========================
+[10-Apr-2026 06:03:56 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:03:56 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:56 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:03:56 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:03:56 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:03:56 Europe/Berlin] =================
+[10-Apr-2026 06:03:56 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:56 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:03:56 Europe/Berlin] Method: GET
+[10-Apr-2026 06:03:56 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:03:56 Europe/Berlin] POST data: []
+[10-Apr-2026 06:03:56 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:03:56 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:03:56 Europe/Berlin] ========================
+[10-Apr-2026 06:03:56 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:03:56 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:56 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:03:56 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:03:56 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:03:56 Europe/Berlin] =================
+[10-Apr-2026 06:03:56 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:56 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:03:56 Europe/Berlin] Method: GET
+[10-Apr-2026 06:03:56 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:03:56 Europe/Berlin] POST data: []
+[10-Apr-2026 06:03:56 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:03:56 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:03:56 Europe/Berlin] ========================
+[10-Apr-2026 06:03:56 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:03:56 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:56 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:03:56 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:03:56 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:03:56 Europe/Berlin] =================
+[10-Apr-2026 06:03:59 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:59 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:03:59 Europe/Berlin] Method: GET
+[10-Apr-2026 06:03:59 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:03:59 Europe/Berlin] POST data: []
+[10-Apr-2026 06:03:59 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:03:59 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:03:59 Europe/Berlin] ========================
+[10-Apr-2026 06:03:59 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:03:59 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:59 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:03:59 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:03:59 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:03:59 Europe/Berlin] =================
+[10-Apr-2026 06:03:59 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:59 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:03:59 Europe/Berlin] Method: GET
+[10-Apr-2026 06:03:59 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:03:59 Europe/Berlin] POST data: []
+[10-Apr-2026 06:03:59 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:03:59 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:03:59 Europe/Berlin] ========================
+[10-Apr-2026 06:03:59 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:03:59 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:03:59 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:03:59 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:03:59 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:03:59 Europe/Berlin] =================
+[10-Apr-2026 06:04:02 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:04:02 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:04:02 Europe/Berlin] Method: GET
+[10-Apr-2026 06:04:02 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:04:02 Europe/Berlin] POST data: []
+[10-Apr-2026 06:04:02 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:04:02 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:04:02 Europe/Berlin] ========================
+[10-Apr-2026 06:04:02 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:04:02 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:04:02 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:04:02 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:04:02 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:04:02 Europe/Berlin] =================
+[10-Apr-2026 06:04:09 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:04:09 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:04:09 Europe/Berlin] Method: GET
+[10-Apr-2026 06:04:09 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:04:09 Europe/Berlin] POST data: []
+[10-Apr-2026 06:04:09 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:04:09 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:04:09 Europe/Berlin] ========================
+[10-Apr-2026 06:04:09 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:04:09 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:04:09 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:04:09 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:04:09 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:04:09 Europe/Berlin] =================
+[10-Apr-2026 06:04:58 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:04:58 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:04:58 Europe/Berlin] Method: POST
+[10-Apr-2026 06:04:58 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryivdLdaHR6BBSMdlh
+[10-Apr-2026 06:04:58 Europe/Berlin] POST data: {"id":"76","action":"resolve","error_description":"re6t3","error_type":"software","replacement_materials":"3435d","solution_method":"\u01b0ertrdytfy56"}
+[10-Apr-2026 06:04:58 Europe/Berlin] FILES data: ["attachments"]
+[10-Apr-2026 06:04:58 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:04:58 Europe/Berlin] ========================
+[10-Apr-2026 06:04:58 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:04:58 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:04:58 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:04:58 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:04:58 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:04:58 Europe/Berlin] =================
+[10-Apr-2026 06:04:58 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:04:58 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryivdLdaHR6BBSMdlh
+[10-Apr-2026 06:04:58 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:04:58 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:04:58 Europe/Berlin] Resolve data - ID: 76, Error: re6t3
+[10-Apr-2026 06:04:58 Europe/Berlin] Found 2 files to upload
+[10-Apr-2026 06:04:58 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:04:58 Europe/Berlin] Request ID: 76
+[10-Apr-2026 06:04:58 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:04:58 Europe/Berlin] Error Description: re6t3
+[10-Apr-2026 06:04:58 Europe/Berlin] Error Type: software
+[10-Apr-2026 06:04:58 Europe/Berlin] Solution Method: ưertrdytfy56
+[10-Apr-2026 06:04:58 Europe/Berlin] Attachments count: 2
+[10-Apr-2026 06:04:58 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:05:16 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:05:16 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:05:16 Europe/Berlin] Method: POST
+[10-Apr-2026 06:05:16 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryt84uqAEwLV0UbZUl
+[10-Apr-2026 06:05:16 Europe/Berlin] POST data: {"id":"76","action":"resolve","error_description":"43","error_type":"software","replacement_materials":"34w45","solution_method":"33w45e"}
+[10-Apr-2026 06:05:16 Europe/Berlin] FILES data: ["attachments"]
+[10-Apr-2026 06:05:16 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:05:16 Europe/Berlin] ========================
+[10-Apr-2026 06:05:16 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:05:16 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:05:16 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:05:16 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:05:16 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:05:16 Europe/Berlin] =================
+[10-Apr-2026 06:05:16 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:05:16 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryt84uqAEwLV0UbZUl
+[10-Apr-2026 06:05:16 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:05:16 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:05:16 Europe/Berlin] Resolve data - ID: 76, Error: 43
+[10-Apr-2026 06:05:16 Europe/Berlin] Found 2 files to upload
+[10-Apr-2026 06:05:16 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:05:16 Europe/Berlin] Request ID: 76
+[10-Apr-2026 06:05:16 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:05:16 Europe/Berlin] Error Description: 43
+[10-Apr-2026 06:05:16 Europe/Berlin] Error Type: software
+[10-Apr-2026 06:05:16 Europe/Berlin] Solution Method: 33w45e
+[10-Apr-2026 06:05:16 Europe/Berlin] Attachments count: 2
+[10-Apr-2026 06:05:16 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:05:22 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:05:22 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:05:22 Europe/Berlin] Method: GET
+[10-Apr-2026 06:05:22 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:05:22 Europe/Berlin] POST data: []
+[10-Apr-2026 06:05:22 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:05:22 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:05:22 Europe/Berlin] ========================
+[10-Apr-2026 06:05:22 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:05:22 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:05:22 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:05:22 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:05:22 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:05:22 Europe/Berlin] =================
+[10-Apr-2026 06:08:46 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:08:46 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:08:46 Europe/Berlin] Method: POST
+[10-Apr-2026 06:08:46 Europe/Berlin] Content-Type: application/x-www-form-urlencoded
+[10-Apr-2026 06:08:46 Europe/Berlin] POST data: {"action":"resolve","id":"81","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:08:46 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:08:46 Europe/Berlin] Raw input: action=resolve&id=81&error_description=Test+error+description&error_type=Test+error+type&replacement_materials=Test+replacement+materials&solution_method=Test+solution+method
+[10-Apr-2026 06:08:46 Europe/Berlin] ========================
+[10-Apr-2026 06:08:46 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:08:46 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:08:46 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:08:46 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:08:46 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:08:46 Europe/Berlin] =================
+[10-Apr-2026 06:08:46 Europe/Berlin] QUICK FIX: Checking action: 
+[10-Apr-2026 06:08:53 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:08:53 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:08:53 Europe/Berlin] Method: POST
+[10-Apr-2026 06:08:53 Europe/Berlin] Content-Type: application/x-www-form-urlencoded
+[10-Apr-2026 06:08:53 Europe/Berlin] POST data: {"action":"resolve","id":"78","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:08:53 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:08:53 Europe/Berlin] Raw input: action=resolve&id=78&error_description=Test+error+description&error_type=Test+error+type&replacement_materials=Test+replacement+materials&solution_method=Test+solution+method
+[10-Apr-2026 06:08:53 Europe/Berlin] ========================
+[10-Apr-2026 06:08:53 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:08:53 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:08:53 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:08:53 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:08:53 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:08:53 Europe/Berlin] =================
+[10-Apr-2026 06:08:53 Europe/Berlin] QUICK FIX: Checking action: 
+[10-Apr-2026 06:09:22 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:22 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:09:22 Europe/Berlin] Method: POST
+[10-Apr-2026 06:09:22 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------lojhauzOJtqHAWNMVLWu6i
+[10-Apr-2026 06:09:22 Europe/Berlin] POST data: {"action":"resolve","id":"81","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:09:22 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:09:22 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:09:22 Europe/Berlin] ========================
+[10-Apr-2026 06:09:22 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:09:22 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:22 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:09:22 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:09:22 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:09:22 Europe/Berlin] =================
+[10-Apr-2026 06:09:22 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:09:22 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------lojhauzOJtqHAWNMVLWu6i
+[10-Apr-2026 06:09:22 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:09:22 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:09:22 Europe/Berlin] Resolve data - ID: 81, Error: Test error description
+[10-Apr-2026 06:09:22 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:09:22 Europe/Berlin] Request ID: 81
+[10-Apr-2026 06:09:22 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:09:22 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:09:22 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:09:22 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:09:22 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:09:22 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:09:26 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:26 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:09:26 Europe/Berlin] Method: POST
+[10-Apr-2026 06:09:26 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------v2FzIWGuWee1ub2r48X7Ww
+[10-Apr-2026 06:09:26 Europe/Berlin] POST data: {"action":"resolve","id":"78","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:09:26 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:09:26 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:09:26 Europe/Berlin] ========================
+[10-Apr-2026 06:09:26 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:09:26 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:26 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:09:26 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:09:26 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:09:26 Europe/Berlin] =================
+[10-Apr-2026 06:09:26 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:09:26 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------v2FzIWGuWee1ub2r48X7Ww
+[10-Apr-2026 06:09:26 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:09:26 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:09:26 Europe/Berlin] Resolve data - ID: 78, Error: Test error description
+[10-Apr-2026 06:09:26 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:09:26 Europe/Berlin] Request ID: 78
+[10-Apr-2026 06:09:26 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:09:26 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:09:26 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:09:26 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:09:26 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:09:26 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:09:27 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:27 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:09:27 Europe/Berlin] Method: POST
+[10-Apr-2026 06:09:27 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------Hkp4MO1Xy6BjUIQ8HNI7u7
+[10-Apr-2026 06:09:27 Europe/Berlin] POST data: {"action":"resolve","id":"73","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:09:27 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:09:27 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:09:27 Europe/Berlin] ========================
+[10-Apr-2026 06:09:27 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:09:27 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:27 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:09:27 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:09:27 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:09:27 Europe/Berlin] =================
+[10-Apr-2026 06:09:27 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:09:27 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------Hkp4MO1Xy6BjUIQ8HNI7u7
+[10-Apr-2026 06:09:27 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:09:27 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:09:27 Europe/Berlin] Resolve data - ID: 73, Error: Test error description
+[10-Apr-2026 06:09:27 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:09:27 Europe/Berlin] Request ID: 73
+[10-Apr-2026 06:09:27 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:09:27 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:09:27 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:09:27 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:09:27 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:09:27 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:09:31 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:31 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:09:31 Europe/Berlin] Method: POST
+[10-Apr-2026 06:09:31 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------IEPScgrXE4BYfljorol5DA
+[10-Apr-2026 06:09:31 Europe/Berlin] POST data: {"action":"resolve","id":"72","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:09:31 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:09:31 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:09:31 Europe/Berlin] ========================
+[10-Apr-2026 06:09:31 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:09:31 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:31 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:09:31 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:09:31 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:09:31 Europe/Berlin] =================
+[10-Apr-2026 06:09:31 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:09:31 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------IEPScgrXE4BYfljorol5DA
+[10-Apr-2026 06:09:31 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:09:31 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:09:31 Europe/Berlin] Resolve data - ID: 72, Error: Test error description
+[10-Apr-2026 06:09:31 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:09:31 Europe/Berlin] Request ID: 72
+[10-Apr-2026 06:09:31 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:09:31 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:09:31 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:09:31 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:09:31 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:09:31 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:09:35 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:35 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:09:35 Europe/Berlin] Method: POST
+[10-Apr-2026 06:09:35 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------kpu3FvF3n4IZ6Nwv5vjMq8
+[10-Apr-2026 06:09:35 Europe/Berlin] POST data: {"action":"resolve","id":"77","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:09:35 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:09:35 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:09:35 Europe/Berlin] ========================
+[10-Apr-2026 06:09:35 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:09:35 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:09:35 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:09:35 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:09:35 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:09:35 Europe/Berlin] =================
+[10-Apr-2026 06:09:35 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:09:35 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------kpu3FvF3n4IZ6Nwv5vjMq8
+[10-Apr-2026 06:09:35 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:09:35 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:09:35 Europe/Berlin] Resolve data - ID: 77, Error: Test error description
+[10-Apr-2026 06:09:35 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:09:35 Europe/Berlin] Request ID: 77
+[10-Apr-2026 06:09:35 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:09:35 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:09:35 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:09:35 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:09:35 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:09:35 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:11:14 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:11:14 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:11:14 Europe/Berlin] Method: POST
+[10-Apr-2026 06:11:14 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------EgND4f3Oz9IF0peRP9ZgZQ
+[10-Apr-2026 06:11:14 Europe/Berlin] POST data: {"action":"resolve","id":"71","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:11:14 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:11:14 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:11:14 Europe/Berlin] ========================
+[10-Apr-2026 06:11:14 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:11:14 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:11:14 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:11:14 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:11:14 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:11:14 Europe/Berlin] =================
+[10-Apr-2026 06:11:14 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:11:14 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------EgND4f3Oz9IF0peRP9ZgZQ
+[10-Apr-2026 06:11:14 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:11:14 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:11:14 Europe/Berlin] Resolve data - ID: 71, Error: Test error description
+[10-Apr-2026 06:11:14 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:11:14 Europe/Berlin] Request ID: 71
+[10-Apr-2026 06:11:14 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:11:14 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:11:14 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:11:14 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:11:14 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:11:14 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:11:19 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:11:19 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:11:19 Europe/Berlin] Method: POST
+[10-Apr-2026 06:11:19 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------y3TyEelVCxpGv0rvHrR82H
+[10-Apr-2026 06:11:19 Europe/Berlin] POST data: {"action":"resolve","id":"67","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:11:19 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:11:19 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:11:19 Europe/Berlin] ========================
+[10-Apr-2026 06:11:19 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:11:19 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:11:19 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:11:19 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:11:19 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:11:19 Europe/Berlin] =================
+[10-Apr-2026 06:11:19 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:11:19 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------y3TyEelVCxpGv0rvHrR82H
+[10-Apr-2026 06:11:19 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:11:19 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:11:19 Europe/Berlin] Resolve data - ID: 67, Error: Test error description
+[10-Apr-2026 06:11:19 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:11:19 Europe/Berlin] Request ID: 67
+[10-Apr-2026 06:11:19 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:11:19 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:11:19 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:11:19 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:11:19 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:11:19 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:11:58 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:11:58 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:11:58 Europe/Berlin] Method: POST
+[10-Apr-2026 06:11:58 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------dFuDfCffAYlLbLncbbMeHQ
+[10-Apr-2026 06:11:58 Europe/Berlin] POST data: {"action":"resolve","id":"67","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:11:58 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:11:58 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:11:58 Europe/Berlin] ========================
+[10-Apr-2026 06:11:58 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:11:58 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:11:58 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:11:58 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:11:58 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:11:58 Europe/Berlin] =================
+[10-Apr-2026 06:11:58 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:11:58 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------dFuDfCffAYlLbLncbbMeHQ
+[10-Apr-2026 06:11:58 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:11:58 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:11:58 Europe/Berlin] Resolve data - ID: 67, Error: Test error description
+[10-Apr-2026 06:11:58 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:11:58 Europe/Berlin] Request ID: 67
+[10-Apr-2026 06:11:58 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:11:58 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:11:58 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:11:58 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:11:58 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:11:58 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:01 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:01 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:01 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:01 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------EHNRq5Ky9zYSTpZCXBp3Jv
+[10-Apr-2026 06:12:01 Europe/Berlin] POST data: {"action":"resolve","id":"67","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:01 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:01 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:01 Europe/Berlin] ========================
+[10-Apr-2026 06:12:01 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:01 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:01 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:01 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:01 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:01 Europe/Berlin] =================
+[10-Apr-2026 06:12:01 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:01 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------EHNRq5Ky9zYSTpZCXBp3Jv
+[10-Apr-2026 06:12:01 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:01 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:01 Europe/Berlin] Resolve data - ID: 67, Error: Test error description
+[10-Apr-2026 06:12:01 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:01 Europe/Berlin] Request ID: 67
+[10-Apr-2026 06:12:01 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:01 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:01 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:01 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:01 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:01 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:03 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:03 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:03 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:03 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------ckVq8okNWLO1l0lLxyc0Hr
+[10-Apr-2026 06:12:03 Europe/Berlin] POST data: {"action":"resolve","id":"70","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:03 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:03 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:03 Europe/Berlin] ========================
+[10-Apr-2026 06:12:03 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:03 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:03 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:03 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:03 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:03 Europe/Berlin] =================
+[10-Apr-2026 06:12:03 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:03 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------ckVq8okNWLO1l0lLxyc0Hr
+[10-Apr-2026 06:12:03 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:03 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:03 Europe/Berlin] Resolve data - ID: 70, Error: Test error description
+[10-Apr-2026 06:12:03 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:03 Europe/Berlin] Request ID: 70
+[10-Apr-2026 06:12:03 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:03 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:03 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:03 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:03 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:03 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:03 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:03 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:05 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:05 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:05 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:05 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------TRkyI76QaMkCeCDej4JRtm
+[10-Apr-2026 06:12:05 Europe/Berlin] POST data: {"action":"resolve","id":"70","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:05 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:05 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:05 Europe/Berlin] ========================
+[10-Apr-2026 06:12:05 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:05 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:05 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:05 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:05 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:05 Europe/Berlin] =================
+[10-Apr-2026 06:12:05 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:05 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------TRkyI76QaMkCeCDej4JRtm
+[10-Apr-2026 06:12:05 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:05 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:05 Europe/Berlin] Resolve data - ID: 70, Error: Test error description
+[10-Apr-2026 06:12:05 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:05 Europe/Berlin] Request ID: 70
+[10-Apr-2026 06:12:05 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:05 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:05 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:05 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:05 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:05 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:06 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:06 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:06 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:06 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------ANRfwjd240xij0PaUGmlHr
+[10-Apr-2026 06:12:06 Europe/Berlin] POST data: {"action":"resolve","id":"68","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:06 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:06 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:06 Europe/Berlin] ========================
+[10-Apr-2026 06:12:06 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:06 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:06 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:06 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:06 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:06 Europe/Berlin] =================
+[10-Apr-2026 06:12:06 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:06 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------ANRfwjd240xij0PaUGmlHr
+[10-Apr-2026 06:12:06 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:06 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:06 Europe/Berlin] Resolve data - ID: 68, Error: Test error description
+[10-Apr-2026 06:12:06 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:06 Europe/Berlin] Request ID: 68
+[10-Apr-2026 06:12:06 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:06 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:06 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:06 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:06 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:06 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:06 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:06 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:06 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:06 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:06 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:06 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------luIg3SDyZ0eP57Ykj1lfo2
+[10-Apr-2026 06:12:06 Europe/Berlin] POST data: {"action":"resolve","id":"69","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:06 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:06 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:06 Europe/Berlin] ========================
+[10-Apr-2026 06:12:06 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:06 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:06 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:06 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:06 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:06 Europe/Berlin] =================
+[10-Apr-2026 06:12:06 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:06 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------luIg3SDyZ0eP57Ykj1lfo2
+[10-Apr-2026 06:12:06 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:06 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:06 Europe/Berlin] Resolve data - ID: 69, Error: Test error description
+[10-Apr-2026 06:12:06 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:06 Europe/Berlin] Request ID: 69
+[10-Apr-2026 06:12:06 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:06 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:06 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:06 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:06 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:06 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:06 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:06 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:07 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:07 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:07 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:07 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------qotEV4MKamOxxIOtlZtuEz
+[10-Apr-2026 06:12:07 Europe/Berlin] POST data: {"action":"resolve","id":"69","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:07 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:07 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:07 Europe/Berlin] ========================
+[10-Apr-2026 06:12:07 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:07 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:07 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:07 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:07 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:07 Europe/Berlin] =================
+[10-Apr-2026 06:12:07 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:07 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------qotEV4MKamOxxIOtlZtuEz
+[10-Apr-2026 06:12:07 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:07 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:07 Europe/Berlin] Resolve data - ID: 69, Error: Test error description
+[10-Apr-2026 06:12:07 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:07 Europe/Berlin] Request ID: 69
+[10-Apr-2026 06:12:07 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:07 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:07 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:07 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:07 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:07 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:08 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:08 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:08 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:08 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------uJjxNi16z1cOh2BBqDmuD7
+[10-Apr-2026 06:12:08 Europe/Berlin] POST data: {"action":"resolve","id":"34","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:08 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:08 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:08 Europe/Berlin] ========================
+[10-Apr-2026 06:12:08 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:08 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:08 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:08 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:08 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:08 Europe/Berlin] =================
+[10-Apr-2026 06:12:08 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:08 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------uJjxNi16z1cOh2BBqDmuD7
+[10-Apr-2026 06:12:08 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:08 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:08 Europe/Berlin] Resolve data - ID: 34, Error: Test error description
+[10-Apr-2026 06:12:08 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:08 Europe/Berlin] Request ID: 34
+[10-Apr-2026 06:12:08 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:08 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:08 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:08 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:08 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:08 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:08 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:08 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:08 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:08 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:08 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:08 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------hd3vIY7oEUxLWbie2Lv8aZ
+[10-Apr-2026 06:12:08 Europe/Berlin] POST data: {"action":"resolve","id":"34","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:08 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:08 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:08 Europe/Berlin] ========================
+[10-Apr-2026 06:12:08 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:08 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:08 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:08 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:08 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:08 Europe/Berlin] =================
+[10-Apr-2026 06:12:08 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:08 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------hd3vIY7oEUxLWbie2Lv8aZ
+[10-Apr-2026 06:12:08 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:08 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:08 Europe/Berlin] Resolve data - ID: 34, Error: Test error description
+[10-Apr-2026 06:12:08 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:08 Europe/Berlin] Request ID: 34
+[10-Apr-2026 06:12:08 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:08 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:08 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:08 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:08 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:08 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:11 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:11 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:11 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:11 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------kxsKyFPyt9tSHwmkHkKVzd
+[10-Apr-2026 06:12:11 Europe/Berlin] POST data: {"action":"resolve","id":"29","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:11 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:11 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:11 Europe/Berlin] ========================
+[10-Apr-2026 06:12:11 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:11 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:11 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:11 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:11 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:11 Europe/Berlin] =================
+[10-Apr-2026 06:12:11 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:11 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------kxsKyFPyt9tSHwmkHkKVzd
+[10-Apr-2026 06:12:11 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:11 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:11 Europe/Berlin] Resolve data - ID: 29, Error: Test error description
+[10-Apr-2026 06:12:11 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:11 Europe/Berlin] Request ID: 29
+[10-Apr-2026 06:12:11 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:11 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:11 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:11 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:11 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:11 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:11 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:11 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:11 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:11 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:11 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:11 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------PbAuMCWZNCH3xjPxJ2Fgap
+[10-Apr-2026 06:12:11 Europe/Berlin] POST data: {"action":"resolve","id":"29","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:11 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:11 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:11 Europe/Berlin] ========================
+[10-Apr-2026 06:12:11 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:11 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:11 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:11 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:11 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:11 Europe/Berlin] =================
+[10-Apr-2026 06:12:11 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:11 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------PbAuMCWZNCH3xjPxJ2Fgap
+[10-Apr-2026 06:12:11 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:11 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:11 Europe/Berlin] Resolve data - ID: 29, Error: Test error description
+[10-Apr-2026 06:12:11 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:11 Europe/Berlin] Request ID: 29
+[10-Apr-2026 06:12:11 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:11 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:11 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:11 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:11 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:11 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:12 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:12 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:12 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:12 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------hUZCQrixzQyscpU5XwHeY2
+[10-Apr-2026 06:12:12 Europe/Berlin] POST data: {"action":"resolve","id":"28","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:12 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:12 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:12 Europe/Berlin] ========================
+[10-Apr-2026 06:12:12 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:12 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:12 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:12 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:12 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:12 Europe/Berlin] =================
+[10-Apr-2026 06:12:12 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:12 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------hUZCQrixzQyscpU5XwHeY2
+[10-Apr-2026 06:12:12 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:12 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:12 Europe/Berlin] Resolve data - ID: 28, Error: Test error description
+[10-Apr-2026 06:12:12 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:12 Europe/Berlin] Request ID: 28
+[10-Apr-2026 06:12:12 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:12 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:12 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:12 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:12 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:12 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:12 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:12 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:12 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:12 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:12 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:12 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------s297Q7bapDXv1nysUktxeM
+[10-Apr-2026 06:12:12 Europe/Berlin] POST data: {"action":"resolve","id":"28","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:12 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:12 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:12 Europe/Berlin] ========================
+[10-Apr-2026 06:12:12 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:12 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:12 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:12 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:12 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:12 Europe/Berlin] =================
+[10-Apr-2026 06:12:12 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:12 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------s297Q7bapDXv1nysUktxeM
+[10-Apr-2026 06:12:12 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:12 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:12 Europe/Berlin] Resolve data - ID: 28, Error: Test error description
+[10-Apr-2026 06:12:12 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:12 Europe/Berlin] Request ID: 28
+[10-Apr-2026 06:12:12 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:12 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:12 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:12 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:12 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:12 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:13 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:13 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:13 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:13 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------XNQgdQ0GjdtoE4n4IAgPxr
+[10-Apr-2026 06:12:13 Europe/Berlin] POST data: {"action":"resolve","id":"27","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:13 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:13 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:13 Europe/Berlin] ========================
+[10-Apr-2026 06:12:13 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:13 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:13 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:13 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:13 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:13 Europe/Berlin] =================
+[10-Apr-2026 06:12:13 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:13 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------XNQgdQ0GjdtoE4n4IAgPxr
+[10-Apr-2026 06:12:13 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:13 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:13 Europe/Berlin] Resolve data - ID: 27, Error: Test error description
+[10-Apr-2026 06:12:13 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:13 Europe/Berlin] Request ID: 27
+[10-Apr-2026 06:12:13 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:13 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:13 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:13 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:13 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:13 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:13 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:13 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:13 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:13 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:13 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:13 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------yY1jZiLFeE7dFZ1YQfYl6S
+[10-Apr-2026 06:12:13 Europe/Berlin] POST data: {"action":"resolve","id":"27","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:13 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:13 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:13 Europe/Berlin] ========================
+[10-Apr-2026 06:12:13 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:13 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:13 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:13 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:13 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:13 Europe/Berlin] =================
+[10-Apr-2026 06:12:13 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:13 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------yY1jZiLFeE7dFZ1YQfYl6S
+[10-Apr-2026 06:12:13 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:13 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:13 Europe/Berlin] Resolve data - ID: 27, Error: Test error description
+[10-Apr-2026 06:12:13 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:13 Europe/Berlin] Request ID: 27
+[10-Apr-2026 06:12:13 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:13 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:13 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:13 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:13 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:13 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:14 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:14 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:14 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:14 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------orytySFSNQhrFvWlrhINVm
+[10-Apr-2026 06:12:14 Europe/Berlin] POST data: {"action":"resolve","id":"23","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:14 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:14 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:14 Europe/Berlin] ========================
+[10-Apr-2026 06:12:14 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:14 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:14 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:14 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:14 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:14 Europe/Berlin] =================
+[10-Apr-2026 06:12:14 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:14 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------orytySFSNQhrFvWlrhINVm
+[10-Apr-2026 06:12:14 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:14 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:14 Europe/Berlin] Resolve data - ID: 23, Error: Test error description
+[10-Apr-2026 06:12:14 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:14 Europe/Berlin] Request ID: 23
+[10-Apr-2026 06:12:14 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:14 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:14 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:14 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:14 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:14 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:14 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:14 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:15 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:15 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:15 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:15 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------VVp0JyvnF28oMQgThlLyIU
+[10-Apr-2026 06:12:15 Europe/Berlin] POST data: {"action":"resolve","id":"23","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:15 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:15 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:15 Europe/Berlin] ========================
+[10-Apr-2026 06:12:15 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:15 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:15 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:15 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:15 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:15 Europe/Berlin] =================
+[10-Apr-2026 06:12:15 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:15 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------VVp0JyvnF28oMQgThlLyIU
+[10-Apr-2026 06:12:15 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:15 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:15 Europe/Berlin] Resolve data - ID: 23, Error: Test error description
+[10-Apr-2026 06:12:15 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:15 Europe/Berlin] Request ID: 23
+[10-Apr-2026 06:12:15 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:15 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:15 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:15 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:15 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:15 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:15 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:15 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:15 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:15 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------jqgpGJSLbaWh2d1gpOeRrw
+[10-Apr-2026 06:12:15 Europe/Berlin] POST data: {"action":"resolve","id":"22","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:15 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:15 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:15 Europe/Berlin] ========================
+[10-Apr-2026 06:12:15 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:15 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:15 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:15 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:15 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:15 Europe/Berlin] =================
+[10-Apr-2026 06:12:15 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:15 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------jqgpGJSLbaWh2d1gpOeRrw
+[10-Apr-2026 06:12:15 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:15 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:15 Europe/Berlin] Resolve data - ID: 22, Error: Test error description
+[10-Apr-2026 06:12:15 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:15 Europe/Berlin] Request ID: 22
+[10-Apr-2026 06:12:15 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:15 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:15 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:15 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:15 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:15 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:15 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:15 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:23 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:23 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:23 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:23 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------9SAXCV77NHZwlmkri7I2bm
+[10-Apr-2026 06:12:23 Europe/Berlin] POST data: {"action":"resolve","id":"22","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:23 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:23 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:23 Europe/Berlin] ========================
+[10-Apr-2026 06:12:23 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:23 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:23 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:23 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:23 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:23 Europe/Berlin] =================
+[10-Apr-2026 06:12:23 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:23 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------9SAXCV77NHZwlmkri7I2bm
+[10-Apr-2026 06:12:23 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:23 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:23 Europe/Berlin] Resolve data - ID: 22, Error: Test error description
+[10-Apr-2026 06:12:23 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:23 Europe/Berlin] Request ID: 22
+[10-Apr-2026 06:12:23 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:23 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:23 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:23 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:23 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:23 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:24 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:24 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:24 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:24 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------LPefvn97owR56l5f5Ie8a0
+[10-Apr-2026 06:12:24 Europe/Berlin] POST data: {"action":"resolve","id":"21","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:24 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:24 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:24 Europe/Berlin] ========================
+[10-Apr-2026 06:12:24 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:24 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:24 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:24 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:24 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:24 Europe/Berlin] =================
+[10-Apr-2026 06:12:24 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:24 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------LPefvn97owR56l5f5Ie8a0
+[10-Apr-2026 06:12:24 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:24 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:24 Europe/Berlin] Resolve data - ID: 21, Error: Test error description
+[10-Apr-2026 06:12:24 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:24 Europe/Berlin] Request ID: 21
+[10-Apr-2026 06:12:24 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:24 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:24 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:24 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:24 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:24 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:24 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED FOR DEBUGGING
+[10-Apr-2026 06:12:24 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:12:46 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:47 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:47 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:47 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------rXX1EHFrgtnimwun3guxyS
+[10-Apr-2026 06:12:47 Europe/Berlin] POST data: {"action":"resolve","id":"21","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:47 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:47 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:47 Europe/Berlin] ========================
+[10-Apr-2026 06:12:47 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:47 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:47 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:47 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:47 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:47 Europe/Berlin] =================
+[10-Apr-2026 06:12:47 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:47 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------rXX1EHFrgtnimwun3guxyS
+[10-Apr-2026 06:12:47 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:47 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:47 Europe/Berlin] Resolve data - ID: 21, Error: Test error description
+[10-Apr-2026 06:12:47 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:47 Europe/Berlin] Request ID: 21
+[10-Apr-2026 06:12:47 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:47 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:47 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:47 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:47 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:47 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:51 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:51 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:51 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:51 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------jgj5Ibhy3Q3RJySwYXdvtC
+[10-Apr-2026 06:12:51 Europe/Berlin] POST data: {"action":"resolve","id":"18","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:51 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:51 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:51 Europe/Berlin] ========================
+[10-Apr-2026 06:12:51 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:51 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:51 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:51 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:51 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:51 Europe/Berlin] =================
+[10-Apr-2026 06:12:51 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:51 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------jgj5Ibhy3Q3RJySwYXdvtC
+[10-Apr-2026 06:12:51 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:51 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:51 Europe/Berlin] Resolve data - ID: 18, Error: Test error description
+[10-Apr-2026 06:12:51 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:51 Europe/Berlin] Request ID: 18
+[10-Apr-2026 06:12:51 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:51 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:51 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:51 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:51 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:51 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:12:51 Europe/Berlin] RESOLVE NOTIFICATIONS START
+[10-Apr-2026 06:12:51 Europe/Berlin] RESOLVE NOTIFICATIONS - Request data found
+[10-Apr-2026 06:12:51 Europe/Berlin] RESOLVE NOTIFICATIONS - Staff name: John Smith
+[10-Apr-2026 06:12:56 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:56 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:12:56 Europe/Berlin] Method: POST
+[10-Apr-2026 06:12:56 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------FBNFGilFhz6ttF55JsxLIZ
+[10-Apr-2026 06:12:56 Europe/Berlin] POST data: {"action":"resolve","id":"18","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:12:56 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:12:56 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:12:56 Europe/Berlin] ========================
+[10-Apr-2026 06:12:56 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:12:56 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:12:56 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:12:56 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:12:56 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:12:56 Europe/Berlin] =================
+[10-Apr-2026 06:12:56 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:12:56 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------FBNFGilFhz6ttF55JsxLIZ
+[10-Apr-2026 06:12:56 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:12:56 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:12:56 Europe/Berlin] Resolve data - ID: 18, Error: Test error description
+[10-Apr-2026 06:12:56 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:12:56 Europe/Berlin] Request ID: 18
+[10-Apr-2026 06:12:56 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:12:56 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:12:56 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:12:56 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:12:56 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:12:56 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:13:43 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:13:43 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:13:43 Europe/Berlin] Method: POST
+[10-Apr-2026 06:13:43 Europe/Berlin] Content-Type: multipart/form-data; boundary=------------------------gUQhqGU6jJuJZZpoZWJxgP
+[10-Apr-2026 06:13:43 Europe/Berlin] POST data: {"action":"resolve","id":"17","error_description":"Test error description","error_type":"Test error type","replacement_materials":"Test replacement materials","solution_method":"Test solution method"}
+[10-Apr-2026 06:13:43 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:13:43 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:13:43 Europe/Berlin] ========================
+[10-Apr-2026 06:13:43 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:13:43 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:13:43 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:13:43 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:13:43 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:13:43 Europe/Berlin] =================
+[10-Apr-2026 06:13:43 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:13:43 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=------------------------gUQhqGU6jJuJZZpoZWJxgP
+[10-Apr-2026 06:13:43 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:13:43 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:13:43 Europe/Berlin] Resolve data - ID: 17, Error: Test error description
+[10-Apr-2026 06:13:43 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:13:43 Europe/Berlin] Request ID: 17
+[10-Apr-2026 06:13:43 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:13:43 Europe/Berlin] Error Description: Test error description
+[10-Apr-2026 06:13:43 Europe/Berlin] Error Type: Test error type
+[10-Apr-2026 06:13:43 Europe/Berlin] Solution Method: Test solution method
+[10-Apr-2026 06:13:43 Europe/Berlin] Attachments count: 0
+[10-Apr-2026 06:13:43 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:13:43 Europe/Berlin] RESOLVE NOTIFICATIONS START
+[10-Apr-2026 06:13:43 Europe/Berlin] RESOLVE NOTIFICATIONS - Request data found
+[10-Apr-2026 06:13:43 Europe/Berlin] RESOLVE NOTIFICATIONS - Staff name: John Smith
+[10-Apr-2026 06:14:35 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:35 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:14:35 Europe/Berlin] Method: GET
+[10-Apr-2026 06:14:35 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:14:35 Europe/Berlin] POST data: []
+[10-Apr-2026 06:14:35 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:14:35 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:14:35 Europe/Berlin] ========================
+[10-Apr-2026 06:14:35 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:14:35 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:35 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:14:35 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:14:35 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:14:35 Europe/Berlin] =================
+[10-Apr-2026 06:14:35 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:35 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:14:35 Europe/Berlin] Method: GET
+[10-Apr-2026 06:14:35 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:14:35 Europe/Berlin] POST data: []
+[10-Apr-2026 06:14:35 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:14:35 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:14:35 Europe/Berlin] ========================
+[10-Apr-2026 06:14:35 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:14:35 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:35 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:14:35 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:14:35 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:14:35 Europe/Berlin] =================
+[10-Apr-2026 06:14:35 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:35 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:14:35 Europe/Berlin] Method: GET
+[10-Apr-2026 06:14:35 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:14:35 Europe/Berlin] POST data: []
+[10-Apr-2026 06:14:35 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:14:35 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:14:35 Europe/Berlin] ========================
+[10-Apr-2026 06:14:35 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:14:35 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:35 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:14:35 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:14:35 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:14:35 Europe/Berlin] =================
+[10-Apr-2026 06:14:40 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:40 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:14:40 Europe/Berlin] Method: GET
+[10-Apr-2026 06:14:40 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:14:40 Europe/Berlin] POST data: []
+[10-Apr-2026 06:14:40 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:14:40 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:14:40 Europe/Berlin] ========================
+[10-Apr-2026 06:14:40 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:14:40 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:40 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:14:40 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:14:40 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:14:40 Europe/Berlin] =================
+[10-Apr-2026 06:14:40 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:40 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:14:40 Europe/Berlin] Method: GET
+[10-Apr-2026 06:14:40 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:14:40 Europe/Berlin] POST data: []
+[10-Apr-2026 06:14:40 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:14:40 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:14:40 Europe/Berlin] ========================
+[10-Apr-2026 06:14:40 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:14:40 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:40 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:14:40 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:14:40 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:14:40 Europe/Berlin] =================
+[10-Apr-2026 06:14:44 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:44 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:14:44 Europe/Berlin] Method: GET
+[10-Apr-2026 06:14:44 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:14:44 Europe/Berlin] POST data: []
+[10-Apr-2026 06:14:44 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:14:44 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:14:44 Europe/Berlin] ========================
+[10-Apr-2026 06:14:44 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:14:44 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:44 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:14:44 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:14:44 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:14:44 Europe/Berlin] =================
+[10-Apr-2026 06:14:44 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:44 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:14:44 Europe/Berlin] Method: GET
+[10-Apr-2026 06:14:44 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:14:44 Europe/Berlin] POST data: []
+[10-Apr-2026 06:14:44 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:14:44 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:14:44 Europe/Berlin] ========================
+[10-Apr-2026 06:14:44 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:14:44 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:44 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:14:44 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:14:44 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:14:44 Europe/Berlin] =================
+[10-Apr-2026 06:14:47 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:47 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:14:47 Europe/Berlin] Method: GET
+[10-Apr-2026 06:14:47 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:14:47 Europe/Berlin] POST data: []
+[10-Apr-2026 06:14:47 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:14:47 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:14:47 Europe/Berlin] ========================
+[10-Apr-2026 06:14:47 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:14:47 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:14:47 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:14:47 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:14:47 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:14:47 Europe/Berlin] =================
+[10-Apr-2026 06:15:03 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:03 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:03 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:03 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:03 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:03 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:03 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:03 Europe/Berlin] ========================
+[10-Apr-2026 06:15:03 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:03 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:03 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:03 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:03 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:03 Europe/Berlin] =================
+[10-Apr-2026 06:15:03 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:03 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:03 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:03 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:03 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:03 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:03 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:03 Europe/Berlin] ========================
+[10-Apr-2026 06:15:03 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:03 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:03 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:03 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:03 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:03 Europe/Berlin] =================
+[10-Apr-2026 06:15:04 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:04 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:04 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:04 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:04 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:04 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:04 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:04 Europe/Berlin] ========================
+[10-Apr-2026 06:15:04 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:04 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:04 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:04 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:04 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:04 Europe/Berlin] =================
+[10-Apr-2026 06:15:04 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:04 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:04 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:04 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:04 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:04 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:04 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:04 Europe/Berlin] ========================
+[10-Apr-2026 06:15:04 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:04 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:04 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:04 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:04 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:04 Europe/Berlin] =================
+[10-Apr-2026 06:15:05 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:05 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:05 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:05 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:05 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:05 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:05 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:05 Europe/Berlin] ========================
+[10-Apr-2026 06:15:05 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:05 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:05 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:05 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:05 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:05 Europe/Berlin] =================
+[10-Apr-2026 06:15:06 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:06 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:06 Europe/Berlin] Method: PUT
+[10-Apr-2026 06:15:06 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:06 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:06 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:06 Europe/Berlin] Raw input: {"action":"accept_request","request_id":82}
+[10-Apr-2026 06:15:06 Europe/Berlin] ========================
+[10-Apr-2026 06:15:06 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:06 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:06 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:06 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:06 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:06 Europe/Berlin] =================
+[10-Apr-2026 06:15:06 Europe/Berlin] PUT raw input: {"action":"accept_request","request_id":82}
+[10-Apr-2026 06:15:06 Europe/Berlin] PUT parsed input: Array
+(
+    [action] => accept_request
+    [request_id] => 82
+)
+
+[10-Apr-2026 06:15:06 Europe/Berlin] PUT action: accept_request
+[10-Apr-2026 06:15:07 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:07 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:07 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:07 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:07 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:07 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:07 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:07 Europe/Berlin] ========================
+[10-Apr-2026 06:15:07 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:07 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:07 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:07 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:07 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:07 Europe/Berlin] =================
+[10-Apr-2026 06:15:18 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:18 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:18 Europe/Berlin] Method: POST
+[10-Apr-2026 06:15:18 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryk8SAVbsdx21PB882
+[10-Apr-2026 06:15:18 Europe/Berlin] POST data: {"id":"82","action":"resolve","error_description":"rtdysrs","error_type":"hardware","replacement_materials":"rstx","solution_method":"edsz"}
+[10-Apr-2026 06:15:18 Europe/Berlin] FILES data: ["attachments"]
+[10-Apr-2026 06:15:18 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:18 Europe/Berlin] ========================
+[10-Apr-2026 06:15:18 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:18 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:18 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:18 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:18 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:18 Europe/Berlin] =================
+[10-Apr-2026 06:15:18 Europe/Berlin] QUICK FIX: Checking action: resolve
+[10-Apr-2026 06:15:18 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryk8SAVbsdx21PB882
+[10-Apr-2026 06:15:18 Europe/Berlin] Is FormData: Yes
+[10-Apr-2026 06:15:18 Europe/Berlin] Processing FormData resolve
+[10-Apr-2026 06:15:18 Europe/Berlin] Resolve data - ID: 82, Error: rtdysrs
+[10-Apr-2026 06:15:18 Europe/Berlin] Found 2 files to upload
+[10-Apr-2026 06:15:18 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[10-Apr-2026 06:15:18 Europe/Berlin] Request ID: 82
+[10-Apr-2026 06:15:18 Europe/Berlin] User ID: 2, Role: staff
+[10-Apr-2026 06:15:18 Europe/Berlin] Error Description: rtdysrs
+[10-Apr-2026 06:15:18 Europe/Berlin] Error Type: hardware
+[10-Apr-2026 06:15:18 Europe/Berlin] Solution Method: edsz
+[10-Apr-2026 06:15:18 Europe/Berlin] Attachments count: 2
+[10-Apr-2026 06:15:18 Europe/Berlin] ACCESS GRANTED - User role: staff
+[10-Apr-2026 06:15:18 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED - Fixing HTTP 500 error
+[10-Apr-2026 06:15:18 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[10-Apr-2026 06:15:19 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:19 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:19 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:19 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:19 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:19 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:19 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:19 Europe/Berlin] ========================
+[10-Apr-2026 06:15:19 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:19 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:19 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:19 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:19 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:19 Europe/Berlin] =================
+[10-Apr-2026 06:15:30 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:30 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:30 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:30 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:30 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:30 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:30 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:30 Europe/Berlin] ========================
+[10-Apr-2026 06:15:30 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:30 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:30 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:30 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:30 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:30 Europe/Berlin] =================
+[10-Apr-2026 06:15:34 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:34 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:34 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:34 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:34 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:34 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:34 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:34 Europe/Berlin] ========================
+[10-Apr-2026 06:15:34 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:34 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:34 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:34 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:34 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:34 Europe/Berlin] =================
+[10-Apr-2026 06:15:34 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:34 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:34 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:34 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:34 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:34 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:34 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:34 Europe/Berlin] ========================
+[10-Apr-2026 06:15:34 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:34 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:34 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:34 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:34 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:34 Europe/Berlin] =================
+[10-Apr-2026 06:15:36 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:36 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:36 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:36 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:36 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:36 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:36 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:36 Europe/Berlin] ========================
+[10-Apr-2026 06:15:36 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:36 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:36 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:36 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:36 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:36 Europe/Berlin] =================
+[10-Apr-2026 06:15:36 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:36 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:36 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:36 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:36 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:36 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:36 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:36 Europe/Berlin] ========================
+[10-Apr-2026 06:15:36 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:36 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:36 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:36 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:36 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:36 Europe/Berlin] =================
+[10-Apr-2026 06:15:37 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:37 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:37 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:37 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:37 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:37 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:37 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:37 Europe/Berlin] ========================
+[10-Apr-2026 06:15:37 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:37 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:37 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:37 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:37 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:37 Europe/Berlin] =================
+[10-Apr-2026 06:15:53 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:53 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:53 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:53 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:53 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:53 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:53 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:53 Europe/Berlin] ========================
+[10-Apr-2026 06:15:53 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:53 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:53 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:53 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:53 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:53 Europe/Berlin] =================
+[10-Apr-2026 06:15:56 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:56 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:15:56 Europe/Berlin] Method: GET
+[10-Apr-2026 06:15:56 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:15:56 Europe/Berlin] POST data: []
+[10-Apr-2026 06:15:56 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:15:56 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:15:56 Europe/Berlin] ========================
+[10-Apr-2026 06:15:56 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:15:56 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:15:56 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:15:56 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:15:56 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:15:56 Europe/Berlin] =================
+[10-Apr-2026 06:17:45 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:17:45 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:17:45 Europe/Berlin] Method: GET
+[10-Apr-2026 06:17:45 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:17:45 Europe/Berlin] POST data: []
+[10-Apr-2026 06:17:45 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:17:45 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:17:45 Europe/Berlin] ========================
+[10-Apr-2026 06:17:45 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:17:45 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:17:45 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:17:45 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:17:45 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:17:45 Europe/Berlin] =================
+[10-Apr-2026 06:18:51 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:51 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:18:51 Europe/Berlin] Method: GET
+[10-Apr-2026 06:18:51 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:18:51 Europe/Berlin] POST data: []
+[10-Apr-2026 06:18:51 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:18:51 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:18:51 Europe/Berlin] ========================
+[10-Apr-2026 06:18:51 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:18:51 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:51 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:18:51 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:18:51 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:18:51 Europe/Berlin] =================
+[10-Apr-2026 06:18:51 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:51 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:18:51 Europe/Berlin] Method: GET
+[10-Apr-2026 06:18:51 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:18:51 Europe/Berlin] POST data: []
+[10-Apr-2026 06:18:51 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:18:51 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:18:51 Europe/Berlin] ========================
+[10-Apr-2026 06:18:51 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:18:51 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:51 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:18:51 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:18:51 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:18:51 Europe/Berlin] =================
+[10-Apr-2026 06:18:51 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:51 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:18:51 Europe/Berlin] Method: GET
+[10-Apr-2026 06:18:51 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:18:51 Europe/Berlin] POST data: []
+[10-Apr-2026 06:18:51 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:18:51 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:18:51 Europe/Berlin] ========================
+[10-Apr-2026 06:18:51 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:18:51 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:51 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:18:51 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:18:51 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:18:51 Europe/Berlin] =================
+[10-Apr-2026 06:18:51 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:51 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:18:51 Europe/Berlin] Method: GET
+[10-Apr-2026 06:18:51 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:18:51 Europe/Berlin] POST data: []
+[10-Apr-2026 06:18:51 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:18:51 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:18:51 Europe/Berlin] ========================
+[10-Apr-2026 06:18:51 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:18:51 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:51 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:18:51 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:18:51 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:18:51 Europe/Berlin] =================
+[10-Apr-2026 06:18:53 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:53 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:18:53 Europe/Berlin] Method: GET
+[10-Apr-2026 06:18:53 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:18:53 Europe/Berlin] POST data: []
+[10-Apr-2026 06:18:53 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:18:53 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:18:53 Europe/Berlin] ========================
+[10-Apr-2026 06:18:53 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:18:53 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:53 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:18:53 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:18:53 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:18:53 Europe/Berlin] =================
+[10-Apr-2026 06:18:53 Europe/Berlin] Database session started - ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:53 Europe/Berlin] === API REQUEST DEBUG ===
+[10-Apr-2026 06:18:53 Europe/Berlin] Method: GET
+[10-Apr-2026 06:18:53 Europe/Berlin] Content-Type: application/json
+[10-Apr-2026 06:18:53 Europe/Berlin] POST data: []
+[10-Apr-2026 06:18:53 Europe/Berlin] FILES data: []
+[10-Apr-2026 06:18:53 Europe/Berlin] Raw input: 
+[10-Apr-2026 06:18:53 Europe/Berlin] ========================
+[10-Apr-2026 06:18:53 Europe/Berlin] === AUTH DEBUG ===
+[10-Apr-2026 06:18:53 Europe/Berlin] Session ID: grqboj4cjv1s2e49600erlmj8t
+[10-Apr-2026 06:18:53 Europe/Berlin] User ID: 2
+[10-Apr-2026 06:18:53 Europe/Berlin] User Role: staff
+[10-Apr-2026 06:18:53 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[10-Apr-2026 06:18:53 Europe/Berlin] =================
