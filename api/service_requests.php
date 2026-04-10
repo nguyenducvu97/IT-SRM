@@ -989,10 +989,8 @@ if ($method == 'GET') {
 
 
         $query = "SELECT sr.*, c.name as category_name, u.full_name as requester_name, 
-
                         u.email as requester_email, u.phone as requester_phone,
-
-                        assigned.full_name as assigned_name, assigned.email as assigned_email, sr.assigned_at,
+                        assigned.full_name as assigned_name, assigned.email as assigned_email, sr.assigned_at, sr.accepted_at,
 
                         sreq.id as support_request_id, sreq.support_type, sreq.support_details, 
 

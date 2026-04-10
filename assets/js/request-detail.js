@@ -4290,39 +4290,15 @@ class RequestDetailApp {
 
 
 
-                    ${request.assigned_at ? `
-
-
-
-
-
-
+                    ${request.assigned_to && request.accepted_at ? `
 
                         <div class="meta-item">
-
-
-
-
-
-
-
-                            <strong>Ngày nhận:</strong> ${formatDate(request.assigned_at)}
-
-
-
-
-
-
+                            <strong>Thời gian staff nhận:</strong> ${formatDate(request.accepted_at)}
 
                         </div>
 
-
-
-
-
-
-
                     ` : ''}
+
 
 
 
@@ -5669,7 +5645,7 @@ class RequestDetailApp {
 
 
 
-                    <div class="support-request-info">
+                    <div class="support-request-info" style="background-color: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
 
 
 
@@ -5749,7 +5725,10 @@ class RequestDetailApp {
 
 
 
-                                <strong>Lý do:</strong> ${request.support_request.support_reason}
+                                <strong style="display: block; margin-bottom: 5px;">Lý do:</strong> 
+                                <div style="background-color: #fff3cd; padding: 10px; border-radius: 5px; border-left: 4px solid #ffc107;">
+                                    ${request.support_request.support_reason}
+                                </div>
 
 
 
@@ -5773,7 +5752,7 @@ class RequestDetailApp {
 
 
 
-                                <strong>Trạng thái:</strong> <span class="badge status-${request.support_request.status}">${getSupportStatusText(request.support_request.status)}</span>
+                                <strong>Trạng thái:</strong> <span class="badge status-${request.support_request.status}" ${request.support_request.status === 'pending' ? 'style="background-color: #dc3545; color: white; font-weight: bold; padding: 6px 12px; border-radius: 6px; box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);"' : ''}>${getSupportStatusText(request.support_request.status)}</span>
 
 
 
@@ -10655,7 +10634,7 @@ class RequestDetailApp {
 
 
 
-                    <div class="support-request-info">
+                    <div class="support-request-info" style="background-color: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
 
 
 
@@ -10783,7 +10762,10 @@ class RequestDetailApp {
 
 
 
-                                <strong>Lý do:</strong> ${support.support_reason}
+                                <strong style="display: block; margin-bottom: 5px;">Lý do:</strong> 
+                                <div style="background-color: #fff3cd; padding: 10px; border-radius: 5px; border-left: 4px solid #ffc107;">
+                                    ${support.support_reason}
+                                </div>
 
 
 
@@ -10831,7 +10813,7 @@ class RequestDetailApp {
 
 
 
-                                <strong>Trạng thái:</strong> <span class="badge status-${support.status}">${this.getSupportStatusText(support.status)}</span>
+                                <strong>Trạng thái:</strong> <span class="badge status-${support.status}" ${support.status === 'pending' ? 'style="background-color: #dc3545; color: white; font-weight: bold; padding: 6px 12px; border-radius: 6px; box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);"' : ''}>${this.getSupportStatusText(support.status)}</span>
 
 
 
@@ -15153,7 +15135,7 @@ class RequestDetailApp {
 
 
 
-                z-index: 9999;
+                z-index: 99999;
 
 
 

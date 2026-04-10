@@ -23,7 +23,7 @@ class NotificationHelper {
     /**
      * Create notification with email integration
      */
-    public function createNotification($userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = null, $sendEmail = true) {
+    public function createNotification($userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = 'service_request', $sendEmail = true) {
         try {
             // Create in-app notification
             $stmt = $this->db->prepare("
