@@ -85,7 +85,21 @@ class ITServiceApp {
         
         const categoryFilter = document.getElementById('categoryFilter');
         if (categoryFilter) categoryFilter.addEventListener('change', () => this.loadRequests());
-
+        
+        // Search functionality
+        const requestSearch = document.getElementById('requestSearch');
+        if (requestSearch) {
+            let searchTimeout;
+            
+            // Search on input with debounce
+            requestSearch.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    this.loadRequests();
+                }, 500); // Wait 500ms after user stops typing
+            });
+        }
+        
         // Modal events
         document.querySelectorAll('.close').forEach(closeBtn => {
             closeBtn.addEventListener('click', (e) => this.closeModal(e.target.closest('.modal')));
@@ -797,10 +811,23 @@ class ITServiceApp {
             const categoryFilter = document.getElementById('categoryFilter');
             const category = categoryFilter ? categoryFilter.value : '';
             
-            let url = `api/service_requests.php?action=list&page=${page}`;
-            if (status) url += `&status=${status}`;
-            if (priority) url += `&priority=${priority}`;
-            if (category) url += `&category=${category}`;
+            // Add search functionality
+            const requestSearch = document.getElementById('requestSearch');
+            const search = requestSearch ? requestSearch.value.trim() : '';
+            
+            // Use search API if search parameter exists, otherwise use normal API
+            let url;
+            if (search) {
+                url = `api/search_requests.php?page=${page}&search=${encodeURIComponent(search)}`;
+                if (status) url += `&status=${status}`;
+                if (priority) url += `&priority=${priority}`;
+                if (category) url += `&category=${category}`;
+            } else {
+                url = `api/service_requests.php?action=list&page=${page}`;
+                if (status) url += `&status=${status}`;
+                if (priority) url += `&priority=${priority}`;
+                if (category) url += `&category=${category}`;
+            }
 
             const response = await this.apiCall(url);
             

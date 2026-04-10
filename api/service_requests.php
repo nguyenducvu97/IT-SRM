@@ -10,7 +10,7 @@ error_reporting(E_ALL);
 
 
 
-ini_set('display_errors', 0);  // Don't display errors in output
+ini_set('display_errors', 0);  // Disable errors for JSON responses
 
 
 
@@ -346,7 +346,7 @@ if ($method == 'GET') {
 
         // For dashboard stats (no filters), use high limit to get all requests
 
-        $has_filters = isset($_GET['status']) || isset($_GET['priority']) || isset($_GET['category']) || isset($_GET['category_id']);
+        $has_filters = isset($_GET['status']) || isset($_GET['priority']) || isset($_GET['category']) || isset($_GET['category_id']) || isset($_GET['search']);
 
         
 
@@ -386,13 +386,11 @@ if ($method == 'GET') {
 
         $category_id_filter = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
 
-
+        $search_filter = isset($_GET['search']) ? trim($_GET['search']) : '';
 
         
-
-
-
         $where_clause = "WHERE 1=1";
+
 
 
 
@@ -501,6 +499,18 @@ if ($method == 'GET') {
 
 
         
+
+
+
+        // Add search condition if provided
+
+        if (!empty($search_filter)) {
+
+            $where_clause .= " AND (sr.title LIKE :search OR sr.description LIKE :search OR u.username LIKE :search)";
+
+            $params[':search'] = '%' . $search_filter . '%';
+
+        }
 
 
 

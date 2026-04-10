@@ -2591,6 +2591,92 @@ body {
 
     align-items: center;
 
+    flex-wrap: wrap;
+
+}
+
+
+
+.page-actions .form-control {
+
+    min-width: 150px;
+
+}
+
+
+
+.page-actions #requestSearch {
+
+    min-width: 250px;
+
+    flex: 2;
+
+}
+
+
+
+.page-actions #requestSearch::placeholder {
+
+    color: #999;
+
+    font-style: italic;
+
+}
+
+
+
+.page-actions .btn {
+
+    padding: 0.5rem 1rem;
+
+    font-size: 0.875rem;
+
+    white-space: nowrap;
+
+}
+
+
+
+.page-actions #searchBtn {
+
+    background-color: #007bff;
+
+    border-color: #007bff;
+
+    color: white;
+
+}
+
+
+
+.page-actions #searchBtn:hover {
+
+    background-color: #0056b3;
+
+    border-color: #0056b3;
+
+}
+
+
+
+.page-actions #clearSearchBtn {
+
+    background-color: #6c757d;
+
+    border-color: #6c757d;
+
+    color: white;
+
+}
+
+
+
+.page-actions #clearSearchBtn:hover {
+
+    background-color: #545b62;
+
+    border-color: #545b62;
+
 }
 
 

@@ -579,3 +579,6 @@
 [2026-04-10 10:27:37] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ mới cho yêu cầu #86
 [2026-04-10 10:32:52] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Phản hồi từ người dùng
 [2026-04-10 10:32:56] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Phản hồi từ người dùng
+[2026-04-10 10:46:10] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu được Admin phê duyệt
+[2026-04-10 10:46:14] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu được Admin phê duyệt
+[2026-04-10 10:46:18] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu đang chờ phê duyệt
