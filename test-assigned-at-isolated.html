@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test assigned_at Isolated</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .request-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .meta-item {
+            margin: 5px 0;
+            padding: 5px 0;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test assigned_at Isolated</h1>
+        
+        <div class="test-section">
+            <h2>JavaScript formatDate Function Test</h2>
+            <div id="format-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Template Logic Test</h2>
+            <div id="template-test"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Request Details Simulation</h2>
+            <div id="request-details"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Debug Information</h2>
+            <div id="debug-info"></div>
+        </div>
+    </div>
+
+    <script>
+        // formatDate function from request-detail.js
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            if (isNaN(date.getTime())) return dateString;
+            return date.toLocaleString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+        
+        // Test data (simulating API response)
+        const testData = {
+            id: 81,
+            title: "éaew",
+            status: "in_progress",
+            assigned_to: 2,
+            assigned_name: "John Smith",
+            created_at: "2026-04-09 19:03:27",
+            assigned_at: "2026-04-09 21:00:42",
+            resolved_at: null
+        };
+        
+        // Test formatDate function
+        document.getElementById('format-test').innerHTML = `
+            <p><strong>Test formatDate function:</strong></p>
+            <p>Input: "2026-04-09 21:00:42"</p>
+            <p>Output: "${formatDate('2026-04-09 21:00:42')}"</p>
+            <p>Input: null</p>
+            <p>Output: "${formatDate(null)}"</p>
+        `;
+        
+        // Test template logic
+        const templateLogic = testData.assigned_at ? `
+            <div class="meta-item">
+                <strong>Ngày nhân:</strong> ${formatDate(testData.assigned_at)}
+            </div>
+        ` : '';
+        
+        document.getElementById('template-test').innerHTML = `
+            <p><strong>Template Logic Test:</strong></p>
+            <p>testData.assigned_at = ${JSON.stringify(testData.assigned_at)}</p>
+            <p>Condition (testData.assigned_at ? 'TRUE' : 'FALSE') = ${testData.assigned_at ? 'TRUE' : 'FALSE'}</p>
+            <p>Template output:</p>
+            ${templateLogic || '<span style="color: red;">No output (condition false)</span>'}
+        `;
+        
+        // Simulate request details
+        document.getElementById('request-details').innerHTML = `
+            <div class="request-details">
+                <h3>Chi Tiêu Yêu Câu #${testData.id}</h3>
+                <div class="meta-item">
+                    <strong>ID yêu yêu:</strong> #${testData.id}
+                </div>
+                <div class="meta-item">
+                    <strong>Tiêu yêu:</strong> ${testData.title}
+                </div>
+                <div class="meta-item">
+                    <strong>Ngày yêu:</strong> ${formatDate(testData.created_at)}
+                </div>
+                ${testData.assigned_at ? `
+                    <div class="meta-item" style="background: #d4edda; padding: 10px; border-radius: 4px;">
+                        <strong>Ngày nhân:</strong> ${formatDate(testData.assigned_at)}
+                    </div>
+                ` : ''}
+                <div class="meta-item">
+                    <strong>Trang thái:</strong> ${testData.status}
+                </div>
+                <div class="meta-item">
+                    <strong>Ngày nhân:</strong> ${testData.assigned_name}
+                </div>
+            </div>
+        `;
+        
+        // Debug information
+        document.getElementById('debug-info').innerHTML = `
+            <h4>Debug Information:</h4>
+            <ul>
+                <li><strong>testData.assigned_at:</strong> ${JSON.stringify(testData.assigned_at)}</li>
+                <li><strong>Type:</strong> ${typeof testData.assigned_at}</li>
+                <li><strong>Boolean check:</strong> ${testData.assigned_at ? 'TRUE' : 'FALSE'}</li>
+                <li><strong>formatDate result:</strong> "${formatDate(testData.assigned_at)}"</li>
+                <li><strong>Template should display:</strong> ${testData.assigned_at ? 'YES' : 'NO'}</li>
+            </ul>
+            
+            <h4>Expected in Main Application:</h4>
+            <p>If this test shows "Ngày nhân:" correctly, but main app doesn't, the issue is likely:</p>
+            <ul>
+                <li>Browser cache (clear with Ctrl+F5)</li>
+                <li>API response caching</li>
+                <li>JavaScript error in main app</li>
+                <li>CSS hiding the element</li>
+            </ul>
+        `;
+        
+        // Log to console
+        console.log('Test data:', testData);
+        console.log('assigned_at:', testData.assigned_at);
+        console.log('formatDate result:', formatDate(testData.assigned_at));
+        console.log('Template condition:', testData.assigned_at ? 'TRUE' : 'FALSE');
+    </script>
+</body>
+</html>

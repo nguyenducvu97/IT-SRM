@@ -992,7 +992,7 @@ if ($method == 'GET') {
 
                         u.email as requester_email, u.phone as requester_phone,
 
-                        assigned.full_name as assigned_name, assigned.email as assigned_email,
+                        assigned.full_name as assigned_name, assigned.email as assigned_email, sr.assigned_at,
 
                         sreq.id as support_request_id, sreq.support_type, sreq.support_details, 
 
@@ -3687,7 +3687,7 @@ elseif ($method == 'POST') {
 
 
 
-                                 priority = :priority, status = :status, assigned_to = :assigned_to, 
+                                 priority = :priority, status = :status, assigned_to = :assigned_to, assigned_at = NOW(), 
 
 
 
@@ -7464,7 +7464,17 @@ elseif ($method == 'PUT') {
 
                            SET title = :title, description = :description, category_id = :category_id, 
 
-                               priority = :priority, status = :status, assigned_to = :assigned_to 
+                               priority = :priority, status = :status, assigned_to = :assigned_to,
+
+                               assigned_at = CASE 
+
+                                   WHEN assigned_to IS NOT NULL AND (SELECT assigned_to FROM service_requests WHERE id = :request_id) IS NULL THEN NOW()
+
+                                   WHEN assigned_to IS NOT NULL AND (SELECT assigned_to FROM service_requests WHERE id = :request_id) != :assigned_to THEN NOW()
+
+                                   ELSE assigned_at
+
+                               END
 
                            WHERE id = :request_id";
 
@@ -8085,6 +8095,86 @@ function handleResolveRequest($request_id, $error_description, $error_type, $rep
         // Commit transaction
 
         $db->commit();
+
+        
+
+        // Send notifications to user and admin
+
+        try {
+
+            require_once __DIR__ . '/../lib/NotificationHelper.php';
+
+            $notificationHelper = new NotificationHelper($db);
+
+            
+
+            // Get request details for notification
+
+            $request_query = "SELECT sr.title, sr.user_id, u.full_name as user_name, u.email as user_email
+
+                             FROM service_requests sr
+
+                             LEFT JOIN users u ON sr.user_id = u.id
+
+                             WHERE sr.id = :request_id";
+
+            $request_stmt = $db->prepare($request_query);
+
+            $request_stmt->bindParam(":request_id", $request_id);
+
+            $request_stmt->execute();
+
+            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+
+            
+
+            if ($request_data) {
+
+                // Get staff name
+
+                $staff_query = "SELECT full_name FROM users WHERE id = :user_id";
+
+                $staff_stmt = $db->prepare($staff_query);
+
+                $staff_stmt->bindParam(":user_id", $user_id);
+
+                $staff_stmt->execute();
+
+                $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
+
+                $staff_name = $staff_data['full_name'] ?? 'Staff';
+
+                
+
+                // Notify user that request is resolved
+
+                $user_title = "Yêu yêu #{$request_id} yêu yêu yêu yêu";
+
+                $user_message = "{$staff_name} yêu yêu yêu yêu: {$request_data['title']}";
+
+                $notificationHelper->notifyUser($request_data['user_id'], $user_title, $user_message, 'success', $request_id, 'request');
+
+                
+
+                // Notify all admins
+
+                $admin_title = "Yêu yêu #{$request_id} yêu yêu yêu yêu";
+
+                $admin_message = "{$staff_name} yêu yêu yêu yêu: {$request_data['title']}";
+
+                $notificationHelper->notifyAdmins($admin_title, $admin_message, 'success', $request_id, 'request');
+
+                
+
+                error_log("RESOLVE NOTIFICATIONS SENT - User: {$request_data['user_id']}, Admins notified");
+
+            }
+
+        } catch (Exception $e) {
+
+            error_log("RESOLVE NOTIFICATION ERROR: " . $e->getMessage());
+
+        }
 
         
 
