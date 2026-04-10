@@ -582,3 +582,6 @@
 [2026-04-10 10:46:10] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu được Admin phê duyệt
 [2026-04-10 10:46:14] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu được Admin phê duyệt
 [2026-04-10 10:46:18] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu đang chờ phê duyệt
+[2026-04-10 11:33:58] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-10 11:34:02] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-10 11:34:06] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống

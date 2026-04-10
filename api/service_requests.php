@@ -1791,12 +1791,8 @@ elseif ($method == 'POST') {
         $action = isset($input['action']) ? $input['action'] : '';
     }
     
-    // QUICK FIX: Early return for create action to improve performance
-    error_log("QUICK FIX: Checking action: " . ($action ?? 'null'));
+    // OPTIMIZED: Early return for create action to improve performance
     if ($action === 'create') {
-        error_log("QUICK FIX: Processing create action with early return");
-        error_log("QUICK FIX: User ID: " . ($user_id ?? 'null'));
-        error_log("QUICK FIX: Content-Type: " . ($content_type ?? 'null'));
         
         if (strpos($content_type, 'multipart/form-data') !== false) {
             // Handle FormData create
@@ -1832,18 +1828,11 @@ elseif ($method == 'POST') {
             
             if ($stmt->execute()) {
                 $request_id = $db->lastInsertId();
-                error_log("QUICK FIX: Request created successfully - ID: $request_id");
                 
                 // Handle file attachments if any (optimized)
                 $uploaded_files = [];
-                error_log("QUICK FIX: Checking file upload conditions");
-                error_log("QUICK FIX: Content-Type: " . $content_type);
-                error_log("QUICK FIX: Is multipart: " . (strpos($content_type, 'multipart/form-data') !== false ? 'Yes' : 'No'));
-                error_log("QUICK FIX: \$_FILES['attachments'] set: " . (isset($_FILES['attachments']) ? 'Yes' : 'No'));
-                error_log("QUICK FIX: \$_FILES data: " . print_r($_FILES, true));
                 
                 if (strpos($content_type, 'multipart/form-data') !== false && isset($_FILES['attachments'])) {
-                    error_log("QUICK FIX: Processing file attachments");
                     
                     $uploads_dir = '../uploads/attachments/' . $request_id . '/';
                     if (!file_exists($uploads_dir)) {
@@ -1851,15 +1840,11 @@ elseif ($method == 'POST') {
                     }
                     
                     $file_attachments = $_FILES['attachments'];
-                    error_log("QUICK FIX: File attachments array loaded");
                     if (is_array($file_attachments['name'])) {
                         $file_count = count($file_attachments['name']);
-                        error_log("QUICK FIX: Processing $file_count files");
                         
                         for ($i = 0; $i < $file_count; $i++) {
-                            error_log("QUICK FIX: File $i - error: " . $file_attachments['error'][$i]);
                             if ($file_attachments['error'][$i] === UPLOAD_ERR_OK) {
-                                error_log("QUICK FIX: File $i passed error check");
                                 $original_name = $file_attachments['name'][$i];
                                 $file_size = $file_attachments['size'][$i];
                                 $file_tmp = $file_attachments['tmp_name'][$i];
@@ -1868,7 +1853,6 @@ elseif ($method == 'POST') {
                                 // Quick validation
                                 $max_size = 10 * 1024 * 1024; // 10MB
                                 if ($file_size > $max_size) {
-                                    error_log("QUICK FIX: File too large: $original_name");
                                     continue;
                                 }
                                 
@@ -1899,7 +1883,6 @@ elseif ($method == 'POST') {
                                             'file_size' => $file_size,
                                             'mime_type' => $file_type
                                         ];
-                                        error_log("QUICK FIX: File uploaded successfully: $original_name");
                                     }
                                 }
                             }
@@ -1939,61 +1922,53 @@ elseif ($method == 'POST') {
                     $response_data['message'] = 'Request created successfully';
                 }
                 
-                // Create notifications for staff and admin
-                error_log("DEBUG: Starting notification creation for request $request_id");
-                try {
-                    require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                    $notificationHelper = new ServiceRequestNotificationHelper();
+                // OPTIMIZED: Background notifications for staff and admin
+                register_shutdown_function(function() use ($request_id, $title, $user_id, $category_id, $db) {
+                    ignore_user_abort(true);
+                    set_time_limit(300); // 5 minutes for background processing
                     
-                    // Get user details for notifications
-                    $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
-                    $user_stmt->execute([$user_id]);
-                    $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
-                    $requester_name = $user_data['full_name'] ?? 'Unknown User';
-                    
-                    // Get category name
-                    $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
-                    $cat_stmt->execute([$category_id]);
-                    $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
-                    $category_name = $cat_data['name'] ?? 'Unknown';
-                    
-                    error_log("DEBUG: Request data for notifications - Title: $title, Requester: $requester_name, Category: $category_name");
-                    
-                    // Notify staff
-                    error_log("DEBUG: Calling notifyStaffNewRequest");
-                    $staffResult = $notificationHelper->notifyStaffNewRequest(
-                        $request_id, 
-                        $title, 
-                        $requester_name, 
-                        $category_name
-                    );
-                    error_log("DEBUG: Staff notification result: " . ($staffResult ? 'SUCCESS' : 'FAILED'));
-                    
-                    // Notify admin
-                    error_log("DEBUG: Calling notifyAdminNewRequest");
-                    $adminResult = $notificationHelper->notifyAdminNewRequest(
-                        $request_id, 
-                        $title, 
-                        $requester_name, 
-                        $category_name
-                    );
-                    error_log("DEBUG: Admin notification result: " . ($adminResult ? 'SUCCESS' : 'FAILED'));
-                    
-                    error_log("Role-based notifications created for request $request_id");
-                    
-                } catch (Exception $e) {
-                    error_log("Failed to create role-based notifications: " . $e->getMessage());
-                    error_log("Notification exception trace: " . $e->getTraceAsString());
-                    // Continue even if notification creation fails
-                }
+                    try {
+                        require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                        $notificationHelper = new ServiceRequestNotificationHelper();
+                        
+                        // Get user details for notifications
+                        $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+                        $user_stmt->execute([$user_id]);
+                        $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
+                        $requester_name = $user_data['full_name'] ?? 'Unknown User';
+                        
+                        // Get category name
+                        $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
+                        $cat_stmt->execute([$category_id]);
+                        $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
+                        $category_name = $cat_data['name'] ?? 'Unknown';
+                        
+                        // Notify staff
+                        $notificationHelper->notifyStaffNewRequest(
+                            $request_id, 
+                            $title, 
+                            $requester_name, 
+                            $category_name
+                        );
+                        
+                        // Notify admin
+                        $notificationHelper->notifyAdminNewRequest(
+                            $request_id, 
+                            $title, 
+                            $requester_name, 
+                            $category_name
+                        );
+                        
+                    } catch (Exception $e) {
+                        error_log("Background notification failed: " . $e->getMessage());
+                    }
+                });
                 
                 serviceJsonResponse(true, $response_data['message'], $response_data);
             } else {
-                error_log("QUICK FIX: Failed to create request");
                 serviceJsonResponse(false, "Failed to create request");
             }
         } catch (Exception $e) {
-            error_log("QUICK FIX: Database error: " . $e->getMessage());
             serviceJsonResponse(false, "Database error: " . $e->getMessage());
         }
     }

@@ -22,6 +22,8 @@ class ITServiceApp {
     constructor() {
         this.currentUser = null;
         this.currentPage = 'dashboard';
+        this.autoReloadInterval = null;
+        this.autoReloadEnabled = true;
         this.init();
     }
 
@@ -29,6 +31,7 @@ class ITServiceApp {
         this.bindEvents();
         this.checkAuth();
         this.selectedFiles = []; // Store selected files
+        this.initAutoReload();
     }
 
     bindEvents() {
@@ -1434,7 +1437,7 @@ class ITServiceApp {
             
             // Create request with timeout protection
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout for large files
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout for large files
             
             const response = await fetch('api/service_requests.php', {
                 method: 'POST',
@@ -1468,7 +1471,7 @@ class ITServiceApp {
                 this.updateFileList();
                 
                 // Very small delay before redirect
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve => setTimeout(resolve, 50));
                 this.showPage('requests');
             } else {
                 // Update loading text - Error
@@ -1484,7 +1487,7 @@ class ITServiceApp {
             console.error('Create request error:', error);
             
             if (error.name === 'AbortError') {
-                this.showNotification('Yêu cầu hết thời gian chờ (30s). File có thể quá lớn (>10MB) hoặc mạng chậm. Vui lòng thử lại với file nhỏ hơn hoặc kiểm tra kết nối.', 'error');
+                this.showNotification('Yêu cầu hết thời gian chờ (15s). File có thể quá lớn (>10MB) hoặc mạng chậm. Vui lòng thử lại với file nhỏ hơn hoặc kiểm tra kết nối.', 'error');
             } else if (error.message && error.message.includes('NetworkError')) {
                 this.showNotification('Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.', 'error');
             } else {
@@ -1501,7 +1504,7 @@ class ITServiceApp {
                 submitBtn.disabled = false;
                 cancelBtn.disabled = false;
                 submitBtn.innerHTML = originalSubmitText;
-            }, 300);
+            }, 200);
         }
     }
 
@@ -2055,6 +2058,8 @@ class ITServiceApp {
                 console.log('User role:', this.currentUser.role);
                 console.log('User ID:', this.currentUser.id);
                 this.showDashboard();
+                // Start auto-reload after successful login
+                this.startAutoReload();
             } else {
                 // No active session, show login screen
                 console.log('❌ No active session, showing login');
@@ -3850,4 +3855,169 @@ ITServiceApp.prototype.exportKPI = async function() {
     } finally {
         this.hideLoadingState();
     }
+};
+
+// ========================================
+// AUTO-RELOAD SYSTEM (3-second refresh)
+// ========================================
+
+ITServiceApp.prototype.initAutoReload = function() {
+    console.log('Initializing auto-reload system...');
+    // Auto-reload will be started after successful login
+};
+
+ITServiceApp.prototype.startAutoReload = function() {
+    if (!this.autoReloadEnabled) {
+        console.log('Auto-reload is disabled');
+        return;
+    }
+
+    // Clear existing interval
+    this.stopAutoReload();
+
+    console.log('Starting 3-second auto-reload for all roles...');
+    
+    // Set interval for 3 seconds
+    this.autoReloadInterval = setInterval(() => {
+        this.performAutoReload();
+    }, 3000);
+
+    // Add visual indicator
+    this.addAutoReloadIndicator();
+};
+
+ITServiceApp.prototype.stopAutoReload = function() {
+    if (this.autoReloadInterval) {
+        clearInterval(this.autoReloadInterval);
+        this.autoReloadInterval = null;
+        console.log('Auto-reload stopped');
+    }
+};
+
+ITServiceApp.prototype.performAutoReload = async function() {
+    if (!this.currentUser || !this.autoReloadEnabled) {
+        return;
+    }
+
+    try {
+        console.log('Auto-reloading data...');
+        
+        // Reload based on current page
+        switch (this.currentPage) {
+            case 'dashboard':
+                await this.loadDashboardData();
+                break;
+            case 'requests':
+                await this.loadRequests();
+                break;
+            case 'notifications':
+                await this.loadNotifications();
+                break;
+            default:
+                // For other pages, just refresh notifications
+                await this.refreshNotifications();
+        }
+
+        // Always refresh notification count
+        await this.updateNotificationCount();
+
+    } catch (error) {
+        console.error('Auto-reload error:', error);
+    }
+};
+
+ITServiceApp.prototype.refreshNotifications = async function() {
+    try {
+        const response = await this.apiCall('api/notifications.php?action=list&limit=5');
+        if (response.success && response.data) {
+            // Update notification badge
+            this.updateNotificationBadge(response.data);
+        }
+    } catch (error) {
+        console.error('Error refreshing notifications:', error);
+    }
+};
+
+ITServiceApp.prototype.updateNotificationCount = async function() {
+    try {
+        const response = await this.apiCall('api/notifications.php?action=count');
+        if (response.success) {
+            const count = response.data.unread_count || 0;
+            this.updateNotificationCountDisplay(count);
+        }
+    } catch (error) {
+        console.error('Error updating notification count:', error);
+    }
+};
+
+ITServiceApp.prototype.updateNotificationBadge = function(notifications) {
+    const unreadCount = notifications.filter(n => !n.is_read).length;
+    this.updateNotificationCountDisplay(unreadCount);
+};
+
+ITServiceApp.prototype.updateNotificationCountDisplay = function(count) {
+    const badge = document.querySelector('.notification-badge');
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+};
+
+ITServiceApp.prototype.addAutoReloadIndicator = function() {
+    // Remove existing indicator
+    const existing = document.querySelector('.auto-reload-indicator');
+    if (existing) {
+        existing.remove();
+    }
+
+    // Create indicator
+    const indicator = document.createElement('div');
+    indicator.className = 'auto-reload-indicator';
+    indicator.innerHTML = `
+        <div class="reload-pulse"></div>
+        <span>Auto-refresh: 3s</span>
+    `;
+    
+    // Add to header
+    const header = document.querySelector('.app-header');
+    if (header) {
+        header.appendChild(indicator);
+    }
+};
+
+ITServiceApp.prototype.toggleAutoReload = function() {
+    this.autoReloadEnabled = !this.autoReloadEnabled;
+    
+    if (this.autoReloadEnabled) {
+        this.startAutoReload();
+        this.showNotification('Auto-reload enabled (3s)', 'success');
+    } else {
+        this.stopAutoReload();
+        this.showNotification('Auto-reload disabled', 'info');
+        
+        // Remove indicator
+        const indicator = document.querySelector('.auto-reload-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+};
+
+// Override logout to stop auto-reload
+ITServiceApp.prototype.logout = function() {
+    this.stopAutoReload();
+    
+    // Original logout logic
+    const response = fetch('api/auth.php?action=logout', {
+        method: 'POST',
+        credentials: 'include'
+    });
+    
+    this.currentUser = null;
+    this.showLoginScreen();
+    this.showNotification('Logged out successfully', 'success');
 };
