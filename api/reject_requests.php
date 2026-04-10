@@ -266,7 +266,15 @@ if ($method == 'GET') {
 
                       processor.username as processor_name,
 
-                      GROUP_CONCAT(DISTINCT CONCAT(attachment.original_name, '|', attachment.filename) SEPARATOR '||') as attachments
+                      GROUP_CONCAT(
+    CASE 
+        WHEN attachment.original_name IS NOT NULL AND attachment.filename IS NOT NULL 
+        THEN CONCAT(attachment.original_name, '|', attachment.filename, '|', COALESCE(attachment.file_size, 0), '|', COALESCE(attachment.mime_type, 'application/octet-stream'))
+        ELSE NULL 
+    END
+    ORDER BY attachment.id 
+    SEPARATOR '||'
+) as attachments
 
                       FROM reject_requests rr 
 
@@ -332,21 +340,44 @@ if ($method == 'GET') {
 
                     $attachment_strings = explode('||', $request['attachments']);
 
+                    $seen_original_names = [];
+
                     foreach ($attachment_strings as $attachment_string) {
 
-                        if (!empty($attachment_string)) {
+                        if (!empty($attachment_string) && trim($attachment_string) !== '') {
 
                             $parts = explode('|', $attachment_string);
 
-                            if (count($parts) >= 2) {
+                            // Filter out empty parts but preserve order
+                            $filtered_parts = [];
+                            foreach ($parts as $part) {
+                                if ($part !== '' && $part !== null) {
+                                    $filtered_parts[] = $part;
+                                }
+                            }
 
-                                $attachments[] = [
+                            if (count($filtered_parts) >= 4 && !empty($filtered_parts[0]) && !empty($filtered_parts[1])) {
 
-                                    'original_name' => $parts[0],
+                                $original_name = trim($filtered_parts[0]);
 
-                                    'filename' => $parts[1]
+                                // Skip if we've already seen this original name
+                                if (!in_array($original_name, $seen_original_names)) {
 
-                                ];
+                                    $attachments[] = [
+
+                                        'original_name' => $original_name,
+
+                                        'filename' => trim($filtered_parts[1]),
+
+                                        'file_size' => intval($filtered_parts[2]),
+
+                                        'mime_type' => trim($filtered_parts[3])
+
+                                    ];
+
+                                    $seen_original_names[] = $original_name;
+
+                                }
 
                             }
 
@@ -468,7 +499,9 @@ if ($method == 'GET') {
 
                             FROM reject_request_attachments 
 
-                            WHERE reject_request_id = :id";
+                            WHERE reject_request_id = :id
+
+                            ORDER BY id";
 
         $attachment_stmt = $db->prepare($attachment_query);
 
@@ -476,7 +509,29 @@ if ($method == 'GET') {
 
         $attachment_stmt->execute();
 
-        $attachments = $attachment_stmt->fetchAll(PDO::FETCH_ASSOC);
+        $all_attachments = $attachment_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        
+
+        // Filter duplicates by original name
+
+        $attachments = [];
+
+        $seen_original_names = [];
+
+        foreach ($all_attachments as $attachment) {
+
+            $original_name = $attachment['original_name'];
+
+            if (!in_array($original_name, $seen_original_names)) {
+
+                $attachments[] = $attachment;
+
+                $seen_original_names[] = $original_name;
+
+            }
+
+        }
 
         
 

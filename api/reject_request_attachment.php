@@ -116,6 +116,34 @@ $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
 $mimeType = finfo_file($fileInfo, $filePath);
 finfo_close($fileInfo);
 
+// Debug logging
+error_log("=== REJECT ATTACHMENT DEBUG ===");
+error_log("File name: " . $fileName);
+error_log("File path: " . $filePath);
+error_log("File exists: " . (file_exists($filePath) ? 'YES' : 'NO'));
+error_log("File size: " . $fileSize);
+error_log("Detected MIME type: " . $mimeType);
+error_log("File extension: " . pathinfo($fileName, PATHINFO_EXTENSION));
+
+// Special handling for image files - validate they are actually images
+$extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp']) && strpos($mimeType, 'image/') !== 0) {
+    error_log("WARNING: File has image extension but MIME type is not image: " . $mimeType);
+    
+    // For view action, return error instead of corrupted content
+    $action = $_GET['action'] ?? 'download';
+    if ($action === 'view') {
+        http_response_code(422);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'File is corrupted or not a valid image file',
+            'detected_type' => $mimeType,
+            'expected_type' => 'image/*'
+        ]);
+        exit;
+    }
+}
+
 // Set appropriate headers for file download
 header('Content-Type: ' . $mimeType);
 header('Content-Length: ' . $fileSize);

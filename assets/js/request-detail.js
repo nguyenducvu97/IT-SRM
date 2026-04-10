@@ -5449,68 +5449,29 @@ class RequestDetailApp {
 
 
 
-
-
-
                                                         <img src="api/reject_request_attachment.php?file=${attachment.filename}&action=view" 
-
-
-
-
-
-
 
                                                              alt="${attachment.original_name}" 
 
-
-
-
-
-
-
                                                              class="attachment-preview"
-
-
-
-
-
-
 
                                                              onclick="requestDetailApp.showImageModal('api/reject_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
 
+                                                             style="cursor: pointer;"
 
+                                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
 
+                                                        <div class="image-error" style="display: none; padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; text-align: center;">
 
-
-
-
-                                                             style="cursor: pointer;">
-
-
-
-
-
-
-
-                                                        <div class="image-overlay">
-
-
-
-
-
-
-
-                                                            <i class="fas fa-search-plus"></i>
-
-
-
-
-
-
+                                                            <i class="fas fa-exclamation-triangle"></i> Không hiển thị được hình ảnh
 
                                                         </div>
 
+                                                        <div class="image-overlay">
 
+                                                            <i class="fas fa-search-plus"></i>
+
+                                                        </div>
 
 
 

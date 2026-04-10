@@ -2935,6 +2935,9 @@ class ITServiceApp {
                 const reject = response.data;
                 const container = document.getElementById('adminRejectRequestDetails');
                 
+                // Clear container before adding new content to prevent duplication
+                container.innerHTML = '';
+                
                 container.innerHTML = `
                     <div class="reject-request-info">
                         <h4><i class="fas fa-info-circle"></i> Chi tiết yêu cầu từ chối</h4>
@@ -3004,7 +3007,11 @@ class ITServiceApp {
                                                              alt="${attachment.original_name}" 
                                                              class="attachment-preview"
                                                              onclick="app.showImageModal('api/reject_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
-                                                             style="cursor: pointer;">
+                                                             style="cursor: pointer;"
+                                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                                        <div class="image-error" style="display: none; padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; text-align: center;">
+                                                            <i class="fas fa-exclamation-triangle"></i> Không hiển thị được hình ảnh
+                                                            </div>
                                                         <div class="image-overlay">
                                                             <i class="fas fa-search-plus"></i>
                                                         </div>
