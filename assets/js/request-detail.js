@@ -4972,7 +4972,7 @@ class RequestDetailApp {
 
 
 
-                ${request.reject_request && currentUser && ['admin', 'staff'].includes(currentUser.role) ? `
+                ${request.reject_request && currentUser && (['admin', 'staff'].includes(currentUser.role) || (currentUser.role === 'user' && request.status === 'rejected')) ? `
 
 
 
@@ -5637,7 +5637,7 @@ class RequestDetailApp {
 
 
 
-                ${request.support_request && currentUser && ['admin', 'staff'].includes(currentUser.role) ? `
+                ${request.support_request && currentUser && (['admin', 'staff'].includes(currentUser.role) || (currentUser.role === 'user' && request.status === 'rejected')) ? `
 
 
 

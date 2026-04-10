@@ -577,3 +577,5 @@
 [2026-04-10 10:12:21] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
 [2026-04-10 10:27:32] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ kỹ thuật (Escalation)
 [2026-04-10 10:27:37] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ mới cho yêu cầu #86
+[2026-04-10 10:32:52] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Phản hồi từ người dùng
+[2026-04-10 10:32:56] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Phản hồi từ người dùng
