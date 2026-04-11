@@ -55,7 +55,15 @@ class ITServiceApp {
         const notificationBtn = document.getElementById('notificationBtn');
         if (notificationBtn) {
             notificationBtn.addEventListener('click', () => {
-                this.showPage('notifications');
+                this.toggleNotificationDropdown();
+            });
+        }
+        
+        // Mark all read button in dropdown
+        const markAllReadBtn = document.getElementById('markAllReadBtn');
+        if (markAllReadBtn) {
+            markAllReadBtn.addEventListener('click', () => {
+                this.markAllNotificationsAsRead();
             });
         }
 
@@ -4049,7 +4057,84 @@ ITServiceApp.prototype.loadNotifications = async function() {
     }
 };
 
-// Display notifications
+// Toggle notification dropdown
+ITServiceApp.prototype.toggleNotificationDropdown = async function() {
+    const dropdown = document.getElementById('notificationDropdown');
+    if (!dropdown) return;
+    
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+    } else {
+        // Load notifications before showing dropdown
+        await this.loadNotificationsForDropdown();
+        dropdown.style.display = 'block';
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', this.handleNotificationDropdownClickOutside);
+    }
+};
+
+// Load notifications for dropdown
+ITServiceApp.prototype.loadNotificationsForDropdown = async function() {
+    try {
+        const response = await this.apiCall('api/notifications.php?action=list&limit=10');
+        
+        if (response.success && response.data) {
+            this.displayNotificationsInDropdown(response.data);
+            // Update notification count
+            await this.updateNotificationCount();
+        } else {
+            this.displayNotificationsInDropdown([]);
+        }
+    } catch (error) {
+        console.error('Error loading notifications for dropdown:', error);
+        this.displayNotificationsInDropdown([]);
+    }
+};
+
+// Display notifications in dropdown
+ITServiceApp.prototype.displayNotificationsInDropdown = function(notifications) {
+    const container = document.getElementById('notificationList');
+    if (!container) return;
+    
+    if (notifications.length === 0) {
+        container.innerHTML = '<p class="no-notifications">Không có thông báo nào</p>';
+        return;
+    }
+    
+    container.innerHTML = notifications.map(notif => {
+        const typeClass = 'notification-' + notif.type;
+        const readClass = notif.is_read ? 'read' : 'unread';
+        const typeIcon = this.getNotificationIcon(notif.type);
+        
+        return `
+            <div class="notification-item ${readClass} ${typeClass}" data-id="${notif.id}">
+                <div class="notification-icon">${typeIcon}</div>
+                <div class="notification-content">
+                    <h4 class="notification-title">${notif.title}</h4>
+                    <p class="notification-message">${notif.message}</p>
+                    <div class="notification-meta">
+                        <span class="notification-time">${notif.time_ago}</span>
+                        ${!notif.is_read ? `<button class="btn-mark-read" onclick="app.markNotificationAsRead(${notif.id})">Đã đọc</button>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+};
+
+// Handle click outside notification dropdown
+ITServiceApp.prototype.handleNotificationDropdownClickOutside = function(event) {
+    const dropdown = document.getElementById('notificationDropdown');
+    const notificationBtn = document.getElementById('notificationBtn');
+    
+    if (dropdown && !dropdown.contains(event.target) && !notificationBtn.contains(event.target)) {
+        dropdown.style.display = 'none';
+        document.removeEventListener('click', app.handleNotificationDropdownClickOutside);
+    }
+};
+
+// Display notifications (for full page)
 ITServiceApp.prototype.displayNotifications = function(notifications) {
     const container = document.getElementById('notificationsList');
     if (!container) return;
@@ -4102,27 +4187,16 @@ ITServiceApp.prototype.markNotificationAsRead = async function(notificationId) {
         });
         
         if (response.success) {
-            // Update UI
-            const notificationElement = document.querySelector(`[data-id="${notificationId}"]`);
-            if (notificationElement) {
-                notificationElement.classList.add('read');
-                notificationElement.classList.remove('unread');
-                const markButton = notificationElement.querySelector('.btn-mark-read');
-                if (markButton) {
-                    markButton.remove();
-                }
-            }
-            
-            // Update count
+            // Reload dropdown to update UI
+            await this.loadNotificationsForDropdown();
             await this.updateNotificationCount();
-            
-            this.showNotification('Notification marked as read', 'success');
+            this.showNotification('Đã đánh dấu thông báo là đã đọc', 'success');
         } else {
-            this.showNotification('Failed to mark notification as read', 'error');
+            this.showNotification('Không thể đánh dấu thông báo là đã đọc', 'error');
         }
     } catch (error) {
         console.error('Error marking notification as read:', error);
-        this.showNotification('Error marking notification as read', 'error');
+        this.showNotification('Lỗi khi đánh dấu thông báo là đã đọc', 'error');
     }
 };
 
@@ -4134,23 +4208,12 @@ ITServiceApp.prototype.markAllNotificationsAsRead = async function() {
         });
         
         if (response.success) {
-            // Update UI
-            const unreadNotifications = document.querySelectorAll('.notification-item.unread');
-            unreadNotifications.forEach(notif => {
-                notif.classList.add('read');
-                notif.classList.remove('unread');
-                const markButton = notif.querySelector('.btn-mark-read');
-                if (markButton) {
-                    markButton.remove();
-                }
-            });
-            
-            // Update count
+            // Reload dropdown to update UI
+            await this.loadNotificationsForDropdown();
             await this.updateNotificationCount();
-            
-            this.showNotification('All notifications marked as read', 'success');
+            this.showNotification('Đã đánh dấu tất cả thông báo là đã đọc', 'success');
         } else {
-            this.showNotification('Failed to mark all notifications as read', 'error');
+            this.showNotification('Không thể đánh dấu tất cả thông báo là đã đọc', 'error');
         }
     } catch (error) {
         console.error('Error marking all notifications as read:', error);

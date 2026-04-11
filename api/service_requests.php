@@ -7033,18 +7033,7 @@ $update_stmt->bindParam(":request_id", $request_id);
                             );
                             
                             
-                            // 3. Notify other staff (excluding the assigned staff)
-                            
-                            $notificationHelper->notifyStaffAdminApproved(
-                                
-                                $request_id, 
-                                
-                                $request_data['title'], 
-                                
-                                $request_data['assigned_name']
-                                
-                            );
-                            
+                                                        
                             
                             error_log("Notifications sent for request #$request_id acceptance");
                             
