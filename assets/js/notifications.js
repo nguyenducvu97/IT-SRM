@@ -173,18 +173,30 @@ class NotificationManager {
             }
         }
         
-        if (this.notificationCount) {
+        // Only update notificationBadge (hide notificationCount to avoid overlap)
+        const notificationCount = document.getElementById('notificationCount');
+        const notificationBadge = document.getElementById('notificationBadge');
+        
+        // Hide notificationCount to avoid overlap
+        if (notificationCount) {
+            notificationCount.style.display = 'none';
+        }
+        
+        // Update notificationBadge
+        if (notificationBadge) {
             if (this.unreadCount > 0) {
-                this.notificationCount.textContent = this.unreadCount > 99 ? '99+' : this.unreadCount;
-                this.notificationCount.classList.remove('empty');
-                console.log('NotificationManager: Set count to:', this.unreadCount);
+                notificationBadge.textContent = this.unreadCount > 99 ? '99+' : this.unreadCount;
+                notificationBadge.classList.remove('empty');
+                notificationBadge.style.display = 'inline-block';
+                console.log('NotificationManager: Set badge count to:', this.unreadCount);
             } else {
-                this.notificationCount.textContent = '0';
-                this.notificationCount.classList.add('empty');
-                console.log('NotificationManager: Set count to 0');
+                notificationBadge.textContent = '0';
+                notificationBadge.classList.add('empty');
+                notificationBadge.style.display = 'none';
+                console.log('NotificationManager: Set badge count to 0');
             }
         } else {
-            console.log('NotificationManager: notificationCount element not found!');
+            console.log('NotificationManager: notificationBadge element not found!');
         }
     }
     
