@@ -2287,6 +2287,7 @@
 
 
                             <span id="notificationCount" class="notification-count">0</span>
+                            <span id="notificationBadge" class="notification-badge" style="display: none;">0</span>
 
 
 
@@ -10398,7 +10399,7 @@
 
 
 
-    <script src="assets/js/notifications.js?v=20260411-7"></script>
+    <script src="assets/js/notifications.js?v=20260411-12"></script>
 
     
 
@@ -10457,6 +10458,14 @@
                             console.log('Request Detail: Force updating notification count...');
 
                             window.notificationManager.updateNotificationCount();
+
+                            
+
+                            // Also try render directly
+
+                            console.log('Request Detail: Force rendering notification count...');
+
+                            window.notificationManager.renderNotificationCount();
 
                         }
 

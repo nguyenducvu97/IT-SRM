@@ -159,18 +159,16 @@ class NotificationManager {
             unreadCount: this.unreadCount
         });
         
-        // Debug: Count unread from DOM
+        // Always use DOM count for accuracy (it reflects actual notifications in the UI)
         if (this.notificationList) {
             const unreadItems = this.notificationList.querySelectorAll('.notification-item.unread');
             const domUnreadCount = unreadItems.length;
             console.log('NotificationManager: DOM unread count:', domUnreadCount);
             console.log('NotificationManager: API unread count:', this.unreadCount);
             
-            // Use DOM count if API count is 0 but DOM has unread items
-            if (this.unreadCount === 0 && domUnreadCount > 0) {
-                this.unreadCount = domUnreadCount;
-                console.log('NotificationManager: Using DOM count instead of API count');
-            }
+            // Always prefer DOM count as it's more accurate
+            this.unreadCount = domUnreadCount;
+            console.log('NotificationManager: Using DOM count for accuracy:', this.unreadCount);
         }
         
         // Only update notificationBadge (hide notificationCount to avoid overlap)
