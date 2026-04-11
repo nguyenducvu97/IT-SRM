@@ -41,7 +41,10 @@ try {
         if ($action == 'count') {
             // Get unread notification count using helper
             $count = $notificationHelper->getUnreadCount($userId);
-            echo json_encode(['count' => $count]);
+            echo json_encode([
+                'success' => true,
+                'data' => ['unread_count' => $count]
+            ]);
             
         } else {
             // Get notifications list using helper

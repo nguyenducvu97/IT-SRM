@@ -7249,6 +7249,18 @@ $update_stmt->bindParam(":request_id", $request_id);
 
                             break;
 
+                        case 'pending_approval':
+
+                            $notificationHelper->notifyUserRequestPendingApproval(
+
+                                $request_id, 
+
+                                $requestDetails['user_id']
+
+                            );
+
+                            break;
+
                         case 'resolved':
 
                             $notificationHelper->notifyUserRequestResolved(
@@ -7319,7 +7331,16 @@ $update_stmt->bindParam(":request_id", $request_id);
 
                 }
 
-                
+                // Admin notification for status change tracking
+                if ($oldStatus !== $status) {
+                    $notificationHelper->notifyAdminStatusChange(
+                        $request_id,
+                        $oldStatus,
+                        $status,
+                        $_SESSION['full_name'] ?? 'Staff',
+                        $requestDetails['title']
+                    );
+                }
 
                 serviceJsonResponse(true, "Request status updated successfully");
 

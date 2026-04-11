@@ -50,6 +50,14 @@ class ITServiceApp {
         
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) logoutBtn.addEventListener('click', () => this.logout());
+        
+        // Notification button event
+        const notificationBtn = document.getElementById('notificationBtn');
+        if (notificationBtn) {
+            notificationBtn.addEventListener('click', () => {
+                this.showPage('notifications');
+            });
+        }
 
         // Profile events
         const profileForm = document.getElementById('profileForm');
@@ -730,6 +738,9 @@ class ITServiceApp {
                 
                 const rejectedElement = document.getElementById('rejectedRequests');
                 if (rejectedElement) rejectedElement.textContent = stats.rejected;
+                
+                // Update notification count when dashboard loads
+                await this.updateNotificationCount();
                 
                 const requestSupportCount = document.getElementById('requestSupportCount');
                 if (requestSupportCount) requestSupportCount.textContent = stats.request_support;
@@ -3956,6 +3967,7 @@ ITServiceApp.prototype.updateNotificationBadge = function(notifications) {
 };
 
 ITServiceApp.prototype.updateNotificationCountDisplay = function(count) {
+    // Update notification badge (if exists)
     const badge = document.querySelector('.notification-badge');
     if (badge) {
         if (count > 0) {
@@ -3963,6 +3975,18 @@ ITServiceApp.prototype.updateNotificationCountDisplay = function(count) {
             badge.style.display = 'inline-block';
         } else {
             badge.style.display = 'none';
+        }
+    }
+    
+    // Update notification count in header
+    const countElement = document.getElementById('notificationCount');
+    if (countElement) {
+        if (count > 0) {
+            countElement.textContent = count > 99 ? '99+' : count;
+            countElement.classList.remove('empty');
+        } else {
+            countElement.textContent = '0';
+            countElement.classList.add('empty');
         }
     }
 };
@@ -4004,6 +4028,142 @@ ITServiceApp.prototype.toggleAutoReload = function() {
         if (indicator) {
             indicator.remove();
         }
+    }
+};
+
+// Load notifications page
+ITServiceApp.prototype.loadNotifications = async function() {
+    try {
+        const response = await this.apiCall('api/notifications.php?action=list&limit=50');
+        
+        if (response.success && response.data) {
+            this.displayNotifications(response.data);
+            // Update notification count when notifications page loads
+            await this.updateNotificationCount();
+        } else {
+            this.showNotification('Failed to load notifications', 'error');
+        }
+    } catch (error) {
+        console.error('Error loading notifications:', error);
+        this.showNotification('Error loading notifications', 'error');
+    }
+};
+
+// Display notifications
+ITServiceApp.prototype.displayNotifications = function(notifications) {
+    const container = document.getElementById('notificationsList');
+    if (!container) return;
+    
+    if (notifications.length === 0) {
+        container.innerHTML = '<p class="no-notifications">No notifications found</p>';
+        return;
+    }
+    
+    container.innerHTML = notifications.map(notif => {
+        const typeClass = 'notification-' + notif.type;
+        const readClass = notif.is_read ? 'read' : 'unread';
+        const typeIcon = this.getNotificationIcon(notif.type);
+        
+        return `
+            <div class="notification-item ${readClass} ${typeClass}" data-id="${notif.id}">
+                <div class="notification-icon">${typeIcon}</div>
+                <div class="notification-content">
+                    <h4 class="notification-title">${notif.title}</h4>
+                    <p class="notification-message">${notif.message}</p>
+                    <div class="notification-meta">
+                        <span class="notification-time">${notif.time_ago}</span>
+                        ${!notif.is_read ? `<button class="btn-mark-read" onclick="app.markNotificationAsRead(${notif.id})">Mark as read</button>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+};
+
+// Get notification icon based on type
+ITServiceApp.prototype.getNotificationIcon = function(type) {
+    const icons = {
+        'info': '<i class="fas fa-info-circle"></i>',
+        'success': '<i class="fas fa-check-circle"></i>',
+        'warning': '<i class="fas fa-exclamation-triangle"></i>',
+        'error': '<i class="fas fa-times-circle"></i>'
+    };
+    return icons[type] || icons['info'];
+};
+
+// Mark notification as read
+ITServiceApp.prototype.markNotificationAsRead = async function(notificationId) {
+    try {
+        const response = await this.apiCall('api/notifications.php?action=mark_read', {
+            method: 'PUT',
+            body: JSON.stringify({
+                notification_id: notificationId
+            })
+        });
+        
+        if (response.success) {
+            // Update UI
+            const notificationElement = document.querySelector(`[data-id="${notificationId}"]`);
+            if (notificationElement) {
+                notificationElement.classList.add('read');
+                notificationElement.classList.remove('unread');
+                const markButton = notificationElement.querySelector('.btn-mark-read');
+                if (markButton) {
+                    markButton.remove();
+                }
+            }
+            
+            // Update count
+            await this.updateNotificationCount();
+            
+            this.showNotification('Notification marked as read', 'success');
+        } else {
+            this.showNotification('Failed to mark notification as read', 'error');
+        }
+    } catch (error) {
+        console.error('Error marking notification as read:', error);
+        this.showNotification('Error marking notification as read', 'error');
+    }
+};
+
+// Mark all notifications as read
+ITServiceApp.prototype.markAllNotificationsAsRead = async function() {
+    try {
+        const response = await this.apiCall('api/notifications.php?action=mark_all_read', {
+            method: 'PUT'
+        });
+        
+        if (response.success) {
+            // Update UI
+            const unreadNotifications = document.querySelectorAll('.notification-item.unread');
+            unreadNotifications.forEach(notif => {
+                notif.classList.add('read');
+                notif.classList.remove('unread');
+                const markButton = notif.querySelector('.btn-mark-read');
+                if (markButton) {
+                    markButton.remove();
+                }
+            });
+            
+            // Update count
+            await this.updateNotificationCount();
+            
+            this.showNotification('All notifications marked as read', 'success');
+        } else {
+            this.showNotification('Failed to mark all notifications as read', 'error');
+        }
+    } catch (error) {
+        console.error('Error marking all notifications as read:', error);
+        this.showNotification('Error marking all notifications as read', 'error');
+    }
+};
+
+// Load dashboard data for auto-reload
+ITServiceApp.prototype.loadDashboardData = async function() {
+    try {
+        await this.loadDashboard();
+    } catch (error) {
+        console.error('Error loading dashboard data:', error);
     }
 };
 

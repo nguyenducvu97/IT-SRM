@@ -6901,7 +6901,7 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     padding: 0.5rem;
 
-    border-radius: 50%;
+    border-radius: 4px;
 
     transition: all 0.3s ease;
 
@@ -9568,5 +9568,231 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     width: 6px;
     height: 6px;
     background: #28a745;
+}
+
+/* ========================================
+   NOTIFICATION SYSTEM STYLES
+   ======================================== */
+
+.notification-item {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.notification-item:hover {
+    background-color: #f8f9fa;
+}
+
+.notification-item.unread {
+    background-color: #e7f3ff;
+    border-left: 4px solid #007bff;
+}
+
+.notification-item.read {
+    opacity: 0.8;
+}
+
+.notification-icon {
+    margin-right: 15px;
+    font-size: 20px;
+    color: #6c757d;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.notification-message {
+    margin: 0 0 10px 0;
+    color: #666;
+    line-height: 1.4;
+}
+
+.notification-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-time {
+    font-size: 12px;
+    color: #999;
+}
+
+.btn-mark-read {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-mark-read:hover {
+    background: #0056b3;
+}
+
+.no-notifications {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.notification-info .notification-icon {
+    color: #17a2b8;
+}
+
+.notification-success .notification-icon {
+    color: #28a745;
+}
+
+.notification-warning .notification-icon {
+    color: #ffc107;
+}
+
+.notification-error .notification-icon {
+    color: #dc3545;
+}
+
+/* Notification page styles */
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.notifications-header h2 {
+    margin: 0;
+}
+
+.mark-all-read-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.mark-all-read-btn:hover {
+    background: #5a6268;
+}
+
+/* Notification badge in header */
+.notification-count {
+    display: none;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc3545;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+    display: none;
+}
+
+.notification-item.notification-info {
+    border-left-color: #17a2b8;
+}
+
+.notification-item.notification-success {
+    border-left-color: #28a745;
+}
+
+.notification-item.notification-warning {
+    border-left-color: #ffc107;
+}
+
+.notification-item.notification-error {
+    border-left-color: #dc3545;
+}
+
+/* Notifications Page Styles */
+.notifications-container {
+    padding: 20px;
+}
+
+.notifications-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.notifications-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.page-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.mark-all-read-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.mark-all-read-btn:hover {
+    background: #5a6268;
+}
+
+.mark-all-read-btn i {
+    margin-right: 8px;
+}
+
+/* Responsive notifications */
+@media (max-width: 768px) {
+    .notifications-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .page-actions {
+        width: 100%;
+    }
+    
+    .mark-all-read-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 

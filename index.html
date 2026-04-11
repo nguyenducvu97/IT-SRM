@@ -46,7 +46,7 @@
 
 
 
-    <link rel="stylesheet" href="assets/css/style.css?v=20260410-11">
+    <link rel="stylesheet" href="assets/css/style.css?v=20260410-13">
 
 
 
@@ -1102,7 +1102,15 @@
 
 
 
-                            <span id="notificationCount" class="notification-count">0</span>
+                            <span id="notificationCount" class="notification-count empty">0</span>
+
+
+
+
+
+
+
+                            <span id="notificationBadge" class="notification-badge">0</span>
 
 
 
@@ -7744,7 +7752,25 @@
 
 
 
-    <!-- User Role Modal -->
+    <!-- Notifications Page -->
+        <div id="notificationsPage" class="page">
+            <div class="page-header">
+                <h2>Thông báo</h2>
+                <div class="page-actions">
+                    <button id="markAllReadBtn" class="btn btn-secondary" onclick="app.markAllNotificationsAsRead()">
+                        <i class="fas fa-check-double"></i> Đánh dấu tất cả đã đọc
+                    </button>
+                </div>
+            </div>
+            
+            <div class="notifications-container">
+                <div id="notificationsList" class="notifications-list">
+                    <!-- Notifications will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+<!-- User Role Modal -->
 
 
 
@@ -8008,7 +8034,7 @@
 
 
 
-    <script src="assets/js/app.js?v=20260410-11"></script>
+    <script src="assets/js/app.js?v=20260410-21"></script>
 
 
 
