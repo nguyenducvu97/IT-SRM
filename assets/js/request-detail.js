@@ -4594,9 +4594,6 @@ class RequestDetailApp {
                                                     <div class="image-overlay">
                                                         <i class="fas fa-search-plus"></i>
                                                     </div>
-                                                    <a href="api/attachment.php?file=${attachment.filename}&action=download" class="btn btn-sm btn-secondary" target="_blank" download="${attachment.original_name}">
-                                                        <i class="fas fa-download"></i> Tài vê
-                                                    </a>
                                             ` : ''}
 
 
@@ -4834,9 +4831,6 @@ class RequestDetailApp {
                                                         <div class="image-overlay">
                                                             <i class="fas fa-search-plus"></i>
                                                         </div>
-                                                        <a href="api/attachment.php?file=${attachment.filename}&action=download" class="btn btn-sm btn-secondary" target="_blank" download="${attachment.original_name}">
-                                                            <i class="fas fa-download"></i> Tải về
-                                                        </a>
 
                                                     ` : ''}
 
@@ -5372,12 +5366,6 @@ class RequestDetailApp {
                                                             <i class="fas fa-search-plus"></i>
 
                                                         </div>
-
-                                                        <a href="api/reject_request_attachment.php?file=${attachment.filename}&action=download" class="btn btn-sm btn-secondary" target="_blank" download="${attachment.original_name}">
-
-                                                            <i class="fas fa-download"></i> Tải về
-
-                                                        </a>
 
                                                     ` : ''}
 
