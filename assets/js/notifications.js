@@ -1,5 +1,13 @@
 class NotificationManager {
     constructor() {
+        // Singleton pattern - prevent multiple instances
+        if (NotificationManager.instance) {
+            console.log('NotificationManager: Instance already exists, returning existing instance');
+            return NotificationManager.instance;
+        }
+        
+        console.log('NotificationManager: Creating new instance');
+        
         this.notificationBtn = null;
         this.notificationDropdown = null;
         this.notificationCount = null;
@@ -9,6 +17,9 @@ class NotificationManager {
         this.unreadCount = 0;
         this.isDropdownOpen = false;
         this.refreshInterval = null;
+        
+        // Store the instance
+        NotificationManager.instance = this;
         
         this.init();
     }
@@ -386,8 +397,19 @@ class NotificationManager {
     
     // Clean up when page is unloaded
     destroy() {
+        console.log('NotificationManager: Destroying instance...');
         this.stopAutoRefresh();
         document.removeEventListener('click', this.closeDropdown);
+        
+        // Clear singleton instance
+        NotificationManager.instance = null;
+    }
+    
+    // Static method to clear instance
+    static clearInstance() {
+        if (NotificationManager.instance) {
+            NotificationManager.instance.destroy();
+        }
     }
     
     // Debug function to force show count
