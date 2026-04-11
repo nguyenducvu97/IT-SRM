@@ -2567,17 +2567,28 @@ elseif ($method == 'POST') {
 
                                 if (move_uploaded_file($file_tmp, $file_path)) {
 
-                                    // Save to database
+                                    // Check for existing attachment with same original_name
+                                    $check_query = "SELECT COUNT(*) as count FROM reject_request_attachments 
+                                                   WHERE reject_request_id = :reject_id AND original_name = :original_name";
+                                    $check_stmt = $db->prepare($check_query);
+                                    $check_stmt->bindParam(":reject_id", $reject_id);
+                                    $check_stmt->bindParam(":original_name", $original_name);
+                                    $check_stmt->execute();
+                                    $existing_count = $check_stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
-                                    $attachment_stmt = $db->prepare("
+                                    if ($existing_count == 0) {
+                                        // Only insert if no existing attachment with same name
+                                        // Save to database
 
-                                        INSERT INTO reject_request_attachments 
+                                        $attachment_stmt = $db->prepare("
 
-                                        (reject_request_id, original_name, filename, file_size, mime_type, uploaded_at)
+                                            INSERT INTO reject_request_attachments 
 
-                                        VALUES (:reject_id, :original_name, :filename, :file_size, :mime_type, NOW())
+                                            (reject_request_id, original_name, filename, file_size, mime_type, uploaded_at)
 
-                                    ");
+                                            VALUES (:reject_id, :original_name, :filename, :file_size, :mime_type, NOW())
+
+                                        ");
 
                                     
 
@@ -2595,17 +2606,23 @@ elseif ($method == 'POST') {
 
                                     if ($attachment_stmt->execute()) {
 
-                                        $uploaded_files[] = [
+                                            $uploaded_files[] = [
 
-                                            'original_name' => $original_name,
+                                                'original_name' => $original_name,
 
-                                            'filename' => $unique_filename,
+                                                'filename' => $unique_filename,
 
-                                            'file_size' => $file_size,
+                                                'file_size' => $file_size,
 
-                                            'mime_type' => $file_type
+                                                'mime_type' => $file_type
 
-                                        ];
+                                            ];
+
+                                        } else {
+
+                                            error_log("Skipping duplicate attachment: $original_name for reject request $reject_id");
+
+                                        }
 
                                     }
 
@@ -2655,8 +2672,127 @@ elseif ($method == 'POST') {
 
             } catch (Exception $e) {
 
-                serviceJsonResponse(false, "Database error: " . $e->getMessage());
+                // Check if this is a duplicate key error
+                if ($e->getCode() === '23000' && strpos($e->getMessage(), 'Duplicate entry') !== false) {
+                    
+                    // This means there's already a pending request, try to update it instead
+                    try {
+                        // Get the existing pending request
+                        $existing_query = "SELECT id, status, reject_reason, reject_details FROM reject_requests 
+                                         WHERE service_request_id = :request_id AND rejected_by = :rejected_by
+                                         ORDER BY created_at DESC LIMIT 1";
+                        
+                        $existing_stmt = $db->prepare($existing_query);
+                        $existing_stmt->bindParam(":request_id", $request_id);
+                        $existing_stmt->bindParam(":rejected_by", $user_id);
+                        $existing_stmt->execute();
+                        
+                        if ($existing_stmt->rowCount() > 0) {
+                            $existing_request = $existing_stmt->fetch(PDO::FETCH_ASSOC);
+                            
+                            // Update existing reject request
+                            $update_query = "UPDATE reject_requests 
+                                           SET reject_reason = :reject_reason, reject_details = :reject_details, updated_at = NOW()
+                                           WHERE id = :existing_id";
+                            
+                            $update_stmt = $db->prepare($update_query);
+                            $update_stmt->bindParam(":reject_reason", $reject_reason);
+                            $update_stmt->bindParam(":reject_details", $reject_details);
+                            $update_stmt->bindParam(":existing_id", $existing_request['id']);
+                            
+                            if ($update_stmt->execute()) {
+                                $reject_id = $existing_request['id'];
+                                
+                                // Handle file uploads if any (add new files)
+                                $uploaded_files = [];
+                                if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
+                                    error_log("Processing file uploads for updated reject request $reject_id");
+                                    
+                                    $uploads_dir = __DIR__ . '/../uploads/reject_requests/';
+                                    if (!file_exists($uploads_dir)) {
+                                        mkdir($uploads_dir, 0755, true);
+                                    }
+                                    
+                                    $file_attachments = $_FILES['attachments'];
+                                    $file_count = count($file_attachments['name']);
+                                    
+                                    for ($i = 0; $i < $file_count; $i++) {
+                                        if ($file_attachments['error'][$i] === UPLOAD_ERR_OK) {
+                                            $original_name = $file_attachments['name'][$i];
+                                            $file_size = $file_attachments['size'][$i];
+                                            $file_tmp = $file_attachments['tmp_name'][$i];
+                                            $file_type = $file_attachments['type'][$i];
+                                            
+                                            // Generate unique filename
+                                            $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
+                                            $unique_filename = uniqid('reject_', true) . '.' . $file_extension;
+                                            $file_path = $uploads_dir . $unique_filename;
+                                            
+                                            // Move file
+                                            if (move_uploaded_file($file_tmp, $file_path)) {
+                                                // Check for existing attachment with same original_name
+                                                $check_query = "SELECT COUNT(*) as count FROM reject_request_attachments 
+                                                               WHERE reject_request_id = :reject_id AND original_name = :original_name";
+                                                $check_stmt = $db->prepare($check_query);
+                                                $check_stmt->bindParam(":reject_id", $reject_id);
+                                                $check_stmt->bindParam(":original_name", $original_name);
+                                                $check_stmt->execute();
+                                                $existing_count = $check_stmt->fetch(PDO::FETCH_ASSOC)['count'];
 
+                                                if ($existing_count == 0) {
+                                                    // Only insert if no existing attachment with same name
+                                                    // Save to database
+                                                    $attachment_stmt = $db->prepare("
+                                                        INSERT INTO reject_request_attachments 
+                                                        (reject_request_id, original_name, filename, file_size, mime_type, uploaded_at)
+                                                        VALUES (:reject_id, :original_name, :filename, :file_size, :mime_type, NOW())
+                                                    ");
+                                                
+                                                $attachment_stmt->bindParam(":reject_id", $reject_id);
+                                                $attachment_stmt->bindParam(":original_name", $original_name);
+                                                $attachment_stmt->bindParam(":filename", $unique_filename);
+                                                $attachment_stmt->bindParam(":file_size", $file_size);
+                                                $attachment_stmt->bindParam(":mime_type", $file_type);
+                                                
+                                                if ($attachment_stmt->execute()) {
+                                                        $uploaded_files[] = [
+                                                            'original_name' => $original_name,
+                                                            'filename' => $unique_filename,
+                                                            'file_size' => $file_size,
+                                                            'mime_type' => $file_type
+                                                        ];
+                                                    } else {
+                                                        error_log("Skipping duplicate attachment: $original_name for reject request $reject_id");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                $response_data = [
+                                    'success' => true,
+                                    'message' => 'Reject request updated successfully',
+                                    'reject_id' => $reject_id,
+                                    'updated' => true
+                                ];
+                                
+                                if (!empty($uploaded_files)) {
+                                    $response_data['uploaded_files'] = $uploaded_files;
+                                    $response_data['message'] .= ' with ' . count($uploaded_files) . ' new file(s) attached';
+                                }
+                                
+                                echo json_encode($response_data);
+                                return;
+                            }
+                        }
+                    } catch (Exception $update_e) {
+                        error_log("Failed to handle duplicate key: " . $update_e->getMessage());
+                    }
+                }
+                
+                // If we get here, it's a genuine error
+                serviceJsonResponse(false, "Database error: " . $e->getMessage());
                 return; // Prevent double response
 
             }

@@ -4442,15 +4442,9 @@ class RequestDetailApp {
 
 
 
-                                const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
-
-
-
-
-
-
-
                                 const fileExt = attachment.filename.split('.').pop().toLowerCase();
+                                const isImage = (attachment.mime_type && attachment.mime_type.startsWith('image/')) || 
+                                                ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(fileExt);
 
 
 
@@ -4590,84 +4584,20 @@ class RequestDetailApp {
 
 
 
-
-
-
-
                                             ${isImage ? `
 
-
-
-
-
-
-
-                                                <img src="api/attachment.php?file=${attachment.filename}&action=view" 
-
-
-
-
-
-
-
-                                                     alt="${attachment.original_name}" 
-
-
-
-
-
-
-
-                                                     class="attachment-preview"
-
-
-
-
-
-
-
-                                                     onclick="requestDetailApp.showImageModal('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
-
-
-
-
-
-
-
-                                                     style="cursor: pointer;">
-
-
-
-
-
-
-
-                                                <div class="image-overlay">
-
-
-
-
-
-
-
-                                                    <i class="fas fa-search-plus"></i>
-
-
-
-
-
-
-
-                                                </div>
-
-
-
-
-
-
-
+                                                    <img src="api/attachment.php?file=${attachment.filename}&action=view" 
+                                                         alt="${attachment.original_name}" 
+                                                         class="attachment-preview"
+                                                         onclick="requestDetailApp.showImageModal('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                         style="cursor: pointer;">
+                                                    <div class="image-overlay">
+                                                        <i class="fas fa-search-plus"></i>
+                                                    </div>
+                                                    <a href="api/attachment.php?file=${attachment.filename}&action=download" class="btn btn-sm btn-secondary" target="_blank" download="${attachment.original_name}">
+                                                        <i class="fas fa-download"></i> Tài vê
+                                                    </a>
                                             ` : ''}
-
 
 
 
@@ -4866,17 +4796,13 @@ class RequestDetailApp {
 
                                         
 
-                                        const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
-
-                                        const isPDF = attachment.mime_type === 'application/pdf';
-
-                                        const isWord = attachment.mime_type && (attachment.mime_type.includes('word') || attachment.mime_type.includes('document'));
-
-                                        const isExcel = attachment.mime_type && (attachment.mime_type.includes('sheet') || attachment.mime_type.includes('excel'));
-
-                                        const isPowerPoint = attachment.mime_type && (attachment.mime_type.includes('presentation') || attachment.mime_type.includes('powerpoint'));
-
                                         const fileExt = attachment.original_name.split('.').pop().toLowerCase();
+                                        const isImage = (attachment.mime_type && attachment.mime_type.startsWith('image/')) || 
+                                                        ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(fileExt);
+                                        const isPDF = attachment.mime_type === 'application/pdf';
+                                        const isWord = attachment.mime_type && (attachment.mime_type.includes('word') || attachment.mime_type.includes('document'));
+                                        const isExcel = attachment.mime_type && (attachment.mime_type.includes('sheet') || attachment.mime_type.includes('excel'));
+                                        const isPowerPoint = attachment.mime_type && (attachment.mime_type.includes('presentation') || attachment.mime_type.includes('powerpoint'));
 
                                         const isViewable = isPDF || isWord || isExcel || isPowerPoint;
 
@@ -4900,19 +4826,17 @@ class RequestDetailApp {
 
                                                     ${isImage ? `
 
-                                                        <div class="image-preview-container" style="position: relative;">
-
-                                                            <img src="api/attachment.php?file=${attachment.filename}&action=view" 
-
-                                                                 alt="${attachment.original_name}" 
-
-                                                                 class="attachment-preview"
-
-                                                                 onclick="requestDetailApp.showImageModal('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
-
-                                                                 style="cursor: pointer; max-width: 100px; max-height: 100px; object-fit: cover; border-radius: 4px;">
-
+                                                        <img src="api/attachment.php?file=${attachment.filename}&action=view" 
+                                                             alt="${attachment.original_name}" 
+                                                             class="attachment-preview"
+                                                             onclick="requestDetailApp.showImageModal('api/attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
+                                                             style="cursor: pointer;">
+                                                        <div class="image-overlay">
+                                                            <i class="fas fa-search-plus"></i>
                                                         </div>
+                                                        <a href="api/attachment.php?file=${attachment.filename}&action=download" class="btn btn-sm btn-secondary" target="_blank" download="${attachment.original_name}">
+                                                            <i class="fas fa-download"></i> Tải về
+                                                        </a>
 
                                                     ` : ''}
 
@@ -5284,15 +5208,15 @@ class RequestDetailApp {
 
 
 
-                                        const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
-
-
-
-
-
-
-
                                         const fileExt = attachment.filename.split('.').pop().toLowerCase();
+                                        const isImage = (attachment.mime_type && attachment.mime_type.startsWith('image/')) || 
+                                                        ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(fileExt);
+
+
+
+
+
+
 
 
 
@@ -5449,9 +5373,11 @@ class RequestDetailApp {
 
                                                         </div>
 
+                                                        <a href="api/reject_request_attachment.php?file=${attachment.filename}&action=download" class="btn btn-sm btn-secondary" target="_blank" download="${attachment.original_name}">
 
+                                                            <i class="fas fa-download"></i> Tải về
 
-
+                                                        </a>
 
                                                     ` : ''}
 
@@ -5936,15 +5862,16 @@ class RequestDetailApp {
 
 
 
-                                        const isImage = attachment.mime_type && attachment.mime_type.startsWith('image/');
-
-
-
-
-
-
-
                                         const fileExt = attachment.filename.split('.').pop().toLowerCase();
+                                        const isImage = (attachment.mime_type && attachment.mime_type.startsWith('image/')) || 
+                                                        ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(fileExt);
+
+
+
+
+
+
+
 
 
 
