@@ -25,6 +25,8 @@ class NotificationHelper {
      */
     public function createNotification($userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = 'service_request', $sendEmail = true) {
         try {
+            error_log("createNotification: user_id={$userId}, title='{$title}', message='{$message}'");
+            
             // Create in-app notification
             $stmt = $this->db->prepare("
                 INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
@@ -32,9 +34,18 @@ class NotificationHelper {
             ");
             $result = $stmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
             
-            // Send email if requested
-            if ($sendEmail && $result) {
+            error_log("createNotification: INSERT result=" . ($result ? "SUCCESS" : "FAILED"));
+            
+            if ($result) {
+                $notification_id = $this->db->lastInsertId();
+                error_log("createNotification: Created notification ID={$notification_id}");
+            }
+            
+            // Send email if requested (separate from notification creation)
+            if ($sendEmail) {
+                error_log("createNotification: Sending email...");
                 $this->sendNotificationEmail($userId, $title, $message, $type, $relatedId, $relatedType);
+                error_log("createNotification: Email sent");
             }
             
             return $result;

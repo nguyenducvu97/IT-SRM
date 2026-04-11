@@ -412,6 +412,123 @@ class NotificationManager {
         }
     }
     
+    // Show notification message (for compatibility with app.js)
+    show(message, type = 'info') {
+        console.log('NotificationManager: Showing notification:', message, type);
+        
+        // Create a temporary notification element
+        const notification = document.createElement('div');
+        notification.className = `notification-toast notification-${type}`;
+        notification.textContent = message;
+        
+        // Add styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        `;
+        
+        // Set background color based on type
+        switch (type) {
+            case 'success':
+                notification.style.backgroundColor = '#28a745';
+                break;
+            case 'error':
+                notification.style.backgroundColor = '#dc3545';
+                break;
+            case 'warning':
+                notification.style.backgroundColor = '#ffc107';
+                notification.style.color = '#212529';
+                break;
+            default:
+                notification.style.backgroundColor = '#17a2b8';
+        }
+        
+        // Add to DOM
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateY(0)';
+        }, 100);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+    
+    // Success notification method (for compatibility with app.js)
+    success(message, title = null, duration = 3000) {
+        console.log('NotificationManager: Success notification:', message, title);
+        
+        // Create a success notification element
+        const notification = document.createElement('div');
+        notification.className = 'notification-toast notification-success';
+        
+        // Build content
+        let content = '';
+        if (title) {
+            content += `<strong>${title}</strong><br>`;
+        }
+        content += message;
+        notification.innerHTML = content;
+        
+        // Add styles
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background-color: #28a745;
+            max-width: 300px;
+        `;
+        
+        // Add to DOM
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateY(0)';
+        }, 100);
+        
+        // Remove after specified duration
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, duration);
+    }
+    
     // Debug function to force show count
     forceShowCount(count) {
         console.log('NotificationManager: Force showing count:', count);

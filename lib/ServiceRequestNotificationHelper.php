@@ -32,7 +32,10 @@ class ServiceRequestNotificationHelper {
         $message = "Yêu cầu #{$requestId} của bạn đã được nhân viên IT tiếp nhận và đang xử lý." . 
                    ($assignedStaffName ? " Nhân viên phụ trách: {$assignedStaffName}" : "");
         
-        return $this->notificationHelper->createNotification(
+        error_log("notifyUserRequestInProgress: Creating notification for user_id={$userId}, request_id={$requestId}");
+        error_log("notifyUserRequestInProgress: Title='{$title}', Message='{$message}'");
+        
+        $result = $this->notificationHelper->createNotification(
             $userId, 
             $title, 
             $message, 
@@ -40,6 +43,10 @@ class ServiceRequestNotificationHelper {
             $requestId, 
             'service_request'
         );
+        
+        error_log("notifyUserRequestInProgress: Result=" . ($result ? "SUCCESS" : "FAILED"));
+        
+        return $result;
     }
     
     /**

@@ -5210,7 +5210,7 @@ class ITServiceApp {
 
         const formData = {
 
-            action: 'update',
+            action: 'update_request',
 
             id: document.getElementById('editRequestId').value,
 

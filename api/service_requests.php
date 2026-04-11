@@ -14706,7 +14706,7 @@ $update_stmt->bindParam(":request_id", $request_id);
 
 
 
-    elseif ($action == 'update') {
+    elseif ($action == 'update_request') {
 
 
 
@@ -14714,7 +14714,7 @@ $update_stmt->bindParam(":request_id", $request_id);
 
 
 
-        error_log("=== UPDATE ACTION DEBUG ===");
+        error_log("=== UPDATE_REQUEST ACTION DEBUG ===");
 
 
 
