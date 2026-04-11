@@ -7079,13 +7079,25 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     padding: 1rem;
 
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #e9ecef;
 
     cursor: pointer;
 
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 
     position: relative;
+
+    background: #ffffff;
+
+}
+
+.notification-item.clickable-notification:hover {
+
+    background: linear-gradient(135deg, #f8f9ff, #e3f2fd);
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
 
 }
 
@@ -7101,9 +7113,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 .notification-item.unread {
 
-    background-color: #e3f2fd;
+    background: linear-gradient(135deg, #f8f9ff, #e3f2fd);
 
-    border-left: 3px solid #007bff;
+    border-left: 4px solid #007bff;
+
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
 
 }
 
@@ -7135,7 +7149,7 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     font-weight: 600;
 
-    color: #333;
+    color: #2c3e50;
 
     margin-bottom: 0.25rem;
 
@@ -7147,13 +7161,13 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 .notification-message {
 
-    color: #666;
+    color: #495057;
 
     font-size: 0.8rem;
 
     margin-bottom: 0.25rem;
 
-    line-height: 1.4;
+    line-height: 1.5;
 
 }
 
@@ -7189,9 +7203,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 .notification-type.info {
 
-    background-color: #e3f2fd;
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
 
-    color: #1976d2;
+    color: #0d47a1;
+
+    font-weight: 500;
 
 }
 
@@ -7199,9 +7215,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 .notification-type.success {
 
-    background-color: #e8f5e8;
+    background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
 
-    color: #388e3c;
+    color: #1b5e20;
+
+    font-weight: 500;
 
 }
 
@@ -7209,9 +7227,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 .notification-type.warning {
 
-    background-color: #fff3e0;
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
 
-    color: #f57c00;
+    color: #e65100;
+
+    font-weight: 500;
 
 }
 
@@ -7219,9 +7239,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 .notification-type.error {
 
-    background-color: #ffebee;
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
 
-    color: #d32f2f;
+    color: #c62828;
+
+    font-weight: 500;
 
 }
 
@@ -9692,10 +9714,7 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
     background: #5a6268;
 }
 
-/* Notification badge in header */
-.notification-count {
-    display: none;
-}
+/* Notification badge in header - REMOVED display: none to show count */
 
 .notification-badge {
     position: absolute;

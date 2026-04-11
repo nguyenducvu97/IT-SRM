@@ -131,7 +131,7 @@ class NotificationManager {
             const data = await response.json();
             console.log('NotificationManager: Count response data:', data);
             
-            this.unreadCount = data.count;
+            this.unreadCount = data.data ? data.data.unread_count : 0;
             console.log('NotificationManager: Unread count set to:', this.unreadCount);
             
             this.renderNotificationCount();
@@ -147,6 +147,20 @@ class NotificationManager {
             notificationCount: !!this.notificationCount,
             unreadCount: this.unreadCount
         });
+        
+        // Debug: Count unread from DOM
+        if (this.notificationList) {
+            const unreadItems = this.notificationList.querySelectorAll('.notification-item.unread');
+            const domUnreadCount = unreadItems.length;
+            console.log('NotificationManager: DOM unread count:', domUnreadCount);
+            console.log('NotificationManager: API unread count:', this.unreadCount);
+            
+            // Use DOM count if API count is 0 but DOM has unread items
+            if (this.unreadCount === 0 && domUnreadCount > 0) {
+                this.unreadCount = domUnreadCount;
+                console.log('NotificationManager: Using DOM count instead of API count');
+            }
+        }
         
         if (this.notificationCount) {
             if (this.unreadCount > 0) {
@@ -184,10 +198,12 @@ class NotificationManager {
         
         const notificationsHtml = this.notifications.map(notification => `
             <div class="notification-item ${!notification.is_read ? 'unread' : ''}" 
-                 data-notification-id="${notification.id}">
+                 data-notification-id="${notification.id}"
+                 onclick="window.notificationManager.handleNotificationClick(${notification.id})"
+                 style="cursor: pointer;">
                 <div class="notification-title">
                     ${notification.title}
-                    <span class="notification-type ${notification.type}">${this.getTypeLabel(notification.type)}</span>
+                    <span class="notification-type ${notification.type}">${this.getTypeText(notification.type)}</span>
                 </div>
                 <div class="notification-message">${notification.message}</div>
                 <div class="notification-time">${notification.time_ago}</div>
@@ -196,16 +212,11 @@ class NotificationManager {
         
         this.notificationList.innerHTML = notificationsHtml;
         
-        // Add click handlers to notification items
-        this.notificationList.querySelectorAll('.notification-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const notificationId = item.dataset.notificationId;
-                this.handleNotificationClick(notificationId);
-            });
-        });
+        // Update notification count after rendering
+        this.renderNotificationCount();
     }
     
-    getTypeLabel(type) {
+    getTypeText(type) {
         const labels = {
             'info': 'Thông tin',
             'success': 'Thành công',
@@ -216,17 +227,28 @@ class NotificationManager {
     }
     
     async handleNotificationClick(notificationId) {
+        console.log('NotificationManager: Handling click for notification ID:', notificationId);
+        
         const notification = this.notifications.find(n => n.id == notificationId);
-        if (!notification) return;
+        if (!notification) {
+            console.error('NotificationManager: Notification not found:', notificationId);
+            return;
+        }
+        
+        console.log('NotificationManager: Found notification:', notification);
         
         // Mark as read if unread
         if (!notification.is_read) {
+            console.log('NotificationManager: Marking as read...');
             await this.markAsRead(notificationId);
         }
         
         // Handle navigation based on related_type
         if (notification.related_type && notification.related_id) {
+            console.log('NotificationManager: Navigating to:', notification.related_type, notification.related_id);
             this.navigateToRelatedItem(notification.related_type, notification.related_id);
+        } else {
+            console.log('NotificationManager: No navigation data found');
         }
         
         // Close dropdown
@@ -290,31 +312,31 @@ class NotificationManager {
     }
     
     navigateToRelatedItem(type, id) {
+        console.log('NotificationManager: Navigating to related item:', type, id);
+        
         switch (type) {
             case 'request':
             case 'service_request':
                 // Navigate to request detail page
-                if (window.location.pathname.includes('request-detail.html')) {
-                    // Already on detail page, just reload with new request
-                    window.location.href = `request-detail.html?id=${id}`;
-                } else {
-                    window.location.href = `request-detail.html?id=${id}`;
-                }
+                const requestUrl = `request-detail.html?id=${id}`;
+                console.log('NotificationManager: Navigating to request:', requestUrl);
+                window.location.href = requestUrl;
                 break;
             case 'comment':
                 // Navigate to request with comment
-                if (window.location.pathname.includes('request-detail.html')) {
-                    window.location.href = `request-detail.html?id=${id}#comments`;
-                } else {
-                    window.location.href = `request-detail.html?id=${id}#comments`;
-                }
+                const commentUrl = `request-detail.html?id=${id}#comments`;
+                console.log('NotificationManager: Navigating to comment:', commentUrl);
+                window.location.href = commentUrl;
                 break;
             case 'assignment':
             case 'resolution':
                 // Navigate to request
-                window.location.href = `request-detail.html?id=${id}`;
+                const assignmentUrl = `request-detail.html?id=${id}`;
+                console.log('NotificationManager: Navigating to assignment:', assignmentUrl);
+                window.location.href = assignmentUrl;
                 break;
             default:
+                console.log('NotificationManager: Unknown type, defaulting to dashboard:', type);
                 // Default to dashboard
                 window.location.href = 'index.html';
         }
@@ -367,15 +389,26 @@ class NotificationManager {
         this.stopAutoRefresh();
         document.removeEventListener('click', this.closeDropdown);
     }
+    
+    // Debug function to force show count
+    forceShowCount(count) {
+        console.log('NotificationManager: Force showing count:', count);
+        this.unreadCount = count;
+        this.renderNotificationCount();
+    }
+    
+    // Debug function to check elements
+    debugElements() {
+        console.log('NotificationManager: Debug Elements:', {
+            notificationBtn: !!this.notificationBtn,
+            notificationDropdown: !!this.notificationDropdown,
+            notificationCount: !!this.notificationCount,
+            notificationList: !!this.notificationList,
+            markAllReadBtn: !!this.markAllReadBtn,
+            countElement: this.notificationCount ? this.notificationCount.textContent : 'N/A',
+            countVisible: this.notificationCount ? this.notificationCount.style.display : 'N/A'
+        });
+    }
 }
 
-// Initialize notification manager
-let notificationManager;
-
-// Create global instance
-window.addEventListener('DOMContentLoaded', () => {
-    notificationManager = new NotificationManager();
-});
-
-// Make it globally available
-window.notificationManager = notificationManager;
+// Note: NotificationManager instances are created in individual HTML pages

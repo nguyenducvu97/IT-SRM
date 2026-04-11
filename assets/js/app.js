@@ -2136,14 +2136,52 @@ class ITServiceApp {
     }
 
     showNotification(message, type = 'info') {
-        // Use NotificationManager if available
-        if (window.notificationManager) {
-            window.notificationManager.show(message, type);
-        } else {
-            // Fallback to simple alert
-            console.log(`Notification [${type}]: ${message}`);
-            alert(message);
+        // Remove existing notifications
+        const existingNotifications = document.querySelectorAll('.notification');
+        existingNotifications.forEach(notification => notification.remove());
+        
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            z-index: 10000;
+            max-width: 300px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        `;
+        
+        // Set background gradient based on type (matching request detail page)
+        switch (type) {
+            case 'success':
+                notification.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                break;
+            case 'error':
+                notification.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+                break;
+            case 'warning':
+                notification.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+                notification.style.color = '#212529';
+                break;
+            default:
+                notification.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
         }
+        
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
     }
 
     getStatusText(status) {
@@ -3953,8 +3991,8 @@ ITServiceApp.prototype.refreshNotifications = async function() {
     try {
         const response = await this.apiCall('api/notifications.php?action=list&limit=5');
         if (response.success && response.data) {
-            // Update notification badge
-            this.updateNotificationBadge(response.data);
+            // Update notification count
+            await this.updateNotificationCount();
         }
     } catch (error) {
         console.error('Error refreshing notifications:', error);
@@ -3973,23 +4011,8 @@ ITServiceApp.prototype.updateNotificationCount = async function() {
     }
 };
 
-ITServiceApp.prototype.updateNotificationBadge = function(notifications) {
-    const unreadCount = notifications.filter(n => !n.is_read).length;
-    this.updateNotificationCountDisplay(unreadCount);
-};
 
 ITServiceApp.prototype.updateNotificationCountDisplay = function(count) {
-    // Update notification badge (if exists)
-    const badge = document.querySelector('.notification-badge');
-    if (badge) {
-        if (count > 0) {
-            badge.textContent = count > 99 ? '99+' : count;
-            badge.style.display = 'inline-block';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-    
     // Update notification count in header
     const countElement = document.getElementById('notificationCount');
     if (countElement) {
@@ -4102,32 +4125,48 @@ ITServiceApp.prototype.displayNotificationsInDropdown = function(notifications) 
     if (!container) return;
     
     if (notifications.length === 0) {
-        container.innerHTML = '<p class="no-notifications">Không có thông báo nào</p>';
+        container.innerHTML = `
+            <div class="notification-empty">
+                <i class="fas fa-bell-slash"></i>
+                <p>Không có thông báo mới</p>
+            </div>
+        `;
         return;
     }
     
     container.innerHTML = notifications.map(notif => {
-        const typeClass = 'notification-' + notif.type;
         const readClass = notif.is_read ? 'read' : 'unread';
+        const typeClass = `notification-${notif.type}`;
         const typeIcon = this.getNotificationIcon(notif.type);
         
         return `
-            <div class="notification-item ${readClass} ${typeClass}" data-id="${notif.id}">
+            <div class="notification-item ${readClass} ${typeClass} clickable-notification" data-id="${notif.id}" onclick="app.handleNotificationClick(${notif.id}, '${notif.message.replace(/'/g, "\\'")}')">
                 <div class="notification-icon">${typeIcon}</div>
                 <div class="notification-content">
                     <h4 class="notification-title">${notif.title}</h4>
                     <p class="notification-message">${notif.message}</p>
                     <div class="notification-meta">
                         <span class="notification-time">${notif.time_ago}</span>
-                        ${!notif.is_read ? `<button class="btn-mark-read" onclick="app.markNotificationAsRead(${notif.id})">Đã đọc</button>` : ''}
                     </div>
                 </div>
             </div>
         `;
     }).join('');
+    
+    // Add click event listeners after rendering
+    setTimeout(() => {
+        const notificationItems = container.querySelectorAll('.clickable-notification');
+        notificationItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const notificationId = item.dataset.id;
+                const message = item.dataset.message;
+                this.handleNotificationClick(notificationId, message);
+            });
+        });
+    }, 100);
 };
 
-// Handle click outside notification dropdown
 ITServiceApp.prototype.handleNotificationDropdownClickOutside = function(event) {
     const dropdown = document.getElementById('notificationDropdown');
     const notificationBtn = document.getElementById('notificationBtn');
@@ -4154,19 +4193,62 @@ ITServiceApp.prototype.displayNotifications = function(notifications) {
         const typeIcon = this.getNotificationIcon(notif.type);
         
         return `
-            <div class="notification-item ${readClass} ${typeClass}" data-id="${notif.id}">
+            <div class="notification-item ${readClass} ${typeClass} clickable-notification" data-id="${notif.id}" onclick="app.handleNotificationClick(${notif.id}, '${notif.message.replace(/'/g, "\\'")}')">
                 <div class="notification-icon">${typeIcon}</div>
                 <div class="notification-content">
                     <h4 class="notification-title">${notif.title}</h4>
                     <p class="notification-message">${notif.message}</p>
                     <div class="notification-meta">
                         <span class="notification-time">${notif.time_ago}</span>
-                        ${!notif.is_read ? `<button class="btn-mark-read" onclick="app.markNotificationAsRead(${notif.id})">Mark as read</button>` : ''}
                     </div>
                 </div>
             </div>
         `;
     }).join('');
+    
+    // Add click event listeners after rendering
+    setTimeout(() => {
+        const notificationItems = container.querySelectorAll('.clickable-notification');
+        notificationItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const notificationId = item.dataset.id;
+                const message = item.dataset.message;
+                this.handleNotificationClick(notificationId, message);
+            });
+        });
+    }, 100);
+};
+
+// Handle notification click - mark as read and navigate to request
+ITServiceApp.prototype.handleNotificationClick = async function(notificationId, message) {
+    try {
+        // Mark notification as read first
+        const response = await this.apiCall('api/notifications.php?action=mark_read', {
+            method: 'PUT',
+            body: JSON.stringify({
+                notification_id: notificationId
+            })
+        });
+        
+        if (response.success) {
+            // Extract request ID from message using regex
+            const requestIdMatch = message.match(/#(\d+)/);
+            if (requestIdMatch) {
+                const requestId = requestIdMatch[1];
+                // Navigate to request detail page
+                window.location.href = `request-detail.html?id=${requestId}`;
+            } else {
+                // If no request ID found, just refresh notifications
+                await this.loadNotificationsForDropdown();
+                await this.updateNotificationCount();
+            }
+        } else {
+            console.error('Failed to mark notification as read');
+        }
+    } catch (error) {
+        console.error('Error handling notification click:', error);
+    }
 };
 
 // Get notification icon based on type

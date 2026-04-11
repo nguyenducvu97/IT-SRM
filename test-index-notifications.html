@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Notifications - Index Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-btn {
+            margin: 10px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .success-btn { background: #28a745; color: white; }
+        .error-btn { background: #dc3545; color: white; }
+        .warning-btn { background: #ffc107; color: #212529; }
+        .info-btn { background: #17a2b8; color: white; }
+        h1 { text-align: center; color: #333; margin-bottom: 30px; }
+        .description { text-align: center; color: #666; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔔 Test Thông Báo Index Page</h1>
+        <p class="description">
+            Kiểm tra chức năng thông báo đã được áp dụng từ request-detail.html sang index.html
+        </p>
+        
+        <div style="text-align: center;">
+            <button class="test-btn success-btn" onclick="testNotification('success')">
+                ✅ Success Notification
+            </button>
+            <button class="test-btn error-btn" onclick="testNotification('error')">
+                ❌ Error Notification
+            </button>
+            <button class="test-btn warning-btn" onclick="testNotification('warning')">
+                ⚠️ Warning Notification
+            </button>
+            <button class="test-btn info-btn" onclick="testNotification('info')">
+                ℹ️ Info Notification
+            </button>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+            <h3>📋 Các tính năng đã được áp dụng:</h3>
+            <ul style="text-align: left; line-height: 1.8;">
+                <li>✅ Thông báo hiển thị ở góc trên bên phải</li>
+                <li>✅ Màu sắc khác nhau cho từng loại thông báo</li>
+                <li>✅ Tự động biến mất sau 5 giây</li>
+                <li>✅ Không block giao diện người dùng</li>
+                <li>✅ Xóa thông báo cũ khi hiển thị thông báo mới</li>
+                <li>✅ Z-index cao để hiển thị trên cùng</li>
+                <li>✅ Responsive design</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="index.html" style="color: #007bff; text-decoration: none;">
+                ← Quay lại trang chính
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Copy showNotification function from app.js
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: 500;
+                z-index: 10000;
+                max-width: 300px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            `;
+            
+            // Set background color based on type
+            switch (type) {
+                case 'success':
+                    notification.style.backgroundColor = '#28a745';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = '#dc3545';
+                    break;
+                case 'warning':
+                    notification.style.backgroundColor = '#ffc107';
+                    notification.style.color = '#212529';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#17a2b8';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+        
+        function testNotification(type) {
+            const messages = {
+                success: '🎉 Thao tác thành công! Đây là thông báo success.',
+                error: '❌ Đã xảy ra lỗi! Đây là thông báo error.',
+                warning: '⚠️ Cảnh báo! Đây là thông báo warning.',
+                info: 'ℹ️ Thông tin! Đây là thông báo info.'
+            };
+            
+            showNotification(messages[type], type);
+        }
+        
+        // Auto test on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                showNotification('🔔 Chức năng thông báo đã sẵn sàng!', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

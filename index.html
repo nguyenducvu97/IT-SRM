@@ -46,7 +46,7 @@
 
 
 
-    <link rel="stylesheet" href="assets/css/style.css?v=20260410-13">
+    <link rel="stylesheet" href="assets/css/style.css?v=20260411-3">
 
 
 
@@ -1110,8 +1110,7 @@
 
 
 
-                            <span id="notificationBadge" class="notification-badge">0</span>
-
+                            
 
 
 
@@ -8034,7 +8033,7 @@
 
 
 
-    <script src="assets/js/app.js?v=20260410-22"></script>
+    <script src="assets/js/app.js?v=20260411-4"></script>
 
 
 
@@ -8074,14 +8073,33 @@
 
 
 
-    <script src="assets/js/notifications.js"></script>
-
-
-
-
-
-
-
+    <script src="assets/js/notifications.js?v=20260411-5"></script>
+    
+    <script>
+        // Initialize notification manager
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Index: DOM loaded, initializing NotificationManager...');
+            
+            setTimeout(() => {
+                if (typeof NotificationManager !== 'undefined') {
+                    console.log('Index: NotificationManager class found, creating instance...');
+                    
+                    // Clear any existing instance
+                    if (window.notificationManager) {
+                        console.log('Index: Clearing existing instance...');
+                        window.notificationManager.destroy();
+                    }
+                    
+                    // Create new instance
+                    window.notificationManager = new NotificationManager();
+                    console.log('Index: NotificationManager instance created successfully!');
+                    
+                } else {
+                    console.error('Index: NotificationManager class not found!');
+                }
+            }, 100);
+        });
+    </script>
 </body>
 
 

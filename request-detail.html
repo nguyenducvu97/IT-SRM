@@ -46,7 +46,7 @@
 
 
 
-    <link rel="stylesheet" href="assets/css/style.css?v=20260317-7">
+    <link rel="stylesheet" href="assets/css/style.css?v=20260411-2">
 
 
 
@@ -5182,7 +5182,7 @@
 
 
 
-    <script src="assets/js/request-detail.js?v=20260411-2"></script>
+    <script src="assets/js/request-detail.js?v=20260411-3"></script>
 
 
 
@@ -5198,14 +5198,58 @@
 
 
 
-    <script src="assets/js/notifications.js?v=20260401-1"></script>
-
-
-
-
-
-
-
+    <script src="assets/js/notifications.js?v=20260411-6"></script>
+    
+    <script>
+        // Initialize notification manager for request detail page
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Request Detail: DOM loaded, initializing NotificationManager...');
+            
+            // Wait a bit for everything to load
+            setTimeout(() => {
+                if (typeof NotificationManager !== 'undefined') {
+                    console.log('Request Detail: NotificationManager class found, creating instance...');
+                    
+                    // Clear any existing instance
+                    if (window.notificationManager) {
+                        console.log('Request Detail: Clearing existing instance...');
+                        window.notificationManager.destroy();
+                    }
+                    
+                    // Create new instance
+                    window.notificationManager = new NotificationManager();
+                    console.log('Request Detail: NotificationManager instance created successfully!');
+                    
+                    // Debug elements
+                    setTimeout(() => {
+                        if (window.notificationManager) {
+                            console.log('Request Detail: Debugging elements...');
+                            window.notificationManager.debugElements();
+                            
+                            // Force show a test count
+                            console.log('Request Detail: Force showing test count...');
+                            window.notificationManager.forceShowCount(5);
+                            
+                            // Try normal update
+                            console.log('Request Detail: Force updating notification count...');
+                            window.notificationManager.updateNotificationCount();
+                        }
+                    }, 1000);
+                    
+                } else {
+                    console.error('Request Detail: NotificationManager class not found!');
+                }
+            }, 100);
+        });
+        
+        // Make debug functions globally available for testing
+        window.debugNotifications = () => {
+            if (window.notificationManager) {
+                window.notificationManager.debugElements();
+                window.notificationManager.forceShowCount(3);
+            }
+        };
+    </script>
 </body>
 
 

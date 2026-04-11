@@ -206,7 +206,7 @@ function showNotification(message, type = 'info') {
 
 
 
-    // Set background color based on type
+    // Set background gradient based on type (matching index page)
 
 
 
@@ -230,7 +230,7 @@ function showNotification(message, type = 'info') {
 
 
 
-            notification.style.backgroundColor = '#28a745';
+            notification.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
 
 
 
@@ -254,7 +254,7 @@ function showNotification(message, type = 'info') {
 
 
 
-            notification.style.backgroundColor = '#dc3545';
+            notification.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
 
 
 
@@ -278,7 +278,7 @@ function showNotification(message, type = 'info') {
 
 
 
-            notification.style.backgroundColor = '#ffc107';
+            notification.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
 
 
 
@@ -310,7 +310,7 @@ function showNotification(message, type = 'info') {
 
 
 
-            notification.style.backgroundColor = '#17a2b8';
+            notification.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
 
 
 

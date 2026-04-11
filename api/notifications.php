@@ -31,9 +31,9 @@ try {
     $database = new Database();
     $pdo = $database->getConnection();
     
-    // Use advanced notification helper
+    // Use advanced notification helper with database connection
     require_once __DIR__ . '/../lib/NotificationHelper.php';
-    $notificationHelper = new NotificationHelper();
+    $notificationHelper = new NotificationHelper($pdo);
     
     if ($method == 'GET') {
         $action = $_GET['action'] ?? 'list';
