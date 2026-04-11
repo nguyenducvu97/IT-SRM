@@ -1474,7 +1474,7 @@ class ITServiceApp {
                 // Update loading text - Success
                 submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Thành công!';
                 
-                // Hiển thị toast notification đẹp cho việc tạo yêu cầu thành công
+                // Hiển thị thông báo thành công tương tự như chức năng gửi yêu cầu hỗ trợ
                 if (window.notificationManager) {
                     window.notificationManager.success(
                         `Yêu cầu #${result.data?.id || 'mới'} đã được tạo thành công!`,
@@ -1482,7 +1482,7 @@ class ITServiceApp {
                         3000
                     );
                 } else {
-                    this.showNotification('Yêu cầu đã được tạo thành công', 'success');
+                    this.showNotification('Yêu cầu đã được tạo thành công!', 'success');
                 }
                 
                 e.target.reset();
@@ -3120,7 +3120,9 @@ class ITServiceApp {
             });
 
             if (response.success) {
-                this.showNotification(response.message, 'success');
+                const decision = formData.get('decision');
+                const message = decision === 'approved' ? 'Yêu cầu từ chối đã được phê duyệt thành công!' : 'Yêu cầu từ chối đã bị từ chối!';
+                this.showNotification(message, 'success');
                 this.closeAdminRejectModal();
                 // Reload reject requests list
                 this.loadRejectRequests();
@@ -3381,7 +3383,9 @@ class ITServiceApp {
             });
 
             if (response.success) {
-                this.showNotification('Đã xử lý yêu cầu hỗ trợ thành công', 'success');
+                const decision = formData.get('decision');
+                const message = decision === 'approved' ? 'Yêu cầu hỗ trợ đã được phê duyệt thành công!' : 'Yêu cầu hỗ trợ đã bị từ chối!';
+                this.showNotification(message, 'success');
                 this.closeAdminSupportModal();
                 this.loadSupportRequests();
                 

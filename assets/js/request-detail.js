@@ -9617,21 +9617,21 @@ class RequestDetailApp {
 
             if (response.success) {
 
-                // Force page refresh immediately to ensure latest data is displayed
-
-                window.location.reload();
-
-                // Show notification after page reload
-
-                setTimeout(() => {
-
-                    this.showNotification('Yêu cầu đã được giải quyết thành công', 'success');
-
-                }, 100);
+                this.showNotification('Yêu cầu đã được giải quyết thành công!', 'success');
 
                 this.closeResolveModal();
 
-                this.loadRequestDetail();
+                // Add small delay to ensure server updates before reload
+
+                setTimeout(() => {
+
+                    // Force reload by resetting loading flag
+
+                    this.isLoading = false;
+
+                    this.loadRequestDetail();
+
+                }, 500);
 
             } else {
 
@@ -9781,15 +9781,23 @@ class RequestDetailApp {
 
             if (response.success) {
 
-                const message = response.updated ? 'Yêu cầu từ chối đã được cập nhật' : 'Yêu cầu đã bị từ chối';
+                const message = response.updated ? 'Yêu cầu từ chối đã được cập nhật thành công!' : 'Đã gửi yêu cầu từ chối thành công!';
 
                 this.showNotification(message, 'success');
 
                 this.closeRejectModal();
 
-                // Force page refresh to ensure latest data is displayed
+                // Add small delay to ensure server updates before reload
 
-                window.location.reload();
+                setTimeout(() => {
+
+                    // Force reload by resetting loading flag
+
+                    this.isLoading = false;
+
+                    this.loadRequestDetail();
+
+                }, 500);
 
             } else {
 
