@@ -42,13 +42,19 @@ class ITServiceApp {
 
     constructor() {
 
-        this.currentUser = null;
-
         this.currentPage = 'dashboard';
+
+        this.currentUser = null;
 
         this.autoReloadInterval = null;
 
         this.autoReloadEnabled = true;
+
+        this.selectedFiles = []; // Store selected files
+
+        this.currentRequestsPage = 1;
+
+        this.currentSupportPage = 1;
 
         this.init();
 
@@ -61,8 +67,6 @@ class ITServiceApp {
         this.bindEvents();
 
         this.checkAuth();
-
-        this.selectedFiles = []; // Store selected files
 
         this.initAutoReload();
 
@@ -196,19 +200,19 @@ class ITServiceApp {
 
         const statusFilter = document.getElementById('statusFilter');
 
-        if (statusFilter) statusFilter.addEventListener('change', () => this.loadRequests());
+        if (statusFilter) statusFilter.addEventListener('change', () => this.loadRequests(this.currentRequestsPage));
 
         
 
         const priorityFilter = document.getElementById('priorityFilter');
 
-        if (priorityFilter) priorityFilter.addEventListener('change', () => this.loadRequests());
+        if (priorityFilter) priorityFilter.addEventListener('change', () => this.loadRequests(this.currentRequestsPage));
 
         
 
         const categoryFilter = document.getElementById('categoryFilter');
 
-        if (categoryFilter) categoryFilter.addEventListener('change', () => this.loadRequests());
+        if (categoryFilter) categoryFilter.addEventListener('change', () => this.loadRequests(this.currentRequestsPage));
 
         
 
@@ -230,7 +234,7 @@ class ITServiceApp {
 
                 searchTimeout = setTimeout(() => {
 
-                    this.loadRequests();
+                    this.loadRequests(1); // Search luôn về trang 1
 
                 }, 500); // Wait 500ms after user stops typing
 
@@ -370,7 +374,7 @@ class ITServiceApp {
 
         if (supportStatusFilter) {
 
-            supportStatusFilter.addEventListener('change', () => this.loadSupportRequests());
+            supportStatusFilter.addEventListener('change', () => this.loadSupportRequests(this.currentSupportPage));
 
         }
 
@@ -1638,6 +1642,9 @@ class ITServiceApp {
 
         try {
 
+            // Lưu lại trang hiện tại
+            this.currentRequestsPage = page;
+
             const statusFilter = document.getElementById('statusFilter');
 
             const status = statusFilter ? statusFilter.value : '';
@@ -1670,7 +1677,7 @@ class ITServiceApp {
 
             if (search) {
 
-                url = `api/search_requests.php?page=${page}&search=${encodeURIComponent(search)}&limit=1000`;
+                url = `api/search_requests.php?page=${page}&search=${encodeURIComponent(search)}&limit=9`;
 
                 if (status) url += `&status=${status}`;
 
@@ -1680,7 +1687,7 @@ class ITServiceApp {
 
             } else {
 
-                url = `api/service_requests.php?action=list&page=${page}&limit=1000`;
+                url = `api/service_requests.php?action=list&page=${page}&limit=9`;
 
                 if (status) url += `&status=${status}`;
 
@@ -1700,7 +1707,7 @@ class ITServiceApp {
 
                 this.displayRequests(response.data.requests);
 
-                this.displayPagination(response.data);
+                this.displayPagination(response.data.pagination || response.data);
 
                 this.updateStatusCounts(response.data.status_counts || {});
 
@@ -1840,13 +1847,19 @@ class ITServiceApp {
 
 
 
+        // Determine which page we're on to call the right function
+        const isSupportPage = document.getElementById('supportPage')?.classList.contains('active');
+        const loadFunction = isSupportPage ? 'loadSupportRequests' : 'loadRequests';
+
+        
+
         let html = '';
 
         
 
         // Previous button
 
-        html += `<button onclick="app.loadRequests(${page - 1})" ${page === 1 ? 'disabled' : ''}>Previous</button>`;
+        html += `<button onclick="app.${loadFunction}(${page - 1})" ${page === 1 ? 'disabled' : ''}>Previous</button>`;
 
         
 
@@ -1856,7 +1869,7 @@ class ITServiceApp {
 
             if (i === page || i === 1 || i === total_pages || (i >= page - 1 && i <= page + 1)) {
 
-                html += `<button onclick="app.loadRequests(${i})" class="${i === page ? 'active' : ''}">${i}</button>`;
+                html += `<button onclick="app.${loadFunction}(${i})" class="${i === page ? 'active' : ''}">${i}</button>`;
 
             } else if (i === page - 2 || i === page + 2) {
 
@@ -1870,7 +1883,7 @@ class ITServiceApp {
 
         // Next button
 
-        html += `<button onclick="app.loadRequests(${page + 1})" ${page === total_pages ? 'disabled' : ''}>Next</button>`;
+        html += `<button onclick="app.${loadFunction}(${page + 1})" ${page === total_pages ? 'disabled' : ''}>Next</button>`;
 
         
 
@@ -1980,7 +1993,7 @@ class ITServiceApp {
 
                     }
 
-                    this.loadRequests();
+                    this.loadRequests(this.currentRequestsPage);
 
                 }, 200);
 
@@ -1996,7 +2009,7 @@ class ITServiceApp {
 
                 }
 
-                this.loadRequests();
+                this.loadRequests(this.currentRequestsPage);
 
             }
 
@@ -2006,9 +2019,12 @@ class ITServiceApp {
 
 
 
-    async loadSupportRequests() {
+    async loadSupportRequests(page = 1) {
 
         try {
+
+            // Lưu lại trang hiện tại
+            this.currentSupportPage = page;
 
             console.log('=== LOADING SUPPORT REQUESTS ===');
 
@@ -2030,7 +2046,7 @@ class ITServiceApp {
 
             if (status === 'all') {
 
-                const response = await this.apiCall('api/support_requests.php?action=list&limit=1000');
+                const response = await this.apiCall(`api/support_requests.php?action=list&page=${page}&limit=9`);
 
                 console.log('API response (all):', response);
 
@@ -2050,6 +2066,10 @@ class ITServiceApp {
 
                         this.displayPagination(response.pagination);
 
+                    } else if (response.data && response.data.pagination) {
+
+                        this.displayPagination(response.data.pagination);
+
                     }
 
                 } else {
@@ -2060,7 +2080,7 @@ class ITServiceApp {
 
             } else {
 
-                const response = await this.apiCall(`api/support_requests.php?action=list&status=${status}&limit=1000`);
+                const response = await this.apiCall(`api/support_requests.php?action=list&status=${status}&page=${page}&limit=9`);
 
                 console.log('API response (filtered):', response);
 
@@ -2079,6 +2099,10 @@ class ITServiceApp {
                     if (response.pagination) {
 
                         this.displayPagination(response.pagination);
+
+                    } else if (response.data && response.data.pagination) {
+
+                        this.displayPagination(response.data.pagination);
 
                     }
 
@@ -7856,7 +7880,7 @@ ITServiceApp.prototype.performAutoReload = async function() {
 
             case 'requests':
 
-                await this.loadRequests();
+                await this.loadRequests(this.currentRequestsPage);
 
                 break;
 
