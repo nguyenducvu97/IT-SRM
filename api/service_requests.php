@@ -1282,7 +1282,7 @@ if ($method == 'GET') {
 
 
 
-            $status_counts_array = ['open' => 0, 'in_progress' => 0, 'resolved' => 0, 'rejected' => 0, 'request_support' => 0, 'closed' => 0];
+            $status_counts_array = ['open' => 0, 'in_progress' => 0, 'resolved' => 0, 'rejected' => 0, 'closed' => 0];
 
 
 

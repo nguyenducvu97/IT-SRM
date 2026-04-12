@@ -1428,17 +1428,9 @@ class ITServiceApp {
 
                 
 
-                // Prioritize support requests in recent requests
+                // Recent requests - no special priority for request_support since it's no longer used
 
-                const supportRequests = recentRequests.filter(r => r.status === 'request_support');
-
-                const otherRequests = recentRequests.filter(r => r.status !== 'request_support');
-
-                
-
-                // Put support requests first, then other requests, limit to 5 total
-
-                recentRequests = [...supportRequests, ...otherRequests].slice(0, 5);
+                recentRequests = recentRequests.slice(0, 5);
 
                 
 
@@ -1455,8 +1447,6 @@ class ITServiceApp {
                     resolved: apiStats.resolved || allRequests.filter(r => r.status === 'resolved').length,
 
                     rejected: apiStats.rejected || allRequests.filter(r => r.status === 'rejected').length,
-
-                    request_support: apiStats.request_support || allRequests.filter(r => r.status === 'request_support').length,
 
                     closed: apiStats.closed || allRequests.filter(r => r.status === 'closed').length
 
@@ -1502,17 +1492,16 @@ class ITServiceApp {
 
                 
 
-                const requestSupportCount = document.getElementById('requestSupportCount');
-
-                if (requestSupportCount) requestSupportCount.textContent = stats.request_support;
-
-                
-
                 const closedRequests = document.getElementById('closedRequests');
 
                 if (closedRequests) closedRequests.textContent = stats.closed;
 
 
+
+                // Load support requests count (approved only)
+                await this.loadSupportRequestsCount();
+
+                
 
                 // Load recent requests (limited)
 
@@ -1538,9 +1527,8 @@ class ITServiceApp {
 
         try {
 
-            // Count all support requests (not just pending)
-
-            const response = await this.apiCall('api/support_requests.php?action=list&limit=1');
+            // Count only approved support requests for dashboard
+            const response = await this.apiCall('api/support_requests.php?action=list&status=approved&limit=1');
 
             
 
@@ -1682,7 +1670,7 @@ class ITServiceApp {
 
             if (search) {
 
-                url = `api/search_requests.php?page=${page}&search=${encodeURIComponent(search)}`;
+                url = `api/search_requests.php?page=${page}&search=${encodeURIComponent(search)}&limit=1000`;
 
                 if (status) url += `&status=${status}`;
 
@@ -1692,7 +1680,7 @@ class ITServiceApp {
 
             } else {
 
-                url = `api/service_requests.php?action=list&page=${page}`;
+                url = `api/service_requests.php?action=list&page=${page}&limit=1000`;
 
                 if (status) url += `&status=${status}`;
 
@@ -1906,8 +1894,6 @@ class ITServiceApp {
 
             rejected: statusCounts.rejected || 0,
 
-            request_support: statusCounts.request_support || 0,
-
             closed: statusCounts.closed || 0
 
         };
@@ -1924,8 +1910,6 @@ class ITServiceApp {
 
         const rejectedCount = document.getElementById('rejectedCount');
 
-        const requestSupportCount = document.getElementById('requestSupportCount');
-
         const closedCount = document.getElementById('closedCount');
 
 
@@ -1937,8 +1921,6 @@ class ITServiceApp {
         if (resolvedCount) resolvedCount.textContent = `(${counts.resolved})`;
 
         if (rejectedCount) rejectedCount.textContent = `(${counts.rejected})`;
-
-        if (requestSupportCount) requestSupportCount.textContent = `(${counts.request_support})`;
 
         if (closedCount) closedCount.textContent = `(${counts.closed})`;
 
@@ -2036,7 +2018,9 @@ class ITServiceApp {
 
             
 
-            const status = document.getElementById('supportStatusFilter').value || 'all';
+            // Default to 'approved' for dashboard support requests filter
+
+            const status = document.getElementById('supportStatusFilter').value || 'approved';
 
             console.log('Loading with status:', status);
 
@@ -2046,7 +2030,7 @@ class ITServiceApp {
 
             if (status === 'all') {
 
-                const response = await this.apiCall('api/support_requests.php?action=list');
+                const response = await this.apiCall('api/support_requests.php?action=list&limit=1000');
 
                 console.log('API response (all):', response);
 
@@ -2060,6 +2044,14 @@ class ITServiceApp {
 
                     this.displaySupportRequests(supportRequests);
 
+                    // Display pagination if available
+
+                    if (response.pagination) {
+
+                        this.displayPagination(response.pagination);
+
+                    }
+
                 } else {
 
                     this.showNotification(response.message, 'error');
@@ -2068,7 +2060,7 @@ class ITServiceApp {
 
             } else {
 
-                const response = await this.apiCall(`api/support_requests.php?action=list&status=${status}`);
+                const response = await this.apiCall(`api/support_requests.php?action=list&status=${status}&limit=1000`);
 
                 console.log('API response (filtered):', response);
 
@@ -2081,6 +2073,14 @@ class ITServiceApp {
                     console.log('Support requests loaded (filtered):', supportRequests);
 
                     this.displaySupportRequests(supportRequests);
+
+                    // Display pagination if available
+
+                    if (response.pagination) {
+
+                        this.displayPagination(response.pagination);
+
+                    }
 
                 } else {
 

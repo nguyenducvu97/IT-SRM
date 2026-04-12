@@ -549,10 +549,10 @@ function handlePost($pdo, $action, $current_user, $user_role) {
             // Continue without files - don't fail the whole request
         }
         
-        // Update service request status to 'request_support'
+        // Keep service request status as 'in_progress' (staff continues working)
         $update_stmt = $pdo->prepare("
             UPDATE service_requests 
-            SET status = 'request_support' 
+            SET status = 'in_progress' 
             WHERE id = ?
         ");
         $update_result = $update_stmt->execute([$service_request_id]);
