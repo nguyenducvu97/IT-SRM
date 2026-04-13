@@ -679,60 +679,20 @@ if ($method == 'GET') {
 
 
 
-
-
-
         $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
-
-
-
-
-
-
         // For dashboard stats (no filters), use high limit to get all requests
-
-
-
         $has_filters = isset($_GET['status']) || isset($_GET['priority']) || isset($_GET['category']) || isset($_GET['category_id']);
-
-
-
+        $has_limit = isset($_GET['limit']);
         
-
-
-
-        if ($has_filters) {
-
-
-
+        if ($has_filters || $has_limit) {
             $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
-
-
-
         } else {
-
-
-
             // Dashboard stats - get all requests without limit
-
-
-
             $limit = 10000; // High enough to get all requests
-
-
-
         }
 
-
-
-
-
-
-
         $offset = ($page - 1) * $limit;
-
-
 
 
 
@@ -1070,7 +1030,7 @@ if ($method == 'GET') {
 
 
 
-        $is_dashboard_stats = !$has_filters; // True when no filters are applied
+        $is_dashboard_stats = !$has_filters && !$has_limit; // True when no filters AND no limit are applied
 
 
 
@@ -1078,21 +1038,26 @@ if ($method == 'GET') {
 
 
 
+        // Debug pagination
+        error_log("=== PAGINATION DEBUG ===");
+        error_log("has_filters: " . ($has_filters ? 'true' : 'false'));
+        error_log("has_limit: " . ($has_limit ? 'true' : 'false'));
+        error_log("is_dashboard_stats: " . ($is_dashboard_stats ? 'true' : 'false'));
+        error_log("limit: $limit");
+        error_log("offset: $offset");
+
         if (!$is_dashboard_stats) {
-
-
 
             // Apply limit only for non-dashboard requests
 
-
-
             $query .= " LIMIT :limit OFFSET :offset";
+            error_log("LIMIT applied to query");
 
+        } else {
 
+            error_log("NO LIMIT applied - dashboard stats");
 
         }
-
-
 
 
 

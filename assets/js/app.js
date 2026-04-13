@@ -1704,7 +1704,15 @@ class ITServiceApp {
             
 
             if (response.success) {
-
+                console.log('=== PAGINATION DEBUG ===');
+                console.log('Page:', page);
+                console.log('Search:', search);
+                console.log('Status:', status);
+                console.log('Priority:', priority);
+                console.log('Category:', category);
+                console.log('Requests count:', response.data.requests.length);
+                console.log('Pagination data:', response.data.pagination);
+                
                 this.displayRequests(response.data.requests);
 
                 this.displayPagination(response.data.pagination || response.data);
@@ -1845,11 +1853,18 @@ class ITServiceApp {
 
         }
 
-
+        
 
         // Determine which page we're on to call the right function
-        const isSupportPage = document.getElementById('supportPage')?.classList.contains('active');
-        const loadFunction = isSupportPage ? 'loadSupportRequests' : 'loadRequests';
+        const isSupportPage = document.getElementById('support-requestsPage')?.classList.contains('active');
+        const isRequestsPage = document.getElementById('requestsPage')?.classList.contains('active');
+        let loadFunction = 'loadRequests'; // default
+
+        if (isSupportPage) {
+            loadFunction = 'loadSupportRequests';
+        } else if (isRequestsPage) {
+            loadFunction = 'loadRequests';
+        }
 
         
 
