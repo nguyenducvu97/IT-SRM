@@ -198,7 +198,7 @@ if ($method == 'GET') {
 
         $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
-        $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
+        $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
 
         $offset = ($page - 1) * $limit;
 

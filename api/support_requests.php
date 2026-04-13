@@ -232,7 +232,7 @@ function handleGet($pdo, $action, $current_user, $user_role) {
             // Admin can view all support requests, staff can view their own
             $status = $_GET['status'] ?? null;
             $page = max(1, intval($_GET['page'] ?? 1));
-            $limit = max(1, intval($_GET['limit'] ?? 20));
+            $limit = max(1, intval($_GET['limit'] ?? 9));
             $offset = ($page - 1) * $limit;
             
             error_log("List parameters - status: " . ($status ?? 'all') . ", page: $page, limit: $limit");

@@ -386,7 +386,7 @@ class ITServiceApp {
 
         if (rejectStatusFilter) {
 
-            rejectStatusFilter.addEventListener('change', () => this.loadRejectRequests());
+            rejectStatusFilter.addEventListener('change', () => this.loadRejectRequests(1));
 
         }
 
@@ -1858,12 +1858,15 @@ class ITServiceApp {
         // Determine which page we're on to call the right function
         const isSupportPage = document.getElementById('support-requestsPage')?.classList.contains('active');
         const isRequestsPage = document.getElementById('requestsPage')?.classList.contains('active');
+        const isRejectPage = document.getElementById('reject-requestsPage')?.classList.contains('active');
         let loadFunction = 'loadRequests'; // default
 
         if (isSupportPage) {
             loadFunction = 'loadSupportRequests';
         } else if (isRequestsPage) {
             loadFunction = 'loadRequests';
+        } else if (isRejectPage) {
+            loadFunction = 'loadRejectRequests';
         }
 
         
@@ -5669,7 +5672,7 @@ class ITServiceApp {
 
     // Reject Request Functions
 
-    async loadRejectRequests() {
+    async loadRejectRequests(page = 1) {
 
         try {
 
@@ -5687,15 +5690,19 @@ class ITServiceApp {
 
             console.log('Status filter element:', statusFilter);
 
+            console.log('Page:', page);
+
             
 
             // If "all" is selected, don't pass status parameter to get all requests
 
-            const url = status === 'all' 
+            const baseUrl = status === 'all' 
 
                 ? 'api/reject_requests.php?action=list'
 
                 : `api/reject_requests.php?action=list&status=${status}`;
+
+            const url = `${baseUrl}&page=${page}&limit=9`;
 
             
 
@@ -5726,6 +5733,13 @@ class ITServiceApp {
                 console.log('✅ API call successful, displaying requests');
 
                 this.displayRejectRequests(response.data.reject_requests || response.data);
+
+                // Display pagination if available
+                if (response.pagination) {
+                    this.displayPagination(response.pagination);
+                } else if (response.data && response.data.pagination) {
+                    this.displayPagination(response.data.pagination);
+                }
 
             } else {
 
