@@ -1529,6 +1529,12 @@ class ITServiceApp {
 
     async loadSupportRequestsCount() {
 
+        // Only admin and staff can access support requests
+        if (!this.currentUser || !['admin', 'staff'].includes(this.currentUser.role)) {
+            console.log('User not authorized for support requests count, skipping');
+            return;
+        }
+
         try {
 
             // Count only approved support requests for dashboard
@@ -1912,49 +1918,39 @@ class ITServiceApp {
 
 
     updateStatusCounts(statusCounts) {
-
         // Update status count displays
-
         const counts = {
-
             open: statusCounts.open || 0,
-
             in_progress: statusCounts.in_progress || 0,
-
             resolved: statusCounts.resolved || 0,
-
             rejected: statusCounts.rejected || 0,
-
-            closed: statusCounts.closed || 0
-
+            closed: statusCounts.closed || 0,
+            request_support: statusCounts.request_support || 0
         };
 
-
-
         // Update dropdown options with counts
-
         const openCount = document.getElementById('openCount');
-
         const inProgressCount = document.getElementById('inProgressCount');
-
         const resolvedCount = document.getElementById('resolvedCount');
-
         const rejectedCount = document.getElementById('rejectedCount');
-
         const closedCount = document.getElementById('closedCount');
-
-
+        const requestSupportCount = document.getElementById('requestSupportCount');
 
         if (openCount) openCount.textContent = `(${counts.open})`;
-
         if (inProgressCount) inProgressCount.textContent = `(${counts.in_progress})`;
-
         if (resolvedCount) resolvedCount.textContent = `(${counts.resolved})`;
-
         if (rejectedCount) rejectedCount.textContent = `(${counts.rejected})`;
-
         if (closedCount) closedCount.textContent = `(${counts.closed})`;
-
+        if (requestSupportCount) {
+            // Update dropdown count with parentheses
+            requestSupportCount.textContent = `(${counts.request_support})`;
+            
+            // Also update dashboard count (different element without parentheses)
+            const dashboardCount = document.querySelector('h3#dashboardRequestSupportCount');
+            if (dashboardCount) {
+                dashboardCount.textContent = counts.request_support;
+            }
+        }
     }
 
 

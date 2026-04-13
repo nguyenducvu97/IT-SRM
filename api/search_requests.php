@@ -44,6 +44,7 @@ try {
     
     // Get search parameters
     $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+    $status = isset($_GET['status']) ? $_GET['status'] : '';
     $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
     $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
     $offset = ($page - 1) * $limit;
@@ -79,6 +80,17 @@ try {
     if (!empty($search)) {
         $where_clause .= " AND (sr.title LIKE :search OR sr.description LIKE :search OR u.username LIKE :search OR sr.id LIKE :search)";
         $params[':search'] = '%' . $search . '%';
+    }
+    
+    // Add status filter
+    if (!empty($status)) {
+        if ($status === 'request_support') {
+            // Special handling for request_support: only show requests with approved support requests
+            $where_clause .= " AND EXISTS (SELECT 1 FROM support_requests sreq WHERE sreq.service_request_id = sr.id AND sreq.status = 'approved')";
+        } else {
+            $where_clause .= " AND sr.status = :status";
+            $params[':status'] = $status;
+        }
     }
     
     // Main query
@@ -132,6 +144,24 @@ try {
     foreach ($status_results as $result) {
         $status_counts_array[$result['status']] = $result['count'];
     }
+    
+    // Calculate request_support count (requests with approved support requests)
+    $support_query = "SELECT COUNT(DISTINCT sr.id) as count 
+                    FROM service_requests sr 
+                    LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+                    WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'";
+    
+    // Only filter by user for non-admin/non-staff
+    if ($user_role != 'admin' && $user_role != 'staff') {
+        $support_query .= " AND sr.user_id = :user_id";
+        $support_stmt = $db->prepare($support_query);
+        $support_stmt->bindValue(":user_id", $user_id);
+    } else {
+        $support_stmt = $db->prepare($support_query);
+    }
+    $support_stmt->execute();
+    $support_result = $support_stmt->fetch(PDO::FETCH_ASSOC);
+    $status_counts_array['request_support'] = $support_result['count'] ?? 0;
     
     // Return success response
     echo json_encode([
