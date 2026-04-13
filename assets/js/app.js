@@ -1452,7 +1452,9 @@ class ITServiceApp {
 
                     rejected: apiStats.rejected || allRequests.filter(r => r.status === 'rejected').length,
 
-                    closed: apiStats.closed || allRequests.filter(r => r.status === 'closed').length
+                    closed: apiStats.closed || allRequests.filter(r => r.status === 'closed').length,
+
+                    request_support: apiStats.request_support || 0
 
                 };
 
@@ -1500,9 +1502,13 @@ class ITServiceApp {
 
                 if (closedRequests) closedRequests.textContent = stats.closed;
 
+                // Update dashboard request support count from API stats
+                const dashboardRequestSupportCount = document.getElementById('dashboardRequestSupportCount');
+                if (dashboardRequestSupportCount) {
+                    dashboardRequestSupportCount.textContent = stats.request_support;
+                }
 
-
-                // Load support requests count (approved only)
+                // Load support requests count (approved only) - for admin/staff dashboard
                 await this.loadSupportRequestsCount();
 
                 
