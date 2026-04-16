@@ -66,35 +66,62 @@ switch ($method) {
 function getUsers($db) {
     $search = isset($_GET['search']) ? sanitizeInput($_GET['search']) : '';
     $role = isset($_GET['role']) ? sanitizeInput($_GET['role']) : '';
+    $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
+    $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
+    $offset = ($page - 1) * $limit;
     
-    $query = "SELECT id, username, email, full_name, department, phone, role, created_at 
-              FROM users WHERE 1=1";
+    // Build WHERE clause
+    $where_clause = "WHERE 1=1";
+    $params = [];
     
     if (!empty($search)) {
-        $query .= " AND (username LIKE :search OR email LIKE :search OR full_name LIKE :search)";
+        $where_clause .= " AND (username LIKE :search OR email LIKE :search OR full_name LIKE :search)";
+        $params[':search'] = "%$search%";
     }
     
     if (!empty($role)) {
-        $query .= " AND role = :role";
+        $where_clause .= " AND role = :role";
+        $params[':role'] = $role;
     }
     
-    $query .= " ORDER BY created_at DESC";
+    // Get total count
+    $count_query = "SELECT COUNT(*) as total FROM users $where_clause";
+    $count_stmt = $db->prepare($count_query);
+    
+    foreach ($params as $key => $value) {
+        $count_stmt->bindValue($key, $value);
+    }
+    
+    $count_stmt->execute();
+    $total = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    
+    // Get users with pagination
+    $query = "SELECT id, username, email, full_name, department, phone, role, created_at 
+              FROM users $where_clause
+              ORDER BY created_at DESC
+              LIMIT :limit OFFSET :offset";
     
     $stmt = $db->prepare($query);
     
-    if (!empty($search)) {
-        $searchParam = "%$search%";
-        $stmt->bindParam(":search", $searchParam);
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
     }
     
-    if (!empty($role)) {
-        $stmt->bindParam(":role", $role);
-    }
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    jsonResponse(true, "Users retrieved successfully", $users);
+    jsonResponse(true, "Users retrieved successfully", [
+        'users' => $users,
+        'pagination' => [
+            'page' => $page,
+            'limit' => $limit,
+            'total' => $total,
+            'total_pages' => ceil($total / $limit)
+        ]
+    ]);
 }
 
 function getUser($db, $id) {

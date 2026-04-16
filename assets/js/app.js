@@ -352,7 +352,7 @@ class ITServiceApp {
 
         if (userSearch) {
 
-            userSearch.addEventListener('input', () => this.loadUsers());
+            userSearch.addEventListener('input', () => this.loadUsers(1));
 
         }
 
@@ -362,7 +362,7 @@ class ITServiceApp {
 
         if (roleFilter) {
 
-            roleFilter.addEventListener('change', () => this.loadUsers());
+            roleFilter.addEventListener('change', () => this.loadUsers(1));
 
         }
 
@@ -1222,7 +1222,7 @@ class ITServiceApp {
 
                         console.log('User is admin, calling loadUsers()');
 
-                        this.loadUsers();
+                        this.loadUsers(this.currentUsersPage || 1);
 
                     } else {
 
@@ -1855,12 +1855,28 @@ class ITServiceApp {
         const isSupportPage = document.getElementById('support-requestsPage')?.classList.contains('active');
         const isRequestsPage = document.getElementById('requestsPage')?.classList.contains('active');
         const isRejectPage = document.getElementById('reject-requestsPage')?.classList.contains('active');
+        const isUsersPage = document.getElementById('usersPage')?.classList.contains('active');
+        const isCategoryRequestsPage = document.getElementById('category-requestsPage')?.classList.contains('active');
+        
+        // Debug pagination container detection
+        console.log('=== PAGINATION CONTAINER DEBUG ===');
+        console.log('isSupportPage:', isSupportPage);
+        console.log('isRequestsPage:', isRequestsPage);
+        console.log('isRejectPage:', isRejectPage);
+        console.log('isUsersPage:', isUsersPage);
+        console.log('isCategoryRequestsPage:', isCategoryRequestsPage);
+        console.log('usersPagination exists:', !!document.getElementById('usersPagination'));
+        console.log('categoryPagination exists:', !!document.getElementById('categoryPagination'));
         
         let container;
         if (isSupportPage) {
             container = document.getElementById('supportPagination');
         } else if (isRejectPage) {
             container = document.getElementById('rejectPagination');
+        } else if (isUsersPage) {
+            container = document.getElementById('usersPagination');
+        } else if (isCategoryRequestsPage) {
+            container = document.getElementById('categoryPagination');
         } else {
             container = document.getElementById('pagination'); // default for requests page
         }
@@ -1868,6 +1884,11 @@ class ITServiceApp {
         const { page, total_pages } = data;
 
         
+        // Check if container exists
+        if (!container) {
+            console.warn('Pagination container not found for current page');
+            return;
+        }
 
         if (total_pages <= 1) {
 
@@ -1886,6 +1907,13 @@ class ITServiceApp {
             loadFunction = 'loadSupportRequests';
         } else if (isRejectPage) {
             loadFunction = 'loadRejectRequests';
+        } else if (isUsersPage) {
+            loadFunction = 'loadUsers';
+        } else if (isCategoryRequestsPage) {
+            // For category requests, we need to pass category ID
+            const categoryId = sessionStorage.getItem('currentCategoryId');
+            loadFunction = `loadCategoryRequestsList(${categoryId}, `;
+            // Will be completed as: loadCategoryRequestsList(categoryId, pageNumber)
         }
 
         
@@ -1895,32 +1923,35 @@ class ITServiceApp {
         
 
         // Previous button
-
-        html += `<button onclick="app.${loadFunction}(${page - 1})" ${page === 1 ? 'disabled' : ''}>Previous</button>`;
+        if (isCategoryRequestsPage) {
+            html += `<button onclick="app.${loadFunction}${page - 1})" ${page === 1 ? 'disabled' : ''}>Previous</button>`;
+        } else {
+            html += `<button onclick="app.${loadFunction}(${page - 1})" ${page === 1 ? 'disabled' : ''}>Previous</button>`;
+        }
 
         
 
         // Page numbers
-
         for (let i = 1; i <= total_pages; i++) {
-
             if (i === page || i === 1 || i === total_pages || (i >= page - 1 && i <= page + 1)) {
-
-                html += `<button onclick="app.${loadFunction}(${i})" class="${i === page ? 'active' : ''}">${i}</button>`;
-
+                if (isCategoryRequestsPage) {
+                    html += `<button onclick="app.${loadFunction}${i})" class="${i === page ? 'active' : ''}">${i}</button>`;
+                } else {
+                    html += `<button onclick="app.${loadFunction}(${i})" class="${i === page ? 'active' : ''}">${i}</button>`;
+                }
             } else if (i === page - 2 || i === page + 2) {
-
                 html += '<span>...</span>';
-
             }
-
         }
 
         
 
         // Next button
-
-        html += `<button onclick="app.${loadFunction}(${page + 1})" ${page === total_pages ? 'disabled' : ''}>Next</button>`;
+        if (isCategoryRequestsPage) {
+            html += `<button onclick="app.${loadFunction}${page + 1})" ${page === total_pages ? 'disabled' : ''}>Next</button>`;
+        } else {
+            html += `<button onclick="app.${loadFunction}(${page + 1})" ${page === total_pages ? 'disabled' : ''}>Next</button>`;
+        }
 
         
 
@@ -3465,7 +3496,7 @@ class ITServiceApp {
 
     // Load requests list for category page
 
-    async loadCategoryRequestsList(categoryId) {
+    async loadCategoryRequestsList(categoryId, page = 1) {
 
         const container = document.getElementById('categoryRequestsList');
 
@@ -3489,7 +3520,7 @@ class ITServiceApp {
 
         try {
 
-            const response = await this.apiCall(`api/service_requests.php?action=list&category_id=${categoryId}`);
+            const response = await this.apiCall(`api/service_requests.php?action=list&category_id=${categoryId}&page=${page}&limit=10`);
 
             
 
@@ -3633,6 +3664,13 @@ class ITServiceApp {
 
                         container.innerHTML = '<p class="error">Lỗi khi hiển thị danh sách yêu cầu.</p>';
 
+                    }
+
+                    // Display pagination if available
+                    if (response.data && response.data.pagination) {
+                        this.displayPagination(response.data.pagination);
+                    } else if (response.pagination) {
+                        this.displayPagination(response.pagination);
                     }
 
                 }
@@ -4089,7 +4127,7 @@ class ITServiceApp {
 
                 this.closeUserModal();
 
-                this.loadUsers();
+                this.loadUsers(this.currentUsersPage || 1);
 
             } else {
 
@@ -4403,19 +4441,21 @@ class ITServiceApp {
 
     // User Management Functions
 
-    async loadUsers() {
+    async loadUsers(page = 1) {
 
-        console.log('🚀 loadUsers() STARTED!');
+        console.log('?? loadUsers() STARTED!');
 
-        console.log('🔍 _loadingUsers flag:', this._loadingUsers);
+        console.log('?? _loadingUsers flag:', this._loadingUsers);
 
         
+        // Save current page
+        this.currentUsersPage = page;
 
         // Prevent multiple simultaneous calls
 
         if (this._loadingUsers) {
 
-            console.log('⚠️ Already loading users, skipping');
+            console.log('?? Already loading users, skipping');
 
             return;
 
@@ -4423,13 +4463,13 @@ class ITServiceApp {
 
         this._loadingUsers = true;
 
-        console.log('✅ Set _loadingUsers = true');
+        console.log('?? Set _loadingUsers = true');
 
         
 
         try {
 
-            console.log('🔍 Looking for usersList element...');
+            console.log('?? Looking for usersList element...');
 
             const usersList = document.getElementById('usersList');
 
@@ -4437,21 +4477,21 @@ class ITServiceApp {
 
             if (!usersList) {
 
-                console.error('❌ usersList element not found!');
+                console.error('?? usersList element not found!');
 
                 return;
 
             }
 
-            console.log('✅ usersList element found');
+            console.log('?? usersList element found');
 
             
 
             // Show loading message
 
-            usersList.innerHTML = '<p>Đang tải danh sách người dùng...</p>';
+            usersList.innerHTML = '<p>??ang t?i danh sách ng??i dùng...</p>';
 
-            console.log('✅ Set loading message');
+            console.log('?? Set loading message');
 
             
 
@@ -4462,6 +4502,8 @@ class ITServiceApp {
             
 
             const params = new URLSearchParams();
+            params.append('page', page);
+            params.append('limit', '10');
 
             if (search) params.append('search', search);
 
@@ -4469,7 +4511,7 @@ class ITServiceApp {
 
             
 
-            console.log('🌐 Making API call...');
+            console.log('?? Making API call...');
 
             // Use the real API (authentication is working)
 
@@ -4479,28 +4521,30 @@ class ITServiceApp {
 
             
 
-            console.log('📦 API response:', data);
+            console.log('?? API response:', data);
 
             
 
             if (data.success) {
 
-                console.log(`✅ Successfully loaded ${data.data.length} users`);
+                console.log(`?? Successfully loaded ${data.data.users.length} users`);
 
-                this.displayUsers(data.data);
+                this.displayUsers(data.data.users);
 
+                this.displayPagination(data.data.pagination);
             } else {
 
-                console.error('❌ API error:', data.message);
+                console.error('?? API error:', data.message);
 
-                usersList.innerHTML = `<div class="error">Lỗi: ${data.message}</div>`;
+                usersList.innerHTML = `<div class="error">L?i: ${data.message}</div}`;
 
-                this.showNotification('Không thể tải danh sách người dùng', 'error');
+                this.showNotification('Không th? t?i danh sách ng??i dùng', 'error');
 
             }
 
         } catch (error) {
 
+            console.error('?? Network error:', error);
             console.error('💥 Network error:', error);
 
             const usersList = document.getElementById('usersList');
@@ -4791,7 +4835,7 @@ class ITServiceApp {
 
                 this.closeUserModal();
 
-                this.loadUsers();
+                this.loadUsers(this.currentUsersPage || 1);
 
             } else {
 
@@ -4845,7 +4889,7 @@ class ITServiceApp {
 
                 this.showNotification('Xóa người dùng thành công', 'success');
 
-                this.loadUsers();
+                this.loadUsers(this.currentUsersPage || 1);
 
             } else {
 
@@ -7176,7 +7220,7 @@ class ITServiceApp {
 
                 this.showNotification('Cập nhật vai trò thành công', 'success');
 
-                this.loadUsers(); // Reload users list
+                this.loadUsers(this.currentUsersPage || 1); // Reload users list
 
                 this.closeUserRoleModal();
 
