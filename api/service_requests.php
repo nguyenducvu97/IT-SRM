@@ -344,24 +344,11 @@ if ($method == 'GET') {
 
 
 
-        // For dashboard stats (no filters), use high limit to get all requests
-
+        // Always use pagination for consistent behavior
         $has_filters = isset($_GET['status']) || isset($_GET['priority']) || isset($_GET['category']) || isset($_GET['category_id']) || isset($_GET['search']);
-
         
-
-        if ($has_filters) {
-
-            $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
-
-        } else {
-
-            // Dashboard stats - get all requests without limit
-
-            $limit = 10000; // High enough to get all requests
-
-        }
-
+        // Always apply limit for pagination
+        $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
 
 
         $offset = ($page - 1) * $limit;
@@ -542,20 +529,8 @@ if ($method == 'GET') {
 
         
 
-        // Special handling for dashboard stats - don't apply limit for total count
-
-        $is_dashboard_stats = !$has_filters; // True when no filters are applied
-
-        
-
-        if (!$is_dashboard_stats) {
-
-            // Apply limit only for non-dashboard requests
-
-            $query .= " LIMIT :limit OFFSET :offset";
-
-        }
-
+        // Always apply pagination for consistent behavior
+        $query .= " LIMIT :limit OFFSET :offset";
 
 
         
@@ -582,16 +557,9 @@ if ($method == 'GET') {
 
         
 
-        // Only bind limit/offset for non-dashboard requests
-
-        if (!$is_dashboard_stats) {
-
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-
-            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-
-        }
-
+        // Always bind limit/offset for pagination
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 
 
         
