@@ -124,7 +124,8 @@ function handleGet($pdo, $action, $current_user, $user_role) {
             $stmt = $pdo->prepare("
                 SELECT sr.*, 
                        u.username as requester_name,
-                       srq.title as request_title
+                       srq.title as request_title,
+                       srq.status as service_request_status
                 FROM support_requests sr
                 JOIN users u ON sr.requester_id = u.id
                 JOIN service_requests srq ON sr.service_request_id = srq.id
@@ -180,9 +181,11 @@ function handleGet($pdo, $action, $current_user, $user_role) {
                 $stmt = $pdo->prepare("
                     SELECT sr.*, 
                            u.username as requester_name,
-                           admin.username as admin_name
+                           admin.username as admin_name,
+                           srq.status as service_request_status
                     FROM support_requests sr
                     JOIN users u ON sr.requester_id = u.id
+                    JOIN service_requests srq ON sr.service_request_id = srq.id
                     LEFT JOIN users admin ON sr.processed_by = admin.id
                     WHERE sr.service_request_id = ? AND sr.requester_id = ?
                     ORDER BY sr.created_at DESC
@@ -194,9 +197,11 @@ function handleGet($pdo, $action, $current_user, $user_role) {
                 $stmt = $pdo->prepare("
                     SELECT sr.*, 
                            u.username as requester_name,
-                           admin.username as admin_name
+                           admin.username as admin_name,
+                           srq.status as service_request_status
                     FROM support_requests sr
                     JOIN users u ON sr.requester_id = u.id
+                    JOIN service_requests srq ON sr.service_request_id = srq.id
                     LEFT JOIN users admin ON sr.processed_by = admin.id
                     WHERE sr.service_request_id = ?
                     ORDER BY sr.created_at DESC
@@ -286,7 +291,8 @@ function handleGet($pdo, $action, $current_user, $user_role) {
             $query = "
                 SELECT sr.*, 
                        u.username as requester_name,
-                       srq.title as request_title
+                       srq.title as request_title,
+                       srq.status as service_request_status
                 FROM support_requests sr
                 JOIN users u ON sr.requester_id = u.id
                 JOIN service_requests srq ON sr.service_request_id = srq.id
@@ -888,7 +894,7 @@ function handleDelete($pdo, $action, $current_user, $user_role) {
     try {
         // Check if support request exists
         $stmt = $pdo->prepare("
-            SELECT sr.*, srq.title as request_title 
+            SELECT sr.*, srq.title as request_title, srq.status as service_request_status
             FROM support_requests sr
             JOIN service_requests srq ON sr.service_request_id = srq.id
             WHERE sr.id = ?

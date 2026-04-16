@@ -4426,7 +4426,9 @@ class ITServiceApp {
 
             'cancelled': 'Đã hủy',
 
-            'request_support': 'Cần hỗ trợ'
+            'request_support': 'Cần hỗ trợ',
+
+            'unknown': 'Không xác định'
 
         };
 
