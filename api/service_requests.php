@@ -411,15 +411,13 @@ if ($method == 'GET') {
 
         if (!empty($status_filter)) {
 
-
-
-            $where_clause .= " AND sr.status = :status";
-
-
-
-            $params[':status'] = $status_filter;
-
-
+            if ($status_filter === 'request_support') {
+                // Special handling for request_support: only show requests with approved support requests
+                $where_clause .= " AND EXISTS (SELECT 1 FROM support_requests sreq WHERE sreq.service_request_id = sr.id AND sreq.status = 'approved')";
+            } else {
+                $where_clause .= " AND sr.status = :status";
+                $params[':status'] = $status_filter;
+            }
 
         }
 
@@ -703,6 +701,50 @@ if ($method == 'GET') {
 
 
             }
+
+
+
+            
+
+            // Calculate request_support count (requests with approved support requests)
+
+            $support_query = "SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'";
+
+            
+
+            // Only filter by user for non-admin/non-staff
+
+            if ($user_role != 'admin' && $user_role != 'staff') {
+
+                $support_query .= " AND sr.user_id = :user_id";
+
+                $support_stmt = $db->prepare($support_query);
+
+                $support_stmt->bindValue(":user_id", $user_id);
+
+            } else {
+
+                $support_stmt = $db->prepare($support_query);
+
+            }
+
+            $support_stmt->execute();
+
+            $support_result = $support_stmt->fetch(PDO::FETCH_ASSOC);
+
+            $request_support_count = $support_result['count'] ?? 0;
+
+            $status_counts_array['request_support'] = $request_support_count;
+
+            
+
+            error_log("Request support count calculated: $request_support_count");
 
 
 

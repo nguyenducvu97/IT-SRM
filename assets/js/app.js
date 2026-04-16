@@ -2013,7 +2013,11 @@ class ITServiceApp {
         if (rejectedCount) rejectedCount.textContent = `(${counts.rejected})`;
         if (closedCount) closedCount.textContent = `(${counts.closed})`;
         if (requestSupportCount) {
+
+            console.log('Updating request support count:', counts.request_support);
+
             // Update dropdown count with parentheses
+
             requestSupportCount.textContent = `(${counts.request_support})`;
             
             // Also update dashboard count (different element without parentheses)
