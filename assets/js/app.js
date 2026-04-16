@@ -7938,9 +7938,8 @@ ITServiceApp.prototype.performAutoReload = async function() {
 
 
 
-        // Always refresh notification count
-
-        await this.updateNotificationCount();
+        // Don't update notification count here - NotificationManager handles it
+        // This prevents conflict with the singleton NotificationManager
 
 
 
@@ -7961,11 +7960,9 @@ ITServiceApp.prototype.refreshNotifications = async function() {
         const response = await this.apiCall('api/notifications.php?action=list&limit=5');
 
         if (response.success && response.data) {
-
-            // Update notification badge
-
-            this.updateNotificationBadge(response.data);
-
+            // Don't update notification badge here - NotificationManager handles it
+            // This prevents conflict with the singleton NotificationManager
+            console.log('Notifications refreshed but badge update handled by NotificationManager');
         }
 
     } catch (error) {
