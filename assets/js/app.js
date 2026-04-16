@@ -3533,7 +3533,7 @@ class ITServiceApp {
 
         try {
 
-            const response = await this.apiCall(`api/service_requests.php?action=list&category_id=${categoryId}&page=${page}&limit=10`);
+            const response = await this.apiCall(`api/service_requests.php?action=list&category_id=${categoryId}&page=${page}&limit=9`);
 
             
 
