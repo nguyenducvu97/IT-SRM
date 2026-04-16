@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Force Cache Clear - IT Service Request</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        // Force clear all caches
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                names.forEach(function(name) {
+                    caches.delete(name);
+                });
+            });
+        }
+        
+        // Clear localStorage
+        localStorage.clear();
+        
+        // Clear sessionStorage
+        sessionStorage.clear();
+        
+        // Redirect to main page with timestamp
+        window.location.href = 'index.html?v=' + new Date().getTime();
+    </script>
+</head>
+<body>
+    <h1>Clearing cache and redirecting...</h1>
+    <p>If not redirected, <a href="index.html?v=<?php echo time(); ?>">click here</a></p>
+</body>
+</html>

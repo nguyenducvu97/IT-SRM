@@ -200,19 +200,19 @@ class ITServiceApp {
 
         const statusFilter = document.getElementById('statusFilter');
 
-        if (statusFilter) statusFilter.addEventListener('change', () => this.loadRequests(this.currentRequestsPage));
+        if (statusFilter) statusFilter.addEventListener('change', () => this.loadRequests(1));
 
         
 
         const priorityFilter = document.getElementById('priorityFilter');
 
-        if (priorityFilter) priorityFilter.addEventListener('change', () => this.loadRequests(this.currentRequestsPage));
+        if (priorityFilter) priorityFilter.addEventListener('change', () => this.loadRequests(1));
 
         
 
         const categoryFilter = document.getElementById('categoryFilter');
 
-        if (categoryFilter) categoryFilter.addEventListener('change', () => this.loadRequests(this.currentRequestsPage));
+        if (categoryFilter) categoryFilter.addEventListener('change', () => this.loadRequests(1));
 
         
 
@@ -374,7 +374,7 @@ class ITServiceApp {
 
         if (supportStatusFilter) {
 
-            supportStatusFilter.addEventListener('change', () => this.loadSupportRequests(this.currentSupportPage));
+            supportStatusFilter.addEventListener('change', () => this.loadSupportRequests(1));
 
         }
 

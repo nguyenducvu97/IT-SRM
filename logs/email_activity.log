@@ -717,3 +717,21 @@
 [2026-04-13 10:06:09] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đã bị từ chối
 [2026-04-13 10:06:13] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu bị Admin từ chối
 [2026-04-13 11:06:38] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu bị Admin từ chối
+[2026-04-13 11:42:30] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Test Direct Notification
+[2026-04-13 11:42:45] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đang được xử lý
+[2026-04-13 11:42:49] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đã hoàn thành
+[2026-04-13 11:42:53] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đã bị từ chối
+[2026-04-13 11:42:57] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-13 11:43:01] FAILED_PHPMAILER | To: jane.doe@sgitech.com.vn | Subject: Yêu cầu mới cần xử lý
+[2026-04-13 11:43:05] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Phản hồi từ người dùng
+[2026-04-13 11:43:10] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Phản hồi từ người dùng
+[2026-04-13 11:43:14] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-13 11:43:18] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu
+[2026-04-13 11:43:22] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu hỗ trợ kỹ thuật (Escalation)
+[2026-04-13 11:43:26] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu từ chối cần xác nhận
+[2026-04-13 11:45:34] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đang được xử lý
+[2026-04-13 11:45:38] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu
+[2026-04-13 12:01:51] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đang được xử lý
+[2026-04-13 12:01:55] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu
+[2026-04-13 12:08:00] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đang được xử lý
+[2026-04-13 12:08:04] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu

@@ -4964,49 +4964,19 @@ elseif ($method == 'POST') {
                         $notificationHelper = new ServiceRequestNotificationHelper();
 
 
-
                         
-
-
-
                         // Get request details for notification
-
-
-
                         $requestDetails = $notificationHelper->getRequestDetails($request_id);
-
-
-
+                        error_log("DEBUG: Request details retrieved: " . ($requestDetails ? "Found" : "Not found"));
                         
-
-
-
                         // Notify admin about rejection request
-
-
-
-                        $notificationHelper->notifyAdminRejectionRequest(
-
-
-
+                        error_log("DEBUG: Calling notifyAdminRejectionRequest with request_id={$request_id}");
+                        $result = $notificationHelper->notifyAdminRejectionRequest(
                             $request_id, 
-
-
-
                             $reject_reason . ($reject_details ? " - " . $reject_details : ""), 
-
-
-
                             $_SESSION['full_name'] ?? 'Staff', 
-
-
-
                             $requestDetails['title']
-
-
-
                         );
-
 
 
                         
@@ -8101,27 +8071,27 @@ elseif ($method == 'POST') {
 
                                     if (!empty($notify_ids)) {
 
-
-
-
-
-
-
-                                        // $notificationHelper = new NotificationHelper($db);
-
-
-
-
-
-
-
-                                        // $notificationHelper->notifyUsers($notify_ids, $accept_title, $accept_message, 'success', $request_id, 'request');
-
-
-
-
-
-
+                                        // Send notifications to user and admin
+                                        require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                                        $notificationHelper = new ServiceRequestNotificationHelper();
+                                        
+                                        // Notify user that request is in progress
+                                        if (in_array($request_data['user_id'], $notify_ids)) {
+                                            $notificationHelper->notifyUserRequestInProgress(
+                                                $request_id, 
+                                                $request_data['user_id'], 
+                                                $staff_name
+                                            );
+                                        }
+                                        
+                                        // Notify admin about status change
+                                        $notificationHelper->notifyAdminStatusChange(
+                                            $request_id, 
+                                            'open', 
+                                            'in_progress', 
+                                            $staff_name, 
+                                            $request_data['title']
+                                        );
 
                                     }
 
@@ -10398,96 +10368,7 @@ elseif ($method == 'POST') {
                     
 
 
-
-
-
-
-
-                    // Notify all admin users
-
-
-
-
-
-
-
-                    $admin_stmt = $db->prepare("SELECT id FROM users WHERE role = 'admin'");
-
-
-
-
-
-
-
-                    $admin_stmt->execute();
-
-
-
-
-
-
-
-                    $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
-
-
-
-
-
-
-
                     
-
-
-
-
-
-
-
-                    if (!empty($admins)) {
-
-
-
-
-
-
-
-                        // $notificationHelper = new NotificationHelper($db);
-
-
-
-
-
-
-
-                        foreach ($admins as $admin_id) {
-
-
-
-
-
-
-
-                            // $notificationHelper->createNotification($admin_id, $title, $message, 'warning', $request_id, 'reject_request', false);
-
-
-
-
-
-
-
-                        }
-
-
-
-
-
-
-
-                    }
-
-
-
-
 
 
 
@@ -11357,49 +11238,41 @@ elseif ($method == 'POST') {
 
 
 
+                    error_log("=== STAFF ACCEPT REQUEST NOTIFICATION DEBUG ===");
+
+                    error_log("Request ID: " . $request_id);
+
+                    error_log("Request Data: " . print_r($request_data, true));
+
+                    error_log("User ID: " . $request_data['user_id']);
+
+                    error_log("Assigned Name: " . $request_data['assigned_name']);
+
                     $notificationHelper = new ServiceRequestNotificationHelper();
 
-
-
-                    
-
-
+                    error_log("NotificationHelper created successfully");
 
                     // Notify user that their request is now in progress
 
+                    error_log("Sending user notification...");
 
-
-                    $notificationHelper->notifyUserRequestInProgress(
-
-
+                    $userResult = $notificationHelper->notifyUserRequestInProgress(
 
                         $request_id, 
 
-
-
                         $request_data['user_id'], 
-
-
 
                         $request_data['assigned_name']
 
-
-
                     );
 
-
-
-                    
-
-
+                    error_log("User notification result: " . ($userResult ? "SUCCESS" : "FAILED"));
 
                     // Notify admin about staff acceptance
 
+                    error_log("Sending admin notification...");
 
-
-                    $notificationHelper->notifyAdminStatusChange(
-
-
+                    $adminResult = $notificationHelper->notifyAdminStatusChange(
 
                         $request_id, 
 
@@ -11423,7 +11296,9 @@ elseif ($method == 'POST') {
 
                     );
 
+                    error_log("Admin notification result: " . ($adminResult ? "SUCCESS" : "FAILED"));
 
+                    error_log("=== END STAFF ACCEPT REQUEST NOTIFICATION DEBUG ===");
 
                     
 
@@ -11439,13 +11314,46 @@ elseif ($method == 'POST') {
 
                 }
 
-
-
-
-
-
-
+                // CRITICAL: SERVER-SIDE NOTIFICATION BACKUP - Always execute regardless of JavaScript version or previous errors
+                error_log("=== CRITICAL: SERVER-SIDE BACKUP START - GUARANTEED EXECUTION ===");
                 
+                try {
+                    // Force create notifications directly without relying on JavaScript
+                    $backup_notificationHelper = new ServiceRequestNotificationHelper();
+                    
+                    // Notify user that their request is now in progress
+                    error_log("BACKUP: Sending user notification...");
+                    $backup_user_result = $backup_notificationHelper->notifyUserRequestInProgress(
+                        $request_id, 
+                        $request_data['user_id'], 
+                        $request_data['assigned_name']
+                    );
+                    error_log("BACKUP: User notification result: " . ($backup_user_result ? "SUCCESS" : "FAILED"));
+                    
+                    // Notify admin about staff acceptance
+                    error_log("BACKUP: Sending admin notification...");
+                    $backup_admin_result = $backup_notificationHelper->notifyAdminStatusChange(
+                        $request_id, 
+                        'open', 
+                        'in_progress', 
+                        $request_data['assigned_name'], 
+                        $request_data['title']
+                    );
+                    error_log("BACKUP: Admin notification result: " . ($backup_admin_result ? "SUCCESS" : "FAILED"));
+                    
+                    // Log final status
+                    if ($backup_user_result && $backup_admin_result) {
+                        error_log("✅ BACKUP SUCCESS: All notifications sent for request #$request_id");
+                    } else {
+                        error_log("❌ BACKUP FAILED: Some notifications failed for request #$request_id");
+                    }
+                    
+                } catch (Exception $backup_e) {
+                    error_log("🚨 CRITICAL: Notification backup failed: " . $backup_e->getMessage());
+                    error_log("🚨 This should never happen - check ServiceRequestNotificationHelper");
+                }
+                
+                error_log("=== CRITICAL: SERVER-SIDE BACKUP END ===");
 
 
 
