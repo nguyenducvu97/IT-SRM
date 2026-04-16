@@ -349,21 +349,29 @@ class ITServiceApp {
         // User search and filter events
 
         const userSearch = document.getElementById('userSearch');
+        console.log('🔍 userSearch element found:', !!userSearch);
 
         if (userSearch) {
 
             userSearch.addEventListener('input', () => this.loadUsers(1));
+            console.log('✅ userSearch event listener bound');
 
+        } else {
+            console.warn('⚠️ userSearch element not found!');
         }
 
         
 
         const roleFilter = document.getElementById('roleFilter');
+        console.log('🔍 roleFilter element found:', !!roleFilter);
 
         if (roleFilter) {
 
             roleFilter.addEventListener('change', () => this.loadUsers(1));
+            console.log('✅ roleFilter event listener bound');
 
+        } else {
+            console.warn('⚠️ roleFilter element not found!');
         }
 
 
@@ -4509,10 +4517,9 @@ class ITServiceApp {
             
 
             const search = document.getElementById('userSearch')?.value || '';
-
             const role = document.getElementById('roleFilter')?.value || '';
 
-            
+            console.log('🔍 Filter values - search:', search, 'role:', role);
 
             const params = new URLSearchParams();
             params.append('page', page);
@@ -4524,11 +4531,13 @@ class ITServiceApp {
 
             
 
-            console.log('?? Making API call...');
+            const apiUrl = `api/users.php?${params.toString()}`;
+            console.log('🚀 Making API call to:', apiUrl);
 
             // Use the real API (authentication is working)
 
-            const response = await fetch(`api/users.php?${params.toString()}`);
+            const response = await fetch(apiUrl);
+            console.log('📡 Response status:', response.status);
 
             const data = await response.json();
 
