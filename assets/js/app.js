@@ -1857,6 +1857,7 @@ class ITServiceApp {
         const isRejectPage = document.getElementById('reject-requestsPage')?.classList.contains('active');
         const isUsersPage = document.getElementById('usersPage')?.classList.contains('active');
         const isCategoryRequestsPage = document.getElementById('category-requestsPage')?.classList.contains('active');
+        const isDepartmentsPage = document.getElementById('departmentsPage')?.classList.contains('active');
         
         // Debug pagination container detection
         console.log('=== PAGINATION CONTAINER DEBUG ===');
@@ -1865,8 +1866,10 @@ class ITServiceApp {
         console.log('isRejectPage:', isRejectPage);
         console.log('isUsersPage:', isUsersPage);
         console.log('isCategoryRequestsPage:', isCategoryRequestsPage);
+        console.log('isDepartmentsPage:', isDepartmentsPage);
         console.log('usersPagination exists:', !!document.getElementById('usersPagination'));
         console.log('categoryPagination exists:', !!document.getElementById('categoryPagination'));
+        console.log('departmentsPagination exists:', !!document.getElementById('departmentsPagination'));
         
         let container;
         if (isSupportPage) {
@@ -1877,6 +1880,8 @@ class ITServiceApp {
             container = document.getElementById('usersPagination');
         } else if (isCategoryRequestsPage) {
             container = document.getElementById('categoryPagination');
+        } else if (isDepartmentsPage) {
+            container = document.getElementById('departmentsPagination');
         } else {
             container = document.getElementById('pagination'); // default for requests page
         }
@@ -1914,6 +1919,8 @@ class ITServiceApp {
             const categoryId = sessionStorage.getItem('currentCategoryId');
             loadFunction = `loadCategoryRequestsList(${categoryId}, `;
             // Will be completed as: loadCategoryRequestsList(categoryId, pageNumber)
+        } else if (isDepartmentsPage) {
+            loadFunction = 'departmentsManager.loadDepartments';
         }
 
         
@@ -1925,6 +1932,8 @@ class ITServiceApp {
         // Previous button
         if (isCategoryRequestsPage) {
             html += `<button onclick="app.${loadFunction}${page - 1})" ${page === 1 ? 'disabled' : ''}>Previous</button>`;
+        } else if (isDepartmentsPage) {
+            html += `<button onclick="app.departmentsManager.loadDepartments(${page - 1})" ${page === 1 ? 'disabled' : ''}>Previous</button>`;
         } else {
             html += `<button onclick="app.${loadFunction}(${page - 1})" ${page === 1 ? 'disabled' : ''}>Previous</button>`;
         }
@@ -1936,6 +1945,8 @@ class ITServiceApp {
             if (i === page || i === 1 || i === total_pages || (i >= page - 1 && i <= page + 1)) {
                 if (isCategoryRequestsPage) {
                     html += `<button onclick="app.${loadFunction}${i})" class="${i === page ? 'active' : ''}">${i}</button>`;
+                } else if (isDepartmentsPage) {
+                    html += `<button onclick="app.departmentsManager.loadDepartments(${i})" class="${i === page ? 'active' : ''}">${i}</button>`;
                 } else {
                     html += `<button onclick="app.${loadFunction}(${i})" class="${i === page ? 'active' : ''}">${i}</button>`;
                 }
@@ -1949,6 +1960,8 @@ class ITServiceApp {
         // Next button
         if (isCategoryRequestsPage) {
             html += `<button onclick="app.${loadFunction}${page + 1})" ${page === total_pages ? 'disabled' : ''}>Next</button>`;
+        } else if (isDepartmentsPage) {
+            html += `<button onclick="app.departmentsManager.loadDepartments(${page + 1})" ${page === total_pages ? 'disabled' : ''}>Next</button>`;
         } else {
             html += `<button onclick="app.${loadFunction}(${page + 1})" ${page === total_pages ? 'disabled' : ''}>Next</button>`;
         }

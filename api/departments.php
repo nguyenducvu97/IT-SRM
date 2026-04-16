@@ -96,12 +96,30 @@ function handleGet($pdo, $action) {
                 echo json_encode(['success' => false, 'message' => 'Department not found']);
             }
         } else {
-            // Get all departments
-            $stmt = $pdo->prepare("SELECT * FROM departments ORDER BY name");
+            // Get departments with pagination
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+            $offset = ($page - 1) * $limit;
+            
+            // Get total count
+            $countStmt = $pdo->prepare("SELECT COUNT(*) as total FROM departments");
+            $countStmt->execute();
+            $total = $countStmt->fetch(PDO::FETCH_ASSOC)['total'];
+            $total_pages = ceil($total / $limit);
+            
+            // Get paginated departments
+            $stmt = $pdo->prepare("SELECT * FROM departments ORDER BY name LIMIT $limit OFFSET $offset");
             $stmt->execute();
             $departments = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            echo json_encode(['success' => true, 'data' => $departments]);
+            echo json_encode([
+                'success' => true, 
+                'data' => $departments,
+                'page' => $page,
+                'limit' => $limit,
+                'total' => $total,
+                'total_pages' => $total_pages
+            ]);
         }
     } else {
         // Get all active departments for dropdown

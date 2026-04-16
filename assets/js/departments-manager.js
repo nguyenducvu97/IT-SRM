@@ -39,12 +39,12 @@ class DepartmentsManager {
         }
     }
 
-    async loadDepartments() {
-        console.log('🏢 Loading departments for admin...');
+    async loadDepartments(page = 1) {
+        console.log(`🏢 Loading departments for admin... page: ${page}`);
         
         try {
-            // Explicitly call with action=get to get full department objects
-            const response = await this.app.apiCall('api/departments.php?action=get');
+            // Explicitly call with action=get and pagination parameters
+            const response = await this.app.apiCall(`api/departments.php?action=get&page=${page}&limit=9`);
             console.log('📡 Full API response:', response);
             console.log('📡 Response data type:', typeof response.data);
             console.log('📡 Response data length:', response.data ? response.data.length : 'N/A');
@@ -52,6 +52,18 @@ class DepartmentsManager {
             if (response.success) {
                 console.log('✅ Departments loaded successfully:', response.data.length);
                 this.departments = response.data;
+                
+                // Call displayPagination for departments
+                if (this.app.displayPagination && typeof this.app.displayPagination === 'function') {
+                    console.log('🎨 Calling displayPagination for departments with data:', {
+                        page: response.page || 1,
+                        total_pages: response.total_pages || 1
+                    });
+                    this.app.displayPagination({
+                        page: response.page || 1,
+                        total_pages: response.total_pages || 1
+                    });
+                }
                 
                 // Log each department to debug the structure
                 this.departments.forEach((dept, index) => {
@@ -94,7 +106,8 @@ class DepartmentsManager {
             if (response.success && response.data) {
                 // Count users by department
                 userCounts = {};
-                response.data.forEach(user => {
+                const users = response.data.users || response.data || [];
+                users.forEach(user => {
                     const dept = user.department || 'Unknown';
                     userCounts[dept] = (userCounts[dept] || 0) + 1;
                 });
