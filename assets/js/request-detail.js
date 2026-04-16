@@ -19492,8 +19492,9 @@ class RequestDetailApp {
 
 
 
-            const response = await this.apiCall('api/service_requests.php?action=accept_request&request_id=' + requestId, {
-                method: 'GET',
+            const response = await this.apiCall('api/service_requests.php', {
+                method: 'POST',
+                body: apiFormData,
                 credentials: 'include'
             });
 
