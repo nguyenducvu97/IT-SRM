@@ -1418,9 +1418,30 @@ if ($method == 'GET') {
 
 
 
-                        $reject_attachments = $reject_attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
+                        $all_reject_attachments = $reject_attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
 
+                        
 
+                        // Filter duplicates by original name (same logic as reject_requests.php)
+
+                        $reject_attachments = [];
+
+                        $seen_original_names = [];
+
+                        foreach ($all_reject_attachments as $attachment) {
+
+                            $original_name = $attachment['original_name'];
+                            if (!in_array($original_name, $seen_original_names)) {
+
+                                $reject_attachments[] = $attachment;
+
+                                $seen_original_names[] = $original_name;
+
+                            }
+
+                        }
+
+                        
 
                         $request['reject_request']['attachments'] = $reject_attachments;
 
