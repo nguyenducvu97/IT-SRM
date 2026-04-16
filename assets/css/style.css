@@ -2343,21 +2343,10 @@ body {
     display: flex;
 
 
-
     gap: 1rem;
-
-
-
     margin-bottom: 2rem;
-
-
-
+    margin-top: 0.5rem;
     background: white;
-
-
-
-    padding: 1rem;
-
 
 
     border-radius: 8px;
@@ -2733,6 +2722,52 @@ body {
 
 
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+
+
+    /* Sticky header styles */
+
+    position: sticky;
+
+
+
+    top: 0px;
+
+
+
+    z-index: 100;
+
+
+
+    transition: box-shadow 0.3s ease;
+
+
+
+    backdrop-filter: blur(10px);
+
+
+
+    -webkit-backdrop-filter: blur(10px);
+
+
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+
+
+}
+
+/* Enhanced sticky header when scrolled */
+
+.page-header.scrolled {
+
+
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 
 
 
@@ -3408,11 +3443,7 @@ body {
 
 
 
-        padding: 1rem;
-
-
-
-        padding-top: 1.25rem;
+        padding: 0rem 1rem 1rem 1rem; /* top right bottom left - no top padding */ 
 
 
 
@@ -5044,11 +5075,7 @@ body {
 
 
 
-    padding: 1rem 1.5rem;
-
-
-
-    padding-top: 1.5rem;
+    padding: 0rem 1.5rem;
 
 
 
@@ -13480,11 +13507,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 
 
-    color: #6c757d;
+    color: #6c757d?
 
 
 
-    margin-top: 5px;
+    margin-top: 5px?
 
 
 

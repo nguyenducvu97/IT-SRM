@@ -418,6 +418,12 @@ class ITServiceApp {
 
         }
 
+        
+
+        // Sticky header scroll effect
+
+        this.initStickyHeader();
+
 
 
         // File upload events
@@ -8589,6 +8595,90 @@ ITServiceApp.prototype.logout = function() {
     this.showLoginScreen();
 
     this.showNotification('Logged out successfully', 'success');
+
+};
+
+// Sticky header scroll effect
+
+ITServiceApp.prototype.initStickyHeader = function() {
+
+    const pageHeaders = document.querySelectorAll('.page-header');
+
+    
+
+    if (pageHeaders.length === 0) {
+
+        console.log('No page headers found for sticky effect');
+
+        return;
+
+    }
+
+    
+
+    console.log(`Found ${pageHeaders.length} page headers for sticky effect`);
+
+    
+
+    const handleScroll = () => {
+
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        
+
+        pageHeaders.forEach(header => {
+
+            if (scrollTop > 50) {
+
+                header.classList.add('scrolled');
+
+            } else {
+
+                header.classList.remove('scrolled');
+
+            }
+
+        });
+
+    };
+
+    
+
+    // Initial check
+
+    handleScroll();
+
+    
+
+    // Add scroll event listener with throttling
+
+    let ticking = false;
+
+    const scrollHandler = () => {
+
+        if (!ticking) {
+
+            requestAnimationFrame(() => {
+
+                handleScroll();
+
+                ticking = false;
+
+            });
+
+            ticking = true;
+
+        }
+
+    };
+
+    
+
+    window.addEventListener('scroll', scrollHandler, { passive: true });
+
+    
+
+    console.log('Sticky header scroll effect initialized');
 
 };
 
