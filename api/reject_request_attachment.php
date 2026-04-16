@@ -48,18 +48,30 @@ $filePath = $uploadsDir . $fileName;
 
 // Security check - ensure file is within uploads directory
 $realBasePath = realpath($uploadsDir);
+
+// First check if file exists before getting realpath
+if (!file_exists($filePath)) {
+    error_log("Reject attachment file not found: " . $filePath);
+    
+    // For view action, return a placeholder image for missing files
+    $action = $_GET['action'] ?? 'download';
+    if ($action === 'view') {
+        header('Content-Type: image/png');
+        // Create a simple 1x1 transparent PNG
+        echo base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
+        exit;
+    } else {
+        http_response_code(404);
+        echo json_encode(['success' => false, 'message' => 'File not found on server']);
+        exit;
+    }
+}
+
 $realFilePath = realpath($filePath);
 
 if ($realFilePath === false || strpos($realFilePath, $realBasePath) !== 0) {
     http_response_code(403);
     echo json_encode(['success' => false, 'message' => 'Access denied - File path validation failed']);
-    exit;
-}
-
-// Check if file exists
-if (!file_exists($filePath)) {
-    http_response_code(404);
-    echo json_encode(['success' => false, 'message' => 'File not found']);
     exit;
 }
 

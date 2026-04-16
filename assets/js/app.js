@@ -1851,7 +1851,19 @@ class ITServiceApp {
 
     displayPagination(data) {
 
-        const container = document.getElementById('pagination');
+        // Determine which page we're on to use the right container
+        const isSupportPage = document.getElementById('support-requestsPage')?.classList.contains('active');
+        const isRequestsPage = document.getElementById('requestsPage')?.classList.contains('active');
+        const isRejectPage = document.getElementById('reject-requestsPage')?.classList.contains('active');
+        
+        let container;
+        if (isSupportPage) {
+            container = document.getElementById('supportPagination');
+        } else if (isRejectPage) {
+            container = document.getElementById('rejectPagination');
+        } else {
+            container = document.getElementById('pagination'); // default for requests page
+        }
 
         const { page, total_pages } = data;
 
@@ -1867,16 +1879,11 @@ class ITServiceApp {
 
         
 
-        // Determine which page we're on to call the right function
-        const isSupportPage = document.getElementById('support-requestsPage')?.classList.contains('active');
-        const isRequestsPage = document.getElementById('requestsPage')?.classList.contains('active');
-        const isRejectPage = document.getElementById('reject-requestsPage')?.classList.contains('active');
+        // Determine which load function to use based on active page
         let loadFunction = 'loadRequests'; // default
 
         if (isSupportPage) {
             loadFunction = 'loadSupportRequests';
-        } else if (isRequestsPage) {
-            loadFunction = 'loadRequests';
         } else if (isRejectPage) {
             loadFunction = 'loadRejectRequests';
         }
@@ -5684,7 +5691,7 @@ class ITServiceApp {
 
             const statusFilter = document.getElementById('rejectStatusFilter');
 
-            const status = statusFilter ? statusFilter.value : 'pending';
+            const status = statusFilter ? statusFilter.value : 'all';
 
             
 

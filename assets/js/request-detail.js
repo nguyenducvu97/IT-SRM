@@ -10339,6 +10339,7 @@ class RequestDetailApp {
 
 
                         ${request.reject_request.attachments && request.reject_request.attachments.length > 0 ? `
+                                    <!-- DEBUG: Reject Request Attachments - ${request.reject_request.attachments.length} items -->
 
 
 
@@ -10402,7 +10403,8 @@ class RequestDetailApp {
 
 
 
-                                    ${request.reject_request.attachments.map(attachment => {
+                                    ${request.reject_request.attachments.map((attachment, index) => {
+                                        console.log('DEBUG: Rendering attachment', index, ':', attachment);
 
 
 
