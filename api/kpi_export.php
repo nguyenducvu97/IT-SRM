@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Invalid action']);
     }
-}
+}   
 
 function exportKPIExcel($db) {
     try {

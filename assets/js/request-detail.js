@@ -12754,7 +12754,21 @@ class RequestDetailApp {
 
 
 
-                        <select id="statusUpdate" class="form-control">
+                        ${currentUser && currentUser.role === 'admin' ? `
+                            <div class="mb-2">
+                                <label class="form-label text-primary fw-bold">
+                                    <i class="fas fa-clock"></i> Chọn thời gian hoàn thành công việc dự kiến
+                                </label>
+                            </div>
+                            <input type="datetime-local" id="estimatedCompletion" class="form-control" 
+                                   placeholder="Thời gian dự kiến hoàn thành"
+                                   value="${request.estimated_completion ? new Date(request.estimated_completion).toISOString().slice(0,16) : ''}">
+ 　　　　　　　　　　　　
+                            <button class="btn btn-primary mt-2" onclick="requestDetailApp.updateEstimatedCompletion(${request.id})">
+                                <i class="fas fa-clock"></i> Cập nhật thời gian
+                            </button>
+                        ` : `
+                            <select id="statusUpdate" class="form-control">
 
 
 
@@ -12770,7 +12784,7 @@ class RequestDetailApp {
 
 
 
-                            <option value="">Cập nhật trạng thái</option>
+                                <option value="">Cập nhật trạng thái</option>
 
 
 
@@ -12786,7 +12800,7 @@ class RequestDetailApp {
 
 
 
-                            <option value="open" ${request.status === 'open' ? 'selected' : ''}>Mở</option>
+                                <option value="open" ${request.status === 'open' ? 'selected' : ''}>Mở</option>
 
 
 
@@ -12802,7 +12816,7 @@ class RequestDetailApp {
 
 
 
-                            <option value="in_progress" ${request.status === 'in_progress' ? 'selected' : ''}>Đang xử lý</option>
+                                <option value="in_progress" ${request.status === 'in_progress' ? 'selected' : ''}>Đang xử lý</option>
 
 
 
@@ -12818,7 +12832,7 @@ class RequestDetailApp {
 
 
 
-                            <option value="resolved" ${request.status === 'resolved' ? 'selected' : ''}>Đã giải quyết</option>
+                                <option value="resolved" ${request.status === 'resolved' ? 'selected' : ''}>Đã giải quyết</option>
 
 
 
@@ -12834,7 +12848,7 @@ class RequestDetailApp {
 
 
 
-                            <option value="closed" ${request.status === 'closed' ? 'selected' : ''}>Đã đóng</option>
+                                <option value="closed" ${request.status === 'closed' ? 'selected' : ''}>Đã đóng</option>
 
 
 
@@ -12850,7 +12864,7 @@ class RequestDetailApp {
 
 
 
-                        </select>
+                            </select>
 
 
 
@@ -12866,7 +12880,21 @@ class RequestDetailApp {
 
 
 
-                        <button class="btn btn-primary" onclick="requestDetailApp.updateRequestStatus(${request.id})">Cập nhật</button>
+                            <button class="btn btn-primary" onclick="requestDetailApp.updateRequestStatus(${request.id})">Cập nhật</button>
+
+
+
+
+
+
+
+
+
+
+
+                        ` }
+
+
 
 
 
@@ -15469,6 +15497,53 @@ class RequestDetailApp {
 
 
 
+
+    async updateEstimatedCompletion(id) {
+        const estimatedCompletion = document.getElementById('estimatedCompletion').value;
+        
+        if (!estimatedCompletion) {
+            this.showNotification('Vui lòng chọn thời gian dự kiến hoàn thành', 'error');
+            return;
+        }
+        
+        // Disable button and show loading state
+        const updateBtn = document.querySelector('button[onclick="requestDetailApp.updateEstimatedCompletion(' + id + ')"]');
+        if (updateBtn) {
+            updateBtn.disabled = true;
+            updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...';
+        }
+        
+        // Show loading state
+        this.showLoading('Đang cập nhật thời gian hoàn thành...');
+        
+        try {
+            const response = await this.apiCall('api/service_requests.php', {
+                method: 'PUT',
+                body: JSON.stringify({
+                    action: 'update_estimated_completion',
+                    id: id,
+                    estimated_completion: estimatedCompletion
+                })
+            });
+            
+            if (response.success) {
+                this.showNotification('Thời gian dự kiến hoàn thành đã được cập nhật', 'success');
+                // Don't reload to avoid double notifications
+            } else {
+                this.showNotification(response.message || 'Cập nhật thất bại', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating estimated completion:', error);
+            this.showNotification('Đã xảy ra lỗi khi cập nhật thời gian', 'error');
+        } finally {
+            // Restore button state
+            if (updateBtn) {
+                updateBtn.disabled = false;
+                updateBtn.innerHTML = '<i class="fas fa-clock"></i> Cập nhật thời gian';
+            }
+            this.hideLoading();
+        }
+    }
 
     async updateRequestStatus(id) {
 

@@ -7420,6 +7420,60 @@ $update_stmt->bindParam(":request_id", $request_id);
         }
 
     }
+    elseif ($action == 'update_estimated_completion') {
+        // Handle estimated completion time update (admin only)
+        error_log("=== UPDATE ESTIMATED COMPLETION DEBUG ===");
+        
+        $request_id = isset($input['id']) ? (int)$input['id'] : 0;
+        $estimated_completion = isset($input['estimated_completion']) ? trim($input['estimated_completion']) : '';
+        
+        error_log("Request ID: $request_id, Estimated Completion: '$estimated_completion'");
+        
+        if ($request_id <= 0) {
+            serviceJsonResponse(false, "Request ID is required");
+            return;
+        }
+        
+        // Only admin can update estimated completion
+        if ($user_role != 'admin') {
+            serviceJsonResponse(false, "Access denied - Only admin can update estimated completion");
+            return;
+        }
+        
+        if (empty($estimated_completion)) {
+            serviceJsonResponse(false, "Estimated completion time is required");
+            return;
+        }
+        
+        try {
+            // Validate datetime format
+            $datetime = DateTime::createFromFormat('Y-m-d\TH:i', $estimated_completion);
+            if (!$datetime) {
+                serviceJsonResponse(false, "Invalid datetime format. Please use YYYY-MM-DD HH:MM format");
+                return;
+            }
+            
+            // Convert to MySQL datetime format
+            $mysql_datetime = $datetime->format('Y-m-d H:i:s');
+            
+            // Update request with estimated completion time
+            $update_query = "UPDATE service_requests SET estimated_completion = :estimated_completion, updated_at = NOW() WHERE id = :request_id";
+            $update_stmt = $db->prepare($update_query);
+            $update_stmt->bindParam(":request_id", $request_id);
+            $update_stmt->bindParam(":estimated_completion", $mysql_datetime);
+            
+            if ($update_stmt->execute()) {
+                error_log("Successfully updated estimated completion for request #$request_id to: $mysql_datetime");
+                serviceJsonResponse(true, "Thời gian dự kiến hoàn thành đã được cập nhật");
+            } else {
+                serviceJsonResponse(false, "Failed to update estimated completion time");
+            }
+            
+        } catch (Exception $e) {
+            error_log("Error updating estimated completion: " . $e->getMessage());
+            serviceJsonResponse(false, "Database error: " . $e->getMessage());
+        }
+    }
 
     elseif ($action == 'update') {
 
