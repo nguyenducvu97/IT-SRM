@@ -7089,127 +7089,65 @@ $update_stmt->bindParam(":request_id", $request_id);
             
 
             if ($update_stmt->execute()) {
+                
+                // Get request details for notifications
+                $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
+                                         staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
+                                  FROM service_requests sr
+                                  LEFT JOIN users u ON sr.user_id = u.id
+                                  LEFT JOIN users staff ON sr.assigned_to = staff.id
+                                  LEFT JOIN categories c ON sr.category_id = c.id
+                                  WHERE sr.id = :request_id";
+                $request_stmt = $db->prepare($request_query);
+                $request_stmt->bindParam(":request_id", $request_id);
+                $request_stmt->execute();
+                $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                
 
-                // Quick response to user
+                // Send notifications using ServiceRequestNotificationHelper
+                try {
+                    require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                    $notificationHelper = new ServiceRequestNotificationHelper();
+                    
+                    // 1. Notify user that request is in progress
+                    error_log("DEBUG: About to call notifyUserRequestInProgress for request_id={$request_id}, user_id={$request_data['user_id']}");
+                    $userNotificationResult = $notificationHelper->notifyUserRequestInProgress(
+                        $request_id, 
+                        $request_data['user_id'], 
+                        $request_data['assigned_name']
+                    );
+                    error_log("DEBUG: notifyUserRequestInProgress result: " . ($userNotificationResult ? "SUCCESS" : "FAILED"));
+                    
+                    // 2. Notify admins about assignment
+                    error_log("DEBUG: About to call notifyAdminStatusChange for request_id={$request_id}");
+                    $adminNotificationResult = $notificationHelper->notifyAdminStatusChange(
+                        $request_id, 
+                        'open', 
+                        'in_progress', 
+                        $request_data['assigned_name'], 
+                        $request_data['title']
+                    );
+                    error_log("DEBUG: notifyAdminStatusChange result: " . ($adminNotificationResult ? "SUCCESS" : "FAILED"));
+                    
+                    error_log("Notifications sent for request #$request_id acceptance");
+                    
+                } catch (Exception $e) {
+                    error_log("Failed to send notifications for request #$request_id: " . $e->getMessage());
+                }
+                
+                // Send email notification to requester (optional)
+                try {
+                    $emailHelper = new PHPMailerEmailHelper();
+                    $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
+                } catch (Exception $e) {
+                    error_log("Email notification failed: " . $e->getMessage());
+                }
 
+                // Send response to user
                 serviceJsonResponse(true, "Request accepted successfully");
 
-                
-
-                // Send email and notifications asynchronously (after response)
-
-                // This makes the API response much faster
-
-                register_shutdown_function(function() use ($request_id, $user_id, $db) {
-
-                    try {
-
-                        // Get request details for notifications
-
-                        $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
-
-                                                 staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
-
-                                          FROM service_requests sr
-
-                                          LEFT JOIN users u ON sr.user_id = u.id
-
-                                          LEFT JOIN users staff ON sr.assigned_to = staff.id
-
-                                          LEFT JOIN categories c ON sr.category_id = c.id
-
-                                          WHERE sr.id = :request_id";
-
-                        $request_stmt = $db->prepare($request_query);
-
-                        $request_stmt->bindParam(":request_id", $request_id);
-
-                        $request_stmt->execute();
-
-                        $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-
-                        
-
-                        // Send notifications using ServiceRequestNotificationHelper
-                        
-                        try {
-                            
-                            require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                            
-                            $notificationHelper = new ServiceRequestNotificationHelper();
-                            
-                            
-                            // 1. Notify user that request is in progress
-                            
-                            $notificationHelper->notifyUserRequestInProgress(
-                                
-                                $request_id, 
-                                
-                                $request_data['user_id'], 
-                                
-                                $request_data['assigned_name']
-                                
-                            );
-                            
-                            
-                            // 2. Notify admins about assignment
-                            
-                            $notificationHelper->notifyAdminStatusChange(
-                                
-                                $request_id, 
-                                
-                                'open', 
-                                
-                                'in_progress', 
-                                
-                                $request_data['assigned_name'], 
-                                
-                                $request_data['title']
-                                
-                            );
-                            
-                            
-                                                        
-                            
-                            error_log("Notifications sent for request #$request_id acceptance");
-                            
-                        } catch (Exception $e) {
-                            
-                            error_log("Failed to send notifications for request #$request_id: " . $e->getMessage());
-                            
-                        }
-                        
-                        
-                        // Send email notification to requester
-                        
-                        try {
-                            
-                            $emailHelper = new PHPMailerEmailHelper();
-                            
-                            $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
-                            
-                        } catch (Exception $e) {
-                            
-                            error_log("Email notification failed: " . $e->getMessage());
-                            
-                        }
-
-                    } catch (Exception $e) {
-
-                        error_log("Background notification failed: " . $e->getMessage());
-
-                    }
-
-                });
-
-                
-
-                return; // Exit early to send response faster
-
             } else {
-
                 serviceJsonResponse(false, "Failed to accept request");
-
             }
 
         } catch (Exception $e) {
