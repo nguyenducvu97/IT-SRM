@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main App Debug - Add Category</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .result { margin: 10px 0; padding: 10px; }
+        .success { color: green; }
+        .error { color: red; }
+        .warning { color: orange; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        input, textarea { padding: 5px; margin: 5px; width: 200px; }
+        .form-group { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Main App Debug - Add Category</h1>
+    
+    <div class="debug-section">
+        <h2>Step 1: Check App Loading</h2>
+        <div id="appLoadResult"></div>
+        <button onclick="checkAppLoading()">Check App Loading</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>Step 2: Test Category Modal</h2>
+        <button onclick="testCategoryModal()">Open Category Modal</button>
+        <div id="modalResult"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Step 3: Manual Form Test</h2>
+        <form id="manualForm">
+            <div class="form-group">
+                <label>Tên danh muc:</label>
+                <input type="text" id="manualName" value="Test Category Manual" required>
+            </div>
+            <div class="form-group">
+                <label>Mô tã:</label>
+                <textarea id="manualDesc">Manual test description</textarea>
+            </div>
+            <button type="submit">Submit Manual Test</button>
+        </form>
+        <div id="manualResult"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Step 4: Direct API Test from Main App</h2>
+        <button onclick="testDirectAPI()">Test Direct API Call</button>
+        <div id="directApiResult"></div>
+    </div>
+
+    <!-- Load main app script -->
+    <script src="assets/js/app.js?v=20260417-9"></script>
+    
+    <script>
+        let debugResults = [];
+        
+        function addDebugResult(message, type = 'info') {
+            debugResults.push({message, type, time: new Date().toLocaleTimeString()});
+            updateDebugDisplay();
+        }
+        
+        function updateDebugDisplay() {
+            const container = document.getElementById('appLoadResult');
+            container.innerHTML = debugResults.map(r => 
+                `<div class="${r.type}">[${r.time}] ${r.message}</div>`
+            ).join('');
+        }
+        
+        function checkAppLoading() {
+            addDebugResult('Checking app loading...', 'info');
+            
+            // Check if app object exists
+            if (typeof window.app !== 'undefined') {
+                addDebugResult('window.app exists', 'success');
+                
+                // Check if app is initialized
+                if (window.app.currentUser) {
+                    addDebugResult('App initialized - User: ' + window.app.currentUser.username, 'success');
+                } else {
+                    addDebugResult('App not initialized - no current user', 'warning');
+                }
+                
+                // Check key functions
+                const functions = ['handleCategorySubmit', 'showCategoryModal', 'apiCall', 'showNotification'];
+                functions.forEach(func => {
+                    if (typeof window.app[func] === 'function') {
+                        addDebugResult(`Function ${func}: AVAILABLE`, 'success');
+                    } else {
+                        addDebugResult(`Function ${func}: MISSING`, 'error');
+                    }
+                });
+                
+            } else {
+                addDebugResult('window.app NOT FOUND', 'error');
+            }
+        }
+        
+        function testCategoryModal() {
+            const result = document.getElementById('modalResult');
+            
+            if (typeof window.app !== 'undefined' && typeof window.app.showCategoryModal === 'function') {
+                try {
+                    window.app.showCategoryModal();
+                    result.innerHTML = '<div class="success">Modal opened successfully</div>';
+                } catch (error) {
+                    result.innerHTML = `<div class="error">Error opening modal: ${error.message}</div>`;
+                }
+            } else {
+                result.innerHTML = '<div class="error">App or showCategoryModal function not available</div>';
+            }
+        }
+        
+        async function testDirectAPI() {
+            const result = document.getElementById('directApiResult');
+            result.innerHTML = '<div>Testing direct API call...</div>';
+            
+            try {
+                if (typeof window.app !== 'undefined' && typeof window.app.apiCall === 'function') {
+                    const testData = {
+                        name: 'Direct API Test ' + new Date().getTime(),
+                        description: 'Direct API test description'
+                    };
+                    
+                    const response = await window.app.apiCall('api/categories.php', {
+                        method: 'POST',
+                        body: JSON.stringify(testData)
+                    });
+                    
+                    result.innerHTML = `
+                        <div class="${response.success ? 'success' : 'error'}">
+                            <strong>API Call Result:</strong><br>
+                            Success: ${response.success}<br>
+                            Message: ${response.message}<br>
+                            ${response.success ? 'Category ID: ' + response.data.id : ''}
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = '<div class="error">App or apiCall function not available</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">API call error: ${error.message}</div>`;
+            }
+        }
+        
+        // Manual form test
+        document.getElementById('manualForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const result = document.getElementById('manualResult');
+            result.innerHTML = '<div>Testing manual form submission...</div>';
+            
+            const name = document.getElementById('manualName').value;
+            const description = document.getElementById('manualDesc').value;
+            
+            try {
+                // Create mock form event
+                const mockEvent = {
+                    preventDefault: () => {},
+                    target: {
+                        elements: {
+                            name: { value: name },
+                            description: { value: description }
+                        }
+                    }
+                };
+                
+                // Create FormData from mock event
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('description', description);
+                
+                // Test with actual handleCategorySubmit
+                if (typeof window.app !== 'undefined' && typeof window.app.handleCategorySubmit === 'function') {
+                    // Create proper mock event
+                    const properMockEvent = {
+                        preventDefault: () => {},
+                        target: document.createElement('form')
+                    };
+                    
+                    // Add form data to mock form
+                    const nameInput = document.createElement('input');
+                    nameInput.name = 'name';
+                    nameInput.value = name;
+                    properMockEvent.target.appendChild(nameInput);
+                    
+                    const descInput = document.createElement('textarea');
+                    descInput.name = 'description';
+                    descInput.value = description;
+                    properMockEvent.target.appendChild(descInput);
+                    
+                    await window.app.handleCategorySubmit(properMockEvent);
+                    
+                    result.innerHTML = '<div class="success">Manual form submission completed</div>';
+                } else {
+                    result.innerHTML = '<div class="error">handleCategorySubmit function not available</div>';
+                }
+                
+            } catch (error) {
+                result.innerHTML = `<div class="error">Manual form error: ${error.message}</div>`;
+            }
+        });
+        
+        // Auto-run checks
+        setTimeout(() => {
+            checkAppLoading();
+        }, 1000);
+    </script>
+</body>
+</html>

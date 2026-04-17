@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Initialization Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .result { margin: 10px 0; padding: 10px; }
+        .success { color: green; }
+        .error { color: red; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Simple Initialization Test</h1>
+    
+    <div id="results"></div>
+    <button onclick="manualInit()">Manual Initialize App</button>
+    <button onclick="testFunctions()">Test Functions</button>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function log(message, type = 'info') {
+            results.innerHTML += `<div class="${type}">${message}</div>`;
+        }
+        
+        log('Page loaded', 'info');
+        
+        // Check if ITServiceApp exists after script loads
+        function checkITServiceApp() {
+            if (typeof ITServiceApp !== 'undefined') {
+                log('ITServiceApp class exists', 'success');
+                return true;
+            } else {
+                log('ITServiceApp class NOT FOUND', 'error');
+                return false;
+            }
+        }
+        
+        // Manual initialization
+        function manualInit() {
+            log('Attempting manual initialization...', 'info');
+            
+            if (checkITServiceApp()) {
+                try {
+                    window.app = new ITServiceApp();
+                    log('Manual initialization SUCCESS', 'success');
+                    
+                    // Check if app has required methods
+                    if (typeof window.app.handleCategorySubmit === 'function') {
+                        log('handleCategorySubmit method exists', 'success');
+                    } else {
+                        log('handleCategorySubmit method MISSING', 'error');
+                    }
+                    
+                    if (typeof window.app.apiCall === 'function') {
+                        log('apiCall method exists', 'success');
+                    } else {
+                        log('apiCall method MISSING', 'error');
+                    }
+                    
+                } catch (error) {
+                    log('Manual initialization FAILED: ' + error.message, 'error');
+                }
+            } else {
+                log('Cannot initialize - ITServiceApp not found', 'error');
+            }
+        }
+        
+        // Test functions
+        async function testFunctions() {
+            if (typeof window.app !== 'undefined') {
+                log('Testing functions...', 'info');
+                
+                try {
+                    // Test apiCall
+                    const response = await window.app.apiCall('api/categories.php');
+                    log('apiCall test: ' + (response.success ? 'SUCCESS' : 'FAILED'), response.success ? 'success' : 'error');
+                } catch (error) {
+                    log('apiCall test ERROR: ' + error.message, 'error');
+                }
+                
+            } else {
+                log('Cannot test functions - window.app not found', 'error');
+            }
+        }
+        
+        // Check automatic initialization
+        setTimeout(() => {
+            log('Checking automatic initialization...', 'info');
+            
+            if (typeof window.app !== 'undefined') {
+                log('Automatic initialization SUCCESS', 'success');
+                testFunctions();
+            } else {
+                log('Automatic initialization FAILED', 'error');
+                log('Try manual initialization button', 'warning');
+            }
+        }, 2000);
+        
+        // Error handlers
+        window.addEventListener('error', function(e) {
+            log('JavaScript Error: ' + e.message, 'error');
+        });
+    </script>
+    
+    <!-- Load app script -->
+    <script src="assets/js/app.js?v=20260417-9"></script>
+</body>
+</html>

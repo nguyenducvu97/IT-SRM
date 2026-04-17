@@ -6847,7 +6847,7 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 
 
-    margin-top: 2rem;
+    margin-top: 1rem;
 
 
 
@@ -7592,6 +7592,30 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 
     gap: 0.5rem;
+
+
+
+    position: relative;
+
+
+
+    z-index: 10;
+
+
+
+}
+
+
+
+.category-actions button {
+
+
+
+    position: relative;
+
+
+
+    z-index: 11;
 
 
 

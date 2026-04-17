@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Category Add JavaScript</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        .result { margin: 10px 0; padding: 10px; }
+        .success { color: green; }
+        .error { color: red; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Debug Category Add JavaScript</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Check App Object</h2>
+        <div id="app-check-result" class="result"></div>
+        <button onclick="checkApp()">Check App Object</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Check Functions</h2>
+        <div id="functions-result" class="result"></div>
+        <button onclick="checkFunctions()">Check Functions</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Test API Call</h2>
+        <div id="api-result" class="result"></div>
+        <button onclick="testAPICall()">Test API Call</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: Test Category Creation</h2>
+        <div id="creation-result" class="result"></div>
+        <button onclick="testCategoryCreation()">Test Category Creation</button>
+    </div>
+
+    <script>
+        // Load the main app script
+        const script = document.createElement('script');
+        script.src = 'assets/js/app.js?v=20260417-6';
+        script.onload = function() {
+            document.getElementById('app-check-result').innerHTML = '<span class="success">✅ App script loaded</span>';
+        };
+        script.onerror = function() {
+            document.getElementById('app-check-result').innerHTML = '<span class="error">❌ App script failed to load</span>';
+        };
+        document.head.appendChild(script);
+
+        function checkApp() {
+            const result = document.getElementById('app-check-result');
+            
+            if (typeof window.app !== 'undefined') {
+                result.innerHTML += '<span class="success">✅ window.app exists</span><br>';
+                
+                if (typeof window.app.handleCategorySubmit === 'function') {
+                    result.innerHTML += '<span class="success">✅ handleCategorySubmit function exists</span><br>';
+                } else {
+                    result.innerHTML += '<span class="error">❌ handleCategorySubmit function missing</span><br>';
+                }
+                
+                if (typeof window.app.showCategoryModal === 'function') {
+                    result.innerHTML += '<span class="success">✅ showCategoryModal function exists</span><br>';
+                } else {
+                    result.innerHTML += '<span class="error">❌ showCategoryModal function missing</span><br>';
+                }
+                
+                if (typeof window.app.apiCall === 'function') {
+                    result.innerHTML += '<span class="success">✅ apiCall function exists</span><br>';
+                } else {
+                    result.innerHTML += '<span class="error">❌ apiCall function missing</span><br>';
+                }
+                
+                if (typeof window.app.showNotification === 'function') {
+                    result.innerHTML += '<span class="success">✅ showNotification function exists</span><br>';
+                } else {
+                    result.innerHTML += '<span class="error">❌ showNotification function missing</span><br>';
+                }
+                
+                if (typeof window.app.loadCategories === 'function') {
+                    result.innerHTML += '<span class="success">✅ loadCategories function exists</span><br>';
+                } else {
+                    result.innerHTML += '<span class="error">❌ loadCategories function missing</span><br>';
+                }
+                
+            } else {
+                result.innerHTML = '<span class="error">❌ window.app not found</span>';
+            }
+        }
+
+        function checkFunctions() {
+            const result = document.getElementById('functions-result');
+            
+            // Check if functions are properly defined
+            const functions = [
+                'handleCategorySubmit',
+                'showCategoryModal', 
+                'apiCall',
+                'showNotification',
+                'loadCategories',
+                'editCategory',
+                'deleteCategory'
+            ];
+            
+            functions.forEach(func => {
+                if (typeof window.app !== 'undefined' && typeof window.app[func] === 'function') {
+                    result.innerHTML += `<span class="success">✅ ${func} exists</span><br>`;
+                } else {
+                    result.innerHTML += `<span class="error">❌ ${func} missing</span><br>`;
+                }
+            });
+        }
+
+        async function testAPICall() {
+            const result = document.getElementById('api-result');
+            
+            try {
+                if (typeof window.app !== 'undefined' && typeof window.app.apiCall === 'function') {
+                    const response = await window.app.apiCall('api/categories.php');
+                    result.innerHTML = `<span class="success">✅ API call successful</span><br>Response: <pre>${JSON.stringify(response, null, 2)}</pre>`;
+                } else {
+                    result.innerHTML = '<span class="error">❌ App or apiCall function not available</span>';
+                }
+            } catch (error) {
+                result.innerHTML = `<span class="error">❌ API call failed: ${error.message}</span>`;
+            }
+        }
+
+        async function testCategoryCreation() {
+            const result = document.getElementById('creation-result');
+            
+            try {
+                if (typeof window.app !== 'undefined' && typeof window.app.handleCategorySubmit === 'function') {
+                    // Create a mock form
+                    const mockForm = document.createElement('form');
+                    mockForm.innerHTML = `
+                        <input name="name" value="Test Category ${new Date().getTime()}" />
+                        <input name="description" value="Test description" />
+                    `;
+                    
+                    // Create mock submit event
+                    const mockEvent = {
+                        preventDefault: () => {},
+                        target: mockForm
+                    };
+                    
+                    // Call the function
+                    const response = await window.app.handleCategorySubmit(mockEvent);
+                    result.innerHTML = `<span class="success">✅ Category creation test completed</span><br>Response: <pre>${JSON.stringify(response, null, 2)}</pre>`;
+                } else {
+                    result.innerHTML = '<span class="error">❌ App or handleCategorySubmit function not available</span>';
+                }
+            } catch (error) {
+                result.innerHTML = `<span class="error">❌ Category creation test failed: ${error.message}</span>`;
+                console.error('Category creation test error:', error);
+            }
+        }
+
+        // Auto-run tests when app loads
+        setTimeout(() => {
+            if (typeof window.app !== 'undefined') {
+                checkApp();
+                setTimeout(checkFunctions, 1000);
+                setTimeout(testAPICall, 2000);
+                setTimeout(testCategoryCreation, 3000);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

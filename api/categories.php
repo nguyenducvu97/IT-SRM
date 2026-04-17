@@ -56,12 +56,12 @@ if ($method == 'GET') {
         
         $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => true,
             'message' => "Categories retrieved with statistics",
             'data' => $categories
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     } elseif ($action == 'requests') {
         // Get requests for a specific category
@@ -69,11 +69,11 @@ if ($method == 'GET') {
         $status = isset($_GET['status']) ? $_GET['status'] : 'all';
         
         if ($categoryId <= 0) {
-            header('Content-Type: application/json');
+            header('Content-Type: application/json; charset=UTF-8');
             echo json_encode([
                 'success' => false,
                 'message' => "Invalid category ID"
-            ]);
+            ], JSON_UNESCAPED_UNICODE);
             exit();
         }
         
@@ -104,37 +104,49 @@ if ($method == 'GET') {
         $stmt->execute();
         $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => true,
             'message' => "Category requests retrieved",
             'data' => $requests
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
 }
 
 elseif ($method == 'POST') {
+    // Start session to check authentication
+    if (!session_id()) {
+        session_start();
+    }
+    
     if (!isLoggedIn() || getCurrentUserRole() != 'admin') {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Only administrators can create categories"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
     
-    $data = json_decode(file_get_contents("php://input"));
+    $json_input = file_get_contents("php://input");
+    error_log("Category API - Raw input: " . $json_input);
+    
+    $data = json_decode($json_input);
+    error_log("Category API - Parsed data: " . print_r($data, true));
     
     $name = isset($data->name) ? sanitizeInput($data->name) : '';
     $description = isset($data->description) ? sanitizeInput($data->description) : '';
     
+    error_log("Category API - Sanitized name: '$name'");
+    error_log("Category API - Sanitized description: '$description'");
+    
     if (empty($name)) {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Category name is required"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
     
@@ -144,11 +156,11 @@ elseif ($method == 'POST') {
     $check_stmt->execute();
     
     if ($check_stmt->rowCount() > 0) {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Category already exists"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
     
@@ -159,30 +171,40 @@ elseif ($method == 'POST') {
     $stmt->bindParam(":description", $description);
     
     if ($stmt->execute()) {
-        header('Content-Type: application/json');
+        $new_id = $db->lastInsertId();
+        error_log("Category API - Successfully created category with ID: $new_id");
+        
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => true,
             'message' => "Category created",
-            'data' => ['id' => $db->lastInsertId()]
-        ]);
+            'data' => ['id' => $new_id]
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     } else {
-        header('Content-Type: application/json');
+        error_log("Category API - Insert failed: " . print_r($stmt->errorInfo(), true));
+        
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Failed to create category"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
 }
 
 elseif ($method == 'PUT') {
+    // Start session to check authentication
+    if (!session_id()) {
+        session_start();
+    }
+    
     if (!isLoggedIn() || getCurrentUserRole() != 'admin') {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Only administrators can update categories"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
     
@@ -193,11 +215,11 @@ elseif ($method == 'PUT') {
     $description = isset($data->description) ? sanitizeInput($data->description) : '';
     
     if ($id <= 0 || empty($name)) {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
-            'message' => "Invalid input"
-        ]);
+            'message' => "Invalid category data"
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
     
@@ -209,43 +231,49 @@ elseif ($method == 'PUT') {
     $stmt->bindParam(":id", $id);
     
     if ($stmt->execute()) {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => true,
-            'message' => "Category updated"
-        ]);
+            'message' => "Category updated successfully"
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     } else {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Failed to update category"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
 }
 
 elseif ($method == 'DELETE') {
+    // Start session to check authentication
+    if (!session_id()) {
+        session_start();
+    }
+    
     if (!isLoggedIn() || getCurrentUserRole() != 'admin') {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Only administrators can delete categories"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
     
     $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
     
     if ($id <= 0) {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Invalid category ID"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
     
+    // Check for existing requests with detailed information
     $check_query = "SELECT COUNT(*) as count FROM service_requests WHERE category_id = :id";
     $check_stmt = $db->prepare($check_query);
     $check_stmt->bindParam(":id", $id);
@@ -254,11 +282,22 @@ elseif ($method == 'DELETE') {
     $count = $check_stmt->fetch(PDO::FETCH_ASSOC)['count'];
     
     if ($count > 0) {
-        header('Content-Type: application/json');
+        // Get category name for better error message
+        $category_query = "SELECT name FROM categories WHERE id = :id";
+        $category_stmt = $db->prepare($category_query);
+        $category_stmt->bindParam(":id", $id);
+        $category_stmt->execute();
+        $category = $category_stmt->fetch(PDO::FETCH_ASSOC);
+        $category_name = $category ? $category['name'] : 'Danh muc này';
+        
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
-            'message' => "Cannot delete category with existing requests"
-        ]);
+            'message' => "Không thể xóa danh mục '$category_name' vì còn $count yêu cầu. Bạn phải xóa tất cả các yêu cầu trong danh mục này trước.",
+            'error_type' => 'category_has_requests',
+            'request_count' => $count,
+            'category_name' => $category_name
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
     
@@ -267,28 +306,28 @@ elseif ($method == 'DELETE') {
     $stmt->bindParam(":id", $id);
     
     if ($stmt->execute()) {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => true,
             'message' => "Category deleted"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     } else {
-        header('Content-Type: application/json');
+        header('Content-Type: application/json; charset=UTF-8');
         echo json_encode([
             'success' => false,
             'message' => "Failed to delete category"
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
         exit();
     }
 }
 
 else {
-    header('Content-Type: application/json');
+    header('Content-Type: application/json; charset=UTF-8');
     echo json_encode([
         'success' => false,
         'message' => "Method not allowed"
-    ]);
+    ], JSON_UNESCAPED_UNICODE);
     exit();
 }
 ?>

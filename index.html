@@ -94,7 +94,7 @@
 
 
 
-    <link rel="stylesheet" href="assets/css/style.css?v=20260416-24">
+    <link rel="stylesheet" href="assets/css/style.css?v=20260417-3">
 
 
 
@@ -10532,7 +10532,7 @@
 
 
 
-                        <input type="hidden" id="categoryId">
+                        <input type="hidden" id="categoryId" name="id">
 
 
 
@@ -10580,7 +10580,7 @@
 
 
 
-                            <input type="text" id="categoryName" required>
+                            <input type="text" id="categoryName" name="name" required>
 
 
 
@@ -10644,7 +10644,7 @@
 
 
 
-                            <textarea id="categoryDescription" rows="3"></textarea>
+                            <textarea id="categoryDescription" name="description" rows="3"></textarea>
 
 
 
@@ -15949,7 +15949,7 @@
 
 
 
-    <script src="assets/js/app.js?v=20260416-26"></script>
+    <script src="assets/js/app.js?v=20260417-10"></script>
     <script src="add-users-pagination.js"></script>
     <script src="add-category-pagination.js"></script>
     <script src="add-departments-pagination.js"></script>
@@ -16075,7 +16075,9 @@
         });
 
     </script>
-
+    
+    <!-- Fix category buttons to prevent navigation -->
+    <script src="fix-category-buttons.js?v=20260417-1"></script>
 </body>
 
 

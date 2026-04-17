@@ -38,7 +38,9 @@ function getDatabaseConnection() {
 function sanitizeInput($data) {
     $data = trim($data);
     $data = stripslashes($data);
-    $data = htmlspecialchars($data);
+    // Don't use htmlspecialchars for database storage, only for output
+    // This preserves Vietnamese characters and prevents SQL injection
+    $data = addslashes($data);
     return $data;
 }
 

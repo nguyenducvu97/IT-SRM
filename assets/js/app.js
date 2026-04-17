@@ -434,17 +434,27 @@ class ITServiceApp {
 
         
 
-        fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+        // Only add event listeners if elements exist
+
+        if (fileInput) {
+
+            fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+
+        }
 
         
 
         // Drag and drop events
 
-        uploadArea.addEventListener('dragover', (e) => this.handleDragOver(e));
+        if (uploadArea) {
 
-        uploadArea.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+            uploadArea.addEventListener('dragover', (e) => this.handleDragOver(e));
 
-        uploadArea.addEventListener('drop', (e) => this.handleFileDrop(e));
+            uploadArea.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+
+            uploadArea.addEventListener('drop', (e) => this.handleFileDrop(e));
+
+        }
 
 
 
@@ -3289,7 +3299,7 @@ class ITServiceApp {
 
         container.innerHTML = categories.map(category => `
 
-            <div class="category-item" data-category-id="${category.id}" onclick="app.showCategoryRequests(${category.id}, '${category.name}')">
+            <div class="category-item" data-category-id="${category.id}" data-category-name="${category.name}">
 
                 <div class="category-info">
 
@@ -3327,13 +3337,13 @@ class ITServiceApp {
 
                     <div class="category-actions">
 
-                        <button class="btn btn-secondary" onclick="app.editCategory(${category.id}, '${category.name}', '${category.description || ''}')" onclick="event.stopPropagation()">
+                        <button class="btn btn-secondary" data-action="edit" data-category-id="${category.id}" data-category-name="${category.name}" data-category-description="${category.description || ''}">
 
                             <i class="fas fa-edit"></i>
 
                         </button>
 
-                        <button class="btn btn-danger" onclick="app.deleteCategory(${category.id})" onclick="event.stopPropagation()">
+                        <button class="btn btn-danger" data-action="delete" data-category-id="${category.id}">
 
                             <i class="fas fa-trash"></i>
 
@@ -3349,9 +3359,95 @@ class ITServiceApp {
 
         
 
+        // Add event listeners after setting innerHTML
+
+        this.addCategoryEventListeners(container);
+
+        
+
         // Load request counts for each category
 
         this.loadCategoryRequestCounts(categories);
+
+    }
+
+
+
+    // Add event listeners for category items
+
+    addCategoryEventListeners(container) {
+
+        console.log('Adding category event listeners...');
+
+        // Handle entire category item click (for navigation)
+
+        container.querySelectorAll('.category-item').forEach(item => {
+
+            item.addEventListener('click', (e) => {
+
+                // Don't trigger if clicking on buttons
+
+                if (!e.target.closest('.category-actions')) {
+
+                    const categoryId = item.dataset.categoryId;
+
+                    const categoryName = item.dataset.categoryName;
+
+                    console.log('Category item clicked:', categoryId, categoryName);
+
+                    this.showCategoryRequests(categoryId, categoryName);
+
+                }
+
+            });
+
+            item.style.cursor = 'pointer';
+
+        });
+
+        // Handle edit button clicks
+
+        container.querySelectorAll('[data-action="edit"]').forEach(btn => {
+
+            btn.addEventListener('click', (e) => {
+
+                e.preventDefault();
+
+                e.stopPropagation();
+
+                const categoryId = btn.dataset.categoryId;
+
+                const categoryName = btn.dataset.categoryName;
+
+                const categoryDescription = btn.dataset.categoryDescription;
+
+                console.log('Edit category clicked:', categoryId, categoryName);
+
+                this.editCategory(categoryId, categoryName, categoryDescription);
+
+            });
+
+        });
+
+        // Handle delete button clicks
+
+        container.querySelectorAll('[data-action="delete"]').forEach(btn => {
+
+            btn.addEventListener('click', (e) => {
+
+                e.preventDefault();
+
+                e.stopPropagation();
+
+                const categoryId = btn.dataset.categoryId;
+
+                console.log('Delete category clicked:', categoryId);
+
+                this.deleteCategory(categoryId);
+
+            });
+
+        });
 
     }
 
@@ -4040,9 +4136,24 @@ class ITServiceApp {
 
         e.preventDefault();
 
+        console.log('=== CATEGORY SUBMIT DEBUG ===');
+
         const formData = new FormData(e.target);
 
         const categoryId = formData.get('id');
+
+        console.log('Category ID:', categoryId);
+
+        console.log('Form data:', Object.fromEntries(formData));
+
+        // Log the actual data being sent
+        const requestData = {
+            id: categoryId,
+            name: formData.get('name'),
+            description: formData.get('description')
+        };
+        console.log('Request data being sent:', requestData);
+        console.log('Request JSON:', JSON.stringify(requestData));
 
         
 
@@ -4051,6 +4162,10 @@ class ITServiceApp {
             const url = categoryId ? 'api/categories.php' : 'api/categories.php';
 
             const method = categoryId ? 'PUT' : 'POST';
+
+            console.log('Method:', method);
+
+            console.log('URL:', url);
 
             
 
@@ -4070,7 +4185,7 @@ class ITServiceApp {
 
             });
 
-
+            console.log('API Response:', response);
 
             if (response.success) {
 
@@ -4175,50 +4290,46 @@ class ITServiceApp {
     }
 
 
-
     async deleteCategory(id) {
-
-        if (!confirm('Bạn có chắc chắn muốn xóa danh mục này?')) {
-
-            return;
-
-        }
-
-
-
         try {
-
             const response = await this.apiCall(`api/categories.php?id=${id}`, {
-
                 method: 'DELETE'
-
             });
 
-
-
             if (response.success) {
-
+                // Success - show success notification only
                 this.showNotification('Xóa danh mục thành công', 'success');
-
                 this.loadCategories();
-
             } else {
-
-                this.showNotification(response.message, 'error');
-
+                // Handle specific error types
+                if (response.error_type === 'category_has_requests') {
+                    const message = response.message;
+                    const requestCount = response.request_count || 0;
+                    const categoryName = response.category_name || 'Danh mục này';
+                    
+                    // Single confirm dialog with all information
+                    const confirmMessage = 
+                        `Không thể xóa danh mục "${categoryName}" vì còn ${requestCount} yêu cầu.\n\n` +
+                        `Bạn phải xóa tất cả các yêu cầu trong danh mục này trước.\n\n` +
+                        `Bạn có muốn xem danh sách các yêu cầu này không?`;
+                    
+                    // Show single confirm dialog
+                    if (confirm(confirmMessage)) {
+                        this.showCategoryRequests(id, categoryName);
+                    } else {
+                        // User cancelled - show error notification
+                        this.showNotification(message, 'error');
+                    }
+                } else {
+                    // Other errors - show error notification
+                    this.showNotification(response.message, 'error');
+                }
             }
-
         } catch (error) {
-
             this.showNotification('Lỗi kết nối', 'error');
-
         }
-
     }
 
-
-
-    
 
     closeModal(modal) {
 
