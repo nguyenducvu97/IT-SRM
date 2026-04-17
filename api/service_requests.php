@@ -7464,11 +7464,10 @@ $update_stmt->bindParam(":request_id", $request_id);
             
             if ($update_stmt->execute()) {
                 error_log("Successfully updated estimated completion for request #$request_id to: $mysql_datetime");
-                serviceJsonResponse(true, "Thời gian dự kiến hoàn thành đã được cập nhật");
+                serviceJsonResponse(true, "Th?i gian d? ki?n hoàn thành dã du?c c?p nh?t thành công");
             } else {
                 serviceJsonResponse(false, "Failed to update estimated completion time");
             }
-            
         } catch (Exception $e) {
             error_log("Error updating estimated completion: " . $e->getMessage());
             serviceJsonResponse(false, "Database error: " . $e->getMessage());
