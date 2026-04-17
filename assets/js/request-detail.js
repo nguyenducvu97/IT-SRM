@@ -8568,19 +8568,15 @@ class RequestDetailApp {
 
                     </div>
 
+                    ${request.estimated_completion ? `
 
+                    <div class="meta-item">
 
+                        <strong><i class="fas fa-clock text-primary"></i> Thời gian dự kiến hoàn thành:</strong> 
+                        <span class="text-primary fw-bold">${formatDate(request.estimated_completion)}</span>
+                    </div>
 
-
-
-
-
-
-
-
-
-
-
+                    ` : ''}
 
                     ${request.assigned_to && request.accepted_at ? `
 
