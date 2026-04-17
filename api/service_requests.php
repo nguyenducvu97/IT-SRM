@@ -1693,7 +1693,7 @@ if ($method == 'GET') {
 
             // Format resolution data if exists
 
-            if ($request['status'] === 'resolved' && $request['resolution_resolver_name']) {
+            if (($request['status'] === 'resolved' || $request['status'] === 'closed') && $request['resolution_resolver_name']) {
 
                 $request['resolution'] = [
 
