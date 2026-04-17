@@ -6773,11 +6773,21 @@ class ITServiceApp {
 
     }
 
-
-
     async loadSupportRequestDetails(supportId) {
 
         try {
+
+            // Cache support request details to avoid repeated calls
+
+            if (this._supportRequestCache && this._supportRequestCache[supportId]) {
+
+                this.renderSupportRequestDetails(this._supportRequestCache[supportId]);
+
+                return;
+
+            }
+
+            
 
             const response = await this.apiCall(`api/support_requests.php?action=get&id=${supportId}`);
 
@@ -6785,183 +6795,93 @@ class ITServiceApp {
 
             if (response.success) {
 
-                const support = response.data;
+                // Cache the response
 
-                const container = document.getElementById('supportRequestDetails');
+                if (!this._supportRequestCache) this._supportRequestCache = {};
+
+                this._supportRequestCache[supportId] = response.data;
 
                 
 
-                container.innerHTML = `
-
-                    <div class="support-request-info">
-
-                        <h4><i class="fas fa-info-circle"></i> Chi tiết yêu cầu hỗ trợ</h4>
-
-                        <div class="support-details">
-
-                            <div class="support-item">
-
-                                <strong>ID yêu cầu gốc:</strong> #${support.service_request_id}
-
-                            </div>
-
-                            <div class="support-item">
-
-                                <strong>Người tạo:</strong> ${support.requester_name}
-
-                            </div>
-
-                            <div class="support-item">
-
-                                <strong>Loại hỗ trợ:</strong> ${this.getSupportTypeText(support.support_type)}
-
-                            </div>
-
-                            <div class="support-item">
-
-                                <strong>Chi tiết hỗ trợ:</strong> ${support.support_details}
-
-                            </div>
-
-                            <div class="support-item">
-
-                                <strong>Lý do:</strong> ${support.support_reason}
-
-                            </div>
-
-                            <div class="support-item">
-
-                                <strong>Ngày tạo:</strong> ${this.formatDate(support.created_at)}
-
-                            </div>
-
-                            <div class="support-item">
-
-                                <strong>Trạng thái:</strong> <span class="badge status-${support.status}">${this.getSupportStatusText(support.status)}</span>
-
-                            </div>
-
-                        </div>
-
-                        
-
-                        ${support.attachments && support.attachments.length > 0 ? `
-
-                            <div class="support-attachments">
-
-                                <h4><i class="fas fa-paperclip"></i> Tệp đính kèm (${support.attachments.length})</h4>
-
-                                <div class="attachments-list">
-
-                                    ${support.attachments.map(attachment => {
-
-                                        const isImage = attachment.mime_type.startsWith('image/');
-
-                                        const fileExt = attachment.filename.split('.').pop().toLowerCase();
-
-                                        const isPDF = fileExt === 'pdf';
-
-                                        const isWord = ['doc', 'docx'].includes(fileExt);
-
-                                        const isExcel = ['xls', 'xlsx'].includes(fileExt);
-
-                                        const isPowerPoint = ['ppt', 'pptx'].includes(fileExt);
-
-                                        const isText = ['txt', 'md'].includes(fileExt);
-
-                                        const isViewable = isPDF || isWord || isExcel || isPowerPoint || isText;
-
-                                        
-
-                                        return `
-
-                                            <div class="attachment-item">
-
-                                                <div class="attachment-info">
-
-                                                    <i class="fas fa-${isImage ? 'image' : isPDF ? 'file-pdf' : isWord ? 'file-word' : isExcel ? 'file-excel' : isPowerPoint ? 'file-powerpoint' : 'file'}"></i>
-
-                                                    <span class="attachment-name">${attachment.original_name}</span>
-
-                                                    <span class="attachment-size">(${this.formatFileSize(attachment.file_size)})</span>
-
-                                                </div>
-
-                                                <div class="attachment-actions">
-
-                                                    ${isImage ? `
-
-                                                        <img src="api/support_request_attachment.php?file=${attachment.filename}&action=view" 
-
-                                                             alt="${attachment.original_name}" 
-
-                                                             class="attachment-preview"
-
-                                                             onclick="app.showImageModal('api/support_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}')"
-
-                                                             style="cursor: pointer;">
-
-                                                        <div class="image-overlay">
-
-                                                            <i class="fas fa-search-plus"></i>
-
-                                                        </div>
-
-                                                    ` : ''}
-
-                                                    ${isViewable ? `
-
-                                                        <button class="btn btn-sm btn-primary" 
-
-                                                                onclick="app.viewDocument('api/support_request_attachment.php?file=${attachment.filename}&action=view', '${attachment.original_name}', '${fileExt}')">
-
-                                                            <i class="fas fa-eye"></i> Xem
-
-                                                        </button>
-
-                                                    ` : ''}
-
-                                                    <a href="api/support_request_attachment.php?file=${attachment.filename}&action=download" 
-
-                                                       class="btn btn-sm btn-secondary" 
-
-                                                       target="_blank"
-
-                                                       download="${attachment.original_name}">
-
-                                                        <i class="fas fa-download"></i> Tải về
-
-                                                    </a>
-
-                                                </div>
-
-                                            </div>
-
-                                        `;
-
-                                    }).join('')}
-
-                                </div>
-
-                            </div>
-
-                        ` : ''}
-
-                    </div>
-
-                `;
-
-            } else {
-
-                this.showNotification(response.message, 'error');
+                this.renderSupportRequestDetails(response.data);
 
             }
 
         } catch (error) {
 
-            this.showNotification('Lỗi tải chi tiết yêu cầu hỗ trợ', 'error');
+            console.error('Error loading support request details:', error);
 
         }
+
+    }
+
+    
+
+    renderSupportRequestDetails(support) {
+
+        const container = document.getElementById('supportRequestDetails');
+
+        
+
+        container.innerHTML = `
+
+            <div class="support-request-info">
+
+                <h4><i class="fas fa-info-circle"></i> Chi tiết yêu cầu hỗ trợ</h4>
+
+                <div class="support-details">
+
+                    <div class="support-item">
+
+                        <strong>Loại hỗ trợ:</strong> ${this.getSupportTypeText(support.support_type)}
+
+                    </div>
+
+                    <div class="support-item">
+
+                        <strong>Chi tiết hỗ trợ:</strong> ${support.support_details}
+
+                    </div>
+
+                    <div class="support-item">
+
+                        <strong>Lý do hỗ trợ:</strong> ${support.support_reason}
+
+                    </div>
+
+                    ${support.attachments && support.attachments.length > 0 ? `
+
+                        <div class="support-item">
+
+                            <strong>File đính kèm:</strong>
+
+                            <div class="attachments-list">
+
+                                ${support.attachments.map(att => `
+
+                                    <div class="attachment-item">
+
+                                        <i class="fas fa-paperclip"></i>
+
+                                        <a href="uploads/support_requests/${att.filename}" target="_blank">${att.original_name}</a>
+
+                                        <span class="file-size">(${this.formatFileSize(att.file_size)})</span>
+
+                                    </div>
+
+                                `).join('')}
+
+                            </div>
+
+                        </div>
+
+                    ` : ''}
+
+                </div>
+
+            </div>
+
+        `;
 
     }
 
@@ -7019,29 +6939,53 @@ class ITServiceApp {
 
                 this.closeAdminSupportModal();
 
-                this.loadSupportRequests();
+                
+
+                // Smart reload: Only reload what's necessary
+
+                const isOnDetailPage = window.location.pathname.includes('request-detail.html');
+
+                const currentRequestId = this.getRequestIdFromURL();
+
+                const isCurrentRequest = response.data && response.data.service_request_id == currentRequestId;
 
                 
 
-                // Also reload service request detail if on request detail page
+                // Optimized reload strategy
 
-                if (window.location.pathname.includes('request-detail.html')) {
+                if (isOnDetailPage && isCurrentRequest) {
 
-                    const currentRequestId = this.getRequestIdFromURL();
+                    // On detail page for this request: only reload detail, not list
 
-                    if (currentRequestId) {
+                    this.loadRequestDetail();
 
-                        // Check if this support request belongs to current service request
+                    
 
-                        if (response.data && response.data.service_request_id == currentRequestId) {
+                    // Update support request status in detail without full reload
 
-                            // Reload the service request detail
+                    if (this.supportRequestStatus) {
 
-                            this.loadRequestDetail();
+                        this.supportRequestStatus.status = response.data.decision;
 
-                        }
+                        this.supportRequestStatus.admin_reason = formData.get('reason');
 
                     }
+
+                } else {
+
+                    // On list page or different request: reload list
+
+                    this.loadSupportRequests();
+
+                }
+
+                
+
+                // Update notification count if available
+
+                if (window.notificationManager) {
+
+                    window.notificationManager.updateNotificationCount();
 
                 }
 

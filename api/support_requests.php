@@ -762,22 +762,26 @@ function handlePut($pdo, $action, $current_user, $user_role) {
     $result = $stmt->execute([$decision, $reason, $current_user, $support_id]);
     
     if ($result) {
-        // Send role-based notifications for support request decision
-        try {
-            $notificationHelper = new ServiceRequestNotificationHelper();
+        // Get minimal data needed for response and background processing
+        $support_stmt = $pdo->prepare("
+            SELECT sr.service_request_id, sr.requester_id, u.username as requester_name 
+            FROM support_requests sr
+            LEFT JOIN users u ON sr.requester_id = u.id
+            WHERE sr.id = ?
+        ");
+        $support_stmt->execute([$support_id]);
+        $support_data = $support_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $service_request_id = $support_data['service_request_id'];
+        
+        // Schedule background processing for notifications
+        register_shutdown_function(function() use ($support_id, $decision, $reason, $current_user, $service_request_id, $support_data) {
+            ignore_user_abort(true);
+            set_time_limit(300); // 5 minutes for background processing
             
-            // Get support request details
-            $support_stmt = $pdo->prepare("
-                SELECT sr.*, u.username as requester_name 
-                FROM support_requests sr
-                LEFT JOIN users u ON sr.requester_id = u.id
-                WHERE sr.id = ?
-            ");
-            $support_stmt->execute([$support_id]);
-            $support_data = $support_stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if ($support_data) {
-                $service_request_id = $support_data['service_request_id'];
+            try {
+                require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                $notificationHelper = new ServiceRequestNotificationHelper();
                 
                 // Get service request details for proper title
                 $requestDetails = $notificationHelper->getRequestDetails($service_request_id);
@@ -802,13 +806,11 @@ function handlePut($pdo, $action, $current_user, $user_role) {
                 // Notify original requester
                 if ($support_data['requester_id'] != $current_user) {
                     if ($decision === 'approved') {
-                        // User gets notification that escalation was approved
                         $notificationHelper->notifyUserRequestPendingApproval(
                             $service_request_id, 
                             $support_data['requester_id']
                         );
                     } else {
-                        // User gets notification that escalation was rejected
                         $notificationHelper->notifyUserRequestRejected(
                             $service_request_id, 
                             $support_data['requester_id'], 
@@ -816,12 +818,12 @@ function handlePut($pdo, $action, $current_user, $user_role) {
                         );
                     }
                 }
+                
+                error_log("Background notifications completed for support request $support_id");
+            } catch (Exception $e) {
+                error_log("Background notification failed for support request $support_id: " . $e->getMessage());
             }
-            
-        } catch (Exception $e) {
-            error_log("Failed to send support request notifications: " . $e->getMessage());
-            // Continue even if notification fails
-        }
+        });
         
         // Update service request based on decision
         if ($decision === 'approved') {
