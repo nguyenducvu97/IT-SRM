@@ -3967,6 +3967,9 @@ class ITServiceApp {
 
     updateStatusCounts(statusCounts) {
 
+        // Debug logging
+        console.log('updateStatusCounts called with:', statusCounts);
+
         // Update status count displays
 
         const counts = {
@@ -3984,6 +3987,8 @@ class ITServiceApp {
             request_support: statusCounts.request_support || 0
 
         };
+
+        console.log('Processed counts:', counts);
 
 
 
@@ -4015,22 +4020,27 @@ class ITServiceApp {
 
         if (requestSupportCount) {
 
+            // Debug logging
+            console.log('Updating requestSupportCount element:', requestSupportCount);
+            console.log('Setting count to:', counts.request_support);
+
             // Update dropdown count with parentheses
-
             requestSupportCount.textContent = `(${counts.request_support})`;
+            console.log('requestSupportCount updated to:', requestSupportCount.textContent);
 
-            
+        } else {
 
-            // Also update dashboard count (different element without parentheses)
+            console.log('requestSupportCount element not found!');
 
-            const dashboardCount = document.querySelector('h3#dashboardRequestSupportCount');
+        }
 
-            if (dashboardCount) {
-
-                dashboardCount.textContent = counts.request_support;
-
-            }
-
+        // Also update dashboard count (different element without parentheses)
+        const dashboardCount = document.getElementById('dashboardRequestSupportCount');
+        if (dashboardCount) {
+            dashboardCount.textContent = counts.request_support;
+            console.log('dashboardRequestSupportCount updated to:', counts.request_support);
+        } else {
+            console.log('dashboardRequestSupportCount element not found!');
         }
 
     }

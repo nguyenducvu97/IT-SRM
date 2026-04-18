@@ -742,10 +742,10 @@ if ($method == 'GET') {
 
             $status_counts_array['request_support'] = $request_support_count;
 
-            
-
+            // Debug logging
             error_log("Request support count calculated: $request_support_count");
-
+            error_log("Support query: $support_query");
+            error_log("Support result: " . json_encode($support_result));
 
 
             
