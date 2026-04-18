@@ -5075,7 +5075,7 @@ body {
 
 
 
-    padding: 0rem 1.5rem;
+    padding: 0rem 1.5rem 4rem 1.5rem;
 
 
 
@@ -6852,6 +6852,46 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 
     margin-top: 1rem;
+
+
+
+    position: fixed;
+
+
+
+    bottom: 0;
+
+
+
+    left: 250px;
+
+
+
+    right: 0;
+
+
+
+    background: rgba(255, 255, 255, 0.95);
+
+
+
+    backdrop-filter: blur(10px);
+
+
+
+    padding: 0.5rem;
+
+
+
+    border-top: 1px solid #e5e7eb;
+
+
+
+    z-index: 100;
+
+
+
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
 
 
 
@@ -8753,6 +8793,18 @@ margin: 0 0 1rem 0;
 
 
 
+    .pagination {
+
+
+
+        left: 200px;
+
+
+
+    }
+
+
+
     
 
 
@@ -9045,6 +9097,10 @@ margin: 0 0 1rem 0;
 
 
 
+        padding: 0rem 1.5rem 4rem 1.5rem;
+
+
+
     }
 
 
@@ -9170,6 +9226,18 @@ margin: 0 0 1rem 0;
 
 
         width: 100%;
+
+
+
+    }
+
+
+
+    .pagination {
+
+
+
+        left: 0;
 
 
 
@@ -9373,7 +9441,7 @@ margin: 0 0 1rem 0;
 
 
 
-        padding: 1rem;
+        padding: 1rem 1rem 4rem 1rem;
 
 
 

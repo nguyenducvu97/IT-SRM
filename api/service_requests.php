@@ -348,7 +348,7 @@ if ($method == 'GET') {
         $has_filters = isset($_GET['status']) || isset($_GET['priority']) || isset($_GET['category']) || isset($_GET['category_id']) || isset($_GET['search']);
         
         // Always apply limit for pagination
-        $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
+        $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
 
 
         $offset = ($page - 1) * $limit;

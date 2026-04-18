@@ -98,7 +98,7 @@ function handleGet($pdo, $action) {
         } else {
             // Get departments with pagination
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-            $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
+            $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 9;
             $offset = ($page - 1) * $limit;
             
             // Get total count

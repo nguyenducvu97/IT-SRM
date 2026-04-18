@@ -67,7 +67,7 @@ function getUsers($db) {
     $search = isset($_GET['search']) ? sanitizeInput($_GET['search']) : '';
     $role = isset($_GET['role']) ? sanitizeInput($_GET['role']) : '';
     $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
-    $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 10);
+    $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
     $offset = ($page - 1) * $limit;
     
     // Build WHERE clause
