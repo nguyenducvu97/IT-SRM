@@ -9047,7 +9047,7 @@ class ITServiceApp {
 
             params.append('page', page);
 
-            params.append('limit', '10');
+            params.append('limit', '9');
 
 
 

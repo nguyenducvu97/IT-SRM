@@ -22,7 +22,7 @@
 
 
 
-    <link rel="stylesheet" href="assets/css/style.css?v=20260418-4">
+    <link rel="stylesheet" href="assets/css/style.css?v=20260418-5">
 
 
 
@@ -551,6 +551,7 @@
 
 
                             <span id="notificationCount" class="notification-count">0</span>
+                            <span id="notificationBadge" class="notification-badge empty" style="display: none;">0</span>
 
 
 
@@ -1978,55 +1979,51 @@
 
 
 
-                        <button id="addUserBtn" class="btn btn-primary">
+                        <div class="page-actions">
 
 
 
-                            <i class="fas fa-user-plus"></i> Thêm người dùng
+                            <select id="roleFilter" class="form-control">
 
 
 
-                        </button>
+                                <option value="">Tất cả vai trò</option>
 
 
 
-                    </div>
+                                <option value="admin">Admin</option>
 
 
 
-                    
+                                <option value="staff">Staff</option>
 
 
 
-                    <div class="search-filter">
+                                <option value="user">User</option>
 
 
 
-                        <input type="text" id="userSearch" placeholder="Tìm kiếm người dùng..." class="form-control">
+                            </select>
 
 
 
-                        <select id="roleFilter" class="form-control">
+                            <input type="text" id="userSearch" placeholder="Tìm kiếm người dùng..." class="form-control">
 
 
 
-                            <option value="">Tất cả vai trò</option>
+                            <button id="addUserBtn" class="btn btn-primary">
 
 
 
-                            <option value="admin">Admin</option>
+                                <i class="fas fa-user-plus"></i> Thêm người dùng
 
 
 
-                            <option value="staff">Staff</option>
+                            </button>
 
 
 
-                            <option value="user">User</option>
-
-
-
-                        </select>
+                        </div>
 
 
 
@@ -4115,11 +4112,18 @@
 
 
 
+    <!-- Initialize NotificationManager -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing NotificationManager...');
+            window.notificationManager = new NotificationManager();
+            console.log('NotificationManager initialized:', window.notificationManager);
+        });
+    </script>
+
 </body>
 
 
-
-</html>
 
 
 
