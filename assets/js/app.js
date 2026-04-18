@@ -3766,7 +3766,7 @@ class ITServiceApp {
 
         console.log('usersPagination exists:', !!document.getElementById('usersPagination'));
 
-        console.log('categoryPagination exists:', !!document.getElementById('categoryPagination'));
+        console.log('categoryRequestsPagination exists:', !!document.getElementById('categoryRequestsPagination'));
 
         console.log('departmentsPagination exists:', !!document.getElementById('departmentsPagination'));
 
@@ -3788,7 +3788,7 @@ class ITServiceApp {
 
         } else if (isCategoryRequestsPage) {
 
-            container = document.getElementById('categoryPagination');
+            container = document.getElementById('categoryRequestsPagination');
 
         } else if (isDepartmentsPage) {
 
@@ -6635,7 +6635,7 @@ class ITServiceApp {
 
 
 
-                        <button class="btn btn-secondary" onclick="app.editCategory(${category.id}, '${category.name}', '${category.description || ''}')" onclick="event.stopPropagation()">
+                        <button class="btn btn-secondary" onclick="event.stopPropagation(); app.editCategory(${category.id}, '${category.name}', '${category.description || ''}')">
 
 
 
@@ -6647,7 +6647,7 @@ class ITServiceApp {
 
 
 
-                        <button class="btn btn-danger" onclick="app.deleteCategory(${category.id})" onclick="event.stopPropagation()">
+                        <button class="btn btn-danger" onclick="event.stopPropagation(); app.deleteCategory(${category.id})">
 
 
 
