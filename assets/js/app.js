@@ -11845,7 +11845,7 @@ class ITServiceApp {
 
                         <div class="meta-item">
 
-                            <strong><i class="fas fa-gavel"></i> Quyết định ADMIN:</strong> ${reject.admin_reason}
+                            <strong><i class="fas fa-gavel"></i> Phản hồi của Admin:</strong> ${reject.admin_reason}
 
                 </div>
 
@@ -11883,29 +11883,9 @@ class ITServiceApp {
 
 
 
-                    ${reject.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
-
-
-
-                        <div class="admin-reason">
-
-
-
-                            <strong>Quyết định ADMIN:</strong> ${reject.admin_reason}
-
-
-
-                        </div>
-
-
-
-                    ` : ''}
-
 
 
                 </div>
-
-
 
             </div>
 
@@ -13055,7 +13035,7 @@ class ITServiceApp {
 
 
 
-                            <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
+                            <strong>Phản hồi của Admin: </strong> ${support.admin_reason}
 
 
 
@@ -13108,26 +13088,6 @@ class ITServiceApp {
 
 
                         </button>
-
-
-
-                    ` : ''}
-
-
-
-                    ${support.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
-
-
-
-                        <div class="admin-reason">
-
-
-
-                            <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
-
-
-
-                        </div>
 
 
 
