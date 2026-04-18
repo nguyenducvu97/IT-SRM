@@ -7464,7 +7464,82 @@ $update_stmt->bindParam(":request_id", $request_id);
             
             if ($update_stmt->execute()) {
                 error_log("Successfully updated estimated completion for request #$request_id to: $mysql_datetime");
-                serviceJsonResponse(true, "Th?i gian d? ki?n hoàn thành dã du?c c?p nh?t thành công");
+                
+                // Send simple notifications without ServiceRequestNotificationHelper
+                try {
+                    // Get request details for notification
+                    $request_query = "SELECT sr.title, sr.user_id, sr.assigned_to, u.username as requester_name 
+                                    FROM service_requests sr 
+                                    LEFT JOIN users u ON sr.user_id = u.id 
+                                    WHERE sr.id = ?";
+                    $request_stmt = $db->prepare($request_query);
+                    $request_stmt->execute([$request_id]);
+                    $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    if ($request_data) {
+                        // Format the estimated completion time for display
+                        $formatted_time = date('d/m/Y H:i', strtotime($mysql_datetime));
+                        
+                        // Simple notification insertion directly
+                        $notification_query = "INSERT INTO notifications (user_id, title, message, type, related_id, related_type, created_at) 
+                                           VALUES (?, ?, ?, ?, ?, ?, NOW())";
+                        $notification_stmt = $db->prepare($notification_query);
+                        
+                        // Notify the request user
+                        if ($request_data['user_id']) {
+                            $user_title = "Cập nhật thời gian dự kiến hoàn thành";
+                            $user_message = "Yêu cầu #{$request_id} - '{$request_data['title']}'  đã được cập nhật thời gian dự kiến hoàn thành: {$formatted_time}";
+                            $notification_stmt->execute([
+                                $request_data['user_id'], 
+                                $user_title, 
+                                $user_message, 
+                                'info', 
+                                $request_id, 
+                                'service_request'
+                            ]);
+                            error_log("Notified user {$request_data['user_id']} about estimated completion update");
+                        }
+                        
+                        // Notify assigned staff if exists
+                        if ($request_data['assigned_to']) {
+                            $staff_title = "Cập nhật thời gian dự kiến hoàn thành";
+                            $staff_message = "Yêu cầu #{$request_id} - '{$request_data['title']}' đã được cập nhật thời gian dự kiến hoàn thành: {$formatted_time}";
+                            $notification_stmt->execute([
+                                $request_data['assigned_to'], 
+                                $staff_title, 
+                                $staff_message, 
+                                'info', 
+                                $request_id, 
+                                'service_request'
+                            ]);
+                            error_log("Notified staff {$request_data['assigned_to']} about estimated completion update");
+                        }
+                        
+                        // Notify all other staff
+                        $all_staff_query = "SELECT id FROM users WHERE role = 'staff' AND id != ?";
+                        $all_staff_stmt = $db->prepare($all_staff_query);
+                        $all_staff_stmt->execute([$request_data['assigned_to'] ?? 0]);
+                        $all_staff = $all_staff_stmt->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        foreach ($all_staff as $staff) {
+                            $all_staff_title = "Cập nhật thời gian dự kiến hoàn thành";
+                            $all_staff_message = "Admin đã cập nhật thời gian hoàn thành cho yêu cầu #{$request_id} - '{$request_data['title']}': {$formatted_time}";
+                            $notification_stmt->execute([
+                                $staff['id'], 
+                                $all_staff_title, 
+                                $all_staff_message, 
+                                'info', 
+                                $request_id, 
+                                'service_request'
+                            ]);
+                        }
+                        error_log("Notified all staff about estimated completion update for request #{$request_id}");
+                    }
+                } catch (Exception $e) {
+                    error_log("Failed to send notifications for estimated completion update: " . $e->getMessage());
+                }
+                
+                serviceJsonResponse(true, "Thời gian đã được cập nhật thành công");
             } else {
                 serviceJsonResponse(false, "Failed to update estimated completion time");
             }
