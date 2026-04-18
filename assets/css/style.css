@@ -5115,6 +5115,10 @@ body {
 
 
 
+    min-height: calc(100vh - 80px);
+
+
+
 }
 
 
@@ -5127,7 +5131,11 @@ body {
 
 
 
-    display: block;
+    display: flex;
+
+
+
+    flex-direction: column;
 
 
 
@@ -14886,7 +14894,7 @@ margin: 0 0 1rem 0;
 
 
 
-    max-height: 400px;
+    flex: 1;
 
 
 

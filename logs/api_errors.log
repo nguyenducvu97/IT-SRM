@@ -22726,3 +22726,671 @@
 
                             WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
 [18-Apr-2026 11:29:39 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:34:23 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:23 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:34:23 Europe/Berlin] Method: GET
+[18-Apr-2026 11:34:23 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:34:23 Europe/Berlin] POST data: []
+[18-Apr-2026 11:34:23 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:34:23 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:34:23 Europe/Berlin] ========================
+[18-Apr-2026 11:34:23 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:34:23 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:23 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:34:23 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:34:23 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:34:23 Europe/Berlin] =================
+[18-Apr-2026 11:34:23 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:34:23 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:23 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:34:23 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:34:23 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:34:23 Europe/Berlin] Method: GET
+[18-Apr-2026 11:34:23 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:34:23 Europe/Berlin] POST data: []
+[18-Apr-2026 11:34:23 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:34:23 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:34:23 Europe/Berlin] ========================
+[18-Apr-2026 11:34:23 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:34:23 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:23 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:34:23 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:34:23 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:34:23 Europe/Berlin] =================
+[18-Apr-2026 11:34:23 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:23 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:34:23 Europe/Berlin] Method: GET
+[18-Apr-2026 11:34:23 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:34:23 Europe/Berlin] POST data: []
+[18-Apr-2026 11:34:23 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:34:23 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:34:23 Europe/Berlin] ========================
+[18-Apr-2026 11:34:23 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:34:23 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:23 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:34:23 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:34:23 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:34:23 Europe/Berlin] =================
+[18-Apr-2026 11:34:23 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:34:23 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:34:23 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:34:23 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:23 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:34:23 Europe/Berlin] Method: GET
+[18-Apr-2026 11:34:23 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:34:23 Europe/Berlin] POST data: []
+[18-Apr-2026 11:34:23 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:34:23 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:34:23 Europe/Berlin] ========================
+[18-Apr-2026 11:34:23 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:34:23 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:23 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:34:23 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:34:23 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:34:23 Europe/Berlin] =================
+[18-Apr-2026 11:34:25 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:25 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:34:25 Europe/Berlin] Method: GET
+[18-Apr-2026 11:34:25 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:34:25 Europe/Berlin] POST data: []
+[18-Apr-2026 11:34:25 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:34:25 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:34:25 Europe/Berlin] ========================
+[18-Apr-2026 11:34:25 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:34:25 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:34:25 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:34:25 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:34:25 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:34:25 Europe/Berlin] =================
+[18-Apr-2026 11:34:25 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:34:25 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:34:25 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:38:57 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:38:57 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:38:57 Europe/Berlin] Method: GET
+[18-Apr-2026 11:38:57 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:38:57 Europe/Berlin] POST data: []
+[18-Apr-2026 11:38:57 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:38:57 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:38:57 Europe/Berlin] ========================
+[18-Apr-2026 11:38:57 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:38:57 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:38:57 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:38:57 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:38:57 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:38:57 Europe/Berlin] =================
+[18-Apr-2026 11:38:57 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:38:57 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:38:57 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:38:57 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:38:57 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:38:57 Europe/Berlin] Method: GET
+[18-Apr-2026 11:38:57 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:38:57 Europe/Berlin] POST data: []
+[18-Apr-2026 11:38:57 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:38:57 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:38:57 Europe/Berlin] ========================
+[18-Apr-2026 11:38:57 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:38:57 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:38:57 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:38:57 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:38:57 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:38:57 Europe/Berlin] =================
+[18-Apr-2026 11:38:57 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:38:57 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:38:57 Europe/Berlin] Method: GET
+[18-Apr-2026 11:38:57 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:38:57 Europe/Berlin] POST data: []
+[18-Apr-2026 11:38:57 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:38:57 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:38:57 Europe/Berlin] ========================
+[18-Apr-2026 11:38:57 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:38:57 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:38:57 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:38:57 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:38:57 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:38:57 Europe/Berlin] =================
+[18-Apr-2026 11:38:57 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:38:57 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:38:57 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:38:57 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:38:57 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:38:57 Europe/Berlin] Method: GET
+[18-Apr-2026 11:38:57 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:38:57 Europe/Berlin] POST data: []
+[18-Apr-2026 11:38:57 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:38:57 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:38:57 Europe/Berlin] ========================
+[18-Apr-2026 11:38:57 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:38:57 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:38:57 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:38:57 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:38:57 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:38:57 Europe/Berlin] =================
+[18-Apr-2026 11:39:02 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:02 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:02 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:02 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:02 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:02 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:02 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:02 Europe/Berlin] ========================
+[18-Apr-2026 11:39:02 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:02 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:02 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:02 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:02 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:02 Europe/Berlin] =================
+[18-Apr-2026 11:39:02 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:02 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:02 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:03 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:03 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:03 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:03 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:03 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:03 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:03 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:03 Europe/Berlin] ========================
+[18-Apr-2026 11:39:03 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:03 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:03 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:03 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:03 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:03 Europe/Berlin] =================
+[18-Apr-2026 11:39:03 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:03 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:03 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:04 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:04 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:04 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:04 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:04 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:04 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:04 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:04 Europe/Berlin] ========================
+[18-Apr-2026 11:39:04 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:04 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:04 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:04 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:04 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:04 Europe/Berlin] =================
+[18-Apr-2026 11:39:06 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:06 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:06 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:06 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:06 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:06 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:06 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:06 Europe/Berlin] ========================
+[18-Apr-2026 11:39:06 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:06 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:06 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:06 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:06 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:06 Europe/Berlin] =================
+[18-Apr-2026 11:39:06 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:06 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:06 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:18 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:18 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:18 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:18 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:18 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:18 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:18 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:18 Europe/Berlin] ========================
+[18-Apr-2026 11:39:18 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:18 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:18 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:18 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:18 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:18 Europe/Berlin] =================
+[18-Apr-2026 11:39:19 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:19 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:19 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:21 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:21 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:21 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:21 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:21 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:21 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:21 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:21 Europe/Berlin] ========================
+[18-Apr-2026 11:39:21 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:21 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:21 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:21 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:21 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:21 Europe/Berlin] =================
+[18-Apr-2026 11:39:21 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:21 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:21 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:24 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:24 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:24 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:24 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:24 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:24 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:24 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:24 Europe/Berlin] ========================
+[18-Apr-2026 11:39:24 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:24 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:24 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:24 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:24 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:24 Europe/Berlin] =================
+[18-Apr-2026 11:39:24 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:24 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:24 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:27 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:27 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:27 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:27 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:27 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:27 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:27 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:27 Europe/Berlin] ========================
+[18-Apr-2026 11:39:27 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:27 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:27 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:27 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:27 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:27 Europe/Berlin] =================
+[18-Apr-2026 11:39:27 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:27 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:27 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:30 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:30 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:30 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:30 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:30 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:30 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:30 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:30 Europe/Berlin] ========================
+[18-Apr-2026 11:39:30 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:30 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:30 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:30 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:30 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:30 Europe/Berlin] =================
+[18-Apr-2026 11:39:30 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:30 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:30 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:33 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:33 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:33 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:33 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:33 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:33 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:33 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:33 Europe/Berlin] ========================
+[18-Apr-2026 11:39:33 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:33 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:33 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:33 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:33 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:33 Europe/Berlin] =================
+[18-Apr-2026 11:39:33 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:33 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:33 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:36 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:36 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:36 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:36 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:36 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:36 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:36 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:36 Europe/Berlin] ========================
+[18-Apr-2026 11:39:36 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:36 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:36 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:36 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:36 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:36 Europe/Berlin] =================
+[18-Apr-2026 11:39:36 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:36 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:36 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:39 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:39 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:39 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:39 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:39 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:39 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:39 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:39 Europe/Berlin] ========================
+[18-Apr-2026 11:39:39 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:39 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:39 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:39 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:39 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:39 Europe/Berlin] =================
+[18-Apr-2026 11:39:39 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:39 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:39 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:42 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:42 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:42 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:42 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:42 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:42 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:42 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:42 Europe/Berlin] ========================
+[18-Apr-2026 11:39:42 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:42 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:42 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:42 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:42 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:42 Europe/Berlin] =================
+[18-Apr-2026 11:39:42 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:42 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:42 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:45 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:45 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:45 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:45 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:45 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:45 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:45 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:45 Europe/Berlin] ========================
+[18-Apr-2026 11:39:45 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:45 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:45 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:45 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:45 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:45 Europe/Berlin] =================
+[18-Apr-2026 11:39:45 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:45 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:45 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:47 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 11:39:47 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:47 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:47 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:47 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:47 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:47 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:47 Europe/Berlin] ========================
+[18-Apr-2026 11:39:47 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:47 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 11:39:47 Europe/Berlin] User ID: 1
+[18-Apr-2026 11:39:47 Europe/Berlin] User Role: admin
+[18-Apr-2026 11:39:47 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 11:39:47 Europe/Berlin] =================
+[18-Apr-2026 11:39:47 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:47 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:47 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:48 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:48 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:48 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:48 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:48 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:48 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:48 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:48 Europe/Berlin] ========================
+[18-Apr-2026 11:39:48 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:48 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:48 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:48 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:48 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:48 Europe/Berlin] =================
+[18-Apr-2026 11:39:48 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:48 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:48 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:49 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 11:39:49 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:49 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:49 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:49 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:49 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:49 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:49 Europe/Berlin] ========================
+[18-Apr-2026 11:39:49 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:49 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 11:39:49 Europe/Berlin] User ID: 1
+[18-Apr-2026 11:39:49 Europe/Berlin] User Role: admin
+[18-Apr-2026 11:39:49 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 11:39:49 Europe/Berlin] =================
+[18-Apr-2026 11:39:49 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:49 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:49 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:51 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:51 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:51 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:51 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:51 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:51 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:51 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:51 Europe/Berlin] ========================
+[18-Apr-2026 11:39:51 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:51 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:51 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:51 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:51 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:51 Europe/Berlin] =================
+[18-Apr-2026 11:39:51 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:51 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:51 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:52 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 11:39:52 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:52 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:52 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:52 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:52 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:52 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:52 Europe/Berlin] ========================
+[18-Apr-2026 11:39:52 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:52 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 11:39:52 Europe/Berlin] User ID: 1
+[18-Apr-2026 11:39:52 Europe/Berlin] User Role: admin
+[18-Apr-2026 11:39:52 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 11:39:52 Europe/Berlin] =================
+[18-Apr-2026 11:39:52 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:52 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:52 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:54 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:54 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:54 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:54 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:54 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:54 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:54 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:54 Europe/Berlin] ========================
+[18-Apr-2026 11:39:54 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:54 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:54 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:54 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:54 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:54 Europe/Berlin] =================
+[18-Apr-2026 11:39:54 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:54 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:54 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:55 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 11:39:55 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:55 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:55 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:55 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:55 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:55 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:55 Europe/Berlin] ========================
+[18-Apr-2026 11:39:55 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:55 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 11:39:55 Europe/Berlin] User ID: 1
+[18-Apr-2026 11:39:55 Europe/Berlin] User Role: admin
+[18-Apr-2026 11:39:55 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 11:39:55 Europe/Berlin] =================
+[18-Apr-2026 11:39:55 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:55 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:55 Europe/Berlin] Support result: {"count":3}
+[18-Apr-2026 11:39:57 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:57 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 11:39:57 Europe/Berlin] Method: GET
+[18-Apr-2026 11:39:57 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 11:39:57 Europe/Berlin] POST data: []
+[18-Apr-2026 11:39:57 Europe/Berlin] FILES data: []
+[18-Apr-2026 11:39:57 Europe/Berlin] Raw input: 
+[18-Apr-2026 11:39:57 Europe/Berlin] ========================
+[18-Apr-2026 11:39:57 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 11:39:57 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 11:39:57 Europe/Berlin] User ID: 2
+[18-Apr-2026 11:39:57 Europe/Berlin] User Role: staff
+[18-Apr-2026 11:39:57 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 11:39:57 Europe/Berlin] =================
+[18-Apr-2026 11:39:57 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 11:39:57 Europe/Berlin] Support query: SELECT COUNT(DISTINCT sr.id) as count 
+
+                            FROM service_requests sr 
+
+                            LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id 
+
+                            WHERE sreq.id IS NOT NULL AND sreq.status = 'approved'
+[18-Apr-2026 11:39:57 Europe/Berlin] Support result: {"count":3}
