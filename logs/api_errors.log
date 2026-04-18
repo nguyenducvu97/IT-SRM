@@ -4389,3 +4389,1693 @@
 [18-Apr-2026 04:52:01 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
 [18-Apr-2026 04:52:01 Europe/Berlin] =================
 [18-Apr-2026 04:52:01 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:52:53 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:52:53 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:52:53 Europe/Berlin] Method: GET
+[18-Apr-2026 04:52:53 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:52:53 Europe/Berlin] POST data: []
+[18-Apr-2026 04:52:53 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:52:53 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:52:53 Europe/Berlin] ========================
+[18-Apr-2026 04:52:53 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:52:53 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:52:53 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:52:53 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:52:53 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:52:53 Europe/Berlin] =================
+[18-Apr-2026 04:53:01 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 04:53:01 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:53:01 Europe/Berlin] Method: GET
+[18-Apr-2026 04:53:01 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:53:01 Europe/Berlin] POST data: []
+[18-Apr-2026 04:53:01 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:53:01 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:53:01 Europe/Berlin] ========================
+[18-Apr-2026 04:53:01 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:53:01 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 04:53:01 Europe/Berlin] User ID: 2
+[18-Apr-2026 04:53:01 Europe/Berlin] User Role: staff
+[18-Apr-2026 04:53:01 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 04:53:01 Europe/Berlin] =================
+[18-Apr-2026 04:53:37 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:53:37 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:53:37 Europe/Berlin] Method: GET
+[18-Apr-2026 04:53:37 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:53:37 Europe/Berlin] POST data: []
+[18-Apr-2026 04:53:37 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:53:37 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:53:37 Europe/Berlin] ========================
+[18-Apr-2026 04:53:37 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:53:37 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:53:37 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:53:37 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:53:37 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:53:37 Europe/Berlin] =================
+[18-Apr-2026 04:53:37 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:53:37 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:53:37 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:53:37 Europe/Berlin] Method: GET
+[18-Apr-2026 04:53:37 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:53:37 Europe/Berlin] POST data: []
+[18-Apr-2026 04:53:37 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:53:37 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:53:37 Europe/Berlin] ========================
+[18-Apr-2026 04:53:37 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:53:37 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:53:37 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:53:37 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:53:37 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:53:37 Europe/Berlin] =================
+[18-Apr-2026 04:53:37 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:53:37 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:53:37 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:53:37 Europe/Berlin] Method: GET
+[18-Apr-2026 04:53:37 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:53:37 Europe/Berlin] POST data: []
+[18-Apr-2026 04:53:37 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:53:37 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:53:37 Europe/Berlin] ========================
+[18-Apr-2026 04:53:37 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:53:37 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:53:37 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:53:37 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:53:37 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:53:37 Europe/Berlin] =================
+[18-Apr-2026 04:53:37 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:54:02 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 04:54:02 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:54:02 Europe/Berlin] Method: POST
+[18-Apr-2026 04:54:02 Europe/Berlin] Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryOdBfenaOdkF931FB
+[18-Apr-2026 04:54:02 Europe/Berlin] POST data: {"id":"127","action":"resolve","error_description":"ok","error_type":"hardware","replacement_materials":"Ki\u1ec3m tra tr\u1ea1ng th\u00e1i ","solution_method":"Test ch\u1ee9c n\u0103ng tr\u1ea1ng th\u00e1i."}
+[18-Apr-2026 04:54:02 Europe/Berlin] FILES data: ["attachments"]
+[18-Apr-2026 04:54:02 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:54:02 Europe/Berlin] ========================
+[18-Apr-2026 04:54:02 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:54:02 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 04:54:02 Europe/Berlin] User ID: 2
+[18-Apr-2026 04:54:02 Europe/Berlin] User Role: staff
+[18-Apr-2026 04:54:02 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 04:54:02 Europe/Berlin] =================
+[18-Apr-2026 04:54:02 Europe/Berlin] Resolve action detected - Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryOdBfenaOdkF931FB
+[18-Apr-2026 04:54:02 Europe/Berlin] Is FormData: Yes
+[18-Apr-2026 04:54:02 Europe/Berlin] Processing FormData resolve
+[18-Apr-2026 04:54:02 Europe/Berlin] Resolve data - ID: 127, Error: ok
+[18-Apr-2026 04:54:02 Europe/Berlin] Found 2 files to upload
+[18-Apr-2026 04:54:02 Europe/Berlin] === HANDLE RESOLVE REQUEST START ===
+[18-Apr-2026 04:54:02 Europe/Berlin] Request ID: 127
+[18-Apr-2026 04:54:02 Europe/Berlin] User ID: 2, Role: staff
+[18-Apr-2026 04:54:02 Europe/Berlin] Error Description: ok
+[18-Apr-2026 04:54:02 Europe/Berlin] Error Type: hardware
+[18-Apr-2026 04:54:02 Europe/Berlin] Solution Method: Test chức năng trạng thái.
+[18-Apr-2026 04:54:02 Europe/Berlin] Attachments count: 2
+[18-Apr-2026 04:54:02 Europe/Berlin] ACCESS GRANTED - User role: staff
+[18-Apr-2026 04:54:02 Europe/Berlin] RESOLVE NOTIFICATIONS DISABLED - Fixing HTTP 500 error
+[18-Apr-2026 04:54:02 Europe/Berlin] RESOLVE SUCCESS - About to send JSON response
+[18-Apr-2026 04:54:03 Europe/Berlin] Database session started - ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 04:54:03 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:54:03 Europe/Berlin] Method: GET
+[18-Apr-2026 04:54:03 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:54:03 Europe/Berlin] POST data: []
+[18-Apr-2026 04:54:03 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:54:03 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:54:03 Europe/Berlin] ========================
+[18-Apr-2026 04:54:03 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:54:03 Europe/Berlin] Session ID: lfd10fnvob49vbgum4c8lh7tde
+[18-Apr-2026 04:54:03 Europe/Berlin] User ID: 2
+[18-Apr-2026 04:54:03 Europe/Berlin] User Role: staff
+[18-Apr-2026 04:54:03 Europe/Berlin] Session data: {"user_id":2,"username":"staff1","full_name":"John Smith","role":"staff"}
+[18-Apr-2026 04:54:03 Europe/Berlin] =================
+[18-Apr-2026 04:54:15 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:54:15 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:54:15 Europe/Berlin] Method: GET
+[18-Apr-2026 04:54:15 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:54:15 Europe/Berlin] POST data: []
+[18-Apr-2026 04:54:15 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:54:15 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:54:15 Europe/Berlin] ========================
+[18-Apr-2026 04:54:15 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:54:15 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:54:15 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:54:15 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:54:15 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:54:15 Europe/Berlin] =================
+[18-Apr-2026 04:54:15 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:54:15 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:54:15 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:54:15 Europe/Berlin] Method: GET
+[18-Apr-2026 04:54:15 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:54:15 Europe/Berlin] POST data: []
+[18-Apr-2026 04:54:15 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:54:15 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:54:15 Europe/Berlin] ========================
+[18-Apr-2026 04:54:15 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:54:15 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:54:15 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:54:15 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:54:15 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:54:15 Europe/Berlin] =================
+[18-Apr-2026 04:54:15 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:54:15 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:54:15 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:54:15 Europe/Berlin] Method: GET
+[18-Apr-2026 04:54:15 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:54:15 Europe/Berlin] POST data: []
+[18-Apr-2026 04:54:15 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:54:15 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:54:15 Europe/Berlin] ========================
+[18-Apr-2026 04:54:15 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:54:15 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:54:15 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:54:15 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:54:15 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:54:15 Europe/Berlin] =================
+[18-Apr-2026 04:54:15 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:16 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:16 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:16 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:16 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:16 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:16 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:16 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:16 Europe/Berlin] ========================
+[18-Apr-2026 04:55:16 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:16 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:16 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:16 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:16 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:16 Europe/Berlin] =================
+[18-Apr-2026 04:55:16 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:18 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:18 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:18 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:18 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:18 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:18 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:18 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:18 Europe/Berlin] ========================
+[18-Apr-2026 04:55:18 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:18 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:18 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:18 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:18 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:18 Europe/Berlin] =================
+[18-Apr-2026 04:55:18 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:21 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:21 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:21 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:21 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:21 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:21 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:21 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:21 Europe/Berlin] ========================
+[18-Apr-2026 04:55:21 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:21 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:21 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:21 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:21 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:21 Europe/Berlin] =================
+[18-Apr-2026 04:55:21 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:21 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:21 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:21 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:21 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:21 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:21 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:21 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:21 Europe/Berlin] ========================
+[18-Apr-2026 04:55:21 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:21 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:21 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:21 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:21 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:21 Europe/Berlin] =================
+[18-Apr-2026 04:55:21 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:23 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:23 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:23 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:23 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:23 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:23 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:23 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:23 Europe/Berlin] ========================
+[18-Apr-2026 04:55:23 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:23 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:23 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:23 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:23 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:23 Europe/Berlin] =================
+[18-Apr-2026 04:55:23 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:24 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:24 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:24 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:24 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:24 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:24 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:24 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:24 Europe/Berlin] ========================
+[18-Apr-2026 04:55:24 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:24 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:24 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:24 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:24 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:24 Europe/Berlin] =================
+[18-Apr-2026 04:55:24 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:26 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:26 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:26 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:26 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:26 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:26 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:26 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:26 Europe/Berlin] ========================
+[18-Apr-2026 04:55:26 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:26 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:26 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:26 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:26 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:26 Europe/Berlin] =================
+[18-Apr-2026 04:55:26 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:26 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:26 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:26 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:26 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:26 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:26 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:26 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:26 Europe/Berlin] ========================
+[18-Apr-2026 04:55:26 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:26 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:26 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:26 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:26 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:26 Europe/Berlin] =================
+[18-Apr-2026 04:55:26 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:27 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:27 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:27 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:27 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:27 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:27 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:27 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:27 Europe/Berlin] ========================
+[18-Apr-2026 04:55:27 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:27 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:27 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:27 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:27 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:27 Europe/Berlin] =================
+[18-Apr-2026 04:55:27 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:27 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:27 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:27 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:27 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:27 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:27 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:27 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:27 Europe/Berlin] ========================
+[18-Apr-2026 04:55:27 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:27 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:27 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:27 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:27 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:27 Europe/Berlin] =================
+[18-Apr-2026 04:55:27 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:27 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:27 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:27 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:27 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:27 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:27 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:27 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:27 Europe/Berlin] ========================
+[18-Apr-2026 04:55:27 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:27 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:27 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:27 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:27 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:27 Europe/Berlin] =================
+[18-Apr-2026 04:55:27 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:30 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:30 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:30 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:30 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:30 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:30 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:30 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:30 Europe/Berlin] ========================
+[18-Apr-2026 04:55:30 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:30 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:30 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:30 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:30 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:30 Europe/Berlin] =================
+[18-Apr-2026 04:55:30 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:30 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:30 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:30 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:30 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:30 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:30 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:30 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:30 Europe/Berlin] ========================
+[18-Apr-2026 04:55:30 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:30 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:30 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:30 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:30 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:30 Europe/Berlin] =================
+[18-Apr-2026 04:55:30 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:32 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:32 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:32 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:32 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:32 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:32 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:32 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:32 Europe/Berlin] ========================
+[18-Apr-2026 04:55:32 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:32 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:32 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:32 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:32 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:32 Europe/Berlin] =================
+[18-Apr-2026 04:55:32 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:32 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:32 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:32 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:32 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:32 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:32 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:32 Europe/Berlin] ========================
+[18-Apr-2026 04:55:32 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:32 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:32 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:32 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:32 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:32 Europe/Berlin] =================
+[18-Apr-2026 04:55:32 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:32 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:33 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:33 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:33 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:33 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:33 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:33 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:33 Europe/Berlin] ========================
+[18-Apr-2026 04:55:33 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:33 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:33 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:33 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:33 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:33 Europe/Berlin] =================
+[18-Apr-2026 04:55:33 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:33 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:33 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:33 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:33 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:33 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:33 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:33 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:33 Europe/Berlin] ========================
+[18-Apr-2026 04:55:33 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:33 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:33 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:33 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:33 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:33 Europe/Berlin] =================
+[18-Apr-2026 04:55:33 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:33 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:33 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:33 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:33 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:33 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:33 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:33 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:33 Europe/Berlin] ========================
+[18-Apr-2026 04:55:33 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:33 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:33 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:33 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:33 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:33 Europe/Berlin] =================
+[18-Apr-2026 04:55:33 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:38 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:38 Europe/Berlin] === KPI EXPORT SESSION DEBUG ===
+[18-Apr-2026 04:55:38 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:38 Europe/Berlin] Cookie data: {"PHPSESSID":"fcu44l096648eor08aq3uhh7gh"}
+[18-Apr-2026 04:55:38 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:38 Europe/Berlin] ===============================
+[18-Apr-2026 04:55:38 Europe/Berlin] KPI Export: Access granted - User ID: 1, Role: admin
+[18-Apr-2026 04:55:39 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:39 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:39 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:39 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:39 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:39 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:39 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:39 Europe/Berlin] ========================
+[18-Apr-2026 04:55:39 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:39 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:39 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:39 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:39 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:39 Europe/Berlin] =================
+[18-Apr-2026 04:55:40 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:40 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:40 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:40 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:40 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:40 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:40 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:40 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:40 Europe/Berlin] ========================
+[18-Apr-2026 04:55:40 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:40 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:40 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:40 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:40 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:40 Europe/Berlin] =================
+[18-Apr-2026 04:55:40 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:40 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:40 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:40 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:40 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:40 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:40 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:40 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:40 Europe/Berlin] ========================
+[18-Apr-2026 04:55:40 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:40 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:40 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:40 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:40 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:40 Europe/Berlin] =================
+[18-Apr-2026 04:55:40 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:42 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:42 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:42 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:42 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:42 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:42 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:42 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:42 Europe/Berlin] ========================
+[18-Apr-2026 04:55:42 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:42 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:42 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:42 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:42 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:42 Europe/Berlin] =================
+[18-Apr-2026 04:55:42 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:46 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:46 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:46 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:46 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:46 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:46 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:46 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:46 Europe/Berlin] ========================
+[18-Apr-2026 04:55:46 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:46 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:46 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:46 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:46 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:46 Europe/Berlin] =================
+[18-Apr-2026 04:55:46 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:49 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:49 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:49 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:49 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:49 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:49 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:49 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:49 Europe/Berlin] ========================
+[18-Apr-2026 04:55:49 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:49 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:49 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:49 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:49 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:49 Europe/Berlin] =================
+[18-Apr-2026 04:55:49 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:52 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:52 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:52 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:52 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:52 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:52 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:52 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:52 Europe/Berlin] ========================
+[18-Apr-2026 04:55:52 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:52 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:52 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:52 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:52 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:52 Europe/Berlin] =================
+[18-Apr-2026 04:55:52 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:55 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:55 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:55 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:55 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:55 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:55 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:55 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:55 Europe/Berlin] ========================
+[18-Apr-2026 04:55:55 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:55 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:55 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:55 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:55 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:55 Europe/Berlin] =================
+[18-Apr-2026 04:55:55 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:55:58 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:58 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:55:58 Europe/Berlin] Method: GET
+[18-Apr-2026 04:55:58 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:55:58 Europe/Berlin] POST data: []
+[18-Apr-2026 04:55:58 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:55:58 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:55:58 Europe/Berlin] ========================
+[18-Apr-2026 04:55:58 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:55:58 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:55:58 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:55:58 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:55:58 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:55:58 Europe/Berlin] =================
+[18-Apr-2026 04:55:58 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:01 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:01 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:01 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:01 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:01 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:01 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:01 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:01 Europe/Berlin] ========================
+[18-Apr-2026 04:56:01 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:01 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:01 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:01 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:01 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:01 Europe/Berlin] =================
+[18-Apr-2026 04:56:01 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:04 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:04 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:04 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:04 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:04 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:04 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:04 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:04 Europe/Berlin] ========================
+[18-Apr-2026 04:56:04 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:04 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:04 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:04 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:04 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:04 Europe/Berlin] =================
+[18-Apr-2026 04:56:04 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:07 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:07 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:07 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:07 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:07 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:07 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:07 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:07 Europe/Berlin] ========================
+[18-Apr-2026 04:56:07 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:07 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:07 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:07 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:07 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:07 Europe/Berlin] =================
+[18-Apr-2026 04:56:07 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:10 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:10 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:10 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:10 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:10 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:10 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:10 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:10 Europe/Berlin] ========================
+[18-Apr-2026 04:56:10 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:10 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:10 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:10 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:10 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:10 Europe/Berlin] =================
+[18-Apr-2026 04:56:10 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:13 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:13 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:13 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:13 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:13 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:13 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:13 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:13 Europe/Berlin] ========================
+[18-Apr-2026 04:56:13 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:13 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:13 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:13 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:13 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:13 Europe/Berlin] =================
+[18-Apr-2026 04:56:13 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:16 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:16 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:16 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:16 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:16 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:16 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:16 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:16 Europe/Berlin] ========================
+[18-Apr-2026 04:56:16 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:16 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:16 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:16 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:16 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:16 Europe/Berlin] =================
+[18-Apr-2026 04:56:16 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:19 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:19 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:19 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:19 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:19 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:19 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:19 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:19 Europe/Berlin] ========================
+[18-Apr-2026 04:56:19 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:19 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:19 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:19 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:19 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:19 Europe/Berlin] =================
+[18-Apr-2026 04:56:19 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:22 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:22 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:22 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:22 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:22 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:22 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:22 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:22 Europe/Berlin] ========================
+[18-Apr-2026 04:56:22 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:22 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:22 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:22 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:22 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:22 Europe/Berlin] =================
+[18-Apr-2026 04:56:22 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:25 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:25 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:25 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:25 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:25 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:25 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:25 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:25 Europe/Berlin] ========================
+[18-Apr-2026 04:56:25 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:25 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:25 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:25 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:25 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:25 Europe/Berlin] =================
+[18-Apr-2026 04:56:25 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:28 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:28 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:28 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:28 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:28 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:28 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:28 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:28 Europe/Berlin] ========================
+[18-Apr-2026 04:56:28 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:28 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:28 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:28 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:28 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:28 Europe/Berlin] =================
+[18-Apr-2026 04:56:28 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:31 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:31 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:31 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:31 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:31 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:31 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:31 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:31 Europe/Berlin] ========================
+[18-Apr-2026 04:56:31 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:31 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:31 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:31 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:31 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:31 Europe/Berlin] =================
+[18-Apr-2026 04:56:31 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:34 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:34 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:34 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:34 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:34 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:34 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:34 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:34 Europe/Berlin] ========================
+[18-Apr-2026 04:56:34 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:34 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:34 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:34 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:34 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:34 Europe/Berlin] =================
+[18-Apr-2026 04:56:34 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:37 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:37 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:37 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:37 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:37 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:37 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:37 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:37 Europe/Berlin] ========================
+[18-Apr-2026 04:56:37 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:37 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:37 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:37 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:37 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:37 Europe/Berlin] =================
+[18-Apr-2026 04:56:37 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:40 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:40 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:40 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:40 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:40 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:40 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:40 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:40 Europe/Berlin] ========================
+[18-Apr-2026 04:56:40 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:40 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:40 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:40 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:40 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:40 Europe/Berlin] =================
+[18-Apr-2026 04:56:40 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:43 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:43 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:43 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:43 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:43 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:43 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:43 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:43 Europe/Berlin] ========================
+[18-Apr-2026 04:56:43 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:43 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:43 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:43 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:43 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:43 Europe/Berlin] =================
+[18-Apr-2026 04:56:43 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:46 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:46 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:46 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:46 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:46 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:46 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:46 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:46 Europe/Berlin] ========================
+[18-Apr-2026 04:56:46 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:46 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:46 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:46 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:46 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:46 Europe/Berlin] =================
+[18-Apr-2026 04:56:46 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:49 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:49 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:49 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:49 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:49 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:49 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:49 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:49 Europe/Berlin] ========================
+[18-Apr-2026 04:56:49 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:49 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:49 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:49 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:49 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:49 Europe/Berlin] =================
+[18-Apr-2026 04:56:49 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:52 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:52 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:52 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:52 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:52 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:52 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:52 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:52 Europe/Berlin] ========================
+[18-Apr-2026 04:56:52 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:52 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:52 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:52 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:52 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:52 Europe/Berlin] =================
+[18-Apr-2026 04:56:52 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:55 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:55 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:55 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:55 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:55 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:55 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:55 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:55 Europe/Berlin] ========================
+[18-Apr-2026 04:56:55 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:55 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:55 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:55 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:55 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:55 Europe/Berlin] =================
+[18-Apr-2026 04:56:55 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:56:58 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:58 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:56:58 Europe/Berlin] Method: GET
+[18-Apr-2026 04:56:58 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:56:58 Europe/Berlin] POST data: []
+[18-Apr-2026 04:56:58 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:56:58 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:56:58 Europe/Berlin] ========================
+[18-Apr-2026 04:56:58 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:56:58 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:56:58 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:56:58 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:56:58 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:56:58 Europe/Berlin] =================
+[18-Apr-2026 04:56:58 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:01 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:01 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:01 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:01 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:01 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:01 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:01 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:01 Europe/Berlin] ========================
+[18-Apr-2026 04:57:01 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:01 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:01 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:01 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:01 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:01 Europe/Berlin] =================
+[18-Apr-2026 04:57:01 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:04 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:04 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:04 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:04 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:04 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:04 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:04 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:04 Europe/Berlin] ========================
+[18-Apr-2026 04:57:04 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:04 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:04 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:04 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:04 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:04 Europe/Berlin] =================
+[18-Apr-2026 04:57:04 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:07 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:07 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:07 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:07 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:07 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:07 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:07 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:07 Europe/Berlin] ========================
+[18-Apr-2026 04:57:07 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:07 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:07 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:07 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:07 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:07 Europe/Berlin] =================
+[18-Apr-2026 04:57:07 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:10 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:10 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:10 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:10 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:10 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:10 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:10 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:10 Europe/Berlin] ========================
+[18-Apr-2026 04:57:10 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:10 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:10 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:10 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:10 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:10 Europe/Berlin] =================
+[18-Apr-2026 04:57:10 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:13 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:13 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:13 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:13 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:13 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:13 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:13 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:13 Europe/Berlin] ========================
+[18-Apr-2026 04:57:13 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:13 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:13 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:13 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:13 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:13 Europe/Berlin] =================
+[18-Apr-2026 04:57:13 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:16 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:16 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:16 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:16 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:16 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:16 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:16 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:16 Europe/Berlin] ========================
+[18-Apr-2026 04:57:16 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:16 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:16 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:16 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:16 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:16 Europe/Berlin] =================
+[18-Apr-2026 04:57:16 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:19 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:19 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:19 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:19 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:19 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:19 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:19 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:19 Europe/Berlin] ========================
+[18-Apr-2026 04:57:19 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:19 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:19 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:19 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:19 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:19 Europe/Berlin] =================
+[18-Apr-2026 04:57:19 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:22 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:22 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:22 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:22 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:22 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:22 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:22 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:22 Europe/Berlin] ========================
+[18-Apr-2026 04:57:22 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:22 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:22 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:22 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:22 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:22 Europe/Berlin] =================
+[18-Apr-2026 04:57:22 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:25 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:25 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:25 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:25 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:25 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:25 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:25 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:25 Europe/Berlin] ========================
+[18-Apr-2026 04:57:25 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:25 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:25 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:25 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:25 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:25 Europe/Berlin] =================
+[18-Apr-2026 04:57:25 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:28 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:28 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:28 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:28 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:28 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:28 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:28 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:28 Europe/Berlin] ========================
+[18-Apr-2026 04:57:28 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:28 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:28 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:28 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:28 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:28 Europe/Berlin] =================
+[18-Apr-2026 04:57:28 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:32 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:32 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:32 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:32 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:32 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:32 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:32 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:32 Europe/Berlin] ========================
+[18-Apr-2026 04:57:32 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:32 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:32 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:32 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:32 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:32 Europe/Berlin] =================
+[18-Apr-2026 04:57:32 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:34 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:34 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:34 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:34 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:34 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:34 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:34 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:34 Europe/Berlin] ========================
+[18-Apr-2026 04:57:34 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:34 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:34 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:34 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:34 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:34 Europe/Berlin] =================
+[18-Apr-2026 04:57:34 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:37 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:37 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:37 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:37 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:37 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:37 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:37 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:37 Europe/Berlin] ========================
+[18-Apr-2026 04:57:37 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:37 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:37 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:37 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:37 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:37 Europe/Berlin] =================
+[18-Apr-2026 04:57:37 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:57:40 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:40 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:57:40 Europe/Berlin] Method: GET
+[18-Apr-2026 04:57:40 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:57:40 Europe/Berlin] POST data: []
+[18-Apr-2026 04:57:40 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:57:40 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:57:40 Europe/Berlin] ========================
+[18-Apr-2026 04:57:40 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:57:40 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:57:40 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:57:40 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:57:40 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:57:40 Europe/Berlin] =================
+[18-Apr-2026 04:57:40 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:14 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:14 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:14 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:14 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:14 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:14 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:14 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:14 Europe/Berlin] ========================
+[18-Apr-2026 04:58:14 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:14 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:14 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:14 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:14 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:14 Europe/Berlin] =================
+[18-Apr-2026 04:58:14 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:43 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:43 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:43 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:43 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:43 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:43 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:43 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:43 Europe/Berlin] ========================
+[18-Apr-2026 04:58:43 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:43 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:43 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:43 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:43 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:43 Europe/Berlin] =================
+[18-Apr-2026 04:58:43 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:46 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:46 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:46 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:46 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:46 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:46 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:46 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:46 Europe/Berlin] ========================
+[18-Apr-2026 04:58:46 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:46 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:46 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:46 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:46 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:46 Europe/Berlin] =================
+[18-Apr-2026 04:58:46 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:49 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:49 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:49 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:49 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:49 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:49 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:49 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:49 Europe/Berlin] ========================
+[18-Apr-2026 04:58:49 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:49 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:49 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:49 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:49 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:49 Europe/Berlin] =================
+[18-Apr-2026 04:58:49 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:52 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:52 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:52 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:52 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:52 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:52 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:52 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:52 Europe/Berlin] ========================
+[18-Apr-2026 04:58:52 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:52 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:52 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:52 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:52 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:52 Europe/Berlin] =================
+[18-Apr-2026 04:58:52 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:55 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:55 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:55 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:55 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:55 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:55 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:55 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:55 Europe/Berlin] ========================
+[18-Apr-2026 04:58:55 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:55 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:55 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:55 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:55 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:55 Europe/Berlin] =================
+[18-Apr-2026 04:58:55 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:57 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:57 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:57 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:57 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:57 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:57 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:57 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:57 Europe/Berlin] ========================
+[18-Apr-2026 04:58:57 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:57 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:57 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:57 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:57 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:57 Europe/Berlin] =================
+[18-Apr-2026 04:58:57 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:57 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:57 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:57 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:57 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:57 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:57 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:57 Europe/Berlin] ========================
+[18-Apr-2026 04:58:57 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:57 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:57 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:57 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:57 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:57 Europe/Berlin] =================
+[18-Apr-2026 04:58:57 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:57 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:57 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:57 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:57 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:57 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:57 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:57 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:57 Europe/Berlin] ========================
+[18-Apr-2026 04:58:57 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:57 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:57 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:57 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:57 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:57 Europe/Berlin] =================
+[18-Apr-2026 04:58:57 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:59 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:59 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:59 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:59 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:59 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:59 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:59 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:59 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:59 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:59 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:59 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:59 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:59 Europe/Berlin] ========================
+[18-Apr-2026 04:58:59 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:59 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:59 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:59 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:59 Europe/Berlin] ========================
+[18-Apr-2026 04:58:59 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:59 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:59 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:59 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:59 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:59 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:59 Europe/Berlin] =================
+[18-Apr-2026 04:58:59 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:59 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:59 Europe/Berlin] =================
+[18-Apr-2026 04:58:59 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:59 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:58:59 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:59 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:58:59 Europe/Berlin] Method: GET
+[18-Apr-2026 04:58:59 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:58:59 Europe/Berlin] POST data: []
+[18-Apr-2026 04:58:59 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:58:59 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:58:59 Europe/Berlin] ========================
+[18-Apr-2026 04:58:59 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:58:59 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:58:59 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:58:59 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:58:59 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:58:59 Europe/Berlin] =================
+[18-Apr-2026 04:58:59 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:02 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:02 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:02 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:02 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:02 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:02 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:02 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:02 Europe/Berlin] ========================
+[18-Apr-2026 04:59:02 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:02 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:02 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:02 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:02 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:02 Europe/Berlin] =================
+[18-Apr-2026 04:59:02 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:05 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:05 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:05 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:05 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:05 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:05 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:05 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:05 Europe/Berlin] ========================
+[18-Apr-2026 04:59:05 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:05 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:05 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:05 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:05 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:05 Europe/Berlin] =================
+[18-Apr-2026 04:59:05 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:08 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:08 Europe/Berlin] === SEARCH API SESSION DEBUG ===
+[18-Apr-2026 04:59:08 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:08 Europe/Berlin] Session data before check: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:08 Europe/Berlin] Cookies: {"PHPSESSID":"fcu44l096648eor08aq3uhh7gh"}
+[18-Apr-2026 04:59:08 Europe/Berlin] === SEARCH API DEBUG ===
+[18-Apr-2026 04:59:08 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:08 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:08 Europe/Berlin] User role: admin
+[18-Apr-2026 04:59:08 Europe/Berlin] Role filter check: user_role='admin'
+[18-Apr-2026 04:59:08 Europe/Berlin] No user_id filter - admin/staff access
+[18-Apr-2026 04:59:08 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:08 Europe/Berlin] === SEARCH API SESSION DEBUG ===
+[18-Apr-2026 04:59:08 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:08 Europe/Berlin] Session data before check: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:08 Europe/Berlin] Cookies: {"PHPSESSID":"fcu44l096648eor08aq3uhh7gh"}
+[18-Apr-2026 04:59:08 Europe/Berlin] === SEARCH API DEBUG ===
+[18-Apr-2026 04:59:08 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:08 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:08 Europe/Berlin] User role: admin
+[18-Apr-2026 04:59:08 Europe/Berlin] Role filter check: user_role='admin'
+[18-Apr-2026 04:59:08 Europe/Berlin] No user_id filter - admin/staff access
+[18-Apr-2026 04:59:09 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:09 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:09 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:09 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:09 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:09 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:09 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:09 Europe/Berlin] ========================
+[18-Apr-2026 04:59:09 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:09 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:09 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:09 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:09 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:09 Europe/Berlin] =================
+[18-Apr-2026 04:59:09 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:11 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:11 Europe/Berlin] === SEARCH API SESSION DEBUG ===
+[18-Apr-2026 04:59:11 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:11 Europe/Berlin] Session data before check: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:11 Europe/Berlin] Cookies: {"PHPSESSID":"fcu44l096648eor08aq3uhh7gh"}
+[18-Apr-2026 04:59:11 Europe/Berlin] === SEARCH API DEBUG ===
+[18-Apr-2026 04:59:11 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:11 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:11 Europe/Berlin] User role: admin
+[18-Apr-2026 04:59:11 Europe/Berlin] Role filter check: user_role='admin'
+[18-Apr-2026 04:59:11 Europe/Berlin] No user_id filter - admin/staff access
+[18-Apr-2026 04:59:11 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:11 Europe/Berlin] === SEARCH API SESSION DEBUG ===
+[18-Apr-2026 04:59:11 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:11 Europe/Berlin] Session data before check: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:11 Europe/Berlin] Cookies: {"PHPSESSID":"fcu44l096648eor08aq3uhh7gh"}
+[18-Apr-2026 04:59:11 Europe/Berlin] === SEARCH API DEBUG ===
+[18-Apr-2026 04:59:11 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:11 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:11 Europe/Berlin] User role: admin
+[18-Apr-2026 04:59:11 Europe/Berlin] Role filter check: user_role='admin'
+[18-Apr-2026 04:59:11 Europe/Berlin] No user_id filter - admin/staff access
+[18-Apr-2026 04:59:14 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:14 Europe/Berlin] === SEARCH API SESSION DEBUG ===
+[18-Apr-2026 04:59:14 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:14 Europe/Berlin] Session data before check: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:14 Europe/Berlin] Cookies: {"PHPSESSID":"fcu44l096648eor08aq3uhh7gh"}
+[18-Apr-2026 04:59:14 Europe/Berlin] === SEARCH API DEBUG ===
+[18-Apr-2026 04:59:14 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:14 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:14 Europe/Berlin] User role: admin
+[18-Apr-2026 04:59:14 Europe/Berlin] Role filter check: user_role='admin'
+[18-Apr-2026 04:59:14 Europe/Berlin] No user_id filter - admin/staff access
+[18-Apr-2026 04:59:14 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:14 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:14 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:14 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:14 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:14 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:14 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:14 Europe/Berlin] ========================
+[18-Apr-2026 04:59:14 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:14 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:14 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:14 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:14 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:14 Europe/Berlin] =================
+[18-Apr-2026 04:59:14 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:14 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:14 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:14 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:14 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:14 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:14 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:14 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:14 Europe/Berlin] ========================
+[18-Apr-2026 04:59:14 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:14 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:14 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:14 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:14 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:14 Europe/Berlin] =================
+[18-Apr-2026 04:59:14 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:17 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:17 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:17 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:17 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:17 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:17 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:17 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:17 Europe/Berlin] ========================
+[18-Apr-2026 04:59:17 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:17 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:17 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:17 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:17 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:17 Europe/Berlin] =================
+[18-Apr-2026 04:59:17 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:20 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:20 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:20 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:20 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:20 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:20 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:20 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:20 Europe/Berlin] ========================
+[18-Apr-2026 04:59:20 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:20 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:20 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:20 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:20 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:20 Europe/Berlin] =================
+[18-Apr-2026 04:59:20 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:23 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:23 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:23 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:23 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:23 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:23 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:23 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:23 Europe/Berlin] ========================
+[18-Apr-2026 04:59:23 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:23 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:23 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:23 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:23 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:23 Europe/Berlin] =================
+[18-Apr-2026 04:59:35 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:35 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:35 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:35 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:35 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:35 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:35 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:35 Europe/Berlin] ========================
+[18-Apr-2026 04:59:35 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:35 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:35 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:35 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:35 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:35 Europe/Berlin] =================
+[18-Apr-2026 04:59:35 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:38 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:38 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:38 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:38 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:38 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:38 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:38 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:38 Europe/Berlin] ========================
+[18-Apr-2026 04:59:38 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:38 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:38 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:38 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:38 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:38 Europe/Berlin] =================
+[18-Apr-2026 04:59:38 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:41 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:41 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:41 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:41 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:41 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:41 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:41 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:41 Europe/Berlin] ========================
+[18-Apr-2026 04:59:41 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:41 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:41 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:41 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:41 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:41 Europe/Berlin] =================
+[18-Apr-2026 04:59:41 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:44 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:44 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:44 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:44 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:44 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:44 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:44 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:44 Europe/Berlin] ========================
+[18-Apr-2026 04:59:44 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:44 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:44 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:44 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:44 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:44 Europe/Berlin] =================
+[18-Apr-2026 04:59:44 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:47 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:47 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:47 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:47 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:47 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:47 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:47 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:47 Europe/Berlin] ========================
+[18-Apr-2026 04:59:47 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:47 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:47 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:47 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:47 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:47 Europe/Berlin] =================
+[18-Apr-2026 04:59:47 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:50 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:50 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:50 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:50 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:50 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:50 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:50 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:50 Europe/Berlin] ========================
+[18-Apr-2026 04:59:50 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:50 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:50 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:50 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:50 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:50 Europe/Berlin] =================
+[18-Apr-2026 04:59:50 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:53 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:53 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:53 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:53 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:53 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:53 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:53 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:53 Europe/Berlin] ========================
+[18-Apr-2026 04:59:53 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:53 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:53 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:53 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:53 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:53 Europe/Berlin] =================
+[18-Apr-2026 04:59:53 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:56 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:56 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:56 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:56 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:56 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:56 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:56 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:56 Europe/Berlin] ========================
+[18-Apr-2026 04:59:56 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:56 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:56 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:56 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:56 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:56 Europe/Berlin] =================
+[18-Apr-2026 04:59:56 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 04:59:59 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:59 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 04:59:59 Europe/Berlin] Method: GET
+[18-Apr-2026 04:59:59 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 04:59:59 Europe/Berlin] POST data: []
+[18-Apr-2026 04:59:59 Europe/Berlin] FILES data: []
+[18-Apr-2026 04:59:59 Europe/Berlin] Raw input: 
+[18-Apr-2026 04:59:59 Europe/Berlin] ========================
+[18-Apr-2026 04:59:59 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 04:59:59 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 04:59:59 Europe/Berlin] User ID: 1
+[18-Apr-2026 04:59:59 Europe/Berlin] User Role: admin
+[18-Apr-2026 04:59:59 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 04:59:59 Europe/Berlin] =================
+[18-Apr-2026 04:59:59 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 05:00:02 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:02 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 05:00:02 Europe/Berlin] Method: GET
+[18-Apr-2026 05:00:02 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 05:00:02 Europe/Berlin] POST data: []
+[18-Apr-2026 05:00:02 Europe/Berlin] FILES data: []
+[18-Apr-2026 05:00:02 Europe/Berlin] Raw input: 
+[18-Apr-2026 05:00:02 Europe/Berlin] ========================
+[18-Apr-2026 05:00:02 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 05:00:02 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:02 Europe/Berlin] User ID: 1
+[18-Apr-2026 05:00:02 Europe/Berlin] User Role: admin
+[18-Apr-2026 05:00:02 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 05:00:02 Europe/Berlin] =================
+[18-Apr-2026 05:00:02 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 05:00:05 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:05 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 05:00:05 Europe/Berlin] Method: GET
+[18-Apr-2026 05:00:05 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 05:00:05 Europe/Berlin] POST data: []
+[18-Apr-2026 05:00:05 Europe/Berlin] FILES data: []
+[18-Apr-2026 05:00:05 Europe/Berlin] Raw input: 
+[18-Apr-2026 05:00:05 Europe/Berlin] ========================
+[18-Apr-2026 05:00:05 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 05:00:05 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:05 Europe/Berlin] User ID: 1
+[18-Apr-2026 05:00:05 Europe/Berlin] User Role: admin
+[18-Apr-2026 05:00:05 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 05:00:05 Europe/Berlin] =================
+[18-Apr-2026 05:00:05 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 05:00:08 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:08 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 05:00:08 Europe/Berlin] Method: GET
+[18-Apr-2026 05:00:08 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 05:00:08 Europe/Berlin] POST data: []
+[18-Apr-2026 05:00:08 Europe/Berlin] FILES data: []
+[18-Apr-2026 05:00:08 Europe/Berlin] Raw input: 
+[18-Apr-2026 05:00:08 Europe/Berlin] ========================
+[18-Apr-2026 05:00:08 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 05:00:08 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:08 Europe/Berlin] User ID: 1
+[18-Apr-2026 05:00:08 Europe/Berlin] User Role: admin
+[18-Apr-2026 05:00:08 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 05:00:08 Europe/Berlin] =================
+[18-Apr-2026 05:00:08 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 05:00:08 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:08 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 05:00:08 Europe/Berlin] Method: GET
+[18-Apr-2026 05:00:08 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 05:00:08 Europe/Berlin] POST data: []
+[18-Apr-2026 05:00:08 Europe/Berlin] FILES data: []
+[18-Apr-2026 05:00:08 Europe/Berlin] Raw input: 
+[18-Apr-2026 05:00:08 Europe/Berlin] ========================
+[18-Apr-2026 05:00:08 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 05:00:08 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:08 Europe/Berlin] User ID: 1
+[18-Apr-2026 05:00:08 Europe/Berlin] User Role: admin
+[18-Apr-2026 05:00:08 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 05:00:08 Europe/Berlin] =================
+[18-Apr-2026 05:00:08 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 05:00:08 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:08 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 05:00:08 Europe/Berlin] Method: GET
+[18-Apr-2026 05:00:08 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 05:00:08 Europe/Berlin] POST data: []
+[18-Apr-2026 05:00:08 Europe/Berlin] FILES data: []
+[18-Apr-2026 05:00:08 Europe/Berlin] Raw input: 
+[18-Apr-2026 05:00:08 Europe/Berlin] ========================
+[18-Apr-2026 05:00:08 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 05:00:08 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:08 Europe/Berlin] User ID: 1
+[18-Apr-2026 05:00:08 Europe/Berlin] User Role: admin
+[18-Apr-2026 05:00:08 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 05:00:08 Europe/Berlin] =================
+[18-Apr-2026 05:00:08 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 05:00:08 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:08 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 05:00:08 Europe/Berlin] Method: GET
+[18-Apr-2026 05:00:08 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 05:00:08 Europe/Berlin] POST data: []
+[18-Apr-2026 05:00:08 Europe/Berlin] FILES data: []
+[18-Apr-2026 05:00:08 Europe/Berlin] Raw input: 
+[18-Apr-2026 05:00:08 Europe/Berlin] ========================
+[18-Apr-2026 05:00:08 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 05:00:08 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:08 Europe/Berlin] User ID: 1
+[18-Apr-2026 05:00:08 Europe/Berlin] User Role: admin
+[18-Apr-2026 05:00:08 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 05:00:08 Europe/Berlin] =================
+[18-Apr-2026 05:00:08 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 05:00:11 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:11 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 05:00:11 Europe/Berlin] Method: GET
+[18-Apr-2026 05:00:11 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 05:00:11 Europe/Berlin] POST data: []
+[18-Apr-2026 05:00:11 Europe/Berlin] FILES data: []
+[18-Apr-2026 05:00:11 Europe/Berlin] Raw input: 
+[18-Apr-2026 05:00:11 Europe/Berlin] ========================
+[18-Apr-2026 05:00:11 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 05:00:11 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:11 Europe/Berlin] User ID: 1
+[18-Apr-2026 05:00:11 Europe/Berlin] User Role: admin
+[18-Apr-2026 05:00:11 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 05:00:11 Europe/Berlin] =================
+[18-Apr-2026 05:00:11 Europe/Berlin] Request support count calculated: 3
+[18-Apr-2026 05:00:14 Europe/Berlin] Database session started - ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:14 Europe/Berlin] === API REQUEST DEBUG ===
+[18-Apr-2026 05:00:14 Europe/Berlin] Method: GET
+[18-Apr-2026 05:00:14 Europe/Berlin] Content-Type: application/json
+[18-Apr-2026 05:00:14 Europe/Berlin] POST data: []
+[18-Apr-2026 05:00:14 Europe/Berlin] FILES data: []
+[18-Apr-2026 05:00:14 Europe/Berlin] Raw input: 
+[18-Apr-2026 05:00:14 Europe/Berlin] ========================
+[18-Apr-2026 05:00:14 Europe/Berlin] === AUTH DEBUG ===
+[18-Apr-2026 05:00:14 Europe/Berlin] Session ID: fcu44l096648eor08aq3uhh7gh
+[18-Apr-2026 05:00:14 Europe/Berlin] User ID: 1
+[18-Apr-2026 05:00:14 Europe/Berlin] User Role: admin
+[18-Apr-2026 05:00:14 Europe/Berlin] Session data: {"user_id":1,"username":"admin","full_name":"System Administrator","role":"admin"}
+[18-Apr-2026 05:00:14 Europe/Berlin] =================
+[18-Apr-2026 05:00:14 Europe/Berlin] Request support count calculated: 3
