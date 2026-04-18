@@ -6043,6 +6043,16 @@ class ITServiceApp {
 
                     ` : ''}
 
+                    ${reject.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
+
+                        <div class="meta-item">
+
+                            <strong><i class="fas fa-gavel"></i> Quyết định ADMIN:</strong> ${reject.admin_reason}
+
+                        </div>
+
+                    ` : ''}
+
                 </div>
 
                 
@@ -6056,16 +6066,6 @@ class ITServiceApp {
                             <i class="fas fa-gavel"></i> Xử lý
 
                         </button>
-
-                    ` : ''}
-
-                    ${reject.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
-
-                        <div class="admin-reason">
-
-                            <strong>Quyết định ADMIN:</strong> ${reject.admin_reason}
-
-                        </div>
 
                     ` : ''}
 
@@ -6645,7 +6645,7 @@ class ITServiceApp {
 
                         <div class="meta-item">
 
-                            <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
+                            <strong><i class="fas fa-gavel"></i> Quyết định ADMIN:</strong> ${support.admin_reason}
 
                         </div>
 
@@ -6672,16 +6672,6 @@ class ITServiceApp {
                             <i class="fas fa-gavel"></i> Xử lý
 
                         </button>
-
-                    ` : ''}
-
-                    ${support.admin_reason && ['admin', 'staff'].includes(this.currentUser.role) ? `
-
-                        <div class="admin-reason">
-
-                            <strong>Quyết định ADMIN:</strong> ${support.admin_reason}
-
-                        </div>
 
                     ` : ''}
 

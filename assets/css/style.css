@@ -5793,6 +5793,12 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     transition: background-color 0.3s;
 
+    display: flex;
+
+    flex-direction: column;
+
+    height: 100%;
+
 
 
 }
@@ -5839,9 +5845,7 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 
 
-    margin-top: 1rem;
-
-
+    margin-top: auto;
 
     padding-top: 1rem;
 
@@ -6517,7 +6521,7 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     line-height: 1.4;
 
-
+    flex: 1;
 
 }
 
@@ -8081,41 +8085,27 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 .request-card {
 
-
-
     background: white;
-
-
 
     border-radius: 0.5rem;
 
-
-
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-
 
     padding: 1.5rem;
 
-
-
     cursor: pointer;
-
-
 
     transition: all 0.2s ease;
 
-
-
     border: 1px solid #dee2e6;
 
+    display: flex;
 
+    flex-direction: column;
+
+    height: 100%;
 
 }
-
-
-
-
 
 
 
@@ -8395,7 +8385,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     color: #6c757d;
 
+    flex: 1;
 
+    display: flex;
+
+    flex-direction: column;
 
 }
 
@@ -8409,13 +8403,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
 
 
-    margin: 0 0 1rem 0;
-
-
+margin: 0 0 1rem 0;
 
     line-height: 1.5;
 
-
+    flex: 1;
 
     color: #495057;
 
@@ -11679,47 +11671,39 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     border-left: 4px solid #ffc107;
 
+    display: flex;
 
+    flex-direction: column;
+
+    height: 100%;
 
 }
 
+.reject-request {
 
+    border-left: 4px solid #dc3545;
 
+    display: flex;
 
+    flex-direction: column;
 
+    height: 100%;
 
+}
 
 .support-type-equipment {
 
-
-
     background-color: #e3f2fd;
-
-
 
     color: #1976d2;
 
-
-
 }
-
-
-
-
-
-
 
 .support-type-person {
 
-
-
     background-color: #f3e5f5;
 
-
-
     color: #7b1fa2;
-
-
 
 }
 
@@ -11915,11 +11899,11 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     margin-top: 0.5rem;
 
-
+    margin-bottom: 1rem;
 
     font-size: 0.9rem;
 
-
+    order: -1;
 
 }
 
@@ -11955,9 +11939,13 @@ background: linear-gradient(135deg, #fd7e14, #e55a00);
 
     margin-top: 0.75rem;
 
+    margin-bottom: 1rem;
+
     font-size: 0.9rem;
 
     box-shadow: 0 2px 8px rgba(133, 100, 4, 0.1);
+
+    order: -1;
 
 }
 
