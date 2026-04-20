@@ -1,0 +1,112 @@
+﻿"THÔNG TIN STAFF"
+"Mã NV",2
+"Hô và tên","John Smith"
+Email,nguyenducvu561@gmail.com
+"Phòng ban","Phòng Kỹ thuật"
+
+"TÔNG KÊ KPI"
+"Tông yêu càu",45
+"K1 TB",1.62
+"K2 TB",1.18
+"K3 TB",1.09
+"K4 TB",1
+"KPI TB",1.19
+
+"CHI TIÊT YÊU CÀU"
+"Mã yêu càu","Tiêuêu yêu càu","Danh muc","Mô tà","Ngày tao","Ngày tiep nhân","Ngày hoàn thành","Thòi gian phan hòi (phút)","Thòi gian hoàn thành (giò)","Dánh giá (1-5)","Sãn sàng giói thiêu","K1 - Tôc dô phan hòi (1-5)","K2 - Tiên dô hoàn thành (1-5)","K3 - Chat lòe xù lý (1-5)","K4 - Sù tin tuòng (1-5)","KPI yêu càu (1-5)"
+146,"Kiểm tra chức năng tạo yêu cầu mới",Network,"Final Test: Add Category Functionality
+Step 1: Database Connection
+Database connection: SUCCESS
+Step 2: Session & Authentication
+Session ID: 2uf5mjhoel53qrkp6ott0gpo72
+User role: admin
+isLoggedIn(): true
+getCurrentUserRole(): admin
+Step 3: Direct Database Insert Test
+Direct insert: SUCCESS - ID: 29
+Test data cleaned up
+Step 4: API Endpoint Test
+JSON data: {""name"":""API Test Category 08:14:06"",""description"":""API test description""}
+HTTP Code: 200
+CURL Error: None
+Raw Response: {""success"":true,""message"":""Category created"",""data"":{""id"":""30""}}
+Parsed Response:
+Array
+(
+    [success] => 1
+    [message] => Category created
+    [data] => Array
+        (
+            [id] => 30
+        )
+
+)
+API SUCCESS - Category ID: 30
+Step 5: API File Syntax Check
+API file exists: YES
+File size: 11338 bytes
+Open braces: 30, Close braces: 30
+Syntax check: PASSED
+Step 6: JavaScript Check
+JavaScript file exists: YES
+File size: 218433 bytes
+handleCategorySubmit: FOUND
+showCategoryModal: FOUND
+apiCall: FOUND
+showNotification: FOUND
+loadCategories: FOUND
+Summary & Next Steps
+Clear browser cache (Ctrl+F5)
+Open browser console (F12) and check for JavaScript errors
+Test add category in main application
+Check Network tab for failed API requests
+Check Server logs for PHP errors
+Debugging Tips
+If API test fails above, check XAMPP services
+If JavaScript functions not found, check file loading
+If database insert fails, check table structure
+If auth fails, check session configuration","2026-04-17 13:15:20","2026-04-17 16:42:22",N/A,207,N/A,N/A,N/A,1,1,1,1,1
+139,"Thêm chức năng chia trang",Hardware.,"Thêm chức năng phân trang","2026-04-16 14:53:14","2026-04-18 15:50:07",N/A,56,N/A,N/A,N/A,3,1,1,1,1.3
+138,"SYSTEM TEST REQUEST",Hardware.,"Test server-side notification backup","2026-04-13 17:07:56","2026-04-13 17:07:56",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+137,"DEBUG TEST REQUEST",Hardware.,"This is a test request for debug logging","2026-04-13 17:01:47","2026-04-13 17:01:47",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+136,"Test pagination",Hardware.,test-api-limit.php,"2026-04-13 08:37:04","2026-04-13 17:09:24","2026-04-17 17:38:30",512,105,N/A,N/A,1,5,1,1,2.4
+135,"Final Test Request",Hardware.,"Final test for accept request","2026-04-12 00:20:14","2026-04-13 17:04:28",N/A,1004,N/A,N/A,N/A,1,1,1,1,1
+134,"Final Test Request",Hardware.,"Final test for accept request","2026-04-12 00:18:39","2026-04-13 17:11:10",N/A,1012,N/A,N/A,N/A,1,1,1,1,1
+133,"Final Test Request",Hardware.,"Final test for accept request","2026-04-12 00:18:28","2026-04-17 14:38:12",N/A,859,N/A,N/A,N/A,1,1,1,1,1
+132,"Final Test Request",Hardware.,"Final test for accept request","2026-04-12 00:15:09","2026-04-13 16:55:21",N/A,1000,N/A,N/A,N/A,1,1,1,1,1
+131,"Final Test Request",Hardware.,"Final test for accept request","2026-04-12 00:14:58","2026-04-17 14:16:33",N/A,841,N/A,N/A,N/A,1,1,1,1,1
+130,"Test chức năng nhận yêu cầu.",Hardware.,"Kiểm tra chức năng nhận yêu cầu.","2026-04-12 00:06:30","2026-04-16 09:50:11",N/A,583,N/A,N/A,N/A,1,1,1,1,1
+129,"GET Test Request",Hardware.,"Test request for GET method","2026-04-11 23:58:30","2026-04-17 13:54:35",N/A,836,N/A,N/A,N/A,1,1,1,1,1
+128,"PUT Test Request",Hardware.,"Test request for PUT method","2026-04-11 23:57:23","2026-04-13 16:47:53",N/A,1010,N/A,N/A,N/A,1,1,1,1,1
+127,"Final Scenario Test",Hardware.,"Test request for final scenario","2026-04-11 23:55:12","2026-04-13 16:46:17","2026-04-18 09:54:02",1011,153,N/A,N/A,1,1,1,1,1
+126,454,Hardware.,ewsz,"2026-04-11 23:50:47","2026-04-11 23:52:22",N/A,1,N/A,N/A,N/A,5,1,1,1,1.6
+125,"Final Scenario Test",Hardware.,"Test request for final scenario","2026-04-11 23:36:45","2026-04-11 23:36:45",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+124,"Final Scenario Test",Hardware.,"Test request for final scenario","2026-04-11 23:35:04","2026-04-11 23:35:04",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+123,ưerg,Account,6gf,"2026-04-11 23:31:47","2026-04-11 23:32:44",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+122,dsd,Other,32,"2026-04-11 23:27:33","2026-04-11 23:42:18",N/A,14,N/A,N/A,N/A,5,1,1,1,1.6
+121,"Final Scenario Test",Hardware.,"Test request for final scenario","2026-04-11 23:12:59","2026-04-11 23:12:59",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+120,"Final Scenario Test",Hardware.,"Test request for final scenario","2026-04-11 23:12:27","2026-04-12 00:22:24",N/A,69,N/A,N/A,N/A,1,1,1,1,1
+119,"Final Scenario Test",Hardware.,"Test request for final scenario","2026-04-11 23:11:44","2026-04-11 23:25:38",N/A,13,N/A,N/A,N/A,5,1,1,1,1.6
+118,"Final Scenario Test",Hardware.,"Test request for final scenario","2026-04-11 23:11:24","2026-04-11 23:11:24",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+117,"Final Scenario Test",Hardware.,"Test request for final scenario","2026-04-11 23:09:43","2026-04-11 23:09:43",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+116,"User Staff Scenario Test",Hardware.,"Test request for user-staff notification","2026-04-11 23:08:46","2026-04-11 23:08:46",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+115,"Real Scenario Test",Hardware.,"Test request for notification debugging","2026-04-11 23:08:07","2026-04-11 23:08:07",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+114,"Real Scenario Test",Hardware.,"Test request for notification debugging","2026-04-11 22:38:30","2026-04-11 22:38:30",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+113,"Real Scenario Test",Hardware.,"Test request for notification debugging","2026-04-11 22:36:37","2026-04-11 22:36:37",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+112,"Test Staff Accept Notification",Hardware.,"This is a test request for staff acceptance notification","2026-04-11 22:12:29","2026-04-11 22:12:29",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+111,547856r,Network,ưeares,"2026-04-11 22:09:18","2026-04-11 22:26:20",N/A,17,N/A,N/A,N/A,3,1,1,1,1.3
+110,"Test yêu cầu mới",Hardware.,3456ty,"2026-04-11 20:46:17","2026-04-11 22:05:18",N/A,79,N/A,N/A,N/A,1,1,1,1,1
+109,456,Hardware.,ưesd,"2026-04-11 15:50:17",N/A,N/A,N/A,N/A,N/A,N/A,1,1,1,1,1
+108,"Test thông báo mới",Other,"Yêu cầu đã bị từ chối thành công!""","2026-04-11 15:49:12","2026-04-11 21:13:35","2026-04-16 13:58:56",324,118,N/A,N/A,1,1,1,1,1
+107,"Test từ chối",Account,"Kiểm tra chức năng từ chối","2026-04-11 14:43:33","2026-04-11 14:44:03",N/A,0,N/A,N/A,N/A,1,1,1,1,1
+98,"Tets yêu cầu",Other,555,"2026-04-11 11:31:30","2026-04-11 15:16:01",N/A,224,N/A,N/A,N/A,1,1,1,1,1
+99,"Tets yêu cầu",Other,555,"2026-04-11 11:31:30","2026-04-11 21:00:12",N/A,568,N/A,N/A,N/A,1,1,1,1,1
+96,"Kiểm tra chức năng tạo yêu cầu.",Other,"Kiểm tra chức năng tạo yêu cầu. Trang không load lại khi đã tạo xong yêu cầu.","2026-04-11 11:30:37","2026-04-11 15:43:45",N/A,253,N/A,N/A,N/A,1,1,1,1,1
+97,"Kiểm tra chức năng tạo yêu cầu.",Other,"Kiểm tra chức năng tạo yêu cầu. Trang không load lại khi đã tạo xong yêu cầu.","2026-04-11 11:30:37","2026-04-11 15:42:03",N/A,251,N/A,N/A,N/A,1,1,1,1,1
+94,"Kiểm tra chức năng tạo yêu cầu.",Other,"Kiểm tra chức năng tạo yêu cầu. Trang không load lại khi đã tạo xong yêu cầu.","2026-04-11 11:16:52","2026-04-11 15:41:29",N/A,264,N/A,N/A,N/A,1,1,1,1,1
+95,"Kiểm tra chức năng tạo yêu cầu.",Other,"Kiểm tra chức năng tạo yêu cầu. Trang không load lại khi đã tạo xong yêu cầu.","2026-04-11 11:16:52","2026-04-11 11:49:46",N/A,32,N/A,N/A,N/A,3,1,1,1,1.3
+92,"kiểm tra chức năng thông báo",Network,"Kiểm tra thông báo ở admin và user khi staff nhận yêu cầu.","2026-04-11 11:15:36","2026-04-11 13:40:04",N/A,144,N/A,N/A,N/A,1,1,1,1,1
+93,"kiểm tra chức năng thông báo",Network,"Kiểm tra thông báo ở admin và user khi staff nhận yêu cầu.","2026-04-11 11:15:36","2026-04-11 11:46:50",N/A,31,N/A,N/A,N/A,3,1,1,1,1.3
+91,"Test thông báo gửi đến admin",Account,34324,"2026-04-11 09:14:12","2026-04-11 11:29:35","2026-04-18 17:15:03",135,176,N/A,N/A,1,5,1,1,2.4
+90,"Test chức năng thông báo",Security,192.168.216.105,"2026-04-10 16:58:52","2026-04-10 17:07:07","2026-04-13 16:08:27",8,71,N/A,N/A,5,1,1,1,1.6
+89,"Test chức năng đăng ký",Account,"Test thời gian tạo yêu cầu","2026-04-10 16:33:53","2026-04-10 16:40:52","2026-04-10 16:43:42",6,0,5,4,5,1,5,1,3.2

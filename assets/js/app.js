@@ -15512,24 +15512,24 @@ ITServiceApp.prototype.handleExportTypeChange = async function() {
 
 ITServiceApp.prototype.loadStaffList = async function() {
     try {
-        const response = await this.apiCall('api/kpi_export.php?action=get_staff_list');
+        const response = await this.apiCall('api/kpi_export_fixed.php?action=get_staff_list');
         
         if (response.success) {
             const staffSelect = document.getElementById('staffSelect');
-            staffSelect.innerHTML = '<option value="">Chän staff...</option>';
+            staffSelect.innerHTML = '<option value="">Select staff...</option>';
             
-            response.data.forEach(staff => {
+            response.staff.forEach(staff => {
                 const option = document.createElement('option');
                 option.value = staff.id;
                 option.textContent = `${staff.full_name} - ${staff.department || 'N/A'}`;
                 staffSelect.appendChild(option);
             });
         } else {
-            this.showNotification('Không thê lây danh sách staff: ' + response.message, 'error');
+            this.showNotification('Cannot get staff list: ' + response.message, 'error');
         }
     } catch (error) {
         console.error('Error loading staff list:', error);
-        this.showNotification('Lõi khi lây danh sách staff', 'error');
+        this.showNotification('Error when getting staff list', 'error');
     }
 };
 
@@ -15549,7 +15549,7 @@ ITServiceApp.prototype.exportKPI = async function() {
         
         if (!startDate || !endDate) {
 
-            this.showNotification('Vui lòng chän khoang thòi gian', 'error');
+            this.showNotification('Vui lòng chọn khoảng thời gian', 'error');
 
             return;
 
@@ -15558,7 +15558,7 @@ ITServiceApp.prototype.exportKPI = async function() {
         
         if (exportType === 'staff' && !staffId) {
 
-            this.showNotification('Vui lòng chän staff', 'error');
+            this.showNotification('Vui lòng chọn staff', 'error');
 
             return;
 
@@ -15566,7 +15566,7 @@ ITServiceApp.prototype.exportKPI = async function() {
 
         
         
-        this.showLoadingState('Ðang xuát file Excel...');
+        this.showLoadingState('Exporting Excel file...');
 
         
         
@@ -15597,7 +15597,7 @@ ITServiceApp.prototype.exportKPI = async function() {
 
         
         
-        this.showNotification('File Excel da duoc xuat thanh cong', 'success');
+        this.showNotification('Tệp Excel đã được xuất thành công', 'success');
 
         
         
@@ -15605,7 +15605,7 @@ ITServiceApp.prototype.exportKPI = async function() {
 
         console.error('Export error:', error);
 
-        this.showNotification('Loi khi xuat file Excel', 'error');
+        this.showNotification('Lỗi khi xuất tệp tin Excel', 'error');
 
     } finally {
 

@@ -14,14 +14,24 @@ ob_start();
 // Function to ensure UTF-8 encoding for Vietnamese characters
 function ensureUTF8($text) {
     if (is_string($text)) {
-        // Remove any existing encoding issues
-        $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8, ISO-8859-1, Windows-1252');
+        // First, detect if text is properly UTF-8 encoded
+        if (!mb_check_encoding($text, 'UTF-8')) {
+            // Try to convert from common encodings to UTF-8
+            $text = mb_convert_encoding($text, 'UTF-8', 'UTF-8, ISO-8859-1, Windows-1252');
+        }
+        
         // Ensure proper UTF-8 encoding
         if (!mb_check_encoding($text, 'UTF-8')) {
             $text = mb_convert_encoding($text, 'UTF-8', 'auto');
         }
-        // Handle any remaining special characters
+        
+        // Clean any invalid UTF-8 sequences
         $text = iconv('UTF-8', 'UTF-8//IGNORE', $text);
+        
+        // Normalize Unicode characters for better Excel compatibility
+        if (function_exists('normalizer_normalize')) {
+            $text = normalizer_normalize($text, Normalizer::FORM_C);
+        }
     }
     return $text;
 }
@@ -147,35 +157,36 @@ function exportKPIExcel($db) {
         // Add UTF-8 BOM for proper Excel display
         fwrite($output, "\xEF\xBB\xBF");
         
-        // Set UTF-8 encoding for stream
-        stream_filter_append($output, 'convert.iconv.UTF-8/UTF-8//TRANSLIT', STREAM_FILTER_WRITE);
+        // Better encoding handling for Vietnamese characters
+        // Use UTF-8 without transliteration to preserve Vietnamese characters
+        // Excel will properly display UTF-8 with BOM
         
         // Add headers with new KPI scoring system
         $headers = [
             'Mã NV',
-            'Hô và tên',
-            'Email',
+            'Họ và tên',
+            'Email',    
             'Phòng ban',
-            'Tông yêu càu',
-            'Da hoàn thành',
-            'Dang xù lý',
-            'Cho xù lý',
-            'Thòi gian phan hòi TB (phút) - T_res',
-            'Thòi gian hoàn thành TB (giò)',
-            'Tông danh giá',
-            'Dièm danh giá TB (1-5) - K3',
-            'Danh giá tích cúc',
-            'Danh giá tiêu cúc',
-            'San sàng giói thiêu (%) - K4',
-            'Ty lê hoàn thành (%)',
-            'Ty lê phan hòi (%)',
+            'Tổng yêu cầu',
+            'Đã hoàn thành',
+            'Đang xử lý',
+            'Chờ xử lý',
+            'Thời gian phản hồi TB (phút) - T_res',
+            'Thời gian hoàn thành TB (giờ)',
+            'Tổng đánh giá',
+            'Điểm đánh giá TB (1-5) - K3',
+            'Đánh giá tích cực',
+            'Đánh giá tiêu cực',
+            'Sẵn sàng giới thiệu (%) - K4',
+            'Tỷ lệ hoàn thành (%)',
+            'Tỷ lệ phản hồi (%)',
             // New KPI Scores (1-5 scale)
-            'Dièm K1 - Tôc dô phan hòi (1-5)',
-            'Dièm K2 - Tiên dô hoàn thành (1-5)',
-            'Dièm K3 - Chat lòe xù lý (1-5)',
-            'Dièm K4 - Sù tin tuòng (1-5)',
+            'Điểm K1 - Tốc độ phản hồi (1-5)',
+            'Điểm K2 - Tiến độ hoàn thành (1-5)',
+            'Điểm K3 - Đánh giá chung (1-5)',
+            'Điểm K4 - Chất lượng xử lý (1-5)',
             // Final KPI Score
-            'Dièm KPI Tông hòp (1-5)'
+            'Điểm KPI Tổng hợp (1-5)'
         ];
         
         // Apply UTF-8 encoding to headers
@@ -565,25 +576,25 @@ function exportKPIDetailed($db) {
         // Detailed headers
         $headers = [
             'Mã NV',
-            'Hô và tên',
+            'Họ và tên',
             'Phòng ban',
-            'Mã yêu càu',
-            'Tiêuêu yêu càu',
-            'Danh muc',
-            'Mô tà',
-            'Ngày tao',
-            'Ngày tiep nhân',
+            'Mã yêu cầu',
+            'Tiêu đề yêu cầu',
+            'Danh mục',
+            'Mô tả',
+            'Ngày tạo',
+            'Ngày tiếp nhận',
             'Ngày hoàn thành',
-            'Thòi gian dư kiên hoàn thành',
-            'Thòi gian phan hòi (phút)',
-            'Thòi gian hoàn thành (giò)',
-            'Dánh giá (1-5)',
-            'Sãn sàng giói thiêu',
-            'K1 - Tôc dô phan hòi (1-5)',
-            'K2 - Tiên dô hoàn thành (1-5)',
-            'K3 - Chat lòe xù lý (1-5)',
-            'K4 - Sù tin tuòng (1-5)',
-            'KPI yêu càu (1-5)'
+            'Thời gian dự kiến hoàn thành',
+            'Thời gian phản hồi (phút)',
+            'Thời gian hoàn thành (giờ)',
+            'Đánh giá (1-5)',
+            'Sẵn sàng giới thiệu',
+            'K1 - Tốc độ phản hồi (1-5)',
+            'K2 - Tiến độ hoàn thành (1-5)',
+            'K3 - Đánh giá chung (1-5)',
+            'K4 - Chất lượng xử lý (1-5)',
+            'KPI yêu cầu (1-5)'
         ];
         
         // Apply UTF-8 encoding to headers
@@ -591,7 +602,20 @@ function exportKPIDetailed($db) {
         fputcsv($output, $encoded_headers);
         
         foreach ($detailed_data as $staff) {
+            // Calculate staff summary statistics
+            $k1_scores = [];
+            $k2_scores = [];
+            $k3_scores = [];
+            $k4_scores = [];
+            $kpi_scores = [];
+            
             foreach ($staff['requests'] as $request) {
+                $k1_scores[] = $request['k1_score'] ?? 1;
+                $k2_scores[] = $request['k2_score'] ?? 1;
+                $k3_scores[] = $request['k3_score'] ?? 1;
+                $k4_scores[] = $request['k4_score'] ?? 1;
+                $kpi_scores[] = $request['request_kpi_score'] ?? 1;
+                
                 $row = [
                     $staff['id'],
                     $staff['full_name'],
@@ -618,6 +642,53 @@ function exportKPIDetailed($db) {
                 // Apply UTF-8 encoding to data row
                 $encoded_row = array_map('ensureUTF8', $row);
                 fputcsv($output, $encoded_row);
+            }
+            
+            // Add staff summary row after all requests
+            if (count($staff['requests']) > 0) {
+                $k1_avg = count($k1_scores) > 0 ? array_sum($k1_scores) / count($k1_scores) : 0;
+                $k2_avg = count($k2_scores) > 0 ? array_sum($k2_scores) / count($k2_scores) : 0;
+                $k3_avg = count($k3_scores) > 0 ? array_sum($k3_scores) / count($k3_scores) : 0;
+                $k4_avg = count($k4_scores) > 0 ? array_sum($k4_scores) / count($k4_scores) : 0;
+                $kpi_avg = count($kpi_scores) > 0 ? array_sum($kpi_scores) / count($kpi_scores) : 0;
+                
+                // Calculate weighted KPI score
+                $total_kpi_score = ($k1_avg * 0.15) + ($k2_avg * 0.35) + ($k3_avg * 0.40) + ($k4_avg * 0.10);
+                
+                fputcsv($output, []); // Empty row
+                fputcsv($output, ['THỐNG KÊ TỔNG HỢP CHO ' . strtoupper($staff['full_name'])]);
+                fputcsv($output, ['Tổng yêu cầu', count($staff['requests'])]);
+                fputcsv($output, ['K1 TB', round($k1_avg, 2)]);
+                fputcsv($output, ['K2 TB', round($k2_avg, 2)]);
+                fputcsv($output, ['K3 TB', round($k3_avg, 2)]);
+                fputcsv($output, ['K4 TB', round($k4_avg, 2)]);
+                fputcsv($output, ['KPI TB', round($kpi_avg, 2)]);
+                fputcsv($output, ['KPI Tổng hợp (có trọng số)', round($total_kpi_score, 2)]);
+                fputcsv($output, []);
+                
+                // Add KPI calculation formulas
+                fputcsv($output, ['CÔNG THỨC TÍNH KPI']);
+                fputcsv($output, ['K1 - Tốc độ phản hồi (1-5):', '=MAX(1; MIN(5; 5 - (L2/30)))', 'L2 = Thời gian phản hồi (phút)']);
+                fputcsv($output, ['K2 - Tiến độ hoàn thành (1-5):', '=MAX(1; MIN(5; 5 - (M2/24)))', 'M2 = Thời gian hoàn thành (giờ)']);
+                fputcsv($output, ['K3 - Đánh giá chung (1-5):', '=MAX(1; MIN(5; N2))', 'N2 = Đánh giá chung (1-5)']);
+                fputcsv($output, ['K4 - Chất lượng xử lý (1-5):', '=MAX(1; MIN(5; O2/20))', 'O2 = Đánh giá staff xử lý yêu cầu']);
+                fputcsv($output, ['KPI Tổng hợp (1-5):', '=(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)', 'P2=K1(15%), Q2=K2(35%), R2=K3(40%), S2=K4(10%)']);
+                fputcsv($output, ['Ghi chú:', 'Công thức áp dụng cho dòng 2 tương tự. Copy công thức cho các dòng khác.']);
+                fputcsv($output, []);
+            } else {
+                // Staff has no requests
+                fputcsv($output, []); // Empty row
+                fputcsv($output, ['THỐNG KÊ TỔNG HỢP CHO ' . strtoupper($staff['full_name'])]);
+                fputcsv($output, ['Tổng yêu cầu', 0]);
+                fputcsv($output, ['K1 TB', 0]);
+                fputcsv($output, ['K2 TB', 0]);
+                fputcsv($output, ['K3 TB', 0]);
+                fputcsv($output, ['K4 TB', 0]);
+                fputcsv($output, ['KPI TB', 0]);
+                fputcsv($output, ['KPI Tổng hợp (có trọng số)', 0]);
+                fputcsv($output, []);
+                fputcsv($output, ['Ghi chú:', 'Không có yêu cầu nào trong khoảng thời gian này.']);
+                fputcsv($output, []);
             }
         }
         
@@ -674,7 +745,16 @@ function exportStaffDetails($db) {
         }
         
         // Get staff's detailed KPI data
+        error_log("Getting detailed KPI for staff_id: $staff_id, start: $start_date, end: $end_date");
         $detailed_data = getStaffDetailedKPI($db, $staff_id, $start_date, $end_date);
+        error_log("Detailed KPI data result: " . print_r($detailed_data, true));
+        
+        if (!$detailed_data || !isset($detailed_data['requests'])) {
+            error_log("Invalid detailed data structure");
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Invalid data structure returned']);
+            exit();
+        }
         
         $filename = 'KPI_Staff_' . $staff['full_name'] . '_' . date('Y-m-d_H-i-s') . '.csv';
         
@@ -687,8 +767,9 @@ function exportStaffDetails($db) {
         $output = fopen('php://output', 'w');
         fwrite($output, "\xEF\xBB\xBF");
         
-        // Set UTF-8 encoding for stream
-        stream_filter_append($output, 'convert.iconv.UTF-8/UTF-8//TRANSLIT', STREAM_FILTER_WRITE);
+        // Better encoding handling for Vietnamese characters
+        // Use UTF-8 without transliteration to preserve Vietnamese characters
+        // Excel will properly display UTF-8 with BOM
         
         // Staff info header
         fputcsv($output, ['THÔNG TIN STAFF']);
@@ -710,23 +791,24 @@ function exportStaffDetails($db) {
         
         // Detailed requests header
         $headers = [
-            'Mã yêu càu',
-            'Tiêuêu yêu càu',
-            'Danh muc',
-            'Mô tà',
-            'Ngày tao',
-            'Ngày tiep nhân',
+            'Phòng ban',
+            'Mã yêu cầu',
+            'Tiêu đề yêu cầu',
+            'Danh mục',
+            'Mô tả',
+            'Ngày tạo',
+            'Ngày tiếp nhận',
             'Ngày hoàn thành',
-            'Thòi gian dư kiên hoàn thành',
-            'Thòi gian phan hòi (phút)',
-            'Thòi gian hoàn thành (giò)',
-            'Dánh giá (1-5)',
-            'Sãn sàng giói thiêu',
-            'K1 - Tôc dô phan hòi (1-5)',
-            'K2 - Tiên dô hoàn thành (1-5)',
-            'K3 - Chat lòe xù lý (1-5)',
-            'K4 - Sù tin tuòng (1-5)',
-            'KPI yêu càu (1-5)'
+            'Thời gian dự kiến hoàn thành',
+            'Thời gian phản hồi (phút)',
+            'Thời gian hoàn thành (giờ)',
+            'Đánh giá (1-5)',
+            'Sẵn sàng giới thiệu',
+            'K1 - Tốc độ phản hồi (1-5)',
+            'K2 - Tiến độ hoàn thành (1-5)',
+            'K3 - Đánh giá chung (1-5)',
+            'K4 - Chất lượng xử lý (1-5)',
+            'KPI yêu cầu (1-5)'
         ];
         
         fputcsv($output, ['CHI TIÊT YÊU CÀU']);
@@ -901,6 +983,8 @@ function getDetailedKPIData($db, $start_date, $end_date) {
 }
 
 function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
+    error_log("getStaffDetailedKPI called with staff_id: $staff_id, start: $start_date, end: $end_date");
+    
     // Get staff details
     $staff_query = "SELECT id, username, email, full_name, department 
                    FROM users WHERE id = :staff_id";
@@ -909,7 +993,10 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
     $staff_stmt->execute();
     $staff = $staff_stmt->fetch(PDO::FETCH_ASSOC);
     
+    error_log("Staff query result: " . print_r($staff, true));
+    
     if (!$staff) {
+        error_log("Staff not found for ID: $staff_id");
         return null;
     }
     
@@ -1010,6 +1097,7 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
             'created_at' => $request['created_at'],
             'assigned_at' => $request['assigned_at'],
             'resolved_at' => $request['resolved_at'],
+            'estimated_completion' => $request['estimated_completion'],
             'response_time_minutes' => $response_time_minutes,
             'completion_time_hours' => $completion_time_hours,
             'rating' => $request['rating'],
