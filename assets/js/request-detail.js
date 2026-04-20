@@ -15094,17 +15094,6 @@ class RequestDetailApp {
 
 
 
-                    request_id: id
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -15893,23 +15882,14 @@ class RequestDetailApp {
 
 
 
+                    action: 'update',
                     id: id,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     status: status
+
+
+
+
+
 
 
 
@@ -24068,6 +24048,10 @@ class RequestDetailApp {
 
 
                         });
+
+
+
+
 
 
 

@@ -10567,9 +10567,7 @@ class ITServiceApp {
 
 
 
-            if (response.success) {
-
-
+            if (response.success && response.data && response.data.users) {
 
                 const select = document.getElementById('editRequestAssigned');
 
@@ -10583,7 +10581,7 @@ class ITServiceApp {
 
 
 
-                response.data.forEach(user => {
+                response.data.users.forEach(user => { 
 
 
 
@@ -10659,7 +10657,7 @@ class ITServiceApp {
 
 
 
-            action: 'update_request',
+            action: 'update',
 
 
 
@@ -15019,57 +15017,36 @@ ITServiceApp.prototype.loadKPIExport = function() {
 
 
 
-    // Bind date change events to refresh data
-
-
-
-    const startInput = document.getElementById('startDate');
-
-
-
-    const endInput = document.getElementById('endDate');
-
-
-
+    // Bind export type change event
+    const exportTypeSelect = document.getElementById('exportType');
+    const staffSelect = document.getElementById('staffSelect');
     
-
-
-
+    if (exportTypeSelect) {
+        exportTypeSelect.removeEventListener('change', this.handleExportTypeChange.bind(this));
+        exportTypeSelect.addEventListener('change', this.handleExportTypeChange.bind(this));
+    }
+    
+    // Bind date change events to refresh data
+    const startInput = document.getElementById('startDate');
+    const endInput = document.getElementById('endDate');
+    
+    
     if (startInput) {
-
-
 
         startInput.removeEventListener('change', this.loadKPIData.bind(this));
 
-
-
         startInput.addEventListener('change', this.loadKPIData.bind(this));
-
-
 
     }
 
-
-
     
-
-
-
     if (endInput) {
-
-
 
         endInput.removeEventListener('change', this.loadKPIData.bind(this));
 
-
-
         endInput.addEventListener('change', this.loadKPIData.bind(this));
 
-
-
     }
-
-
 
     
 
@@ -15259,130 +15236,42 @@ ITServiceApp.prototype.displayKPIData = function(kpiData) {
 
 
 
-        // Determine performance class for total KPI score
+        // Determine performance class for total KPI score (1-5 scale)
+        const kpiScoreClass = staff.total_kpi_score >= 4.5 ? 'performance-excellent' : 
+                             staff.total_kpi_score >= 3.5 ? 'performance-good' : 
+                             staff.total_kpi_score >= 2.5 ? 'performance-medium' : 'performance-poor';
 
+        // Determine performance class for individual KPI scores (1-5 scale)
+        const k1ScoreClass = staff.k1_score >= 4 ? 'performance-good' : 
+                            staff.k1_score >= 3 ? 'performance-medium' : 'performance-poor';
 
+        const k2ScoreClass = staff.k2_score >= 4 ? 'performance-good' : 
+                            staff.k2_score >= 3 ? 'performance-medium' : 'performance-poor';
 
-        const kpiScoreClass = staff.total_kpi_score >= 90 ? 'performance-excellent' : 
+        const k3ScoreClass = staff.k3_score >= 4 ? 'performance-good' : 
+                            staff.k3_score >= 3 ? 'performance-medium' : 'performance-poor';
 
-
-
-                             staff.total_kpi_score >= 80 ? 'performance-good' : 
-
-
-
-                             staff.total_kpi_score >= 70 ? 'performance-medium' : 'performance-poor';
-
-
-
-        
-
-
-
-        // Determine performance class for individual scores
-
-
-
-        const artScoreClass = staff.art_score >= 80 ? 'performance-good' : 
-
-
-
-                             staff.art_score >= 60 ? 'performance-medium' : 'performance-poor';
-
-
-
-        const actScoreClass = staff.act_score >= 80 ? 'performance-good' : 
-
-
-
-                             staff.act_score >= 60 ? 'performance-medium' : 'performance-poor';
-
-
-
-        const arScoreClass = staff.ar_score >= 80 ? 'performance-good' : 
-
-
-
-                            staff.ar_score >= 60 ? 'performance-medium' : 'performance-poor';
-
-
-
-        const awrScoreClass = staff.awr_score >= 80 ? 'performance-good' : 
-
-
-
-                            staff.awr_score >= 60 ? 'performance-medium' : 'performance-poor';
-
-
+        const k4ScoreClass = staff.k4_score >= 4 ? 'performance-good' : 
+                            staff.k4_score >= 3 ? 'performance-medium' : 'performance-poor';
 
         
 
 
 
         row.innerHTML = `
-
-
-
             <td>${staff.id}</td>
-
-
-
             <td>${staff.full_name}</td>
-
-
-
             <td>${staff.department || 'N/A'}</td>
-
-
-
             <td class="numeric">${staff.total_requests}</td>
-
-
-
             <td class="numeric">${staff.completed_requests}</td>
-
-
-
-            <td class="numeric">${typeof staff.avg_response_time_minutes === 'number' ? staff.avg_response_time_minutes.toFixed(1) : 'N/A'}</td>
-
-
-
-            <td class="numeric">${typeof staff.avg_completion_time_hours === 'number' ? staff.avg_completion_time_hours.toFixed(1) : 'N/A'}</td>
-
-
-
             <td class="numeric">${typeof staff.avg_rating === 'number' ? staff.avg_rating.toFixed(1) : 'N/A'}</td>
-
-
-
-            <td class="numeric">${staff.total_feedback}</td>
-
-
-
-            <td class="numeric">${typeof staff.recommendation_rate === 'number' ? staff.recommendation_rate.toFixed(1) : '0.0'}%</td>
-
-
-
+            <td class="numeric">${typeof staff.avg_response_time_minutes === 'number' ? staff.avg_response_time_minutes.toFixed(1) : 'N/A'}</td>
+            <td class="numeric">${typeof staff.avg_completion_time_hours === 'number' ? staff.avg_completion_time_hours.toFixed(1) : 'N/A'}</td>
+            <td class="numeric ${k1ScoreClass}">${staff.k1_score || 1}</td>
+            <td class="numeric ${k2ScoreClass}">${staff.k2_score || 1}</td>
+            <td class="numeric ${k3ScoreClass}">${staff.k3_score || 1}</td>
+            <td class="numeric ${k4ScoreClass}">${staff.k4_score || 1}</td>
             <td class="numeric ${kpiScoreClass}">${typeof staff.total_kpi_score === 'number' ? staff.total_kpi_score.toFixed(1) : 'N/A'}</td>
-
-
-
-            <td class="numeric ${artScoreClass}">${typeof staff.art_score === 'number' ? staff.art_score.toFixed(1) : 'N/A'}</td>
-
-
-
-            <td class="numeric ${actScoreClass}">${typeof staff.act_score === 'number' ? staff.act_score.toFixed(1) : 'N/A'}</td>
-
-
-
-            <td class="numeric ${arScoreClass}">${typeof staff.ar_score === 'number' ? staff.ar_score.toFixed(1) : 'N/A'}</td>
-
-
-
-            <td class="numeric ${awrScoreClass}">${typeof staff.awr_score === 'number' ? staff.awr_score.toFixed(1) : 'N/A'}</td>
-
-
-
         `;
 
 
@@ -15607,134 +15496,124 @@ ITServiceApp.prototype.displayKPISummary = function(kpiData) {
 
 
 
+ITServiceApp.prototype.handleExportTypeChange = async function() {
+    const exportType = document.getElementById('exportType').value;
+    const staffSelect = document.getElementById('staffSelect');
+    
+    if (exportType === 'staff') {
+        // Show staff selection and load staff list
+        staffSelect.style.display = 'block';
+        await this.loadStaffList();
+    } else {
+        // Hide staff selection
+        staffSelect.style.display = 'none';
+    }
+};
+
+ITServiceApp.prototype.loadStaffList = async function() {
+    try {
+        const response = await this.apiCall('api/kpi_export.php?action=get_staff_list');
+        
+        if (response.success) {
+            const staffSelect = document.getElementById('staffSelect');
+            staffSelect.innerHTML = '<option value="">Chän staff...</option>';
+            
+            response.data.forEach(staff => {
+                const option = document.createElement('option');
+                option.value = staff.id;
+                option.textContent = `${staff.full_name} - ${staff.department || 'N/A'}`;
+                staffSelect.appendChild(option);
+            });
+        } else {
+            this.showNotification('Không thê lây danh sách staff: ' + response.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error loading staff list:', error);
+        this.showNotification('Lõi khi lây danh sách staff', 'error');
+    }
+};
+
 ITServiceApp.prototype.exportKPI = async function() {
-
-
 
     try {
 
-
-
         const startDate = document.getElementById('startDate').value;
-
-
 
         const endDate = document.getElementById('endDate').value;
 
+        const exportType = document.getElementById('exportType').value;
 
+        const staffId = document.getElementById('staffSelect').value;
 
         
-
-
-
+        
         if (!startDate || !endDate) {
 
-
-
-            this.showNotification('Vui lòng chọn khoảng thời gian', 'error');
-
-
+            this.showNotification('Vui lòng chän khoang thòi gian', 'error');
 
             return;
 
+        }
 
+        
+        if (exportType === 'staff' && !staffId) {
+
+            this.showNotification('Vui lòng chän staff', 'error');
+
+            return;
 
         }
 
-
+        
+        
+        this.showLoadingState('Ðang xuát file Excel...');
 
         
-
-
-
-        this.showLoadingState('Đang xuất file Excel...');
-
-
+        
+        let downloadUrl;
+        
+        if (exportType === 'summary') {
+            downloadUrl = `api/kpi_export.php?action=export_kpi&start_date=${startDate}&end_date=${endDate}`;
+        } else if (exportType === 'detailed') {
+            downloadUrl = `api/kpi_export.php?action=export_kpi_detailed&start_date=${startDate}&end_date=${endDate}`;
+        } else if (exportType === 'staff') {
+            downloadUrl = `api/kpi_export.php?action=export_staff_details&start_date=${startDate}&end_date=${endDate}&staff_id=${staffId}`;
+        }
 
         
-
-
-
-        // Create download link
-
-
-
-        const downloadUrl = `api/kpi_export.php?action=export_kpi&start_date=${startDate}&end_date=${endDate}`;
-
-
-
         
-
-
-
         // Create temporary link and trigger download
-
-
-
         const link = document.createElement('a');
-
-
 
         link.href = downloadUrl;
 
-
-
         link.style.display = 'none';
-
-
 
         document.body.appendChild(link);
 
-
-
         link.click();
-
-
 
         document.body.removeChild(link);
 
-
+        
+        
+        this.showNotification('File Excel da duoc xuat thanh cong', 'success');
 
         
-
-
-
-        this.showNotification('File Excel đã được xuất thành công', 'success');
-
-
-
         
-
-
-
     } catch (error) {
 
+        console.error('Export error:', error);
 
-
-        console.error('Error exporting KPI:', error);
-
-
-
-        this.showNotification('Lỗi khi xuất file Excel', 'error');
-
-
+        this.showNotification('Loi khi xuat file Excel', 'error');
 
     } finally {
 
-
-
         this.hideLoadingState();
-
-
 
     }
 
-
-
 };
-
-
-
 
 
 
