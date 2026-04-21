@@ -2174,6 +2174,10 @@ class ITServiceApp {
 
             console.log('Successfully activated page:', page);
 
+            // Set current page
+            this.currentPage = page;
+            console.log('Current page set to:', this.currentPage);
+
             // Update URL hash for proper navigation and F5 persistence
             if (page !== 'dashboard') {
                 window.location.hash = page;
@@ -6297,7 +6301,7 @@ class ITServiceApp {
 
     async loadCategories() {
 
-
+        console.log('loadCategories called, currentPage:', this.currentPage);
 
         // Prevent multiple simultaneous calls
 
