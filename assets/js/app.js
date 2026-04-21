@@ -2893,32 +2893,14 @@ class ITServiceApp {
                 console.log('Dashboard all requests count:', allRequests.length);
 
 
-
                 
-
-
-
-                // Recent requests - no special priority for request_support since it's no longer used
-
-
-
-                recentRequests = recentRequests.slice(0, 5);
-
-
-
-                
-
-
-
                 // Use API stats for dashboard (more accurate than client-side calculation)
-
-
-
+                // API response structure: {pagination: {total: 46}, status_counts: {...}}
+                const total = statsResponse.data.pagination?.total || allRequests.length;
+                console.log('Using total from API pagination:', total);
+                
                 const stats = {
-
-
-
-                    total: apiStats.pagination?.total || allRequests.length,
+                    total: total,
 
 
 
