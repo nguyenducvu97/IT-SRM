@@ -2164,24 +2164,6 @@ class ITServiceApp {
 
         
 
-
-
-        // Set current page BEFORE checking element existence
-
-
-
-        this.currentPage = page;
-
-
-
-        console.log('Current page set to:', this.currentPage);
-
-
-
-        
-
-
-
         if (pageElement) {
 
 
@@ -2192,7 +2174,15 @@ class ITServiceApp {
 
             console.log('Successfully activated page:', page);
 
-
+            // Update URL hash for proper navigation and F5 persistence
+            if (page !== 'dashboard') {
+                window.location.hash = page;
+            } else {
+                // Remove hash for dashboard
+                if (window.location.hash) {
+                    window.location.hash = '';
+                }
+            }
 
         } else {
 
@@ -14571,93 +14561,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    if (pageParam && window.app) {
+    // Check for URL hash (e.g., #dashboard, #requests, #kpi-export)
 
 
 
-        console.log('URL parameter found, showing loading and navigating to:', pageParam);
+    const hashPage = window.location.hash.substring(1); // Remove #
 
 
+
+    // Determine which page to load: hash > parameter > default
+
+
+
+    const targetPage = hashPage || pageParam || 'dashboard';
+
+
+
+    
+
+    if (window.app) {
+        console.log('Navigation target:', targetPage, '(from hash:', hashPage, 'param:', pageParam, ')');
 
         
-
-
 
         // Show loading immediately to hide dashboard flash
 
-
-
-        window.app.showLoadingState('Đang tải trang...');
-
-
+        window.app.showLoadingState('Loading page...');
 
         
-
-
 
         // Hide default page content
 
-
-
-        document.querySelectorAll('.page').forEach(p => {
-
-
-
+        document.querySelectorAll('.page').forEach(function(p) {
             p.classList.remove('active');
-
-
-
         });
-
-
 
         
 
-
-
         // Navigate to target page after short delay
 
-
-
-        setTimeout(() => {
-
-
-
-            window.app.showPage(pageParam);
-
-
-
+        setTimeout(function() {
+            window.app.showPage(targetPage);
         }, 100);
-
-
-
-    } else {
-
-
-
-        // No URL parameter, load default page (dashboard)
-
-
-
-        console.log('No URL parameter, loading default page');
-
-
-
-        setTimeout(() => {
-
-
-
-            window.app.showPage('dashboard');
-
-
-
-        }, 100);
-
-
-
     }
-
-
 
     
 
