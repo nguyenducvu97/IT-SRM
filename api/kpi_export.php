@@ -1324,10 +1324,10 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
             'completion_time_hours' => $completion_time_hours,
             'rating' => $request['rating'],
             'processing_results' => $request['processing_results'],
-            'k1_score' => $k1_score,
-            'k2_score' => $k2_score,
-            'k3_score' => $k3_score,
-            'k4_score' => $k4_score,
+            'k1_score' => round($k1_score, 1),
+            'k2_score' => round($k2_score, 1),
+            'k3_score' => round($k3_score, 1),
+            'k4_score' => round($k4_score, 1),
             'request_kpi_score' => round($request_kpi_score, 1)
         ];
         

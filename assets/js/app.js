@@ -15195,10 +15195,10 @@ ITServiceApp.prototype.displayKPIData = function(kpiData) {
             <td class="numeric">${typeof staff.avg_rating === 'number' ? staff.avg_rating.toFixed(1) : 'N/A'}</td>
             <td class="numeric">${typeof staff.avg_response_time_minutes === 'number' ? staff.avg_response_time_minutes.toFixed(1) : 'N/A'}</td>
             <td class="numeric">${typeof staff.avg_completion_time_hours === 'number' ? staff.avg_completion_time_hours.toFixed(1) : 'N/A'}</td>
-            <td class="numeric ${k1ScoreClass}">${staff.k1_score || 1}</td>
-            <td class="numeric ${k2ScoreClass}">${staff.k2_score || 1}</td>
-            <td class="numeric ${k3ScoreClass}">${staff.k3_score || 1}</td>
-            <td class="numeric ${k4ScoreClass}">${staff.k4_score || 1}</td>
+            <td class="numeric ${k1ScoreClass}">${typeof staff.k1_score === 'number' ? staff.k1_score.toFixed(1) : (staff.k1_score || 1)}</td>
+            <td class="numeric ${k2ScoreClass}">${typeof staff.k2_score === 'number' ? staff.k2_score.toFixed(1) : (staff.k2_score || 1)}</td>
+            <td class="numeric ${k3ScoreClass}">${typeof staff.k3_score === 'number' ? staff.k3_score.toFixed(1) : (staff.k3_score || 1)}</td>
+            <td class="numeric ${k4ScoreClass}">${typeof staff.k4_score === 'number' ? staff.k4_score.toFixed(1) : (staff.k4_score || 1)}</td>
             <td class="numeric ${kpiScoreClass}">${typeof staff.total_kpi_score === 'number' ? staff.total_kpi_score.toFixed(1) : 'N/A'}</td>
         `;
 
