@@ -22,7 +22,7 @@
 
 
 
-    <link rel="stylesheet" href="assets/css/style.css?v=20260418-12">
+    <link rel="stylesheet" href="assets/css/style.css?v=20260421-10">
 
 
 
@@ -4158,7 +4158,7 @@
 
 
 
-    <script src="assets/js/app.js?v=20260421-9"></script>
+    <script src="assets/js/app.js?v=20260421-10"></script>
 
 
 
@@ -4471,7 +4471,7 @@
                     <div class="row g-3 mt-3">
                         <div class="col-12">
                             <label class="form-label">C\u00f4ng th\u1ee9c:</label>
-                            <input type="text" class="form-control" 
+                            <input type="text" class="form-control formula-input" 
                                    id="formula_${config.kpi_type}" 
                                    value="${config.formula}"
                                    ${isTotal ? 'readonly' : ''}>
@@ -4504,36 +4504,111 @@
         
         function updateTotalWeight() {
             let totalWeight = 0;
+            const kpiFormulas = {};
+            
+            // First pass: collect weights for K1-K4
             kpiConfigs.forEach(config => {
                 if (config.kpi_type !== 'TOTAL') {
                     const weightInput = document.getElementById(`weight_${config.kpi_type}`);
                     if (weightInput) {
-                        totalWeight += parseFloat(weightInput.value) || 0;
+                        const weight = parseFloat(weightInput.value) || 0;
+                        totalWeight += weight;
+                        kpiFormulas[config.kpi_type] = {
+                            weight: weight,
+                            cell: config.kpi_type === 'K1' ? 'P2' : 
+                                   config.kpi_type === 'K2' ? 'Q2' : 
+                                   config.kpi_type === 'K3' ? 'R2' : 'S2'
+                        };
                     }
                 }
             });
             
+            // Generate TOTAL formula automatically based on weights
+            const totalFormulaParts = [];
+            Object.keys(kpiFormulas).forEach(kpiType => {
+                const kpi = kpiFormulas[kpiType];
+                if (kpi.weight > 0) {
+                    totalFormulaParts.push(`(${kpi.cell}*${(kpi.weight / 100).toFixed(2)})`);
+                }
+            });
+            const autoTotalFormula = totalFormulaParts.join('+');
+            
+            // Update TOTAL formula field in real-time
+            const totalFormulaInput = document.getElementById('formula_TOTAL');
+            const totalDescInput = document.getElementById('description_TOTAL');
+            const totalWeightInput = document.getElementById('weight_TOTAL');
+            
+            if (totalFormulaInput) {
+                totalFormulaInput.value = autoTotalFormula;
+            }
+            if (totalDescInput) {
+                totalDescInput.value = `Tong hop ${totalWeight.toFixed(2)}%`;
+            }
+            if (totalWeightInput) {
+                totalWeightInput.value = totalWeight;
+            }
+            
+            // Update total weight display
             const totalWeightElement = document.getElementById('totalWeightValue');
             const totalWeightAlert = document.getElementById('totalWeightAlert');
             
-            totalWeightElement.textContent = totalWeight.toFixed(2);
+            if (totalWeightElement) {
+                totalWeightElement.textContent = totalWeight.toFixed(2);
+            }
             
-            if (totalWeight !== 100) {
-                totalWeightAlert.className = 'alert alert-danger';
-                totalWeightAlert.innerHTML = `<strong>T\u1ed5ng tr\u1ecdng s\u1ed1: <span id="totalWeightValue">${totalWeight.toFixed(2)}</span>%</strong><br>Ph\u1ea3i b\u1eb1ng 100%`;
-            } else {
-                totalWeightAlert.className = 'alert alert-success';
-                totalWeightAlert.innerHTML = `<strong>T\u1ed5ng tr\u1ecdng s\u1ed1: <span id="totalWeightValue">${totalWeight.toFixed(2)}</span>%</strong>`;
+            if (totalWeightAlert) {
+                if (totalWeight !== 100) {
+                    totalWeightAlert.className = 'alert alert-danger';
+                    totalWeightAlert.innerHTML = `<strong>T\u1ed5ng tr\u1ecdng s\u1ed1: <span id="totalWeightValue">${totalWeight.toFixed(2)}</span>%</strong><br>Ph\u1ea3i b\u1eb1ng 100%`;
+                } else {
+                    totalWeightAlert.className = 'alert alert-success';
+                    totalWeightAlert.innerHTML = `<strong>T\u1ed5ng tr\u1ecdng s\u1ed1: <span id="totalWeightValue">${totalWeight.toFixed(2)}</span>%</strong>`;
+                }
             }
         }
         
         function saveKPIConfig() {
+            // Calculate total weight and update TOTAL formula automatically
+            let totalWeight = 0;
+            const kpiFormulas = {};
+            
+            // First pass: collect weights and formulas for K1-K4
+            kpiConfigs.forEach(config => {
+                if (config.kpi_type !== 'TOTAL') {
+                    const weight = parseFloat(document.getElementById(`weight_${config.kpi_type}`).value) || 0;
+                    totalWeight += weight;
+                    kpiFormulas[config.kpi_type] = {
+                        weight: weight,
+                        cell: config.kpi_type === 'K1' ? 'P2' : 
+                               config.kpi_type === 'K2' ? 'Q2' : 
+                               config.kpi_type === 'K3' ? 'R2' : 'S2'
+                    };
+                }
+            });
+            
+            // Generate TOTAL formula automatically based on weights
+            const totalFormulaParts = [];
+            Object.keys(kpiFormulas).forEach(kpiType => {
+                const kpi = kpiFormulas[kpiType];
+                if (kpi.weight > 0) {
+                    totalFormulaParts.push(`(${kpi.cell}*${(kpi.weight / 100).toFixed(2)})`);
+                }
+            });
+            const autoTotalFormula = totalFormulaParts.join('+');
+            
             const updatedConfigs = kpiConfigs.map(config => {
-                const formula = document.getElementById(`formula_${config.kpi_type}`).value;
-                const description = document.getElementById(`description_${config.kpi_type}`).value;
-                const weight = config.kpi_type !== 'TOTAL' 
+                let formula = document.getElementById(`formula_${config.kpi_type}`).value;
+                let description = document.getElementById(`description_${config.kpi_type}`).value;
+                let weight = config.kpi_type !== 'TOTAL' 
                     ? parseFloat(document.getElementById(`weight_${config.kpi_type}`).value) || 0
                     : config.weight_percentage;
+                
+                // Auto-update TOTAL formula and description
+                if (config.kpi_type === 'TOTAL') {
+                    formula = autoTotalFormula;
+                    description = `Tong hop ${totalWeight.toFixed(2)}%`;
+                    weight = totalWeight;
+                }
                 
                 return {
                     kpi_type: config.kpi_type,
@@ -4556,11 +4631,11 @@
                     showMessage('KPI configuration saved successfully!', 'success');
                     loadKPIConfig();
                     
-                    // Auto-refresh KPI page if server indicates reload needed
-                    if (data.reload_kpi && 
-                        (window.location.hash === '#kpi-summary' || 
-                         document.querySelector('[data-page="kpi-summary"]') ||
-                         window.location.pathname.includes('kpi-export'))) {
+                    // Auto-refresh page if server indicates reload needed
+                    console.log("=== KPI RELOAD DEBUG ==="); 
+                    console.log("data.reload_kpi:", data.reload_kpi); 
+                    console.log("window.location.hash:", window.location.hash);
+                    if (data.reload_kpi) {
                         setTimeout(() => {
                             // Reload the page to refresh KPI data with new formulas
                             window.location.reload();
@@ -4589,11 +4664,11 @@
                     showMessage('C\u1ea5u h\u00ecnh KPI \u0111\u00e3 \u0111\u01b0\u1ee3c reset v\u1ec1 m\u1eb7c \u0111\u1ecbnh!', 'success');
                     loadKPIConfig();
                     
-                    // Auto-refresh KPI page if server indicates reload needed
-                    if (data.reload_kpi && 
-                        (window.location.hash === '#kpi-summary' || 
-                         document.querySelector('[data-page="kpi-summary"]') ||
-                         window.location.pathname.includes('kpi-export'))) {
+                    // Auto-refresh page if server indicates reload needed
+                    console.log("=== KPI RELOAD DEBUG ==="); 
+                    console.log("data.reload_kpi:", data.reload_kpi); 
+                    console.log("window.location.hash:", window.location.hash);
+                    if (data.reload_kpi) {
                         setTimeout(() => {
                             // Reload the page to refresh KPI data with default formulas
                             window.location.reload();
