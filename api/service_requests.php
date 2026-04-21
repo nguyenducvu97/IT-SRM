@@ -1953,10 +1953,53 @@ elseif ($method == 'POST') {
                     $response_data['message'] = 'Request created successfully';
                 }
                 
-                // OPTIMIZED: Background notifications for staff and admin
+                // OPTIMIZED: Async notifications for staff and admin (non-blocking)
+                try {
+                    require_once __DIR__ . '/async_email_queue.php';
+                    
+                    // Get user details for notifications
+                    $user_stmt = $db->prepare("SELECT full_name, email FROM users WHERE id = ?");
+                    $user_stmt->execute([$user_id]);
+                    $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
+                    $requester_name = $user_data['full_name'] ?? 'Unknown User';
+                    $requester_email = $user_data['email'] ?? '';
+                    
+                    // Get category name
+                    $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
+                    $cat_stmt->execute([$category_id]);
+                    $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
+                    $category_name = $cat_data['name'] ?? 'Unknown';
+                    
+                    // Queue confirmation email to requester (async)
+                    $subject = "Yêu cầu #{$request_id} đã được tạo thành công";
+                    $body = "
+                        <h2>Yêu cầu đã được tạo</h2>
+                        <p><strong>Mã yêu cầu:</strong> #{$request_id}</p>
+                        <p><strong>Tiêu đề:</strong> {$title}</p>
+                        <p><strong>Danh mục:</strong> {$category_name}</p>
+                        <p><strong>Trạng thái:</strong> Đang chờ xử lý</p>
+                        <p><strong>Thời gian tạo:</strong> " . date('d/m/Y H:i') . "</p>
+                        <p>Chúng tôi sẽ xử lý yêu cầu của bạn trong thời gian sớm nhất.</p>
+                    ";
+                    
+                    queueEmailAsync(
+                        $requester_email,
+                        $requester_name,
+                        $subject,
+                        $body,
+                        'normal'
+                    );
+                    
+                    error_log("Confirmation email queued for new request: {$request_id}");
+                    
+                } catch (Exception $e) {
+                    error_log("Failed to queue confirmation email: " . $e->getMessage());
+                }
+                
+                // Background staff notifications (non-blocking)
                 register_shutdown_function(function() use ($request_id, $title, $user_id, $category_id, $db) {
                     ignore_user_abort(true);
-                    set_time_limit(300); // 5 minutes for background processing
+                    set_time_limit(60); // 1 minute for background processing
                     
                     try {
                         require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
@@ -1974,7 +2017,7 @@ elseif ($method == 'POST') {
                         $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
                         $category_name = $cat_data['name'] ?? 'Unknown';
                         
-                        // Notify staff
+                        // Notify staff with email
                         $notificationHelper->notifyStaffNewRequest(
                             $request_id, 
                             $title, 
@@ -1982,13 +2025,61 @@ elseif ($method == 'POST') {
                             $category_name
                         );
                         
-                        // Notify admin
+                        // Queue email notifications to staff
+                        $staff_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'staff' AND status = 'active'");
+                        $staff_stmt->execute();
+                        $staff_users = $staff_stmt->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        foreach ($staff_users as $staff) {
+                            $staff_subject = "Yêu câu moi can xly #{$request_id}";
+                            $staff_body = "
+                                <h2>Yêu câu moi</h2>
+                                <p>Nguyên dung {$requester_name} da tao yêu câu moi #{$request_id} - {$title}</p>
+                                <p>Danh muc: {$category_name}</p>
+                                <p>Thoi gian tao: " . date('d/m/Y H:i') . "</p>
+                                <p>Vui lòng truy cap hê thong de xly yêu câu.</p>
+                            ";
+                            
+                            queueEmailAsync(
+                                $staff['email'],
+                                $staff['full_name'],
+                                $staff_subject,
+                                $staff_body,
+                                'high'
+                            );
+                        }
+                        
+                        // Notify admin with email
                         $notificationHelper->notifyAdminNewRequest(
                             $request_id, 
                             $title, 
                             $requester_name, 
                             $category_name
                         );
+                        
+                        // Queue email notifications to admin
+                        $admin_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'admin' AND status = 'active'");
+                        $admin_stmt->execute();
+                        $admin_users = $admin_stmt->fetchAll(PDO::FETCH_ASSOC);
+                        
+                        foreach ($admin_users as $admin) {
+                            $admin_subject = "Yêu câu moi trong hê thong #{$request_id}";
+                            $admin_body = "
+                                <h2>Yêu câu moi trong hê thong</h2>
+                                <p>Nguyên dung {$requester_name} da tao yêu câu moi #{$request_id} - {$title}</p>
+                                <p>Danh muc: {$category_name}</p>
+                                <p>Thoi gian tao: " . date('d/m/Y H:i') . "</p>
+                                <p>Chi tiêt yêu câu có trong hê thong.</p>
+                            ";
+                            
+                            queueEmailAsync(
+                                $admin['email'],
+                                $admin['full_name'],
+                                $admin_subject,
+                                $admin_body,
+                                'high'
+                            );
+                        }
                         
                     } catch (Exception $e) {
                         error_log("Background notification failed: " . $e->getMessage());
@@ -5717,102 +5808,103 @@ elseif ($method == 'POST') {
 
 
 
-                // Send email notification to requester about assignment (only if current user is not the requester)
-
-
-
+                // Send email notification to requester about assignment (ASYNC - non-blocking)
                 if ($request_data['user_id'] != $user_id) {
-
-
-
                     try {
-
-
-
-                        $emailHelper = new PHPMailerEmailHelper(); // Use PHPMailerEmailHelper for actual email sending
-
-
-
-                        $emailHelper->sendStatusUpdateNotification($request_data, $request_data['assigned_name']);
-
-
-
+                        require_once __DIR__ . '/async_email_queue.php';
+                        
+                        $subject = "Yêu cầu #{$request_id} đã được nhận xử lý";
+                        $body = "
+                            <h2>Yêu cầu đã được nhận</h2>
+                            <p><strong>Mã yêu cầu:</strong> #{$request_id}</p>
+                            <p><strong>Tiêu đề:</strong> {$request_data['title']}</p>
+                            <p><strong>Người nhận:</strong> {$request_data['assigned_name']}</p>
+                            <p><strong>Thời gian nhận:</strong> " . date('d/m/Y H:i') . "</p>
+                            <p>Vui lòng truy cập hệ thống để theo dõi tiến độ.</p>
+                        ";
+                        
+                        // Queue email for async processing (non-blocking, < 100ms)
+                        queueEmailAsync(
+                            $request_data['requester_email'],
+                            $request_data['requester_name'],
+                            $subject,
+                            $body,
+                            'high' // High priority for assignment notifications
+                        );
+                        
+                        error_log("Email queued for assignment notification: request_id={$request_id}");
+                        
                     } catch (Exception $e) {
-
-
-
-                        error_log("Email notification failed: " . $e->getMessage());
-
-
-
-                        // Continue even if email fails
-
-
-
+                        error_log("Email queue failed: " . $e->getMessage());
+                        // Continue even if email queue fails
                     }
-
-
-
-                }
-
-
-
                 
-
-
-
-                // Send role-based notifications
-
+                // Send role-based notifications and emails
                 try {
-
                     $notificationHelper = new ServiceRequestNotificationHelper();
-
                     
-
                     // Notify user that their request is now in progress
-
                     $notificationHelper->notifyUserRequestInProgress(
-
                         $request_id, 
-
                         $request_data['user_id'], 
-
                         $request_data['assigned_name']
-
                     );
-
                     
-
+                    // Queue email to user about assignment
+                    $user_subject = "Yêu câu #{$request_id} - Da duoc nhân xly";
+                    $user_body = "
+                        <h2>Yêu câu da duoc nhân</h2>
+                        <p>Yêu câu #{$request_id} cua ban da duoc nhân viên {$request_data['assigned_name']} nhân xly.</p>
+                        <p>Tiêu de: {$request_data['title']}</p>
+                        <p>Thoi gian nhân: " . date('d/m/Y H:i') . "</p>
+                        <p>Ban có the theo doi tiên do trong hê thong.</p>
+                    ";
+                    
+                    queueEmailAsync(
+                        $request_data['requester_email'],
+                        $request_data['requester_name'],
+                        $user_subject,
+                        $user_body,
+                        'high'
+                    );
+                    
                     // Notify admin about staff acceptance
-
                     $notificationHelper->notifyAdminStatusChange(
-
                         $request_id, 
-
                         'open', 
-
                         'in_progress', 
-
                         $request_data['assigned_name'], 
-
                         $request_data['title']
-
                     );
-
                     
-
+                    // Queue email notifications to admin about status change
+                    $admin_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'admin' AND status = 'active'");
+                    $admin_stmt->execute();
+                    $admin_users = $admin_stmt->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    foreach ($admin_users as $admin) {
+                        $admin_subject = "Trang thái yêu câu #{$request_id} da thay doi";
+                        $admin_body = "
+                            <h2>Trang thái yêu câu thay doi</h2>
+                            <p>Nhân viên {$request_data['assigned_name']} da nhân yêu câu #{$request_id}.</p>
+                            <p>Tiêu de: {$request_data['title']}</p>
+                            <p>Trang thái: Open -> In Progress</p>
+                            <p>Thoi gian: " . date('d/m/Y H:i') . "</p>
+                        ";
+                        
+                        queueEmailAsync(
+                            $admin['email'],
+                            $admin['full_name'],
+                            $admin_subject,
+                            $admin_body,
+                            'normal'
+                        );
+                    }
+                    
                 } catch (Exception $e) {
-
                     error_log("Failed to send role-based notifications for staff acceptance: " . $e->getMessage());
-
                 }
-
-
-
                 
-
-
-
                 serviceJsonResponse(true, "Request accepted successfully");
 
 
@@ -5826,9 +5918,8 @@ elseif ($method == 'POST') {
 
 
             }
-
-
-
+        }
+            
         } catch (Exception $e) {
 
 

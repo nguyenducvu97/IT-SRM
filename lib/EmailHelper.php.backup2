@@ -1,0 +1,67 @@
+<?php
+// Real-time Email Helper - Gửi email ngay lập tức
+class EmailHelper {
+    public $mail;
+    public $config;
+    
+    public function __construct() {
+        // Simple constructor - detect email protocol and configure accordingly
+        $this->config = array(
+            'protocol' => 'pop3', // Default to POP3 for your company
+            'host' => 'pop.gmail.com', // Gmail POP3 server
+            'port' => 995, // POP3 SSL port
+            'username' => 'your-gmail@gmail.com', // Update with your Gmail
+            'password' => 'your-app-password', // Use app password
+            'from_email' => 'your-gmail@gmail.com',
+            'from_name' => 'IT Service Request System',
+            'encryption' => 'ssl' // Enable SSL encryption for POP3
+        );
+    }
+    
+    public function sendEmail($to, $toName, $subject, $body) {
+        try {
+            $this->logEmail($to, $subject, $body, 'SENT_GMAIL');
+            
+            // Use PHPMailer for Gmail
+            $this->mail = new PHPMailer(true);
+            
+            // Server settings
+            $this->mail->isSMTP();
+            $this->mail->Host = $this->config['host'];
+            $this->mail->SMTPAuth = true;
+            $this->mail->Username = $this->config['username'];
+            $this->mail->Password = $this->config['password'];
+            $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $this->mail->Port = $this->config['port'];
+            
+            // Recipients
+            $this->mail->setFrom($this->config['from_email'], $this->config['from_name']);
+            $this->mail->addAddress($to, $toName);
+            
+            // Content
+            $this->mail->isHTML(true);
+            $this->mail->Subject = $subject;
+            $this->mail->Body = $body;
+            
+            // Send
+            if ($this->mail->send()) {
+                $this->logEmail($to, $subject, $body, 'SENT_GMAIL_SUCCESS');
+                return true;
+            } else {
+                $this->logEmail($to, $subject, $body, 'FAILED_GMAIL');
+                return false;
+            }
+            
+        } catch (Exception $e) {
+            $this->logEmail($to, $subject, $body, 'ERROR_GMAIL');
+            error_log('Gmail sending error: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    private function logEmail($to, $subject, $body, $status) {
+        $log_message = "[" . date('Y-m-d H:i:s') . "] {$status} | To: {$to} | Subject: {$subject}";
+        error_log($log_message);
+    }
+}
+?>

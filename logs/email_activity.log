@@ -789,3 +789,106 @@
 [2026-04-21 09:09:52] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: Yêu cầu đang được xử lý
 [2026-04-21 09:09:56] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Thay đổi trạng thái yêu cầu
 [2026-04-21 09:10:00] FAILED_PHPMAILER | To: vupro060597@gmail.com | Subject: 📝 Cập nhật trạng thái yêu cầu #152
+[2026-04-21 10:53:48] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-21 10:53:52] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-21 11:22:59] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-21 11:23:04] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-21 11:38:04] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-21 11:44:34] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-21 11:54:53] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-21 16:48:35] FAILED | To: test@example.com | Subject: IT Service Request - Email Test
+[2026-04-21 16:48:40] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: IT Service Request - Admin Test
+[2026-04-21 18:06:40] FAILED | To: test@example.com | Subject: IT Service Request - Email Test
+[2026-04-21 18:06:45] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: IT Service Request - Admin Test
+[2026-04-21 18:11:48] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-21 18:11:51] FAILED_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-21 18:15:30] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Manual Test - 2026-04-21 18:15:25
+[2026-04-21 18:16:19] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Yêu câu moi trong hê thong #160
+[2026-04-21 18:16:23] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Manual Test - 2026-04-21 18:16:19
+[2026-04-21 18:19:49] FAILED | To: test@example.com | Subject: IT Service Request - Email Test
+[2026-04-21 18:19:53] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: IT Service Request - Admin Test
+[2026-04-21 18:20:01] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:20:03] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:20:08] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:21:12] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:21:13] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:21:14] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #161 đã được tạo thành công
+[2026-04-21 18:21:16] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-21 18:21:18] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #161 đã được tạo thành công
+[2026-04-21 18:21:20] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #161 đã được tạo thành công
+[2026-04-21 18:21:20] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #161 đã được tạo thành công
+[2026-04-21 18:21:21] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #161
+[2026-04-21 18:21:26] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #161
+[2026-04-21 18:21:31] SENT_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-21 18:21:31] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #161 đã được tạo thành công
+[2026-04-21 18:21:33] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #161 đã được tạo thành công
+[2026-04-21 18:21:33] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #161
+[2026-04-21 18:21:35] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #161 đã được tạo thành công
+[2026-04-21 18:21:36] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #161 đã được tạo thành công
+[2026-04-21 18:21:36] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:21:37] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #161
+[2026-04-21 18:21:39] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #161
+[2026-04-21 18:21:40] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #161
+[2026-04-21 18:21:40] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:21:42] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:21:42] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Yêu câu moi trong hê thong #161
+[2026-04-21 18:21:44] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Yêu câu moi trong hê thong #161
+[2026-04-21 18:21:46] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:21:51] FAILED_PHPMAILER | To: nguyenducvu561@gmail.com | Subject: Yêu cầu mới cần xử lý
+[2026-04-21 18:21:54] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #161
+[2026-04-21 18:21:56] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #161
+[2026-04-21 18:21:56] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:21:58] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:22:00] SENT_PHPMAILER | To: ndvu@sgitech.com.vn | Subject: Yêu cầu mới trong hệ thống
+[2026-04-21 18:22:03] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:22:03] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:22:03] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:22:05] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:22:06] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:22:07] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Yêu câu moi trong hê thong #162
+[2026-04-21 18:22:08] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Yêu câu moi trong hê thong #162
+[2026-04-21 18:22:09] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:23:45] FAILED | To: test@example.com | Subject: IT Service Request - Email Test
+[2026-04-21 18:23:50] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: IT Service Request - Admin Test
+[2026-04-21 18:23:54] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:23:56] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:23:57] FAILED | To: vupro060597@gmail.com | Subject: Yêu cầu #162 đã được tạo thành công
+[2026-04-21 18:23:58] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:24:00] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:24:03] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:24:03] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:24:08] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:26:37] FAILED | To: test@example.com | Subject: IT Service Request - Email Test
+[2026-04-21 18:26:41] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: IT Service Request - Admin Test
+[2026-04-21 18:26:44] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:26:45] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu moi can xly #162
+[2026-04-21 18:26:47] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:26:49] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:26:51] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:26:55] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:26:59] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:27:03] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:31:07] FAILED | To: test@example.com | Subject: IT Service Request - Email Test
+[2026-04-21 18:31:13] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: IT Service Request - Admin Test
+[2026-04-21 18:31:19] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:31:20] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:31:24] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:31:25] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:31:32] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:37:54] FAILED | To: test@example.com | Subject: IT Service Request - Email Test
+[2026-04-21 18:38:30] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Yêu câu dich vu mõi #999
+[2026-04-21 18:39:05] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu dich vu mõi #999
+[2026-04-21 18:39:05] SENT to 1/2 admin/staff recipients | To: multiple | Subject: Yêu câu dich vu mõi #999
+[2026-04-21 18:39:10] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:39:11] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:39:15] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:39:16] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:39:21] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:42:36] FAILED | To: test@example.com | Subject: IT Service Request - Email Test
+[2026-04-21 18:43:22] SENT_PHPMAIL | To: ndvu@sgitech.com.vn | Subject: Yêu câu dich vu mõi #999
+[2026-04-21 18:44:01] FAILED | To: nguyenducvu561@gmail.com | Subject: Yêu câu dich vu mõi #999
+[2026-04-21 18:44:01] SENT to 1/2 admin/staff recipients | To: multiple | Subject: Yêu câu dich vu mõi #999
+[2026-04-21 18:44:08] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:44:08] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:44:13] FAILED | To: test-recipient@example.com | Subject: Queue Test Email
+[2026-04-21 18:44:15] FAILED | To: test-recipient@example.com | Subject: Queue Test Email

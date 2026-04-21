@@ -1,0 +1,10 @@
+To: test@example.com
+Subject: IT Service Request - Email Test
+From: IT Service Request System <ndvu@sgitech.com.vn>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<h2>Email Test</h2>
+         <p>This is a test email from IT Service Request system.</p>
+         <p>Time: 2026-04-21 18:06:31</p>
+         <p>If you receive this, email system is working!</p>

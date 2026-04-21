@@ -15,7 +15,8 @@ class NotificationHelper {
         if ($database) {
             $this->db = $database;
         } else {
-            $this->db = getDatabaseConnection();
+            $database = new Database();
+            $this->db = $database->getConnection();
         }
         $this->emailHelper = new PHPMailerEmailHelper();
     }
@@ -92,28 +93,6 @@ class NotificationHelper {
             return false;
         }
     }
-            /*
-            // Get user email
-            $stmt = $this->db->prepare("SELECT email, full_name FROM users WHERE id = ?");
-            $stmt->execute([$userId]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$user) {
-                return false;
-            }
-            
-            // Generate email template based on type
-            $emailBody = $this->generateEmailTemplate($title, $message, $type, $relatedId, $relatedType, $user['full_name']);
-            
-            // Send email
-            $subject = '=?UTF-8?B?' . base64_encode($title) . '?=';
-            return $this->emailHelper->sendEmail($user['email'], $user['full_name'], $subject, $emailBody);
-            
-        } catch (Exception $e) {
-            error_log("Failed to send notification email: " . $e->getMessage());
-            return false;
-        }
-    }
     
     /**
      * Generate email template based on notification type
@@ -146,7 +125,9 @@ class NotificationHelper {
                     // For support requests, we need to link to the original service request
                     // Get the service_request_id from the support request
                     try {
-                        $pdo = require_once 'config/database.php';
+                        require_once __DIR__ . '/../config/database.php';
+                        $database = new Database();
+                        $pdo = $database->getConnection();
                         if ($pdo) {
                             $stmt = $pdo->prepare("SELECT service_request_id FROM support_requests WHERE id = ?");
                             $stmt->execute([$relatedId]);
@@ -168,7 +149,9 @@ class NotificationHelper {
                     // For reject requests, we need to link to the original service request
                     // Get the service_request_id from the reject request
                     try {
-                        $pdo = require_once 'config/database.php';
+                        require_once __DIR__ . '/../config/database.php';
+                        $database = new Database();
+                        $pdo = $database->getConnection();
                         if ($pdo) {
                             $stmt = $pdo->prepare("SELECT service_request_id FROM reject_requests WHERE id = ?");
                             $stmt->execute([$relatedId]);

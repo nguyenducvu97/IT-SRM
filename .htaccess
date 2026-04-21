@@ -6,9 +6,14 @@ RewriteEngine On
 # Set default character encoding
 AddDefaultCharset UTF-8
 
+# PHP Handler Configuration - Ensure PHP files are executed
+AddType application/x-httpd-php .php
+AddHandler application/x-httpd-php .php
+
 # PHP settings
 php_flag display_errors Off
 php_value error_reporting 32767
+php_flag short_open_tag On
 
 # Security headers
 <IfModule mod_headers.c>

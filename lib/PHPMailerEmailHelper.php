@@ -6,6 +6,8 @@ ini_set('display_errors', 0);
 
 require_once __DIR__ . '/../vendor/phpmailer/phpmailer.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
+
 class PHPMailerEmailHelper {
     private $mail;
     private $from_email;

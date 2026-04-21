@@ -1,1 +1,41 @@
-[{"id":"email_69c1ed58dc3ac5.61676442","to_email":"nguyenducvu561@gmail.com","to_name":"John Smith","subject":"Y\u00eau c\u1ea7u m\u1edbi #9: anh y\u00eau em","body":"Y\u00eau c\u1ea7u m\u1edbi \u0111\u00e3 \u0111\u01b0\u1ee3c t\u1ea1o:\n\nID: #9\nTi\u00eau \u0111\u1ec1: anh y\u00eau em\nNg\u01b0\u1eddi t\u1ea1o: Nguy\u1ec5n \u0110\u1ee9c V\u0169\nDanh m\u1ee5c: Hardware\n\u01afu ti\u00ean: medium\nM\u00f4 t\u1ea3: Y\u00eau em nh\u1ea5t m\u00e0\n\nXem chi ti\u1ebft: http:\/\/localhost\/it-service-request\/request-detail.html?id=9\n\nTr\u00e2n tr\u1ecdng,\nIT Service Request System","created_at":"2026-03-24 02:48:08","status":"queued"},{"id":"email_69c1ed58dc72f9.66258887","to_email":"jane.doe@sgitech.com.vn","to_name":"Jane Doe","subject":"Y\u00eau c\u1ea7u m\u1edbi #9: anh y\u00eau em","body":"Y\u00eau c\u1ea7u m\u1edbi \u0111\u00e3 \u0111\u01b0\u1ee3c t\u1ea1o:\n\nID: #9\nTi\u00eau \u0111\u1ec1: anh y\u00eau em\nNg\u01b0\u1eddi t\u1ea1o: Nguy\u1ec5n \u0110\u1ee9c V\u0169\nDanh m\u1ee5c: Hardware\n\u01afu ti\u00ean: medium\nM\u00f4 t\u1ea3: Y\u00eau em nh\u1ea5t m\u00e0\n\nXem chi ti\u1ebft: http:\/\/localhost\/it-service-request\/request-detail.html?id=9\n\nTr\u00e2n tr\u1ecdng,\nIT Service Request System","created_at":"2026-03-24 02:48:08","status":"queued"},{"id":"email_69c1ed58df3c20.31969431","to_email":"ndvu@sgitech.com.vn","to_name":"System Administrator","subject":"Y\u00eau c\u1ea7u m\u1edbi #9: anh y\u00eau em","body":"Y\u00eau c\u1ea7u m\u1edbi \u0111\u00e3 \u0111\u01b0\u1ee3c t\u1ea1o:\n\nID: #9\nTi\u00eau \u0111\u1ec1: anh y\u00eau em\nNg\u01b0\u1eddi t\u1ea1o: Nguy\u1ec5n \u0110\u1ee9c V\u0169\nDanh m\u1ee5c: Hardware\n\u01afu ti\u00ean: medium\nM\u00f4 t\u1ea3: Y\u00eau em nh\u1ea5t m\u00e0\n\nXem chi ti\u1ebft: http:\/\/localhost\/it-service-request\/request-detail.html?id=9\n\nTr\u00e2n tr\u1ecdng,\nIT Service Request System","created_at":"2026-03-24 02:48:08","status":"queued"},{"id":"email_69c1ee6ede3349.43903791","to_email":"nguyenducvu561@gmail.com","to_name":"John Smith","subject":"Y\u00eau c\u1ea7u m\u1edbi #10: T\u00ecnh y\u00eau v\u0129nh c\u1eedu","body":"Y\u00eau c\u1ea7u m\u1edbi \u0111\u00e3 \u0111\u01b0\u1ee3c t\u1ea1o:\n\nID: #10\nTi\u00eau \u0111\u1ec1: T\u00ecnh y\u00eau v\u0129nh c\u1eedu\nNg\u01b0\u1eddi t\u1ea1o: Nguy\u1ec5n \u0110\u1ee9c V\u0169\nDanh m\u1ee5c: Network\n\u01afu ti\u00ean: critical\nM\u00f4 t\u1ea3: ssssss\n\nXem chi ti\u1ebft: http:\/\/localhost\/it-service-request\/request-detail.html?id=10\n\nTr\u00e2n tr\u1ecdng,\nIT Service Request System","created_at":"2026-03-24 02:52:46","status":"queued"},{"id":"email_69c1ee715ef359.50930769","to_email":"jane.doe@sgitech.com.vn","to_name":"Jane Doe","subject":"Y\u00eau c\u1ea7u m\u1edbi #10: T\u00ecnh y\u00eau v\u0129nh c\u1eedu","body":"Y\u00eau c\u1ea7u m\u1edbi \u0111\u00e3 \u0111\u01b0\u1ee3c t\u1ea1o:\n\nID: #10\nTi\u00eau \u0111\u1ec1: T\u00ecnh y\u00eau v\u0129nh c\u1eedu\nNg\u01b0\u1eddi t\u1ea1o: Nguy\u1ec5n \u0110\u1ee9c V\u0169\nDanh m\u1ee5c: Network\n\u01afu ti\u00ean: critical\nM\u00f4 t\u1ea3: ssssss\n\nXem chi ti\u1ebft: http:\/\/localhost\/it-service-request\/request-detail.html?id=10\n\nTr\u00e2n tr\u1ecdng,\nIT Service Request System","created_at":"2026-03-24 02:52:49","status":"queued"}]
+[
+    {
+        "id": "email_69e7a1c753c717.07636772",
+        "to": "ndvu@sgitech.com.vn",
+        "toName": "System Administrator",
+        "subject": "Y\u00eau c\u00e2u moi trong h\u00ea thong #160",
+        "body": "\r\n                                <h2>Y\u00eau c\u00e2u moi trong h\u00ea thong<\/h2>\r\n                                <p>Nguy\u00ean dung Nguy\u1ec5n \u0110\u1ee9c V\u0169 da tao y\u00eau c\u00e2u moi #160 - 345567<\/p>\r\n                                <p>Danh muc: Account<\/p>\r\n                                <p>Thoi gian tao: 21\/04\/2026 18:11<\/p>\r\n                                <p>Chi ti\u00eat y\u00eau c\u00e2u c\u00f3 trong h\u00ea thong.<\/p>\r\n                            ",
+        "status": "processed",
+        "attempts": 1,
+        "created_at": "2026-04-21 18:11:51",
+        "last_attempt": "2026-04-21 18:16:14",
+        "processed_at": "2026-04-21 18:16:19",
+        "priority": "high"
+    },
+    {
+        "id": "email_69e7a829b2b3b2.34613205",
+        "to": "test-recipient@example.com",
+        "toName": "Test Recipient",
+        "subject": "Queue Test Email",
+        "body": "<h2>Queue Test<\/h2>\n         <p>This email was queued and should be sent.<\/p>\n         <p>Queue ID: 69e7a829b2a60<\/p>\n         <p>Time: 2026-04-21 18:39:05<\/p>",
+        "status": "failed",
+        "attempts": 3,
+        "created_at": "2026-04-21 18:39:05",
+        "last_attempt": "2026-04-21 18:44:01",
+        "processed_at": "",
+        "priority": "high"
+    },
+    {
+        "id": "email_69e7a9518dccd3.34597363",
+        "to": "test-recipient@example.com",
+        "toName": "Test Recipient",
+        "subject": "Queue Test Email",
+        "body": "<h2>Queue Test<\/h2>\n         <p>This email was queued and should be sent.<\/p>\n         <p>Queue ID: 69e7a9518db4b<\/p>\n         <p>Time: 2026-04-21 18:44:01<\/p>",
+        "status": "failed",
+        "attempts": 1,
+        "created_at": "2026-04-21 18:44:01",
+        "last_attempt": "2026-04-21 18:44:08",
+        "processed_at": "",
+        "priority": "high"
+    }
+]

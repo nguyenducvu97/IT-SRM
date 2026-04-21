@@ -1,0 +1,10 @@
+To: test-recipient@example.com
+Subject: Queue Test Email
+From: IT Service Request System <ndvu@sgitech.com.vn>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<h2>Queue Test</h2>
+         <p>This email was queued and should be sent.</p>
+         <p>Queue ID: 69e7a3a9ee6bc</p>
+         <p>Time: 2026-04-21 18:19:53</p>
