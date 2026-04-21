@@ -193,6 +193,40 @@ function exportKPIExcel($db) {
         $encoded_headers = array_map('ensureUTF8', $headers);
         fputcsv($output, $encoded_headers);
         
+        // Calculate summary statistics (only for staff with requests)
+        $summary = calculateKPISummary($kpi_data);
+        
+        // Add summary row
+        fputcsv($output, []);
+        fputcsv($output, ['THỐNG KÊ TỔNG HỢP']);
+        fputcsv($output, ['LƯU Ý: KPI chỉ tính cho yêu cầu có ĐẦY ĐỦ thông tin (thời gian tạo, nhận, dự kiến, hoàn thành, đánh giá)']);
+        fputcsv($output, []);
+        fputcsv($output, [
+            'TỔNG',
+            '',
+            '',
+            '',
+            $summary['total_requests'],
+            $summary['total_completed'],
+            '',
+            '',
+            round($summary['avg_response_time'], 2),
+            round($summary['avg_completion_time'], 2),
+            $summary['total_feedback'],
+            round($summary['avg_rating'], 2),
+            '',
+            '',
+            round($summary['avg_recommendation_rate'], 2),
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            round($summary['avg_kpi_score'], 2)
+        ]);
+        fputcsv($output, []);
+        
         // Add data with new KPI scores
         foreach ($kpi_data as $staff) {
             $row = [
@@ -286,54 +320,74 @@ function getKPIDataArray($db, $start_date, $end_date) {
         $staff_id = $staff['id'];
         
         // Enhanced KPI statistics with proper formulas
+        // stats_query: TINH TAT CA REQUESTS CHO SUMMARY
+        // feedback_query: CHI TINH REQUEST CO DAY DU 6 THONG TIN CHO K1-K4
         $stats_query = "SELECT 
-            COUNT(*) as total_requests,
-            SUM(CASE WHEN status IN ('resolved', 'closed') THEN 1 ELSE 0 END) as completed_requests,
-            SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress_requests,
-            SUM(CASE WHEN status = 'open' THEN 1 ELSE 0 END) as open_requests,
-            -- Average Response Time (ART): Time from submitted to acknowledged
-            AVG(CASE WHEN assigned_at IS NOT NULL 
-                THEN TIMESTAMPDIFF(MINUTE, created_at, assigned_at) 
-                ELSE NULL END) as avg_response_time_minutes,
-            -- Average Completion Time (ACT): Time from submitted to closed (includes both resolved and closed)
-            AVG(CASE WHEN status IN ('resolved', 'closed') AND resolved_at IS NOT NULL
-                THEN TIMESTAMPDIFF(HOUR, created_at, resolved_at) 
-                ELSE NULL END) as avg_completion_time_hours,
-            -- Include estimated completion for K2 calculation
-            AVG(estimated_completion) as avg_estimated_completion
-            FROM service_requests 
-            WHERE assigned_to = :staff_id 
-            AND created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')";
+        COUNT(*) as total_requests,
+        SUM(CASE WHEN sr.status IN ('resolved', 'closed') THEN 1 ELSE 0 END) as completed_requests,
+        SUM(CASE WHEN sr.status = 'in_progress' THEN 1 ELSE 0 END) as in_progress_requests,
+        SUM(CASE WHEN sr.status = 'open' THEN 1 ELSE 0 END) as open_requests,
+        -- Average Response Time (ART): Time from submitted to acknowledged
+        AVG(CASE WHEN sr.assigned_at IS NOT NULL 
+            THEN TIMESTAMPDIFF(MINUTE, sr.created_at, sr.assigned_at) 
+            ELSE NULL END) as avg_response_time_minutes,
+        -- Average Completion Time (ACT): Time from submitted to closed (includes both resolved and closed)
+        AVG(CASE WHEN sr.status IN ('resolved', 'closed') AND sr.resolved_at IS NOT NULL
+            THEN TIMESTAMPDIFF(HOUR, sr.created_at, sr.resolved_at) 
+            ELSE NULL END) as avg_completion_time_hours,
+        -- Include estimated completion for K2 calculation
+        AVG(sr.estimated_completion) as avg_estimated_completion
+        FROM service_requests sr
+        WHERE sr.assigned_to = :staff_id 
+        AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')";
         
-        $stats_stmt = $db->prepare($stats_query);
-        $stats_stmt->bindParam(':staff_id', $staff_id);
-        $stats_stmt->bindParam(':start_date', $start_date);
-        $stats_stmt->bindParam(':end_date', $end_date);
-        $stats_stmt->execute();
-        $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
+    $stats_stmt = $db->prepare($stats_query);
+    $stats_stmt->bindParam(':staff_id', $staff_id);
+    $stats_stmt->bindParam(':start_date', $start_date);
+    $stats_stmt->bindParam(':end_date', $end_date);
+    $stats_stmt->execute();
+    $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
         
         // Get user feedback ratings with proper AWR calculation
+        // CHI TINH REQUEST CO DAY DU 6 THONG TIN CHO K1-K4:
+        // 1. created_at (thoi gian tao)
+        // 2. assigned_at (thoi gian nhan)
+        // 3. estimated_completion (thoi gian du kien)
+        // 4. resolved_at (thoi gian hoan thanh)
+        // 5. rating (danh gia chung)
+        // 6. processing_results (danh gia ket qua)
         $feedback_query = "SELECT 
             COUNT(rf.id) as total_feedback,
             AVG(rf.rating) as avg_rating,
             SUM(CASE WHEN rf.rating >= 4 THEN 1 ELSE 0 END) as positive_feedback,
             SUM(CASE WHEN rf.rating <= 2 THEN 1 ELSE 0 END) as negative_feedback,
-            -- Average Would Recommend (AWR): Handle different data types (yes/no/maybe/1-5)
+            -- Average Processing Results (APR): Handle different data types (1-5 scale matching UI)
+            -- UI Mapping: 1=Rất không hài lòng, 2=Không hài lòng, 3=Bình thường, 4=Khá tốt, 5=Rất hài lòng
             SUM(CASE 
-                WHEN rf.would_recommend = 'yes' OR rf.would_recommend = '1' OR rf.would_recommend = 1 OR rf.would_recommend = 5 THEN 1 
-                WHEN rf.would_recommend = 'maybe' OR rf.would_recommend = '2' OR rf.would_recommend = 2 OR rf.would_recommend = 4 THEN 0.8 
-                WHEN rf.would_recommend = '3' THEN 0.6
-                WHEN rf.would_recommend = 'no' OR rf.would_recommend = '0' THEN 0 
+                WHEN rf.processing_results = '5' OR rf.processing_results = 5 THEN 1.0
+                WHEN rf.processing_results = '4' OR rf.processing_results = 4 THEN 0.8
+                WHEN rf.processing_results = '3' OR rf.processing_results = 3 THEN 0.6
+                WHEN rf.processing_results = '2' OR rf.processing_results = 2 THEN 0.4
+                WHEN rf.processing_results = '1' OR rf.processing_results = 1 THEN 0.2
+                WHEN rf.processing_results = 'yes' THEN 1.0
+                WHEN rf.processing_results = 'maybe' THEN 0.6
+                WHEN rf.processing_results = 'no' THEN 0.2
                 ELSE 0 
-            END) as would_recommend_count,
+            END) as processing_results_count,
             COUNT(DISTINCT rf.service_request_id) as rated_requests,
-            -- Also get raw would_recommend values for debugging
-            GROUP_CONCAT(DISTINCT rf.would_recommend) as would_recommend_values
+            -- Also get raw processing_results values for debugging
+            GROUP_CONCAT(DISTINCT rf.processing_results) as processing_results_values
             FROM request_feedback rf
             JOIN service_requests sr ON rf.service_request_id = sr.id
             WHERE sr.assigned_to = :staff_id
             AND sr.status IN ('resolved', 'closed')
-            AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')";
+            AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')
+            -- Only include requests with complete information for KPI
+            AND sr.assigned_at IS NOT NULL
+            AND sr.estimated_completion IS NOT NULL
+            AND sr.resolved_at IS NOT NULL
+            AND rf.rating IS NOT NULL
+            AND rf.processing_results IS NOT NULL";
         
         $feedback_stmt = $db->prepare($feedback_query);
         $feedback_stmt->bindParam(':staff_id', $staff_id);
@@ -341,6 +395,22 @@ function getKPIDataArray($db, $start_date, $end_date) {
         $feedback_stmt->bindParam(':end_date', $end_date);
         $feedback_stmt->execute();
         $feedback = $feedback_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Get ALL feedback for summary (khong filter 6 thong tin)
+        $all_feedback_query = "SELECT 
+            COUNT(rf.id) as all_total_feedback,
+            AVG(rf.rating) as all_avg_rating
+            FROM request_feedback rf
+            JOIN service_requests sr ON rf.service_request_id = sr.id
+            WHERE sr.assigned_to = :staff_id
+            AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')";
+        
+        $all_feedback_stmt = $db->prepare($all_feedback_query);
+        $all_feedback_stmt->bindParam(':staff_id', $staff_id);
+        $all_feedback_stmt->bindParam(':start_date', $start_date);
+        $all_feedback_stmt->bindParam(':end_date', $end_date);
+        $all_feedback_stmt->execute();
+        $all_feedback = $all_feedback_stmt->fetch(PDO::FETCH_ASSOC);
         
         // Calculate KPI metrics with proper formulas
         $total_requests = (int)$stats['total_requests'];
@@ -357,21 +427,21 @@ function getKPIDataArray($db, $start_date, $end_date) {
         $avg_rating = $feedback['avg_rating'] ?? 0;
         $positive_feedback = (int)$feedback['positive_feedback'];
         $negative_feedback = (int)$feedback['negative_feedback'];
-        $would_recommend_count = (int)$feedback['would_recommend_count'];
+        $processing_results_count = (float)$feedback['processing_results_count'];
         
         // Average Rating (AR)
         $avg_rating_score = (float)$avg_rating;
         
-        // Average Would Recommend (AWR): Handle new calculation logic
-        $recommendation_rate = $total_feedback > 0 ? ($would_recommend_count / $total_feedback) * 100 : 0;
+        // Average Processing Results (APR): Handle new calculation logic
+        $recommendation_rate = $total_feedback > 0 ? ($processing_results_count / $total_feedback) * 100 : 0;
         
         // Feedback response rate (how many completed requests have feedback)
         $feedback_response_rate = $completed_requests > 0 ? ($feedback['rated_requests'] / $completed_requests) * 100 : 0;
         
         // Debug logging for KPI data
-        error_log("KPI Debug - Staff ID: $staff_id, Total Requests: $total_requests, Completed: $completed_requests, Avg Response: $avg_response_time_minutes, Avg Rating: $avg_rating, Would Recommend Count: $would_recommend_count, Total Feedback: $total_feedback");
+        error_log("KPI Debug - Staff ID: $staff_id, Total Requests: $total_requests, Completed: $completed_requests, Avg Response: $avg_response_time_minutes, Avg Rating: $avg_rating, Processing Results Count: $processing_results_count, Total Feedback: $total_feedback");
         error_log("KPI Debug - KPI Scores: K1=$k1_score, K2=$k2_score, K3=$k3_score, K4=$k4_score, Final=$total_kpi_score");
-        error_log("KPI Debug - Would Recommend Values: " . ($feedback['would_recommend_values'] ?? 'none'));
+        error_log("KPI Debug - Processing Results Values: " . ($feedback['processing_results_values'] ?? 'none'));
         
         // Calculate KPI scores according to new requirements (scale 1-5)
         
@@ -391,7 +461,7 @@ function getKPIDataArray($db, $start_date, $end_date) {
         }
         
         // K2: On-time Completion Score (Tien do hoan thanh)
-        // Only calculate if staff has completed requests
+        // Only calculate if staff has completed requests with complete information
         $k2_score = 1;
         if ($completed_requests > 0) {
             $delta_t_query = "SELECT AVG(
@@ -404,7 +474,11 @@ function getKPIDataArray($db, $start_date, $end_date) {
             FROM service_requests sr
             WHERE sr.assigned_to = :staff_id
             AND sr.status IN ('resolved', 'closed')
-            AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')";
+            AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')
+            -- Only include requests with complete information for KPI
+            AND sr.assigned_at IS NOT NULL
+            AND sr.estimated_completion IS NOT NULL
+            AND sr.resolved_at IS NOT NULL";
             
             $delta_t_stmt = $db->prepare($delta_t_query);
             $delta_t_stmt->bindParam(':staff_id', $staff_id);
@@ -433,7 +507,8 @@ function getKPIDataArray($db, $start_date, $end_date) {
         $k3_score = $avg_rating_score > 0 ? round($avg_rating_score, 1) : 1;
         
         // K4: Recommendation Score (Su tin tuong)
-        // Only calculate if staff has feedback
+        // Mapping from processing_results (1-5 scale) to K4 score
+        // 5 (100%) → K4 = 5, 4 (80%) → K4 = 5, 3 (60%) → K4 = 4, 2 (40%) → K4 = 3, 1 (20%) → K4 = 2
         $k4_score = 1;
         if ($total_feedback > 0) {
             if ($recommendation_rate >= 80) {
@@ -485,7 +560,7 @@ function getKPIDataArray($db, $start_date, $end_date) {
             'avg_rating' => $avg_rating_score, // K3
             'positive_feedback' => $positive_feedback,
             'negative_feedback' => $negative_feedback,
-            'would_recommend_count' => $would_recommend_count,
+            'processing_results_count' => $processing_results_count,
             'rated_requests' => (int)$feedback['rated_requests'],
             'recommendation_rate' => $recommendation_rate, // K4 percentage
             
@@ -504,6 +579,10 @@ function getKPIDataArray($db, $start_date, $end_date) {
             // Calculated KPI Rates
             'completion_rate' => $completion_rate,
             'feedback_response_rate' => $feedback_response_rate,
+            
+            // Summary data from ALL feedback (not just 6-info requests)
+            'all_total_feedback' => (int)$all_feedback['all_total_feedback'],
+            'all_avg_rating' => round((float)$all_feedback['all_avg_rating'], 2),
             
             // Total KPI Score (weighted, 1-5 scale)
             'total_kpi_score' => round($total_kpi_score, 2)
@@ -631,7 +710,7 @@ function exportKPIDetailed($db) {
                     $request['response_time_minutes'] ?? 'N/A',
                     $request['completion_time_hours'] ?? 'N/A',
                     $request['rating'] ?? 'N/A',
-                    $request['would_recommend'] ?? 'N/A',
+                    $request['processing_results'] ?? 'N/A',
                     $request['k1_score'] ?? 1,
                     $request['k2_score'] ?? 1,
                     $request['k3_score'] ?? 1,
@@ -652,8 +731,14 @@ function exportKPIDetailed($db) {
                 $k4_avg = count($k4_scores) > 0 ? array_sum($k4_scores) / count($k4_scores) : 0;
                 $kpi_avg = count($kpi_scores) > 0 ? array_sum($kpi_scores) / count($kpi_scores) : 0;
                 
-                // Calculate weighted KPI score
-                $total_kpi_score = ($k1_avg * 0.15) + ($k2_avg * 0.35) + ($k3_avg * 0.40) + ($k4_avg * 0.10);
+                // Get KPI formulas from database
+                $kpi_formulas = getKPIFormulas($db);
+                
+                // Calculate weighted KPI score using configured weights
+                $total_kpi_score = ($k1_avg * ($kpi_formulas['K1']['weight']/100)) + 
+                                 ($k2_avg * ($kpi_formulas['K2']['weight']/100)) + 
+                                 ($k3_avg * ($kpi_formulas['K3']['weight']/100)) + 
+                                 ($k4_avg * ($kpi_formulas['K4']['weight']/100));
                 
                 fputcsv($output, []); // Empty row
                 fputcsv($output, ['THỐNG KÊ TỔNG HỢP CHO ' . strtoupper($staff['full_name'])]);
@@ -666,13 +751,13 @@ function exportKPIDetailed($db) {
                 fputcsv($output, ['KPI Tổng hợp (có trọng số)', round($total_kpi_score, 2)]);
                 fputcsv($output, []);
                 
-                // Add KPI calculation formulas
+                // Add KPI calculation formulas from database
                 fputcsv($output, ['CÔNG THỨC TÍNH KPI']);
-                fputcsv($output, ['K1 - Tốc độ phản hồi (1-5):', '=MAX(1; MIN(5; 5 - (L2/30)))', 'L2 = Thời gian phản hồi (phút)']);
-                fputcsv($output, ['K2 - Tiến độ hoàn thành (1-5):', '=MAX(1; MIN(5; 5 - (M2/24)))', 'M2 = Thời gian hoàn thành (giờ)']);
-                fputcsv($output, ['K3 - Đánh giá chung (1-5):', '=MAX(1; MIN(5; N2))', 'N2 = Đánh giá chung (1-5)']);
-                fputcsv($output, ['K4 - Chất lượng xử lý (1-5):', '=MAX(1; MIN(5; O2/20))', 'O2 = Đánh giá staff xử lý yêu cầu']);
-                fputcsv($output, ['KPI Tổng hợp (1-5):', '=(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)', 'P2=K1(15%), Q2=K2(35%), R2=K3(40%), S2=K4(10%)']);
+                fputcsv($output, ['K1 - Tốc độ phản hồi (1-5):', $kpi_formulas['K1']['formula'], $kpi_formulas['K1']['description']]);
+                fputcsv($output, ['K2 - Tiến độ hoàn thành (1-5):', $kpi_formulas['K2']['formula'], $kpi_formulas['K2']['description']]);
+                fputcsv($output, ['K3 - Đánh giá chung (1-5):', $kpi_formulas['K3']['formula'], $kpi_formulas['K3']['description']]);
+                fputcsv($output, ['K4 - Chất lượng xử lý (1-5):', $kpi_formulas['K4']['formula'], $kpi_formulas['K4']['description']]);
+                fputcsv($output, ['KPI Tổng hợp (1-5):', $kpi_formulas['TOTAL']['formula'], $kpi_formulas['TOTAL']['description']]);
                 fputcsv($output, ['Ghi chú:', 'Công thức áp dụng cho dòng 2 tương tự. Copy công thức cho các dòng khác.']);
                 fputcsv($output, []);
             } else {
@@ -829,7 +914,7 @@ function exportStaffDetails($db) {
                 $request['response_time_minutes'] ?? 'N/A',
                 $request['completion_time_hours'] ?? 'N/A',
                 $request['rating'] ?? 'N/A',
-                $request['would_recommend'] ?? 'N/A',
+                $request['processing_results'] ?? 'N/A',
                 $request['k1_score'] ?? 1,
                 $request['k2_score'] ?? 1,
                 $request['k3_score'] ?? 1,
@@ -852,6 +937,52 @@ function exportStaffDetails($db) {
     }
 }
 
+function getKPIFormulas($db) {
+    try {
+        // Check if kpi_config table exists
+        $check_table = "SHOW TABLES LIKE 'kpi_config'";
+        $result = $db->query($check_table);
+        
+        if ($result->rowCount() == 0) {
+            // Return default formulas if table doesn't exist
+            return [
+                'K1' => ['formula' => '=MAX(1; MIN(5; 5 - (L2/30)))', 'description' => 'L2 = Thoi gian phan hoi (phut)', 'weight' => 15],
+                'K2' => ['formula' => '=MAX(1; MIN(5; 5 - (M2/24)))', 'description' => 'M2 = Thoi gian hoan thanh (gio)', 'weight' => 35],
+                'K3' => ['formula' => '=MAX(1; MIN(5; N2))', 'description' => 'N2 = Danh gia chung (1-5)', 'weight' => 40],
+                'K4' => ['formula' => '=MAX(1; MIN(5; O2/20))', 'description' => 'O2 = Danh gia staff xu ly yeu cau', 'weight' => 10],
+                'TOTAL' => ['formula' => '=(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)', 'description' => 'P2=K1(15%), Q2=K2(35%), R2=K3(40%), S2=K4(10%)', 'weight' => 100]
+            ];
+        }
+        
+        $query = "SELECT kpi_type, formula, description, weight_percentage FROM kpi_config";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+        $configs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $formulas = [];
+        foreach ($configs as $config) {
+            $formulas[$config['kpi_type']] = [
+                'formula' => $config['formula'],
+                'description' => $config['description'],
+                'weight' => $config['weight_percentage']
+            ];
+        }
+        
+        return $formulas;
+        
+    } catch (Exception $e) {
+        error_log("Error getting KPI formulas: " . $e->getMessage());
+        // Return default formulas on error
+        return [
+            'K1' => ['formula' => '=MAX(1; MIN(5; 5 - (L2/30)))', 'description' => 'L2 = Thoi gian phan hoi (phut)', 'weight' => 15],
+            'K2' => ['formula' => '=MAX(1; MIN(5; 5 - (M2/24)))', 'description' => 'M2 = Thoi gian hoan thanh (gio)', 'weight' => 35],
+            'K3' => ['formula' => '=MAX(1; MIN(5; N2))', 'description' => 'N2 = Danh gia chung (1-5)', 'weight' => 40],
+            'K4' => ['formula' => '=MAX(1; MIN(5; O2/20))', 'description' => 'O2 = Danh gia staff xu ly yeu cau', 'weight' => 10],
+            'TOTAL' => ['formula' => '=(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)', 'description' => 'P2=K1(15%), Q2=K2(35%), R2=K3(40%), S2=K4(10%)', 'weight' => 100]
+        ];
+    }
+}
+
 function getDetailedKPIData($db, $start_date, $end_date) {
     $detailed_data = [];
     
@@ -868,12 +999,19 @@ function getDetailedKPIData($db, $start_date, $end_date) {
         $staff_id = $staff['id'];
         
         // Get all requests for this staff with detailed information
-        $requests_query = "SELECT sr.*, c.name as category_name, rf.rating, rf.would_recommend
+        // Only include requests with complete information for KPI calculation
+        $requests_query = "SELECT sr.*, c.name as category_name, rf.rating, rf.processing_results
                           FROM service_requests sr
                           LEFT JOIN categories c ON sr.category_id = c.id
                           LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
                           WHERE sr.assigned_to = :staff_id 
                           AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')
+                          -- Only include requests with complete information for KPI
+                          AND sr.assigned_at IS NOT NULL
+                          AND sr.estimated_completion IS NOT NULL
+                          AND sr.resolved_at IS NOT NULL
+                          AND rf.rating IS NOT NULL
+                          AND rf.processing_results IS NOT NULL
                           ORDER BY sr.created_at DESC";
         
         $requests_stmt = $db->prepare($requests_query);
@@ -933,18 +1071,21 @@ function getDetailedKPIData($db, $start_date, $end_date) {
             // Calculate K3 score for this request
             $k3_score = $request['rating'] > 0 ? round($request['rating'], 1) : 1;
             
-            // Calculate K4 score for this request
+            // Calculate K4 score for this request (1-5 scale matching UI)
+            // UI Mapping: 1=Rất không hài lòng, 2=Không hài lòng, 3=Bình thường, 4=Khá tốt, 5=Rất hài lòng
             $k4_score = 1;
-            if ($request['would_recommend'] === 'yes' || $request['would_recommend'] === '1' || $request['would_recommend'] == 1 || $request['would_recommend'] == 5) {
-                $k4_score = 5;
-            } elseif ($request['would_recommend'] === 'maybe' || $request['would_recommend'] === '2' || $request['would_recommend'] == 2 || $request['would_recommend'] == 4) {
-                $k4_score = 4;
-            } elseif ($request['would_recommend'] == 3) {
-                $k4_score = 3;
-            } elseif ($request['would_recommend'] === 'no' || $request['would_recommend'] === '0' || $request['would_recommend'] == 0) {
-                $k4_score = 1;
+            if ($request['processing_results'] == 5) {
+                $k4_score = 5;  // Rất hài lòng
+            } elseif ($request['processing_results'] == 4) {
+                $k4_score = 4;  // Khá tốt
+            } elseif ($request['processing_results'] == 3) {
+                $k4_score = 3;  // Bình thường
+            } elseif ($request['processing_results'] == 2) {
+                $k4_score = 2;  // Không hài lòng
+            } elseif ($request['processing_results'] == 1) {
+                $k4_score = 1;  // Rất không hài lòng
             } else {
-                $k4_score = 1;
+                $k4_score = 1;  // Mặc định
             }
             
             // Calculate request KPI score
@@ -962,7 +1103,7 @@ function getDetailedKPIData($db, $start_date, $end_date) {
                 'response_time_minutes' => $response_time_minutes,
                 'completion_time_hours' => $completion_time_hours,
                 'rating' => $request['rating'],
-                'would_recommend' => $request['would_recommend'],
+                'processing_results' => $request['processing_results'],
                 'k1_score' => $k1_score,
                 'k2_score' => $k2_score,
                 'k3_score' => $k3_score,
@@ -1000,13 +1141,19 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
         return null;
     }
     
-    // Get all requests for this staff
-    $requests_query = "SELECT sr.*, c.name as category_name, rf.rating, rf.would_recommend
+    // Get all requests for this staff with complete information for KPI
+    $requests_query = "SELECT sr.*, c.name as category_name, rf.rating, rf.processing_results
                       FROM service_requests sr
                       LEFT JOIN categories c ON sr.category_id = c.id
                       LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
                       WHERE sr.assigned_to = :staff_id 
                       AND sr.created_at BETWEEN :start_date AND CONCAT(:end_date, ' 23:59:59')
+                      -- Only include requests with complete information for KPI
+                      AND sr.assigned_at IS NOT NULL
+                      AND sr.estimated_completion IS NOT NULL
+                      AND sr.resolved_at IS NOT NULL
+                      AND rf.rating IS NOT NULL
+                      AND rf.processing_results IS NOT NULL
                       ORDER BY sr.created_at DESC";
     
     $requests_stmt = $db->prepare($requests_query);
@@ -1072,18 +1219,20 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
         // Calculate K3 score
         $k3_score = $request['rating'] > 0 ? round($request['rating'], 1) : 1;
         
-        // Calculate K4 score
+        // Calculate K4 score (1-5 scale)
         $k4_score = 1;
-        if ($request['would_recommend'] === 'yes' || $request['would_recommend'] === '1' || $request['would_recommend'] == 1 || $request['would_recommend'] == 5) {
-            $k4_score = 5;
-        } elseif ($request['would_recommend'] === 'maybe' || $request['would_recommend'] === '2' || $request['would_recommend'] == 2 || $request['would_recommend'] == 4) {
-            $k4_score = 4;
-        } elseif ($request['would_recommend'] == 3) {
-            $k4_score = 3;
-        } elseif ($request['would_recommend'] === 'no' || $request['would_recommend'] === '0' || $request['would_recommend'] == 0) {
-            $k4_score = 1;
+        if ($request['processing_results'] == 5) {
+            $k4_score = 5;  // Rất hài lòng
+        } elseif ($request['processing_results'] == 4) {
+            $k4_score = 4;  // Hài lòng
+        } elseif ($request['processing_results'] == 3) {
+            $k4_score = 3;  // Bình thường
+        } elseif ($request['processing_results'] == 2) {
+            $k4_score = 2;  // Không hài lòng
+        } elseif ($request['processing_results'] == 1) {
+            $k4_score = 1;  // Rất không hài lòng
         } else {
-            $k4_score = 1;
+            $k4_score = 1;  // Mặc định
         }
         
         // Calculate request KPI score
@@ -1101,7 +1250,7 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
             'response_time_minutes' => $response_time_minutes,
             'completion_time_hours' => $completion_time_hours,
             'rating' => $request['rating'],
-            'would_recommend' => $request['would_recommend'],
+            'processing_results' => $request['processing_results'],
             'k1_score' => $k1_score,
             'k2_score' => $k2_score,
             'k3_score' => $k3_score,
@@ -1130,6 +1279,51 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
         'staff' => $staff,
         'requests' => $staff_requests,
         'summary' => $summary
+    ];
+}
+
+function calculateKPISummary($kpi_data) {
+    $total_requests = 0;
+    $total_completed = 0;
+    $total_feedback = 0;
+    $sum_response_time = 0;
+    $sum_completion_time = 0;
+    $sum_rating = 0;
+    $sum_recommendation_rate = 0;
+    $sum_kpi_score = 0;
+    $staff_with_requests = 0;
+    $staff_with_feedback = 0;
+    
+    foreach ($kpi_data as $staff) {
+        $total_requests += $staff['total_requests'];
+        $total_completed += $staff['completed_requests'];
+        $total_feedback += $staff['all_total_feedback']; // Use ALL feedback for summary
+        
+        // Only include staff with complete KPI data in averages
+        if ($staff['total_requests'] > 0) {
+            $sum_response_time += $staff['avg_response_time_minutes'];
+            $sum_completion_time += $staff['avg_completion_time_hours'];
+            $sum_kpi_score += $staff['total_kpi_score'];
+            $staff_with_requests++;
+        }
+        
+        // Only include staff with feedback in rating averages
+        if ($staff['all_total_feedback'] > 0) {
+            $sum_rating += $staff['all_avg_rating']; // Use ALL feedback rating for summary
+            $sum_recommendation_rate += $staff['recommendation_rate'];
+            $staff_with_feedback++;
+        }
+    }
+    
+    return [
+        'total_requests' => $total_requests,
+        'total_completed' => $total_completed,
+        'total_feedback' => $total_feedback,
+        'avg_response_time' => $staff_with_requests > 0 ? $sum_response_time / $staff_with_requests : 0,
+        'avg_completion_time' => $staff_with_requests > 0 ? $sum_completion_time / $staff_with_requests : 0,
+        'avg_rating' => $staff_with_feedback > 0 ? $sum_rating / $staff_with_feedback : 0,
+        'avg_recommendation_rate' => $staff_with_feedback > 0 ? $sum_recommendation_rate / $staff_with_feedback : 0,
+        'avg_kpi_score' => count($kpi_data) > 0 ? $sum_kpi_score / count($kpi_data) : 0
     ];
 }
 ?>

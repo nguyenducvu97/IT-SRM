@@ -1024,7 +1024,7 @@ if ($method == 'GET') {
 
                         rf.software_feedback, rf.ease_of_use, rf.speed_stability, 
 
-                        rf.requirement_meeting, rf.would_recommend, rf.created_at as feedback_created_at,
+                        rf.requirement_meeting, rf.processing_results, rf.created_at as feedback_created_at,
 
                         sr.error_description as resolution_error_description,
 
@@ -7423,11 +7423,13 @@ $update_stmt->bindParam(":request_id", $request_id);
     elseif ($action == 'update_estimated_completion') {
         // Handle estimated completion time update (admin only)
         error_log("=== UPDATE ESTIMATED COMPLETION DEBUG ===");
+        error_log("Raw input data: " . json_encode($input));
         
-        $request_id = isset($input['id']) ? (int)$input['id'] : 0;
+        $request_id = isset($input['request_id']) ? (int)$input['request_id'] : (isset($input['id']) ? (int)$input['id'] : 0);
         $estimated_completion = isset($input['estimated_completion']) ? trim($input['estimated_completion']) : '';
         
         error_log("Request ID: $request_id, Estimated Completion: '$estimated_completion'");
+        error_log("Available keys in input: " . implode(', ', array_keys($input)));
         
         if ($request_id <= 0) {
             serviceJsonResponse(false, "Request ID is required");
@@ -7737,7 +7739,7 @@ $update_stmt->bindParam(":request_id", $request_id);
 
         $software_feedback = isset($input['software_feedback']) ? trim($input['software_feedback']) : null;
 
-        $would_recommend = isset($input['would_recommend']) ? $input['would_recommend'] : null;
+        $processing_results = isset($input['processing_results']) ? $input['processing_results'] : null;
 
         $ease_of_use = isset($input['ease_of_use']) ? (int)$input['ease_of_use'] : null;
 
@@ -7823,11 +7825,11 @@ $update_stmt->bindParam(":request_id", $request_id);
 
             $feedback_query = "INSERT INTO request_feedback 
 
-                              (service_request_id, rating, feedback, software_feedback, would_recommend, 
+                              (service_request_id, rating, feedback, software_feedback, processing_results, 
 
                                ease_of_use, speed_stability, requirement_meeting, created_by) 
 
-                              VALUES (:request_id, :rating, :feedback, :software_feedback, :would_recommend,
+                              VALUES (:request_id, :rating, :feedback, :software_feedback, :processing_results,
 
                                       :ease_of_use, :speed_stability, :requirement_meeting, :created_by)";
 
@@ -7841,7 +7843,7 @@ $update_stmt->bindParam(":request_id", $request_id);
 
             $feedback_stmt->bindParam(":software_feedback", $software_feedback);
 
-            $feedback_stmt->bindParam(":would_recommend", $would_recommend);
+            $feedback_stmt->bindParam(":processing_results", $processing_results);
 
             $feedback_stmt->bindParam(":ease_of_use", $ease_of_use, PDO::PARAM_INT);
 

@@ -2474,6 +2474,18 @@
 
 
 
+                                <button id="configKPIBtn" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#kpiConfigModal">
+
+
+
+                                    <i class="fas fa-cogs"></i> <span>Cài KPI</span>
+
+
+
+                                </button>
+
+
+
                             </div>
 
 
@@ -4146,7 +4158,7 @@
 
 
 
-    <script src="assets/js/app.js?v=20260420-7"></script>
+    <script src="assets/js/app.js?v=20260421-1"></script>
 
 
 
@@ -4179,9 +4191,420 @@
         });
     </script>
 
+    <!-- KPI Configuration Modal -->
+    <div class="modal fade" id="kpiConfigModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title mb-0">
+                        <i class="fas fa-cogs me-2"></i> Cấu hình công thức tính KPI
+                    </h5>
+                    <button type="button" class="btn btn-link text-white p-0" data-bs-dismiss="modal" 
+                            style="font-size: 2.5rem; opacity: 1; filter: brightness(2); width: 40px; height: 40px; text-decoration: none; line-height: 1;">×</button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-nowrap">
+                        <div class="d-flex gap-2 flex-shrink-0">
+                            <button type="button" class="btn btn-success btn-sm" onclick="saveKPIConfig()">
+                                <i class="fas fa-save me-1"></i> Lưu
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="resetKPIConfig()">
+                                <i class="fas fa-undo me-1"></i> Cài lại
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2" id="kpiConfigMessage"></div>
+                    
+                    <div id="kpiConfigContainer">
+                        <!-- KPI configurations will be loaded here -->
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="alert" id="totalWeightAlert">
+                            <strong>Tổng trọng số: <span id="totalWeightValue">100</span>%</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom CSS for KPI Modal -->
+    <style>
+        /* Ensure UTF-8 encoding for Vietnamese fonts */
+        #kpiConfigModal {
+            font-family: 'Segoe UI', 'Arial Unicode MS', 'DejaVu Sans', 'Lucida Sans Unicode', sans-serif !important;
+            unicode-bidi: embed;
+        }
+        
+        #kpiConfigModal .modal-content {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        #kpiConfigModal .modal-header {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            border-bottom: none;
+            padding: 1.75rem 2rem;
+        }
+        
+        #kpiConfigModal .modal-body {
+            padding: 2rem;
+            background: #fafbfc;
+        }
+        
+        #kpiConfigModal .modal-header h5 {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: white;
+            margin: 0;
+        }
+        
+        #kpiConfigModal .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.8;
+        }
+        
+        #kpiConfigModal .kpi-config-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        
+        #kpiConfigModal .kpi-config-item:hover {
+            background: #f8f9ff;
+            border-color: #007bff;
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
+            transform: translateY(-4px);
+        }
+        
+        #kpiConfigModal .kpi-config-item h6 {
+            color: #2c3e50;
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        #kpiConfigModal .form-label {
+            color: #495057;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: none;
+        }
+        
+        #kpiConfigModal .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        #kpiConfigModal .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.15);
+            background: #f8f9ff;
+        }
+        
+        #kpiConfigModal .form-control:read-only {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        #kpiConfigModal .badge {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+        }
+        
+        #kpiConfigModal .btn-sm {
+            font-size: 0.9rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: none;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        #kpiConfigModal .btn-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        #kpiConfigModal .btn-success:hover {
+            background: linear-gradient(135deg, #218838, #1ea085);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+        
+        #kpiConfigModal .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #e74c3c);
+        }
+        
+        #kpiConfigModal .btn-danger:hover {
+            background: linear-gradient(135deg, #c82333, #c0392b);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+        
+        #kpiConfigModal .alert {
+            border: none;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        #kpiConfigModal .alert-success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+        
+        #kpiConfigModal .alert-danger {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+        
+        #kpiConfigModal .alert-info {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        /* Fix row spacing */
+        #kpiConfigModal .row {
+            margin-left: -0.75rem;
+            margin-right: -0.75rem;
+        }
+        
+        #kpiConfigModal .col-md-6,
+        #kpiConfigModal .col-md-4 {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+        
+        /* Fix textarea height */
+        #kpiConfigModal textarea.form-control {
+            min-height: 4.5rem;
+            resize: vertical;
+            width: 100%;
+        }
+        
+        /* Full width columns for better layout */
+        #kpiConfigModal .col-12 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+        
+        /* Fix number input width */
+        #kpiConfigModal input[type="number"] {
+            max-width: 200px;
+        }
+    </style>
+    
+    <!-- Bootstrap JS for Modal -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let kpiConfigs = [];
+        
+        // Load KPI configurations when modal opens
+        document.getElementById('kpiConfigModal').addEventListener('show.bs.modal', function () {
+            loadKPIConfig();
+        });
+        
+        function loadKPIConfig() {
+            fetch('api/kpi_config.php?action=get_config')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        kpiConfigs = data.data;
+                        renderKPIConfigForm();
+                        updateTotalWeight();
+                    } else {
+                        showMessage('Error loading KPI configuration', 'danger');
+                    }
+                })
+                .catch(error => {
+                    showMessage('Network error', 'danger');
+                });
+        }
+        
+        function renderKPIConfigForm() {
+            const container = document.getElementById('kpiConfigContainer');
+            container.innerHTML = '';
+            
+            kpiConfigs.forEach(config => {
+                const isTotal = config.kpi_type === 'TOTAL';
+                const kpiName = config.kpi_type === 'K1' ? 'T\u1ed1c \u0111\u1ed9 ph\u1ea3n h\u1ed3i' :
+                               config.kpi_type === 'K2' ? 'Ti\u1ebfn \u0111\u1ed9 ho\u00e0n th\u00e0nh' :
+                               config.kpi_type === 'K3' ? '\u0110\u00e1nh gi\u00e1 chung' :
+                               config.kpi_type === 'K4' ? 'Ch\u1ea5t l\u01b0\u1ee3ng x\u1eed l\u00fd' : 'T\u1ed5ng h\u1ee3p';
+                
+                const configDiv = document.createElement('div');
+                configDiv.className = 'kpi-config-item';
+                configDiv.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">
+                            ${config.kpi_type} - ${kpiName}
+                            <span class="badge bg-primary ms-2">${config.weight_percentage}%</span>
+                        </h6>
+                    </div>
+                    
+                    <div class="row g-3 mt-3">
+                        <div class="col-12">
+                            <label class="form-label">C\u00f4ng th\u1ee9c:</label>
+                            <input type="text" class="form-control" 
+                                   id="formula_${config.kpi_type}" 
+                                   value="${config.formula}"
+                                   ${isTotal ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">M\u00f4 t\u1ea3:</label>
+                            <textarea class="form-control" 
+                                      id="description_${config.kpi_type}" 
+                                      rows="3">${config.description}</textarea>
+                        </div>
+                    </div>
+                    
+                    ${!isTotal ? `
+                    <div class="row g-3 mt-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Tr\u1ecdng s\u1ed1 (%):</label>
+                            <input type="number" class="form-control" 
+                                   id="weight_${config.kpi_type}" 
+                                   value="${config.weight_percentage}"
+                                   min="0" max="100" step="0.01"
+                                   onchange="updateTotalWeight()">
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+                
+                container.appendChild(configDiv);
+            });
+        }
+        
+        function updateTotalWeight() {
+            let totalWeight = 0;
+            kpiConfigs.forEach(config => {
+                if (config.kpi_type !== 'TOTAL') {
+                    const weightInput = document.getElementById(`weight_${config.kpi_type}`);
+                    if (weightInput) {
+                        totalWeight += parseFloat(weightInput.value) || 0;
+                    }
+                }
+            });
+            
+            const totalWeightElement = document.getElementById('totalWeightValue');
+            const totalWeightAlert = document.getElementById('totalWeightAlert');
+            
+            totalWeightElement.textContent = totalWeight.toFixed(2);
+            
+            if (totalWeight !== 100) {
+                totalWeightAlert.className = 'alert alert-danger';
+                totalWeightAlert.innerHTML = `<strong>T\u1ed5ng tr\u1ecdng s\u1ed1: <span id="totalWeightValue">${totalWeight.toFixed(2)}</span>%</strong><br>Ph\u1ea3i b\u1eb1ng 100%`;
+            } else {
+                totalWeightAlert.className = 'alert alert-success';
+                totalWeightAlert.innerHTML = `<strong>T\u1ed5ng tr\u1ecdng s\u1ed1: <span id="totalWeightValue">${totalWeight.toFixed(2)}</span>%</strong>`;
+            }
+        }
+        
+        function saveKPIConfig() {
+            const updatedConfigs = kpiConfigs.map(config => {
+                const formula = document.getElementById(`formula_${config.kpi_type}`).value;
+                const description = document.getElementById(`description_${config.kpi_type}`).value;
+                const weight = config.kpi_type !== 'TOTAL' 
+                    ? parseFloat(document.getElementById(`weight_${config.kpi_type}`).value) || 0
+                    : config.weight_percentage;
+                
+                return {
+                    kpi_type: config.kpi_type,
+                    formula: formula,
+                    description: description,
+                    weight_percentage: weight
+                };
+            });
+
+            fetch('api/kpi_config.php?action=save_config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedConfigs)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('KPI configuration saved successfully!', 'success');
+                    loadKPIConfig();
+                    
+                    // Auto-refresh KPI summary page if it's open
+                    if (window.location.hash === '#kpi-summary' || 
+                        document.querySelector('[data-page="kpi-summary"]')) {
+                        setTimeout(() => {
+                            // Reload the page to refresh KPI data with new formulas
+                            window.location.reload();
+                        }, 1000);
+                    }
+                } else {
+                    showMessage(data.message || 'Error saving configuration', 'danger');
+                }
+            })
+            .catch(error => {
+                showMessage('L\u1ed7i m\u1ea1ng', 'danger');
+            });
+        }
+        
+        function resetKPIConfig() {
+            if (!confirm('B\u1ea1n c\u00f3 ch\u1eafc mu\u1ed1n c\u00e0i l\u1ea1i KPI v\u1ec1 m\u1eb7c \u0111\u1ecbnh?')) {
+                return;
+            }
+            
+            fetch('api/kpi_config.php?action=reset_config', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showMessage('C\u1ea5u h\u00ecnh KPI \u0111\u00e3 \u0111\u01b0\u1ee3c reset v\u1ec1 m\u1eb7c \u0111\u1ecbnh!', 'success');
+                    loadKPIConfig();
+                } else {
+                    showMessage(data.message || 'L\u1ed7i khi reset c\u1ea5u h\u00ecnh', 'danger');
+                }
+            })
+            .catch(error => {
+                showMessage('L\u1ed7i m\u1ea1ng', 'danger');
+            });
+        }
+        
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('kpiConfigMessage');
+            messageElement.textContent = message;
+            messageElement.className = `alert alert-${type}`;
+            messageElement.classList.remove('d-none');
+            
+            setTimeout(() => {
+                messageElement.classList.add('d-none');
+            }, 5000);
+        }
+    </script>
+
 </body>
-
-
-
-
-

@@ -15307,48 +15307,31 @@ ITServiceApp.prototype.displayKPISummary = function(kpiData) {
     if (!summaryContent) return;
 
 
-
     
-
-
-
-    // Calculate summary statistics
-
-
-
     const totalStaff = kpiData.length;
-
-
-
+    
     const totalRequests = kpiData.reduce((sum, staff) => sum + staff.total_requests, 0);
-
-
-
+    
     const totalCompleted = kpiData.reduce((sum, staff) => sum + staff.completed_requests, 0);
-
-
-
-    const totalFeedback = kpiData.reduce((sum, staff) => sum + staff.total_feedback, 0);
-
-
-
-    const avgRating = kpiData.reduce((sum, staff) => sum + staff.avg_rating, 0) / totalStaff || 0;
-
-
-
-    const avgResponseTime = kpiData.reduce((sum, staff) => sum + staff.avg_response_time_minutes, 0) / totalStaff || 0;
-
-
-
-    const avgCompletionTime = kpiData.reduce((sum, staff) => sum + staff.avg_completion_time_hours, 0) / totalStaff || 0;
-
-
-
+    
+    // Use all_total_feedback for summary (not just 6-info requests)
+    const totalFeedback = kpiData.reduce((sum, staff) => sum + (staff.all_total_feedback || 0), 0);
+    
+    // Calculate averages like backend logic
+    const staffWithRequests = kpiData.filter(staff => staff.total_requests > 0).length;
+    const staffWithFeedback = kpiData.filter(staff => (staff.all_total_feedback || 0) > 0).length;
+    
+    const avgRating = staffWithFeedback > 0 ? 
+        kpiData.reduce((sum, staff) => sum + (staff.all_avg_rating || 0), 0) / staffWithFeedback : 0;
+    
+    const avgResponseTime = staffWithRequests > 0 ? 
+        kpiData.reduce((sum, staff) => sum + staff.avg_response_time_minutes, 0) / staffWithRequests : 0;
+    
+    const avgCompletionTime = staffWithRequests > 0 ? 
+        kpiData.reduce((sum, staff) => sum + staff.avg_completion_time_hours, 0) / staffWithRequests : 0;
+    
     const avgKPIScore = kpiData.reduce((sum, staff) => sum + staff.total_kpi_score, 0) / totalStaff || 0;
 
-
-
-    
 
 
 

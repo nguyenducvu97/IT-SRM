@@ -6810,7 +6810,7 @@ class RequestDetailApp {
 
 
 
-    // Function to convert would_recommend number to text
+    // Function to convert processing_results number to text
 
 
 
@@ -9185,12 +9185,6 @@ class RequestDetailApp {
                                                         <i class="fas fa-search-plus"></i>
 
                                                     </div>
-
-                                                    <a href="api/attachment.php?file=${attachment.filename}&action=download" class="btn btn-sm btn-secondary" target="_blank" download="${attachment.original_name}">
-
-                                                        <i class="fas fa-download"></i> Tài vê
-
-                                                    </a>
 
                                             ` : ''}
 
@@ -13390,7 +13384,7 @@ class RequestDetailApp {
 
 
 
-                            ${request.would_recommend ? `
+                            ${request.processing_results ? `
 
 
 
@@ -13402,11 +13396,11 @@ class RequestDetailApp {
 
 
 
-                                    <span class="recommend-badge ${request.would_recommend}">
+                                    <span class="recommend-badge ${request.processing_results}">
 
 
 
-                                        ${this.getRecommendationText(request.would_recommend)}
+                                        ${this.getRecommendationText(request.processing_results)}
 
 
 
@@ -15079,6 +15073,7 @@ class RequestDetailApp {
 
 
                     action: 'accept_request',
+                    request_id: id,
 
 
 
@@ -15500,18 +15495,18 @@ class RequestDetailApp {
         
         // Show loading state
         this.showLoading('Đang cập nhật thời gian hoàn thành...');
-        
         try {
             const response = await this.apiCall('api/service_requests.php', {
                 method: 'PUT',
                 body: JSON.stringify({
                     action: 'update_estimated_completion',
-                    id: id,
+                    request_id: id,
                     estimated_completion: estimatedCompletion
                 })
             });
             
             if (response.success) {
+                this.showNotification('Yêu cầu đã được chấp nhận', 'success');
                 this.showNotification('Thời gian dự kiến hoàn thành đã được cập nhật', 'success');
                 // Don't reload to avoid double notifications
             } else {
@@ -23403,7 +23398,7 @@ class RequestDetailApp {
 
 
 
-            would_recommend: formData.get('would_recommend'),
+            processing_results: formData.get('processing_results'),
 
 
 
@@ -23803,7 +23798,7 @@ class RequestDetailApp {
 
 
 
-                    would_recommend: formData.get('would_recommend'),
+                    processing_results: formData.get('processing_results'),
 
 
 
@@ -23959,11 +23954,11 @@ class RequestDetailApp {
 
 
 
-                const wouldRecommend = formData.get('would_recommend');
+                const processingResults = formData.get('processing_results');
 
 
 
-                if (wouldRecommend && this.currentUser) {
+                if (processingResults && this.currentUser) {
 
 
 
@@ -23979,7 +23974,11 @@ class RequestDetailApp {
 
 
 
-                            rating: parseInt(wouldRecommend),
+                            rating: parseInt(formData.get('rating')),
+
+
+
+                            processing_results: parseInt(processingResults),
 
 
 

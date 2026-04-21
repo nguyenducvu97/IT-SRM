@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS request_feedback (
     service_request_id INT NOT NULL,
     rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
     feedback TEXT,
-    would_recommend VARCHAR(10),
+    processing_results VARCHAR(10),
     created_by INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

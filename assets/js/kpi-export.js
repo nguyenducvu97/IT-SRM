@@ -61,7 +61,7 @@ class KPIExportForm {
 
     async loadStaffList() {
         try {
-            const response = await this.apiCall('api/kpi_export_fixed.php?action=get_staff_list');
+            const response = await this.apiCall('api/kpi_export.php?action=get_staff_list');
             
             if (response.success) {
                 const select = document.getElementById('staffSelect');
@@ -111,7 +111,7 @@ class KPIExportForm {
         
         try {
             let action = type === 'staff' ? 'export_staff_details' : `export_${type}`;
-            let url = `api/kpi_export_fixed.php?action=${action}&start_date=${startDate}&end_date=${endDate}`;
+            let url = `api/kpi_export.php?action=${action}&start_date=${startDate}&end_date=${endDate}`;
             if (staffId) {
                 url += `&staff_id=${staffId}`;
             }
