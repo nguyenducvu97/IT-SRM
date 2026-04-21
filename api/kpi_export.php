@@ -307,10 +307,10 @@ function getKPIData($db) {
 function getKPIDataArray($db, $start_date, $end_date) {
     $kpi_data = [];
     
-    // Get all staff users (including admin who can handle requests)
+    // Get staff users only (exclude admin from KPI calculation)
     $staff_query = "SELECT id, username, email, full_name, department 
                    FROM users 
-                   WHERE role IN ('admin', 'staff') 
+                   WHERE role = 'staff' 
                    ORDER BY full_name";
     $staff_stmt = $db->prepare($staff_query);
     $staff_stmt->execute();
@@ -443,25 +443,22 @@ function getKPIDataArray($db, $start_date, $end_date) {
         error_log("KPI Debug - KPI Scores: K1=$k1_score, K2=$k2_score, K3=$k3_score, K4=$k4_score, Final=$total_kpi_score");
         error_log("KPI Debug - Processing Results Values: " . ($feedback['processing_results_values'] ?? 'none'));
         
-        // Calculate KPI scores according to new requirements (scale 1-5)
+        // Get KPI formulas from database config
+        $kpi_formulas = getKPIFormulas($db);
         
-        // K1: Response Time Score (Toc do phan hoi)
-        // 5 points: T_res <= 15 minutes
-        // 3 points: 15 < T_res <= 60 minutes  
-        // 1 point: T_res > 60 minutes
+        // Calculate KPI scores using configured formulas (scale 1-5)
+        
+        // K1: Response Time Score (Toc do phan hoi) - Parse and execute configured formula
         $k1_score = 1;
         if ($avg_response_time_minutes > 0) {
-            if ($avg_response_time_minutes <= 15) {
-                $k1_score = 5;
-            } elseif ($avg_response_time_minutes <= 60) {
-                $k1_score = 3;
-            } else {
-                $k1_score = 1;
-            }
+            $k1_config = $kpi_formulas['K1'] ?? ['formula' => 'default', 'weight' => 15];
+            $k1_formula = $k1_config['formula'];
+            
+            // Parse and execute formula
+            $k1_score = parseKPIFormula($k1_formula, $avg_response_time_minutes, 'K1');
         }
         
-        // K2: On-time Completion Score (Tien do hoan thanh)
-        // Only calculate if staff has completed requests with complete information
+        // K2: On-time Completion Score (Tien do hoan thanh) - Use configured formula
         $k2_score = 1;
         if ($completed_requests > 0) {
             $delta_t_query = "SELECT AVG(
@@ -488,6 +485,9 @@ function getKPIDataArray($db, $start_date, $end_date) {
             $delta_t_result = $delta_t_stmt->fetch(PDO::FETCH_ASSOC);
             $avg_delta_t = (float)($delta_t_result['avg_delta_t'] ?? 0);
             
+            // Use K2 config
+            $k2_config = $kpi_formulas['K2'] ?? ['formula' => 'default', 'weight' => 35];
+            
             // 5 points: Delta T <= 0 (hoan thanh dung hoac truoc han)
             // 3 points: Delta T > 0 but tre khong qua 2 gio lam viec
             // 1 point: Tre hon 1 ngay
@@ -502,13 +502,12 @@ function getKPIDataArray($db, $start_date, $end_date) {
             }
         }
         
-        // K3: Quality Score (Chat luong xu ly)
-        // Directly from rating (1-5 scale)
+        // K3: Quality Score (Chat luong xu ly) - Use configured formula
+        $k3_config = $kpi_formulas['K3'] ?? ['formula' => 'default', 'weight' => 40];
         $k3_score = $avg_rating_score > 0 ? round($avg_rating_score, 1) : 1;
         
-        // K4: Recommendation Score (Su tin tuong)
-        // Mapping from processing_results (1-5 scale) to K4 score
-        // 5 (100%) → K4 = 5, 4 (80%) → K4 = 5, 3 (60%) → K4 = 4, 2 (40%) → K4 = 3, 1 (20%) → K4 = 2
+        // K4: Recommendation Score (Su tin tuong) - Use configured formula
+        $k4_config = $kpi_formulas['K4'] ?? ['formula' => 'default', 'weight' => 10];
         $k4_score = 1;
         if ($total_feedback > 0) {
             if ($recommendation_rate >= 80) {
@@ -524,13 +523,17 @@ function getKPIDataArray($db, $start_date, $end_date) {
             }
         }
         
-        // Final KPI Score with weighted formula
-        // Score_Final = (K1 × 15%) + (K2 × 35%) + (K3 × 40%) + (K4 × 10%)
-        // For staff with no requests, KPI should be 1.0 (neutral)
+        // Final KPI Score with configured weights
+        // Use weights from database config instead of hardcoded values
         if ($total_requests == 0) {
             $total_kpi_score = 1.0;
         } else {
-            $total_kpi_score = ($k1_score * 0.15) + ($k2_score * 0.35) + ($k3_score * 0.40) + ($k4_score * 0.10);
+            $k1_weight = ($kpi_formulas['K1']['weight'] ?? 15) / 100;
+            $k2_weight = ($kpi_formulas['K2']['weight'] ?? 35) / 100;
+            $k3_weight = ($kpi_formulas['K3']['weight'] ?? 40) / 100;
+            $k4_weight = ($kpi_formulas['K4']['weight'] ?? 10) / 100;
+            
+            $total_kpi_score = ($k1_score * $k1_weight) + ($k2_score * $k2_weight) + ($k3_score * $k3_weight) + ($k4_score * $k4_weight);
         }
         
         // Also provide normalized scores (0-100 scale) for compatibility
@@ -585,7 +588,7 @@ function getKPIDataArray($db, $start_date, $end_date) {
             'all_avg_rating' => round((float)$all_feedback['all_avg_rating'], 2),
             
             // Total KPI Score (weighted, 1-5 scale)
-            'total_kpi_score' => round($total_kpi_score, 2)
+            'total_kpi_score' => round($total_kpi_score, 1)
         ];
     }
     
@@ -596,7 +599,7 @@ function getStaffList($db) {
     try {
         $query = "SELECT id, username, full_name, department 
                   FROM users 
-                  WHERE role IN ('admin', 'staff') 
+                  WHERE role = 'staff' 
                   ORDER BY full_name";
         $stmt = $db->prepare($query);
         $stmt->execute();
@@ -711,11 +714,11 @@ function exportKPIDetailed($db) {
                     $request['completion_time_hours'] ?? 'N/A',
                     $request['rating'] ?? 'N/A',
                     $request['processing_results'] ?? 'N/A',
-                    $request['k1_score'] ?? 1,
-                    $request['k2_score'] ?? 1,
-                    $request['k3_score'] ?? 1,
-                    $request['k4_score'] ?? 1,
-                    $request['request_kpi_score'] ?? 1
+                    round($request['k1_score'] ?? 1, 1),
+                    round($request['k2_score'] ?? 1, 1),
+                    round($request['k3_score'] ?? 1, 1),
+                    round($request['k4_score'] ?? 1, 1),
+                    round($request['request_kpi_score'] ?? 1, 1)
                 ];
                 
                 // Apply UTF-8 encoding to data row
@@ -937,6 +940,76 @@ function exportStaffDetails($db) {
     }
 }
 
+function parseKPIFormula($formula, $value, $kpi_type) {
+    try {
+        error_log("Parsing KPI formula: $formula for value: $value");
+        
+        // Handle default formula
+        if ($formula === 'default') {
+            switch ($kpi_type) {
+                case 'K1':
+                    if ($value <= 15) return 5;
+                    elseif ($value <= 60) return 3;
+                    else return 1;
+                case 'K2':
+                    if ($value <= 0) return 5;
+                    elseif ($value <= 2) return 3;
+                    else return 1;
+                case 'K3':
+                    return max(1, min(5, $value));
+                case 'K4':
+                    if ($value >= 80) return 5;
+                    elseif ($value >= 60) return 4;
+                    elseif ($value >= 40) return 3;
+                    elseif ($value >= 20) return 2;
+                    else return 1;
+                default:
+                    return 1;
+            }
+        }
+        
+        // Parse Excel-style formula
+        // Example: MAX(1; MIN(5; 5 - (L2/10000)))
+        // Remove leading = if present
+        $formula = ltrim($formula, '=');
+        
+        // Replace L2 with actual value
+        $formula = str_replace('L2', $value, $formula);
+        $formula = str_replace('M2', $value, $formula);
+        $formula = str_replace('N2', $value, $formula);
+        $formula = str_replace('O2', $value, $formula);
+        
+        // Replace Excel functions with PHP equivalents
+        $formula = str_replace('MAX', 'max', $formula);
+        $formula = str_replace('MIN', 'min', $formula);
+        $formula = str_replace(';', ',', $formula);
+        
+        // Evaluate the formula safely
+        // Create a safe evaluation context
+        $allowed_functions = ['max', 'min', 'round', 'abs', 'ceil', 'floor'];
+        $allowed_operators = ['+', '-', '*', '/', '(', ')', ','];
+        
+        // Check if formula contains only allowed characters
+        if (!preg_match('/^[0-9\.\+\-\*\/\(\),\s_a-zA-Z]+$/', $formula)) {
+            error_log("Invalid formula characters: $formula");
+            return 1;
+        }
+        
+        // Evaluate the formula
+        $result = eval("return $formula;");
+        
+        // Ensure result is within 1-5 range
+        $result = max(1, min(5, $result));
+        
+        error_log("Formula result: $result");
+        return $result;
+        
+    } catch (Exception $e) {
+        error_log("Error parsing formula '$formula': " . $e->getMessage());
+        return 1; // Default to 1 on error
+    }
+}
+
 function getKPIFormulas($db) {
     try {
         // Check if kpi_config table exists
@@ -986,10 +1059,10 @@ function getKPIFormulas($db) {
 function getDetailedKPIData($db, $start_date, $end_date) {
     $detailed_data = [];
     
-    // Get all staff users
+    // Get staff users only (exclude admin from KPI calculation)
     $staff_query = "SELECT id, username, email, full_name, department 
                    FROM users 
-                   WHERE role IN ('admin', 'staff') 
+                   WHERE role = 'staff' 
                    ORDER BY full_name";
     $staff_stmt = $db->prepare($staff_query);
     $staff_stmt->execute();
@@ -1255,7 +1328,7 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
             'k2_score' => $k2_score,
             'k3_score' => $k3_score,
             'k4_score' => $k4_score,
-            'request_kpi_score' => round($request_kpi_score, 2)
+            'request_kpi_score' => round($request_kpi_score, 1)
         ];
         
         // Collect scores for summary

@@ -4158,7 +4158,7 @@
 
 
 
-    <script src="assets/js/app.js?v=20260421-1"></script>
+    <script src="assets/js/app.js?v=20260421-2"></script>
 
 
 
@@ -4556,9 +4556,11 @@
                     showMessage('KPI configuration saved successfully!', 'success');
                     loadKPIConfig();
                     
-                    // Auto-refresh KPI summary page if it's open
-                    if (window.location.hash === '#kpi-summary' || 
-                        document.querySelector('[data-page="kpi-summary"]')) {
+                    // Auto-refresh KPI page if server indicates reload needed
+                    if (data.reload_kpi && 
+                        (window.location.hash === '#kpi-summary' || 
+                         document.querySelector('[data-page="kpi-summary"]') ||
+                         window.location.pathname.includes('kpi-export'))) {
                         setTimeout(() => {
                             // Reload the page to refresh KPI data with new formulas
                             window.location.reload();
@@ -4586,6 +4588,17 @@
                 if (data.success) {
                     showMessage('C\u1ea5u h\u00ecnh KPI \u0111\u00e3 \u0111\u01b0\u1ee3c reset v\u1ec1 m\u1eb7c \u0111\u1ecbnh!', 'success');
                     loadKPIConfig();
+                    
+                    // Auto-refresh KPI page if server indicates reload needed
+                    if (data.reload_kpi && 
+                        (window.location.hash === '#kpi-summary' || 
+                         document.querySelector('[data-page="kpi-summary"]') ||
+                         window.location.pathname.includes('kpi-export'))) {
+                        setTimeout(() => {
+                            // Reload the page to refresh KPI data with default formulas
+                            window.location.reload();
+                        }, 1000);
+                    }
                 } else {
                     showMessage(data.message || 'L\u1ed7i khi reset c\u1ea5u h\u00ecnh', 'danger');
                 }

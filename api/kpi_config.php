@@ -95,7 +95,11 @@ function saveKPIConfig($db) {
         }
         
         $db->commit();
-        echo json_encode(['success' => true, 'message' => 'KPI configuration updated successfully']);
+        echo json_encode([
+            'success' => true, 
+            'message' => 'KPI configuration updated successfully',
+            'reload_kpi' => true  // Flag to trigger KPI page reload
+        ]);
         
     } catch (Exception $e) {
         $db->rollBack();
@@ -116,7 +120,11 @@ function resetKPIConfig($db) {
         insertDefaultKPIConfig($db);
         
         $db->commit();
-        echo json_encode(['success' => true, 'message' => 'KPI configuration reset to default']);
+        echo json_encode([
+            'success' => true, 
+            'message' => 'KPI configuration reset to default',
+            'reload_kpi' => true  // Flag to trigger KPI page reload
+        ]);
         
     } catch (Exception $e) {
         $db->rollBack();
