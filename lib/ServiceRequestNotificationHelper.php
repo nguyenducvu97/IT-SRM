@@ -12,10 +12,14 @@ require_once __DIR__ . '/NotificationHelper.php';
 class ServiceRequestNotificationHelper {
     private $db;
     private $notificationHelper;
-    
-    public function __construct() {
-        $database = new Database();
-        $this->db = $database->getConnection();
+
+    public function __construct($database = null) {
+        if ($database) {
+            $this->db = $database;
+        } else {
+            $database = new Database();
+            $this->db = $database->getConnection();
+        }
         $this->notificationHelper = new NotificationHelper($this->db);
     }
     

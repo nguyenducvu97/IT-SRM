@@ -452,7 +452,7 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         
         // Send notification to admin about new support request
         try {
-            $notificationHelper = new ServiceRequestNotificationHelper();
+            $notificationHelper = new ServiceRequestNotificationHelper($pdo);
             
             // Get request details for notification
             $requestDetails = $notificationHelper->getRequestDetails($service_request_id);
@@ -794,13 +794,13 @@ function handlePut($pdo, $action, $current_user, $user_role) {
         $service_request_id = $support_data['service_request_id'];
         
         // Schedule background processing for notifications
-        register_shutdown_function(function() use ($support_id, $decision, $reason, $current_user, $service_request_id, $support_data) {
+        register_shutdown_function(function() use ($support_id, $decision, $reason, $current_user, $service_request_id, $support_data, $pdo) {
             ignore_user_abort(true);
             set_time_limit(300); // 5 minutes for background processing
             
             try {
                 require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                $notificationHelper = new ServiceRequestNotificationHelper();
+                $notificationHelper = new ServiceRequestNotificationHelper($pdo);
                 
                 // Get service request details for proper title
                 $requestDetails = $notificationHelper->getRequestDetails($service_request_id);

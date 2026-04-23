@@ -675,7 +675,7 @@ if ($method == 'GET') {
 
             try {
 
-                $notificationHelper = new ServiceRequestNotificationHelper();
+                $notificationHelper = new ServiceRequestNotificationHelper($db);
 
                 
 

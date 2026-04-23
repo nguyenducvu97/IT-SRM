@@ -1985,41 +1985,71 @@ elseif ($method == 'POST') {
                 } catch (Exception $e) {
                     error_log("Failed to send confirmation email: " . $e->getMessage());
                 }
-                
-                // Background staff notifications (non-blocking)
+
+                // Create admin notification immediately (not background)
+                try {
+                    require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                    $notificationHelper = new ServiceRequestNotificationHelper($db);
+
+                    // Get user details for notifications
+                    $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+                    $user_stmt->execute([$user_id]);
+                    $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
+                    $requester_name = $user_data['full_name'] ?? 'Unknown User';
+
+                    // Get category name
+                    $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
+                    $cat_stmt->execute([$category_id]);
+                    $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
+                    $category_name = $cat_data['name'] ?? 'Unknown';
+
+                    // Notify admin immediately
+                    error_log("NOTIFICATION: Creating admin notification for request #{$request_id}");
+                    $adminNotifyResult = $notificationHelper->notifyAdminNewRequest(
+                        $request_id,
+                        $title,
+                        $requester_name,
+                        $category_name
+                    );
+                    error_log("NOTIFICATION: Admin notification result: " . ($adminNotifyResult ? "SUCCESS" : "FAILED"));
+                } catch (Exception $e) {
+                    error_log("Failed to create admin notification: " . $e->getMessage());
+                }
+
+                // Background staff email notifications (non-blocking)
                 register_shutdown_function(function() use ($request_id, $title, $user_id, $category_id, $db) {
                     ignore_user_abort(true);
                     set_time_limit(60); // 1 minute for background processing
-                    
+
                     try {
                         require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                        $notificationHelper = new ServiceRequestNotificationHelper();
-                        
+                        $notificationHelper = new ServiceRequestNotificationHelper($db);
+
                         // Get user details for notifications
                         $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
                         $user_stmt->execute([$user_id]);
                         $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
                         $requester_name = $user_data['full_name'] ?? 'Unknown User';
-                        
+
                         // Get category name
                         $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
                         $cat_stmt->execute([$category_id]);
                         $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
                         $category_name = $cat_data['name'] ?? 'Unknown';
-                        
+
                         // Notify staff with email
                         $notificationHelper->notifyStaffNewRequest(
-                            $request_id, 
-                            $title, 
-                            $requester_name, 
+                            $request_id,
+                            $title,
+                            $requester_name,
                             $category_name
                         );
-                        
+
                         // Queue email notifications to staff
                         $staff_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'staff' AND status = 'active'");
                         $staff_stmt->execute();
                         $staff_users = $staff_stmt->fetchAll(PDO::FETCH_ASSOC);
-                        
+
                         foreach ($staff_users as $staff) {
                             $staff_subject = "Yêu câu moi can xly #{$request_id}";
                             $staff_body = "
@@ -2029,7 +2059,7 @@ elseif ($method == 'POST') {
                                 <p>Thoi gian tao: " . date('d/m/Y H:i') . "</p>
                                 <p>Vui lòng truy cap hê thong de xly yêu câu.</p>
                             ";
-                            
+
                             queueEmailAsync(
                                 $staff['email'],
                                 $staff['full_name'],
@@ -2038,20 +2068,12 @@ elseif ($method == 'POST') {
                                 'high'
                             );
                         }
-                        
-                        // Notify admin with email
-                        $notificationHelper->notifyAdminNewRequest(
-                            $request_id, 
-                            $title, 
-                            $requester_name, 
-                            $category_name
-                        );
-                        
+
                         // Queue email notifications to admin
                         $admin_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'admin' AND status = 'active'");
                         $admin_stmt->execute();
                         $admin_users = $admin_stmt->fetchAll(PDO::FETCH_ASSOC);
-                        
+
                         foreach ($admin_users as $admin) {
                             $admin_subject = "Yêu câu moi trong hê thong #{$request_id}";
                             $admin_body = "
@@ -2061,7 +2083,7 @@ elseif ($method == 'POST') {
                                 <p>Thoi gian tao: " . date('d/m/Y H:i') . "</p>
                                 <p>Chi tiêt yêu câu có trong hê thong.</p>
                             ";
-                            
+
                             queueEmailAsync(
                                 $admin['email'],
                                 $admin['full_name'],
@@ -2070,12 +2092,12 @@ elseif ($method == 'POST') {
                                 'high'
                             );
                         }
-                        
+
                     } catch (Exception $e) {
                         error_log("Background notification failed: " . $e->getMessage());
                     }
                 });
-                
+
                 serviceJsonResponse(true, $response_data['message'], $response_data);
             } else {
                 serviceJsonResponse(false, "Failed to create request");
@@ -2543,7 +2565,7 @@ elseif ($method == 'POST') {
 
                     try {
 
-                        $notificationHelper = new ServiceRequestNotificationHelper();
+                        $notificationHelper = new ServiceRequestNotificationHelper($db);
 
                         
 
@@ -3187,7 +3209,7 @@ elseif ($method == 'POST') {
 
                 error_log("DEBUG: Creating ServiceRequestNotificationHelper");
 
-                $notificationHelper = new ServiceRequestNotificationHelper();
+                $notificationHelper = new ServiceRequestNotificationHelper($db);
 
                 
 
@@ -5884,7 +5906,7 @@ elseif ($method == 'POST') {
                 
                 // Send role-based notifications and emails
                 try {
-                    $notificationHelper = new ServiceRequestNotificationHelper();
+                    $notificationHelper = new ServiceRequestNotificationHelper($db);
                     
                     // Notify user that their request is now in progress
                     $notificationHelper->notifyUserRequestInProgress(
@@ -7327,7 +7349,7 @@ elseif ($method == 'PUT') {
                         // Send notifications using ServiceRequestNotificationHelper
                         try {
                             require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                            $notificationHelper = new ServiceRequestNotificationHelper();
+                            $notificationHelper = new ServiceRequestNotificationHelper($db);
                             
                             // 1. Notify user that request is in progress
                             error_log("NOTIFICATIONS: Notifying user for request #$request_id");
@@ -7607,7 +7629,7 @@ elseif ($method == 'PUT') {
 
                 // Send role-based notifications based on status change
 
-                $notificationHelper = new ServiceRequestNotificationHelper();
+                $notificationHelper = new ServiceRequestNotificationHelper($db);
 
                 
 
@@ -8204,7 +8226,7 @@ elseif ($method == 'PUT') {
 
                 try {
 
-                    $notificationHelper = new ServiceRequestNotificationHelper();
+                    $notificationHelper = new ServiceRequestNotificationHelper($db);
 
                     
 
