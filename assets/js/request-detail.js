@@ -12616,7 +12616,7 @@ class RequestDetailApp {
 
 
 
-                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || ['rejected', 'approved'].includes(request.reject_request.status)) ? `
+                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || ['rejected', 'approved'].includes(request.reject_request.status)) && (!request.support_request || ['approved', 'rejected'].includes(request.support_request.status)) ? `
 
 
 
@@ -12956,7 +12956,7 @@ class RequestDetailApp {
 
 
 
-                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || ['rejected', 'approved'].includes(request.reject_request.status)) ? `
+                        ${request.status === 'in_progress' && request.assigned_to == currentUser.id && (!request.reject_request || ['rejected', 'approved'].includes(request.reject_request.status)) && (!request.support_request || ['approved', 'rejected'].includes(request.support_request.status)) ? `
 
 
 
