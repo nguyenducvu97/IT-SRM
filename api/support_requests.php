@@ -19,7 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require_once '../config/session.php';
 require_once '../config/database.php';
 require_once '../config/email.php';
-require_once '../lib/PHPMailerEmailHelper.php';
+require_once '../lib/EmailHelper.php'; // Use original EmailHelper
+// require_once '../lib/PHPMailerEmailHelper.php'; // FILE MISSING
 require_once '../lib/ServiceRequestNotificationHelper.php';
 
 // Start session
@@ -591,7 +592,7 @@ function handlePost($pdo, $action, $current_user, $user_role) {
                     
                     // Send email notification to admin (non-blocking)
                     try {
-                        $emailHelper = new PHPMailerEmailHelper();
+                        $emailHelper = new EmailHelper();
                         
                         // Get admin email
                         $admin_stmt = $pdo->prepare("SELECT email, full_name FROM users WHERE id = ?");
@@ -600,14 +601,32 @@ function handlePost($pdo, $action, $current_user, $user_role) {
                         
                         if ($admin_data) {
                             $subject = $title;
-                            $email_body = "Yêu cầu hỗ trợ mới\n\n";
-                            $email_body .= "Tiêu đề: " . $title . "\n";
-                            $email_body .= "Nội dung: " . $message . "\n\n";
-                            $email_body .= "Xem chi tiết: http://localhost/it-service-request/request-detail.html?id=" . $service_request_id . "\n\n";
-                            $email_body .= "Trân trọng,\n";
-                            $email_body .= "IT Service Request System";
                             
-                            $emailHelper->sendEmail($admin_data['email'], $admin_data['full_name'], $subject, $email_body);
+                            // Use standard HTML template
+                            $emailContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu hỗ trợ mới</h2>
+                        
+                        <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0;">
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 120px;">Mã yêu cầu:</span>
+                                <span style="color: #212529;"><strong>#' . $service_request_id . '</strong></span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 120px;">Tiêu đề:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($title) . '</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 120px;">Nhân viên IT:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($staff_name) . '</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 120px;">Yêu cầu gốc:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($request_title) . '</span>
+                            </div>
+                        </div>
+                        
+                        <p style="color: #666; line-height: 1.6;">Vui lòng truy cập hệ thống để xem và xử lý yêu cầu hỗ trợ này.</p>';
+                            
+                            $emailHelper->sendStandardEmail($admin_data['email'], $admin_data['full_name'], $subject, $emailContent, $service_request_id);
                         }
                     } catch (Exception $e) {
                         error_log("Failed to send support request email to admin {$admin_id}: " . $e->getMessage());

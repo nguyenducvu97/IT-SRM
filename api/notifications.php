@@ -74,10 +74,14 @@ try {
                 ];
             }
             
+            // Get unread count for badge
+            $unreadCount = $notificationHelper->getUnreadCount($userId);
+            
             echo json_encode([
                 'success' => true,
                 'message' => 'Notifications retrieved successfully',
-                'data' => $formattedNotifications
+                'data' => $formattedNotifications,
+                'unread_count' => $unreadCount
             ]);
         }
     } else if ($method == 'PUT') {

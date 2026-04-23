@@ -107,7 +107,7 @@ class NotificationManager {
             console.log('NotificationManager: Loading notifications...');
             
             // Load notifications list
-            const response = await fetch('api/notifications.php?action=get');
+            const response = await fetch('api/notifications.php?action=list');
             console.log('NotificationManager: Response status:', response.status);
             
             if (!response.ok) throw new Error('Failed to load notifications');
@@ -115,6 +115,12 @@ class NotificationManager {
             const data = await response.json();
             if (data.success && data.data) {
                 this.notifications = data.data;
+                // Use unread_count from list API response
+                if (data.unread_count !== undefined) {
+                    this.unreadCount = data.unread_count;
+                    console.log('NotificationManager: Unread count from list API:', this.unreadCount);
+                    this.renderNotificationCount();
+                }
             } else {
                 this.notifications = [];
             }
@@ -122,8 +128,10 @@ class NotificationManager {
             
             this.renderNotifications();
             
-            // Load unread count
-            await this.updateNotificationCount();
+            // Only load unread count separately if not provided in list API
+            if (data.unread_count === undefined) {
+                await this.updateNotificationCount();
+            }
             
         } catch (error) {
             console.error('Error loading notifications:', error);

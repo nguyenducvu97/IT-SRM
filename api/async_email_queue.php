@@ -49,56 +49,54 @@ class AsyncEmailQueue {
     
     // Trigger background email processing (completely non-blocking)
     private function triggerBackgroundProcess() {
+        // Check email processing mode
+        if (function_exists('isEmailProcessingDisabled') && isEmailProcessingDisabled()) {
+            error_log("Email processing is DISABLED - emails queued but not sent");
+            return;
+        }
+        
+        // For inline mode, process immediately
+        if (function_exists('isBackgroundProcessingEnabled') && !isBackgroundProcessingEnabled()) {
+            error_log("Processing emails inline (background disabled)");
+            $this->processQueue();
+            return;
+        }
+        
+        // TRUE BACKGROUND MODE - Process directly without opening files
+        try {
+            require_once __DIR__ . '/../scripts/background_email_processor.php';
+            
+            // Process emails in true background (no file opening)
+            $result = processEmailsInBackground();
+            
+            if (defined('ENABLE_BACKGROUND_LOGGING') && ENABLE_BACKGROUND_LOGGING) {
+                error_log("Background email processing: " . json_encode($result));
+            }
+            
+        } catch (Exception $e) {
+            error_log("Background processing failed: " . $e->getMessage());
+            
+            // Fallback to old method if needed
+            $this->fallbackToOldMethod();
+        }
+    }
+    
+    // Fallback method for compatibility
+    private function fallbackToOldMethod() {
         $script = __DIR__ . '/../scripts/process_email_queue.php';
         
-        // Method 1: Use curl with very short timeout (non-blocking)
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'http://localhost/it-service-request/scripts/process_email_queue.php');
-        curl_setopt($ch, CURLOPT_TIMEOUT, 1); // 1 second timeout
-        curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FORBID_REUSE, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
-        curl_setopt($ch, CURLOPT_FRESH_CONNECT, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'User-Agent: EmailQueue-Trigger/1.0'
-        ]);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['action' => 'process']));
-        
-        // Execute but don't wait for response
-        curl_exec($ch);
-        curl_close($ch);
-        
-        // Method 2: Fallback to exec() with full PHP path (completely background)
         if (function_exists('exec')) {
-            // Try to find PHP path
             $php_path = $this->findPhpPath();
-            
             if ($php_path) {
                 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                    // Windows: use full path and start command
                     $command = 'start /B "' . $php_path . '" "' . $script . '"';
                     @exec($command);
                 } else {
-                    // Linux/Mac: use full path
                     $command = '"' . $php_path . '" "' . $script . '" > /dev/null 2>&1 &';
                     @exec($command);
                 }
             }
         }
-        
-        // Method 3: Windows specific fallback
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            $php_path = $this->findPhpPath();
-            if ($php_path) {
-                $command = '"' . $php_path . '" "' . $script . '"';
-                @popen($command, 'r');
-            }
-        }
-        
-        error_log("Background email processing triggered");
     }
     
     // Find PHP executable path

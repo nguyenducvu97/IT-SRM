@@ -1,0 +1,161 @@
+[2026-04-23 11:41:35] === START TEST ===
+[2026-04-23 11:41:35] ServiceRequestNotificationHelper created
+[2026-04-23 11:41:35] Calling notifyStaffNewRequest with request_id=777
+[2026-04-23 11:41:35] notifyStaffNewRequest result: FAILED (2.38ms)
+[2026-04-23 11:41:35] === END TEST ===
+[2026-04-23 11:41:42] === START TEST ===
+[2026-04-23 11:41:42] ServiceRequestNotificationHelper created
+[2026-04-23 11:41:42] Calling notifyStaffNewRequest with request_id=777
+[2026-04-23 11:41:42] notifyStaffNewRequest: START - request_id=777, title='Logger Test Request'
+[2026-04-23 11:41:42] notifyStaffNewRequest: Staff users count = 1
+[2026-04-23 11:41:42] notifyStaffNewRequest: Creating notification for staff_id=2, email=nguyenducvu561@gmail.com
+[2026-04-23 11:41:42] notifyStaffNewRequest: createNotification result = FAILED
+[2026-04-23 11:41:42] notifyStaffNewRequest: Results array = Array
+(
+    [0] => 
+)
+
+[2026-04-23 11:41:42] notifyStaffNewRequest: in_array(false, results) = true
+[2026-04-23 11:41:42] notifyStaffNewRequest: !empty(results) = true
+[2026-04-23 11:41:42] notifyStaffNewRequest: FINAL RESULT = FAILED
+[2026-04-23 11:41:42] notifyStaffNewRequest result: FAILED (4.26ms)
+[2026-04-23 11:41:42] === END TEST ===
+[2026-04-23 11:41:55] === START TEST ===
+[2026-04-23 11:41:55] ServiceRequestNotificationHelper created
+[2026-04-23 11:41:55] Calling notifyStaffNewRequest with request_id=777
+[2026-04-23 11:41:55] notifyStaffNewRequest: START - request_id=777, title='Logger Test Request'
+[2026-04-23 11:41:55] notifyStaffNewRequest: Staff users count = 1
+[2026-04-23 11:41:55] notifyStaffNewRequest: Creating notification for staff_id=2, email=nguyenducvu561@gmail.com
+[2026-04-23 11:41:55] notifyStaffNewRequest: createNotification result = FAILED
+[2026-04-23 11:41:55] notifyStaffNewRequest: Results array = Array
+(
+    [0] => 
+)
+
+[2026-04-23 11:41:55] notifyStaffNewRequest: in_array(false, results) = true
+[2026-04-23 11:41:55] notifyStaffNewRequest: !empty(results) = true
+[2026-04-23 11:41:55] notifyStaffNewRequest: FINAL RESULT = FAILED
+[2026-04-23 11:41:55] notifyStaffNewRequest result: FAILED (3.24ms)
+[2026-04-23 11:41:55] === END TEST ===
+[2026-04-23 11:42:06] === START TEST ===
+[2026-04-23 11:42:06] ServiceRequestNotificationHelper created
+[2026-04-23 11:42:06] Calling notifyStaffNewRequest with request_id=777
+[2026-04-23 11:42:06] notifyStaffNewRequest: START - request_id=777, title='Logger Test Request'
+[2026-04-23 11:42:06] notifyStaffNewRequest: Staff users count = 1
+[2026-04-23 11:42:06] notifyStaffNewRequest: Creating notification for staff_id=2, email=nguyenducvu561@gmail.com
+[2026-04-23 11:42:06] createNotification: START - user_id=2, title='Yêu cầu mới cần xử lý'
+[2026-04-23 11:42:06] createNotification: db is SET
+[2026-04-23 11:42:06] createNotification: Statement prepared
+[2026-04-23 11:42:06] createNotification: EXCEPTION - SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'related_type' cannot be null
+[2026-04-23 11:42:06] createNotification: Exception file=C:\xampp\htdocs\it-service-request\lib\NotificationHelper.php line=50
+[2026-04-23 11:42:06] notifyStaffNewRequest: createNotification result = FAILED
+[2026-04-23 11:42:06] notifyStaffNewRequest: Results array = Array
+(
+    [0] => 
+)
+
+[2026-04-23 11:42:06] notifyStaffNewRequest: in_array(false, results) = true
+[2026-04-23 11:42:06] notifyStaffNewRequest: !empty(results) = true
+[2026-04-23 11:42:06] notifyStaffNewRequest: FINAL RESULT = FAILED
+[2026-04-23 11:42:06] notifyStaffNewRequest result: FAILED (6.65ms)
+[2026-04-23 11:42:06] === END TEST ===
+[2026-04-23 11:42:28] createNotification: START - user_id=1, title='Yêu cầu đang được xử lý'
+[2026-04-23 11:42:28] createNotification: db is SET
+[2026-04-23 11:42:28] createNotification: Statement prepared
+[2026-04-23 11:42:28] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:28] createNotification: Created notification ID=732
+[2026-04-23 11:42:28] createNotification: END - returning TRUE
+[2026-04-23 11:42:28] createNotification: START - user_id=1, title='Yêu cầu đã hoàn thành'
+[2026-04-23 11:42:28] createNotification: db is SET
+[2026-04-23 11:42:28] createNotification: Statement prepared
+[2026-04-23 11:42:28] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:28] createNotification: Created notification ID=733
+[2026-04-23 11:42:28] createNotification: END - returning TRUE
+[2026-04-23 11:42:28] createNotification: START - user_id=1, title='Yêu cầu đã bị từ chối'
+[2026-04-23 11:42:28] createNotification: db is SET
+[2026-04-23 11:42:28] createNotification: Statement prepared
+[2026-04-23 11:42:28] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:28] createNotification: Created notification ID=734
+[2026-04-23 11:42:28] createNotification: END - returning TRUE
+[2026-04-23 11:42:28] createNotification: START - user_id=1, title='Có bình luận mới'
+[2026-04-23 11:42:28] createNotification: db is SET
+[2026-04-23 11:42:28] createNotification: Statement prepared
+[2026-04-23 11:42:28] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:28] createNotification: Created notification ID=735
+[2026-04-23 11:42:28] createNotification: END - returning TRUE
+[2026-04-23 11:42:28] notifyStaffNewRequest: START - request_id=777, title='Database Test Request'
+[2026-04-23 11:42:28] notifyStaffNewRequest: Staff users count = 1
+[2026-04-23 11:42:28] notifyStaffNewRequest: Creating notification for staff_id=2, email=nguyenducvu561@gmail.com
+[2026-04-23 11:42:28] createNotification: START - user_id=2, title='Yêu cầu mới cần xử lý'
+[2026-04-23 11:42:28] createNotification: db is SET
+[2026-04-23 11:42:28] createNotification: Statement prepared
+[2026-04-23 11:42:28] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:28] createNotification: Created notification ID=736
+[2026-04-23 11:42:28] createNotification: END - returning TRUE
+[2026-04-23 11:42:28] notifyStaffNewRequest: createNotification result = SUCCESS
+[2026-04-23 11:42:28] notifyStaffNewRequest: Results array = Array
+(
+    [0] => 1
+)
+
+[2026-04-23 11:42:28] notifyStaffNewRequest: in_array(false, results) = false
+[2026-04-23 11:42:28] notifyStaffNewRequest: !empty(results) = true
+[2026-04-23 11:42:28] notifyStaffNewRequest: FINAL RESULT = SUCCESS
+[2026-04-23 11:42:29] createNotification: START - user_id=2, title='Phản hồi từ người dùng'
+[2026-04-23 11:42:29] createNotification: db is SET
+[2026-04-23 11:42:29] createNotification: Statement prepared
+[2026-04-23 11:42:29] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:29] createNotification: Created notification ID=737
+[2026-04-23 11:42:29] createNotification: END - returning TRUE
+[2026-04-23 11:42:29] createNotification: START - user_id=1, title='Phản hồi từ người dùng'
+[2026-04-23 11:42:29] createNotification: db is SET
+[2026-04-23 11:42:29] createNotification: Statement prepared
+[2026-04-23 11:42:29] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:29] createNotification: Created notification ID=738
+[2026-04-23 11:42:29] createNotification: END - returning TRUE
+[2026-04-23 11:42:29] createNotification: START - user_id=2, title='Yêu cầu được Admin phê duyệt'
+[2026-04-23 11:42:29] createNotification: db is SET
+[2026-04-23 11:42:29] createNotification: Statement prepared
+[2026-04-23 11:42:29] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:29] createNotification: Created notification ID=739
+[2026-04-23 11:42:29] createNotification: END - returning TRUE
+[2026-04-23 11:42:29] createNotification: START - user_id=2, title='Yêu cầu bị Admin từ chối'
+[2026-04-23 11:42:29] createNotification: db is SET
+[2026-04-23 11:42:29] createNotification: Statement prepared
+[2026-04-23 11:42:29] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:29] createNotification: Created notification ID=740
+[2026-04-23 11:42:29] createNotification: END - returning TRUE
+[2026-04-23 11:42:29] createNotification: START - user_id=2, title='Bình luận mới về yêu cầu'
+[2026-04-23 11:42:29] createNotification: db is SET
+[2026-04-23 11:42:29] createNotification: Statement prepared
+[2026-04-23 11:42:29] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:29] createNotification: Created notification ID=741
+[2026-04-23 11:42:29] createNotification: END - returning TRUE
+[2026-04-23 11:42:29] createNotification: START - user_id=1, title='Yêu cầu mới trong hệ thống'
+[2026-04-23 11:42:29] createNotification: db is SET
+[2026-04-23 11:42:29] createNotification: Statement prepared
+[2026-04-23 11:42:29] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:29] createNotification: Created notification ID=742
+[2026-04-23 11:42:29] createNotification: END - returning TRUE
+[2026-04-23 11:42:29] createNotification: START - user_id=1, title='Thay đổi trạng thái yêu cầu'
+[2026-04-23 11:42:29] createNotification: db is SET
+[2026-04-23 11:42:29] createNotification: Statement prepared
+[2026-04-23 11:42:29] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:29] createNotification: Created notification ID=743
+[2026-04-23 11:42:29] createNotification: END - returning TRUE
+[2026-04-23 11:42:29] createNotification: START - user_id=1, title='Yêu cầu hỗ trợ kỹ thuật (Escalation)'
+[2026-04-23 11:42:29] createNotification: db is SET
+[2026-04-23 11:42:29] createNotification: Statement prepared
+[2026-04-23 11:42:29] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:29] createNotification: Created notification ID=744
+[2026-04-23 11:42:29] createNotification: Sending email...
+[2026-04-23 11:42:37] createNotification: Email sent
+[2026-04-23 11:42:37] createNotification: END - returning TRUE
+[2026-04-23 11:42:37] createNotification: START - user_id=1, title='Yêu cầu từ chối cần xác nhận'
+[2026-04-23 11:42:37] createNotification: db is SET
+[2026-04-23 11:42:37] createNotification: Statement prepared
+[2026-04-23 11:42:37] createNotification: INSERT result=SUCCESS
+[2026-04-23 11:42:37] createNotification: Created notification ID=745
+[2026-04-23 11:42:37] createNotification: Sending email...
+[2026-04-23 11:42:40] createNotification: Email sent
+[2026-04-23 11:42:40] createNotification: END - returning TRUE

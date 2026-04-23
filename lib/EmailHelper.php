@@ -1,103 +1,20 @@
 <?php
-require_once __DIR__ . '/../autoloader.php';
-
 class EmailHelper {
-    public $mail;
-    public $config;
+    private $config = [];
     
     public function __construct() {
-        $this->config = array(
-            'protocol' => 'pop3',
-            'host' => 'gw.sgitech.com.vn',
+        $this->config = [
+            'smtp_server' => 'gw.sgitech.com.vn',
             'port' => 25,
             'username' => 'ndvu@sgitech.com.vn',
-            'password' => 'ndvu',
+            'password' => 'ndvu@123',
             'from_email' => 'ndvu@sgitech.com.vn',
-            'from_name' => 'IT Service Request System',
-            'encryption' => 'none',
-            'pop3_server' => 'gw.sgitech.com.vn',
-            'smtp_server' => 'gw.sgitech.com.vn'
-        );
-    }
-    
-    public function sendEmail($to, $toName, $subject, $body) {
-        try {
-            if ($this->sendCompanySMTP($to, $toName, $subject, $body)) {
-                $this->logEmail($to, $subject, $body, 'SENT_COMPANY_SMTP');
-                return true;
-            }
-            
-            if ($this->sendPhpMail($to, $toName, $subject, $body)) {
-                $this->logEmail($to, $subject, $body, 'SENT_PHPMAIL');
-                return true;
-            }
-            
-            $this->logEmail($to, $subject, $body, 'FAILED');
-            return false;
-            
-        } catch (Exception $e) {
-            error_log("EmailHelper Error: " . $e->getMessage());
-            $this->logEmail($to, $subject, $body, 'ERROR');
-            return false;
-        }
-    }
-    
-    private function sendCompanySMTP($to, $toName, $subject, $body) {
-        try {
-            $this->mail = new PHPMailer\PHPMailer\PHPMailer(true);
-            
-            $this->mail->isSMTP();
-            $this->mail->Host = $this->config['smtp_server'];
-            $this->mail->Port = $this->config['port'];
-            $this->mail->SMTPAuth = true;
-            $this->mail->Username = $this->config['username'];
-            $this->mail->Password = $this->config['password'];
-            $this->mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-            $this->mail->Port = 25;
-            
-            $this->mail->setFrom($this->config['from_email'], $this->config['from_name']);
-            $this->mail->addAddress($to, $toName);
-            $this->mail->Subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
-            $this->mail->Body = $body;
-            $this->mail->isHTML(true);
-            
-            try {
-                $this->mail->send();
-                return true;
-            } catch (Exception $e) {
-                $this->mail->SMTPSecure = '';
-                $this->mail->Port = 25;
-                $this->mail->send();
-                return true;
-            }
-            
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-    
-    private function sendPhpMail($to, $toName, $subject, $body) {
-        $headers = [
-            'MIME-Version: 1.0',
-            'Content-Type: text/html; charset=UTF-8',
-            'From: ' . $this->config['from_name'] . ' <' . $this->config['from_email'] . '>',
-            'Reply-To: ' . $this->config['from_email']
+            'from_name' => 'IT Service Request System'
         ];
-        
-        return mail($to, $subject, $body, implode("\r\n", $headers));
     }
     
-    private function logEmail($to, $subject, $body, $status) {
-        $log_entry = sprintf(
-            "[%s] %s | To: %s | Subject: %s\n",
-            date('Y-m-d H:i:s'),
-            $status,
-            $to,
-            $subject
-        );
-        
-        $log_file = __DIR__ . '/../logs/email_activity.log';
-        file_put_contents($log_file, $log_entry, FILE_APPEND | LOCK_EX);
+    public function getConfig() {
+        return $this->config;
     }
     
     public function sendNewRequestNotification($request_data) {
@@ -106,232 +23,67 @@ class EmailHelper {
         $database = new Database();
         $db = $database->getConnection();
         
-        $stmt = $db->prepare("SELECT email, full_name FROM users WHERE role IN ('admin', 'staff') AND status = 'active'");
+        $stmt = $db->prepare("SELECT email, full_name FROM users WHERE role = 'admin' AND status = 'active'");
         $stmt->execute();
         $recipients = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         if (empty($recipients)) {
-            $this->logEmail('', 'No recipients found', '', 'FAILED: No admin/staff users found');
             return false;
         }
         
-        $subject = "Yêu câu dich vu mõi #" . $request_data['id'];
+        $subject = "Yêu cầu dịch vụ mới #" . $request_data['id'];
         
-        $body = '<div class="mail-container" align="left" valign="top" style="padding-top:5px;vertical-align:top;" id="displayFrameTD">
-		<iframe name="displayFrame" id="displayFrame" src="./?mode=display&amp;box=&amp;&amp;iid=194969&amp;yn_preview=" width="100%" height="751" frameborder="0" marginheight="0" onload="autoResize(this);">
-			<html><head>
-<meta content="text/html; charset=UTF-8" http-equiv="content-type">
-<style>
-.email-container {
-    max-width: 600px;
-    margin: 20px auto;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-}
+        $body = '<body marginheight="0">
+<div id="am_mail_content">
+<div style="max-width: 600px; margin: 20px auto; background-color: white; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; font-family: Arial, sans-serif;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 24px; font-weight: bold;">IT Service Request</h1>
+                        <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;">Hệ thống yêu cầu dịch vụ CNTT</p>
+                    </div>
+                    
+                    <div style="padding: 30px 20px;">
+                        <h2 style="color: #333; margin-bottom: 20px;">Yêu cầu dịch vụ mới</h2>
+                        
+                        <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0;">
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Mã yêu cầu:</span>
+                                <span style="color: #212529;"><strong>#' . $request_data['id'] . '</strong></span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Tiêu đề:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($request_data['title']) . '</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Người tạo:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($request_data['requester_name']) . '</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Danh mục:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($request_data['category']) . '</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Ưu tiên:</span>
+                                <span style="color: #212529;"><span style="padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; text-transform: uppercase; background: #fff3e0; color: #ef6c00;">' . htmlspecialchars($request_data['priority']) . '</span></span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Mô tả:</span>
+                                <span style="color: #212529;">' . nl2br(htmlspecialchars($request_data['description'])) . '</span>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="http://localhost/it-service-request/" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 20px; font-weight: bold;" target="_blank">Xem chi tiết yêu cầu -></a>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #ddd;">
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;"><strong>IT Service Request System</strong></p>
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;">Đây là email tự động. Vui lòng không trả lời email này.</p>
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;">Nếu cần hỗ trợ, vui lòng liên hệ IT Department.</p>
+                    </div>
+                </div></div>
 
-.email-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 40px 30px;
-    text-align: center;
-}
-
-.email-header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: bold;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.email-header p {
-    margin: 8px 0 0 0;
-    opacity: 0.9;
-    font-size: 14px;
-}
-
-.email-body {
-    padding: 40px 30px;
-    background-color: #fafbfc;
-}
-
-.email-title {
-    color: #2c3e50;
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 25px;
-    text-align: center;
-    position: relative;
-}
-
-.email-title::after {
-    content: "";
-    position: absolute;
-    bottom: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 2px;
-}
-
-.request-details {
-    background: white;
-    border: 1px solid #e8eaed;
-    border-radius: 10px;
-    padding: 25px;
-    margin: 20px 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.request-detail-row {
-    display: flex;
-    margin-bottom: 15px;
-    align-items: flex-start;
-}
-
-.request-detail-row:last-child {
-    margin-bottom: 0;
-}
-
-.request-label {
-    font-weight: 600;
-    color: #495057;
-    min-width: 120px;
-    flex-shrink: 0;
-    font-size: 14px;
-}
-
-.request-value {
-    color: #212529;
-    flex: 1;
-    font-size: 14px;
-    word-break: break-word;
-}
-
-.priority-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.priority-high {
-    background: linear-gradient(135deg, #ff6b6b, #ff5252);
-    color: white;
-    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
-}
-
-.priority-medium {
-    background: linear-gradient(135deg, #ffc107, #ff9800);
-    color: white;
-    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
-}
-
-.priority-low {
-    background: linear-gradient(135deg, #4caf50, #388e3c);
-    color: white;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-}
-
-.cta-button {
-    display: inline-block;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 15px 30px;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 16px;
-    text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    letter-spacing: 0.5px;
-}
-
-.cta-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-.email-footer {
-    background: #f8f9fa;
-    padding: 30px;
-    text-align: center;
-    border-top: 1px solid #e8eaed;
-}
-
-.footer-text {
-    margin: 5px 0;
-    color: #6c757d;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.footer-text strong {
-    color: #495057;
-}
-</style>
-</head>
-<body marginheight="0">
-<div class="email-container">
-    <div class="email-header">
-        <h1>IT Service Request</h1>
-        <p>Hê thong yêu câu dich vu CNTT</p>
-    </div>
-    
-    <div class="email-body">
-        <h2 class="email-title">Yêu câu dich vu mõi</h2>
-        
-        <div class="request-details">
-            <div class="request-detail-row">
-                <span class="request-label">Mã yêu câu:</span>
-                <span class="request-value"><strong>#' . $request_data['id'] . '</strong></span>
-            </div>
-            <div class="request-detail-row">
-                <span class="request-label">Tiêu dê:</span>
-                <span class="request-value">' . htmlspecialchars($request_data['title']) . '</span>
-            </div>
-            <div class="request-detail-row">
-                <span class="request-label">Nguôi tao:</span>
-                <span class="request-value">' . htmlspecialchars($request_data['requester_name']) . '</span>
-            </div>
-            <div class="request-detail-row">
-                <span class="request-label">Danh mûc:</span>
-                <span class="request-value">' . htmlspecialchars($request_data['category']) . '</span>
-            </div>
-            <div class="request-detail-row">
-                <span class="request-label">Uu tiên:</span>
-                <span class="request-value"><span class="priority-badge priority-' . strtolower($request_data['priority']) . '">' . htmlspecialchars($request_data['priority']) . '</span></span>
-            </div>
-            <div class="request-detail-row">
-                <span class="request-label">Mô tã:</span>
-                <span class="request-value">' . nl2br(htmlspecialchars($request_data['description'])) . '</span>
-            </div>
-        </div>
-        
-        <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost/it-service-request/" class="cta-button" target="_blank">Xem chi tiêt yêu câu -></a>
-        </div>
-        
-        <div class="email-footer">
-            <p class="footer-text"><strong>IT Service Request System</strong></p>
-            <p class="footer-text">Dây là email tu dông. Vui lòng không trá loi email này.</p>
-            <p class="footer-text">Nêu cân hõ trõ, vui lòng liên hê IT Department.</p>
-        </div>
-    </div>
-</div>
-
-</body></html>
-		</iframe>
-	</div>';
+</body>';
         
         $success_count = 0;
         $total_count = count($recipients);
@@ -342,8 +94,92 @@ class EmailHelper {
             }
         }
         
-        $this->logEmail('multiple', $subject, $body, "SENT to {$success_count}/{$total_count} admin/staff recipients");
         return $success_count > 0;
+    }
+    
+    /**
+     * Send email using standard template with custom content
+     * This method uses the same beautiful template as new request notifications
+     */
+    public function sendStandardEmail($to, $toName, $subject, $customContent, $requestId = null, $requestDetails = []) {
+        try {
+            // Use the same beautiful template as sendNewRequestNotification
+            $body = '<body marginheight="0">
+<div id="am_mail_content">
+<div style="max-width: 600px; margin: 20px auto; background-color: white; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; font-family: Arial, sans-serif;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px 20px; text-align: center;">
+                        <h1 style="margin: 0; font-size: 24px; font-weight: bold;">IT Service Request</h1>
+                        <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;">Hệ thống yêu cầu dịch vụ CNTT</p>
+                    </div>
+                    
+                    <div style="padding: 30px 20px;">
+                        ' . $customContent . '
+                        
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="http://localhost/it-service-request/' . ($requestId ? 'request-detail.html?id=' . $requestId : '') . '" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 25px; text-decoration: none; border-radius: 20px; font-weight: bold;" target="_blank">Xem chi tiết yêu cầu -></a>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #ddd;">
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;"><strong>IT Service Request System</strong></p>
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;">Đây là email tự động. Vui lòng không trả lời email này.</p>
+                        <p style="margin: 5px 0; color: #6c757d; font-size: 12px;">Nếu cần hỗ trợ, vui lòng liên hệ IT Department.</p>
+                    </div>
+                </div></div>
+
+</body>';
+            
+            return $this->sendEmail($to, $toName, $subject, $body);
+            
+        } catch (Exception $e) {
+            error_log("EmailHelper Standard Email Error: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    public function sendEmail($to, $toName, $subject, $body) {
+        try {
+            if ($this->sendPhpMail($to, $toName, $subject, $body)) {
+                return true;
+            }
+            
+            return false;
+            
+        } catch (Exception $e) {
+            error_log("EmailHelper Error: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    private function sendPhpMail($to, $toName, $subject, $body) {
+        $headers = [
+            'MIME-Version: 1.0',
+            'Content-Type: text/html; charset=UTF-8',
+            'From: ' . $this->config['from_name'] . ' <' . $this->config['from_email'] . '>',
+            'Reply-To: ' . $this->config['from_email'],
+            'X-Mailer: PHP/' . phpversion()
+        ];
+        
+        $encoded_subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+        
+        // Add additional headers for better deliverability
+        $additional_headers = [
+            'X-Priority: 3',
+            'X-MSMail-Priority: Normal',
+            'Importance: Normal'
+        ];
+        
+        $all_headers = array_merge($headers, $additional_headers);
+        
+        // Log email attempt for debugging
+        error_log("EmailHelper: Sending email to $to with subject: $subject");
+        
+        $result = mail($to, $encoded_subject, $body, implode("\r\n", $all_headers));
+        
+        // Log result
+        error_log("EmailHelper: Mail result: " . ($result ? 'SUCCESS' : 'FAILED'));
+        
+        return $result;
     }
 }
 ?>

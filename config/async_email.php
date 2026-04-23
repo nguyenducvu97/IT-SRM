@@ -32,16 +32,40 @@ class AsyncEmailProcessor {
     }
     
     private function triggerAsyncProcess() {
-        // Check if processor is already running
-        $lock_file = __DIR__ . '/../logs/email_processor.lock';
-        if (file_exists($lock_file) && (time() - filemtime($lock_file)) < 30) {
-            return; // Processor already running
+        // Check email processing mode
+        if (function_exists('isEmailProcessingDisabled') && isEmailProcessingDisabled()) {
+            error_log("Email processing is DISABLED - emails queued but not sent");
+            return;
         }
         
-        // Create lock file
-        touch($lock_file);
+        // For inline mode, process immediately
+        if (function_exists('isBackgroundProcessingEnabled') && !isBackgroundProcessingEnabled()) {
+            error_log("Processing emails inline (background disabled)");
+            $this->processQueue();
+            return;
+        }
         
-        // Trigger background process
+        // TRUE BACKGROUND MODE - Process directly without opening files
+        try {
+            require_once __DIR__ . '/../scripts/background_email_processor.php';
+            
+            // Process emails in true background (no file opening)
+            $result = processEmailsInBackground();
+            
+            if (defined('ENABLE_BACKGROUND_LOGGING') && ENABLE_BACKGROUND_LOGGING) {
+                error_log("Background email processing: " . json_encode($result));
+            }
+            
+        } catch (Exception $e) {
+            error_log("Background processing failed: " . $e->getMessage());
+            
+            // Fallback to old method
+            $this->fallbackToOldMethod();
+        }
+    }
+    
+    // Fallback method for compatibility
+    private function fallbackToOldMethod() {
         $script_path = __DIR__ . '/../scripts/process_email_queue.php';
         if (file_exists($script_path)) {
             exec("php \"$script_path\" > /dev/null 2>&1 &");

@@ -73,10 +73,12 @@ function startSession() {
             array($handler, 'destroy'),
             array($handler, 'gc')
         );
-        
-        // Start session
-        session_start();
-        
+    }
+    
+    // Start session
+    session_start();
+    
+    if (session_status() == PHP_SESSION_ACTIVE) {
         error_log("Database session started - ID: " . session_id());
     }
 }

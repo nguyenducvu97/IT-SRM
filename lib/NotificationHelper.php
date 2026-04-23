@@ -3,9 +3,12 @@
 // Suppress PHP warnings to prevent JSON corruption
 error_reporting(0);
 ini_set('display_errors', 0);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php';
+require_once __DIR__ . '/EmailHelper.php';
+// require_once __DIR__ . '/../lib/PHPMailerEmailHelper.php'; // FILE MISSING
 
 class NotificationHelper {
     private $db;
@@ -18,7 +21,7 @@ class NotificationHelper {
             $database = new Database();
             $this->db = $database->getConnection();
         }
-        $this->emailHelper = new PHPMailerEmailHelper();
+        $this->emailHelper = new EmailHelper();
     }
     
     /**
@@ -26,8 +29,6 @@ class NotificationHelper {
      */
     public function createNotification($userId, $title, $message, $type = 'info', $relatedId = null, $relatedType = 'service_request', $sendEmail = true) {
         try {
-            error_log("createNotification: user_id={$userId}, title='{$title}', message='{$message}'");
-            
             // Create in-app notification
             $stmt = $this->db->prepare("
                 INSERT INTO notifications (user_id, title, message, type, related_id, related_type)
@@ -35,18 +36,9 @@ class NotificationHelper {
             ");
             $result = $stmt->execute([$userId, $title, $message, $type, $relatedId, $relatedType]);
             
-            error_log("createNotification: INSERT result=" . ($result ? "SUCCESS" : "FAILED"));
-            
-            if ($result) {
-                $notification_id = $this->db->lastInsertId();
-                error_log("createNotification: Created notification ID={$notification_id}");
-            }
-            
             // Send email if requested (separate from notification creation)
             if ($sendEmail) {
-                error_log("createNotification: Sending email...");
                 $this->sendNotificationEmail($userId, $title, $message, $type, $relatedId, $relatedType);
-                error_log("createNotification: Email sent");
             }
             
             return $result;
@@ -61,9 +53,9 @@ class NotificationHelper {
      */
     private function sendNotificationEmail($userId, $title, $message, $type, $relatedId, $relatedType) {
         try {
-            // Use PHPMailerEmailHelper for consistent email templates
-            require_once __DIR__ . '/PHPMailerEmailHelper.php';
-            $emailHelper = new PHPMailerEmailHelper();
+            // Use EmailHelper for email notifications
+            require_once __DIR__ . '/EmailHelper.php';
+            $emailHelper = new EmailHelper();
             
             // Get user details
             $stmt = $this->db->prepare("SELECT email, full_name FROM users WHERE id = ?");
