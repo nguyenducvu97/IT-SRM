@@ -74,8 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 
 
-require_once __DIR__ . '/../config/session.php';
-
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/session.php';
 
@@ -109,10 +107,10 @@ require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php'; // Role-b
 
 
 // Start session for authentication
-
-
+$api_start_time = microtime(true);
 
 startSession();
+error_log("PERF: Session started in " . round((microtime(true) - $api_start_time) * 1000, 2) . "ms");
 
 
 
@@ -188,11 +186,10 @@ function serviceJsonResponse($success, $message, $data = null) {
 
 
 
+$db_start_time = microtime(true);
 $database = new Database();
-
-
-
 $db = $database->getConnection();
+error_log("PERF: Database connection established in " . round((microtime(true) - $db_start_time) * 1000, 2) . "ms");
 
 
 
@@ -281,14 +278,10 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 
 // Ensure session is started with proper cookie settings
-
-
-
+$auth_start_time = microtime(true);
 $user_id = getCurrentUserId();
-
-
-
 $user_role = getCurrentUserRole();
+error_log("PERF: User authentication completed in " . round((microtime(true) - $auth_start_time) * 1000, 2) . "ms");
 
 
 
@@ -1835,6 +1828,8 @@ elseif ($method == 'POST') {
             serviceJsonResponse(false, "Title, description, and category are required");
         }
         
+        $start_time = microtime(true);
+        
         try {
             // Direct insert - no category caching, no complex processing
             $query = "INSERT INTO service_requests 
@@ -1850,16 +1845,22 @@ elseif ($method == 'POST') {
             
             if ($stmt->execute()) {
                 $request_id = $db->lastInsertId();
+                error_log("PERF: Database insert completed in " . round((microtime(true) - $start_time) * 1000, 2) . "ms");
                 
                 // Handle file attachments if any (optimized)
                 $uploaded_files = [];
                 
                 if (strpos($content_type, 'multipart/form-data') !== false && isset($_FILES['attachments'])) {
+                    error_log("PERF: Starting file upload processing");
+                    $file_start_time = microtime(true);
                     
                     $uploads_dir = '../uploads/attachments/' . $request_id . '/';
+                    error_log("PERF: Creating upload directory: {$uploads_dir}");
+                    $dir_start = microtime(true);
                     if (!file_exists($uploads_dir)) {
                         mkdir($uploads_dir, 0755, true);
                     }
+                    error_log("PERF: Directory creation took " . round((microtime(true) - $dir_start) * 1000, 2) . "ms");
                     
                     $file_attachments = $_FILES['attachments'];
                     if (is_array($file_attachments['name'])) {
@@ -1872,6 +1873,8 @@ elseif ($method == 'POST') {
                                 $file_tmp = $file_attachments['tmp_name'][$i];
                                 $file_type = $file_attachments['type'][$i];
                                 
+                                error_log("PERF: Processing file {$i}: {$original_name} (Size: " . round($file_size/1024/1024, 2) . "MB)");
+                                
                                 // Quick validation
                                 $max_size = 10 * 1024 * 1024; // 10MB
                                 if ($file_size > $max_size) {
@@ -1879,13 +1882,16 @@ elseif ($method == 'POST') {
                                 }
                                 
                                 // Generate unique filename
-                                $file_extension = pathinfo($original_name, PATHINFO_EXTENSION);
-                                $unique_filename = uniqid('req_', true) . '.' . $file_extension;
+                                $unique_filename = uniqid() . '_' . $original_name;
                                 $file_path = $uploads_dir . $unique_filename;
                                 
                                 // Move file - handle both uploaded files and temp files
+                                $move_start = microtime(true);
                                 if (move_uploaded_file($file_tmp, $file_path) || copy($file_tmp, $file_path)) {
+                                    error_log("PERF: File move took " . round((microtime(true) - $move_start) * 1000, 2) . "ms");
+                                    
                                     // Insert attachment record
+                                    $db_start = microtime(true);
                                     $attach_query = "INSERT INTO attachments 
                                                    (service_request_id, original_name, filename, file_size, mime_type, uploaded_by, uploaded_at)
                                                    VALUES (:service_request_id, :original_name, :filename, :file_size, :mime_type, :uploaded_by, NOW())";
@@ -1899,17 +1905,23 @@ elseif ($method == 'POST') {
                                     $attach_stmt->bindParam(":uploaded_by", $user_id);
                                     
                                     if ($attach_stmt->execute()) {
+                                        error_log("PERF: DB insert took " . round((microtime(true) - $db_start) * 1000, 2) . "ms");
                                         $uploaded_files[] = [
                                             'original_name' => $original_name,
                                             'filename' => $unique_filename,
                                             'file_size' => $file_size,
                                             'mime_type' => $file_type
                                         ];
+                                        error_log("PERF: File {$i} completed in " . round((microtime(true) - $file_start) * 1000, 2) . "ms");
                                     }
                                 }
                             }
                         }
                     }
+                }
+                
+                if (isset($file_start_time)) {
+                    error_log("PERF: File upload completed in " . round((microtime(true) - $file_start_time) * 1000, 2) . "ms");
                 }
                 
                 $response_data = [
@@ -1944,62 +1956,26 @@ elseif ($method == 'POST') {
                     $response_data['message'] = 'Request created successfully';
                 }
                 
-                // Send email notification using EmailHelper for consistency
-                try {
-                    require_once __DIR__ . '/../lib/EmailHelper.php';
-                    
-                    // Get request details for email
-                    $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email
-                                      FROM service_requests sr
-                                      LEFT JOIN users u ON sr.user_id = u.id
-                                      WHERE sr.id = :request_id";
-                    $request_stmt = $db->prepare($request_query);
-                    $request_stmt->bindParam(":request_id", $request_id);
-                    $request_stmt->execute();
-                    $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-                    
-                    // Get category name
-                    $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
-                    $cat_stmt->execute([$category_id]);
-                    $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
-                    $category_name = $cat_data['name'] ?? 'Unknown';
-                    
-                    // Prepare email data with correct ID
-                    $email_data = array(
-                        'id' => $request_id,  // Use actual request ID
-                        'title' => $title,
-                        'requester_name' => $request_data['requester_name'],
-                        'category' => $category_name,
-                        'priority' => $priority,
-                        'description' => $description
-                    );
-                    
-                    // Log debug info
-                    error_log("EMAIL_DEBUG: FormData create - Request ID: {$request_id}, Email Data ID: {$email_data['id']}");
-                    
-                    // Send email using EmailHelper (same as test)
-                    $emailHelper = new EmailHelper();
-                    $email_result = $emailHelper->sendNewRequestNotification($email_data);
-                    error_log("EMAIL: FormData create email result for request #$request_id: " . ($email_result ? "SUCCESS" : "FAILED"));
-                    
-                } catch (Exception $e) {
-                    error_log("Failed to send confirmation email: " . $e->getMessage());
-                }
                 
-                // Background staff notifications (non-blocking)
-                register_shutdown_function(function() use ($request_id, $title, $user_id, $category_id, $db) {
+                // Background email and notifications (non-blocking)
+                register_shutdown_function(function() use ($request_id, $title, $description, $priority, $user_id, $category_id, $db) {
                     ignore_user_abort(true);
-                    set_time_limit(60); // 1 minute for background processing
-                    
+                    set_time_limit(300); // 5 minutes for background processing
+
                     try {
-                        require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                        $notificationHelper = new ServiceRequestNotificationHelper();
+                        // Send confirmation email to user
+                        require_once __DIR__ . '/../lib/EmailHelper.php';
+                        $emailHelper = new EmailHelper();
                         
-                        // Get user details for notifications
-                        $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
-                        $user_stmt->execute([$user_id]);
-                        $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
-                        $requester_name = $user_data['full_name'] ?? 'Unknown User';
+                        // Get request details for email
+                        $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email
+                                          FROM service_requests sr
+                                          LEFT JOIN users u ON sr.user_id = u.id
+                                          WHERE sr.id = :request_id";
+                        $request_stmt = $db->prepare($request_query);
+                        $request_stmt->bindParam(":request_id", $request_id);
+                        $request_stmt->execute();
+                        $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
                         
                         // Get category name
                         $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
@@ -2007,19 +1983,59 @@ elseif ($method == 'POST') {
                         $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
                         $category_name = $cat_data['name'] ?? 'Unknown';
                         
-                        // Notify staff with email
-                        $notificationHelper->notifyStaffNewRequest(
-                            $request_id, 
-                            $title, 
-                            $requester_name, 
-                            $category_name
+                        // Prepare email data
+                        $email_data = array(
+                            'id' => $request_id,
+                            'title' => $title,
+                            'requester_name' => $request_data['requester_name'],
+                            'category' => $category_name,
+                            'priority' => $priority,
+                            'description' => $description
                         );
                         
+                        // Send confirmation email
+                        $email_result = $emailHelper->sendNewRequestNotification($email_data);
+                        error_log("EMAIL: Background confirmation email for request #$request_id: " . ($email_result ? "SUCCESS" : "FAILED"));
+                        
+                        // Create notifications
+                        require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                        $notificationHelper = new ServiceRequestNotificationHelper($db);
+
+                        // Get user details for notifications
+                        $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
+                        $user_stmt->execute([$user_id]);
+                        $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
+                        $requester_name = $user_data['full_name'] ?? 'Unknown User';
+
+                        // Get category name
+                        $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
+                        $cat_stmt->execute([$category_id]);
+                        $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
+                        $category_name = $cat_data['name'] ?? 'Unknown';
+
+                        // Notify admin immediately
+                        error_log("NOTIFICATION: Creating admin notification for request #{$request_id}");
+                        $adminNotifyResult = $notificationHelper->notifyAdminNewRequest(
+                            $request_id,
+                            $title,
+                            $requester_name,
+                            $category_name
+                        );
+                        error_log("NOTIFICATION: Admin notification result: " . ($adminNotifyResult ? "SUCCESS" : "FAILED"));
+
+                        // Notify staff with email
+                        $notificationHelper->notifyStaffNewRequest(
+                            $request_id,
+                            $title,
+                            $requester_name,
+                            $category_name
+                        );
+
                         // Queue email notifications to staff
                         $staff_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'staff' AND status = 'active'");
                         $staff_stmt->execute();
                         $staff_users = $staff_stmt->fetchAll(PDO::FETCH_ASSOC);
-                        
+
                         foreach ($staff_users as $staff) {
                             $staff_subject = "Yêu câu moi can xly #{$request_id}";
                             $staff_body = "
@@ -2029,7 +2045,7 @@ elseif ($method == 'POST') {
                                 <p>Thoi gian tao: " . date('d/m/Y H:i') . "</p>
                                 <p>Vui lòng truy cap hê thong de xly yêu câu.</p>
                             ";
-                            
+
                             queueEmailAsync(
                                 $staff['email'],
                                 $staff['full_name'],
@@ -2038,20 +2054,12 @@ elseif ($method == 'POST') {
                                 'high'
                             );
                         }
-                        
-                        // Notify admin with email
-                        $notificationHelper->notifyAdminNewRequest(
-                            $request_id, 
-                            $title, 
-                            $requester_name, 
-                            $category_name
-                        );
-                        
+
                         // Queue email notifications to admin
                         $admin_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'admin' AND status = 'active'");
                         $admin_stmt->execute();
                         $admin_users = $admin_stmt->fetchAll(PDO::FETCH_ASSOC);
-                        
+
                         foreach ($admin_users as $admin) {
                             $admin_subject = "Yêu câu moi trong hê thong #{$request_id}";
                             $admin_body = "
@@ -2061,7 +2069,7 @@ elseif ($method == 'POST') {
                                 <p>Thoi gian tao: " . date('d/m/Y H:i') . "</p>
                                 <p>Chi tiêt yêu câu có trong hê thong.</p>
                             ";
-                            
+
                             queueEmailAsync(
                                 $admin['email'],
                                 $admin['full_name'],
@@ -2070,12 +2078,13 @@ elseif ($method == 'POST') {
                                 'high'
                             );
                         }
-                        
+
                     } catch (Exception $e) {
                         error_log("Background notification failed: " . $e->getMessage());
                     }
                 });
-                
+
+                error_log("PERF: Total processing time before response: " . round((microtime(true) - $start_time) * 1000, 2) . "ms");
                 serviceJsonResponse(true, $response_data['message'], $response_data);
             } else {
                 serviceJsonResponse(false, "Failed to create request");
@@ -2543,31 +2552,72 @@ elseif ($method == 'POST') {
 
                     try {
 
-                        $notificationHelper = new ServiceRequestNotificationHelper();
+                        $notificationHelper = new ServiceRequestNotificationHelper($db);
 
-                        
+
 
                         // Get request details for notification
 
                         $requestDetails = $notificationHelper->getRequestDetails($request_id);
 
-                        
+
 
                         // Notify admin about rejection request
 
                         $notificationHelper->notifyAdminRejectionRequest(
 
-                            $request_id, 
+                            $request_id,
 
-                            $reject_reason . ($reject_details ? " - " . $reject_details : ""), 
+                            $reject_reason . ($reject_details ? " - " . $reject_details : ""),
 
-                            $_SESSION['full_name'] ?? 'Staff', 
+                            $_SESSION['full_name'] ?? 'Staff',
 
                             $requestDetails['title']
 
                         );
 
-                        
+                        // Send email to admin with standard template
+                        $emailHelper = new EmailHelper();
+                        $adminUsers = $notificationHelper->getUsersByRole(['admin']);
+
+                        foreach ($adminUsers as $admin) {
+                            $emailContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu từ chối cần xác nhận</h2>
+
+                            <div style="background: #f8f9fa; border-left: 4px solid #dc3545; padding: 20px; margin: 20px 0;">
+                                <div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Mã yêu cầu:</span>
+                                    <span style="color: #212529;"><strong>#' . $request_id . '</strong></span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Tiêu đề yêu cầu:</span>
+                                    <span style="color: #212529;">' . htmlspecialchars($requestDetails['title']) . '</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Nhân viên IT:</span>
+                                    <span style="color: #212529;">' . htmlspecialchars($_SESSION['full_name'] ?? 'Staff') . '</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Lý do từ chối:</span>
+                                    <span style="color: #212529;">' . htmlspecialchars($reject_reason) . '</span>
+                                </div>
+                                ' . ($reject_details ? '<div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Chi tiết:</span>
+                                    <span style="color: #212529;">' . htmlspecialchars($reject_details) . '</span>
+                                </div>' : '') . '
+                            </div>
+
+                            <p style="color: #666; line-height: 1.6;">Nhân viên IT nhận thấy yêu cầu này vi phạm chính sách hoặc không khả thi và cần Admin xác nhận trước khi hủy. Vui lòng truy cập hệ thống để xem và xử lý yêu cầu từ chối này.</p>';
+
+                            $emailHelper->sendStandardEmail(
+                                $admin['email'],
+                                $admin['full_name'],
+                                "Yêu cầu từ chối cần xác nhận #" . $request_id,
+                                $emailContent,
+                                $request_id
+                            );
+                        }
+
+
 
                     } catch (Exception $e) {
 
@@ -3103,137 +3153,11 @@ elseif ($method == 'POST') {
 
             
 
-            // Map data to template variables
-
-            $email_data = array(
-
-                'id' => $request_data['id'],
-
-                'title' => $request_data['title'],
-
-                'requester_name' => $request_data['requester_name'],
-
-                'category' => $request_data['category'],
-
-                'priority' => $request_data['priority'],
-
-                'description' => $request_data['description']
-
-            );
-
-            error_log("EMAIL_DEBUG: Email data prepared - ID: {$email_data['id']}");
-
-
 
             
 
 
-
-            // Send email notification to staff and admin - ORIGINAL
-
-            $email_start = microtime(true);
-
-            // Log the actual request ID being processed
-            error_log("EMAIL_DEBUG: Processing email for request_id = $request_id");
-            error_log("EMAIL_DEBUG: Database lastInsertId = " . $db->lastInsertId());
-
             
-
-            try {
-
-                // Quick SMTP connectivity check with shorter timeout
-
-                $smtp_socket = @fsockopen('gw.sgitech.com.vn', 25, $errno, $errstr, 0.5);
-
-                
-
-                if ($smtp_socket) {
-
-                    // SMTP is responsive - send email
-
-                    fclose($smtp_socket);
-
-                    $emailHelper = new EmailHelper();
-
-                    $emailHelper->sendNewRequestNotification($email_data);
-
-                    error_log("Email sent in " . round((microtime(true) - $email_start) * 1000, 2) . "ms");
-
-                } else {
-
-                    // SMTP is down - log and continue quickly
-
-                    error_log("SMTP down - skipping email ({$errno}: {$errstr})");
-
-                }
-
-            } catch (Exception $e) {
-
-                error_log("Email error: " . $e->getMessage());
-
-            }
-
-
-
-            // Create role-based notifications for staff and admin
-
-            $notification_start = microtime(true);
-
-            error_log("DEBUG: Starting notification creation for request $request_id");
-
-
-
-            try {
-
-                error_log("DEBUG: Creating ServiceRequestNotificationHelper");
-
-                $notificationHelper = new ServiceRequestNotificationHelper();
-
-                
-
-                error_log("DEBUG: Request data for notifications - Title: " . $request_data['title'] . ", Requester: " . $request_data['requester_name'] . ", Category: " . $request_data['category']);
-
-                
-
-                // Notify staff about new request
-
-                error_log("DEBUG: Calling notifyStaffNewRequest");
-
-                $staffResult = $notificationHelper->notifyStaffNewRequest(
-
-                    $request_id, 
-
-                    $request_data['title'], 
-
-                    $request_data['requester_name'], 
-
-                    $request_data['category']
-
-                );
-
-                error_log("DEBUG: Staff notification result: " . ($staffResult ? 'SUCCESS' : 'FAILED'));
-
-                
-
-                // Admin notification already sent in the first code path (line 1966)
-                // Remove duplicate to prevent sending 2 notifications to admin
-
-                
-
-                error_log("Role-based notifications created in " . (microtime(true) - $notification_start) . "s");
-
-
-
-            } catch (Exception $e) {
-
-                error_log("Failed to create role-based notifications: " . $e->getMessage());
-
-                error_log("Notification exception trace: " . $e->getTraceAsString());
-
-                // Continue even if notification creation fails
-
-            }
-
 
 
             
@@ -5884,7 +5808,7 @@ elseif ($method == 'POST') {
                 
                 // Send role-based notifications and emails
                 try {
-                    $notificationHelper = new ServiceRequestNotificationHelper();
+                    $notificationHelper = new ServiceRequestNotificationHelper($db);
                     
                     // Notify user that their request is now in progress
                     $notificationHelper->notifyUserRequestInProgress(
@@ -7327,7 +7251,7 @@ elseif ($method == 'PUT') {
                         // Send notifications using ServiceRequestNotificationHelper
                         try {
                             require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                            $notificationHelper = new ServiceRequestNotificationHelper();
+                            $notificationHelper = new ServiceRequestNotificationHelper($db);
                             
                             // 1. Notify user that request is in progress
                             error_log("NOTIFICATIONS: Notifying user for request #$request_id");
@@ -7607,7 +7531,7 @@ elseif ($method == 'PUT') {
 
                 // Send role-based notifications based on status change
 
-                $notificationHelper = new ServiceRequestNotificationHelper();
+                $notificationHelper = new ServiceRequestNotificationHelper($db);
 
                 
 
@@ -8204,7 +8128,7 @@ elseif ($method == 'PUT') {
 
                 try {
 
-                    $notificationHelper = new ServiceRequestNotificationHelper();
+                    $notificationHelper = new ServiceRequestNotificationHelper($db);
 
                     
 

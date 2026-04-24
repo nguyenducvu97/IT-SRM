@@ -3,14 +3,17 @@
 
 class DatabaseSessionHandler {
     private $db;
+    private static $instance = null;
     
     public function __construct() {
-        require_once 'database.php';
-        $database = new Database();
-        $this->db = $database->getConnection();
-        
-        // Don't create table in constructor to avoid headers issue
-        // Table will be created when first session is accessed
+        if (self::$instance === null) {
+            require_once 'database.php';
+            $database = new Database();
+            $this->db = $database->getConnection();
+            self::$instance = $this->db;
+        } else {
+            $this->db = self::$instance;
+        }
     }
     
     private function createSessionTable() {
@@ -32,12 +35,20 @@ class DatabaseSessionHandler {
     }
     
     public function read($sessionId) {
+        $start_time = microtime(true);
+        
         // Create table if not exists (first access)
         $this->createSessionTable();
         
         $stmt = $this->db->prepare("SELECT data FROM sessions WHERE id = ?");
         $stmt->execute([$sessionId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $read_time = round((microtime(true) - $start_time) * 1000, 2);
+        if ($read_time > 10) { // Only log if slow
+            error_log("PERF: Session read took {$read_time}ms for ID: {$sessionId}");
+        }
+        
         return $result ? $result['data'] : '';
     }
     
