@@ -64,13 +64,14 @@ switch ($method) {
 }
 
 function getUsers($db) {
+    error_log("USERS API: getUsers called");
     $search = isset($_GET['search']) ? sanitizeInput($_GET['search']) : '';
     $role = isset($_GET['role']) ? sanitizeInput($_GET['role']) : '';
     $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
     $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
     $offset = ($page - 1) * $limit;
     
-    error_log("USERS SEARCH DEBUG: search='$search', role='$role', page=$page, limit=$limit");
+    error_log("USERS API: search='$search', role='$role', page=$page, limit=$limit");
     
     // Build WHERE clause
     $where_clause = "WHERE 1=1";
@@ -86,16 +87,27 @@ function getUsers($db) {
         $params[':role'] = $role;
     }
     
+    error_log("USERS API: where_clause='$where_clause', params=" . json_encode($params));
+    
     // Get total count
     $count_query = "SELECT COUNT(*) as total FROM users $where_clause";
+    error_log("USERS API: count_query='$count_query'");
     $count_stmt = $db->prepare($count_query);
     
     foreach ($params as $key => $value) {
+        error_log("USERS API: binding $key = '$value'");
         $count_stmt->bindValue($key, $value);
     }
     
-    $count_stmt->execute();
-    $total = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    try {
+        $count_stmt->execute();
+        $total = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'];
+        error_log("USERS API: total count = $total");
+    } catch (PDOException $e) {
+        error_log("USERS API: Count query error: " . $e->getMessage());
+        jsonResponse(false, "Database error in count query: " . $e->getMessage());
+        return;
+    }
     
     // Get users with pagination
     $query = "SELECT id, username, email, full_name, department, phone, role, created_at 
@@ -114,8 +126,6 @@ function getUsers($db) {
     
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    error_log("USERS SEARCH DEBUG: Found " . count($users) . " users");
     
     jsonResponse(true, "Users retrieved successfully", [
         'users' => $users,
