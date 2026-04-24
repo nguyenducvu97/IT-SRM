@@ -70,6 +70,8 @@ function getUsers($db) {
     $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
     $offset = ($page - 1) * $limit;
     
+    error_log("USERS SEARCH DEBUG: search='$search', role='$role', page=$page, limit=$limit");
+    
     // Build WHERE clause
     $where_clause = "WHERE 1=1";
     $params = [];
@@ -112,6 +114,8 @@ function getUsers($db) {
     
     $stmt->execute();
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    error_log("USERS SEARCH DEBUG: Found " . count($users) . " users");
     
     jsonResponse(true, "Users retrieved successfully", [
         'users' => $users,
