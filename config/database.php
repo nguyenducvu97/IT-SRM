@@ -11,7 +11,7 @@ class Database {
     private static $instance = null;
 
     public function getConnection() {
-        if (self::$instance === null || self::$instance === null) {
+        if (self::$instance === null) {
             try {
                 $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4", 
                                      $this->username, $this->password, [

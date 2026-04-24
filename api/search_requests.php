@@ -49,7 +49,7 @@ try {
     $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
     $offset = ($page - 1) * $limit;
     
-    error_log("SEARCH DEBUG: Parameters - search='$search', status='$status', page=$page, limit=$limit");
+    error_log("SEARCH API: search='$search', status='$status', page=$page, limit=$limit");
     
     // Get user info
     $user_id = $_SESSION['user_id'];
@@ -115,8 +115,6 @@ try {
     
     $stmt->execute();
     $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    error_log("SEARCH DEBUG: Found " . count($requests) . " requests");
     
     // Get total count
     $count_query = "SELECT COUNT(*) as total FROM service_requests sr 
