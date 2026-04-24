@@ -9024,7 +9024,8 @@ class ITServiceApp {
 
 
 
-            const apiUrl = `api/users.php?${params.toString()}`;
+            // Use profile.php for user search (admin/staff only)
+            const apiUrl = `api/profile.php?action=search_users&${params.toString()}`;
 
             console.log('🚀 Making API call to:', apiUrl);
 
