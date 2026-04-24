@@ -460,19 +460,14 @@ class ITServiceApp {
 
             requestSearch.addEventListener('input', (e) => {
 
-
+                console.log('🔍 Request search input:', e.target.value);
 
                 clearTimeout(searchTimeout);
 
-
-
                 searchTimeout = setTimeout(() => {
 
-
-
+                    console.log('🚀 Triggering request search for:', e.target.value);
                     this.loadRequests(1); // Search luôn về trang 1
-
-
 
                 }, 500); // Wait 500ms after user stops typing
 
@@ -697,42 +692,31 @@ class ITServiceApp {
         // User search and filter events
 
 
-
-        const userSearch = document.getElementById('userSearch');
-
-        console.log('🔍 userSearch element found:', !!userSearch);
+            // User search and filter events
 
 
 
-        if (userSearch) {
+            const userSearch = document.getElementById('userSearch');
 
+            console.log('🔍 userSearch element found:', !!userSearch);
 
+            if (userSearch) {
 
-            userSearch.addEventListener('input', () => this.loadUsers(1));
+                userSearch.addEventListener('input', (e) => {
 
-            console.log('✅ userSearch event listener bound');
+                    console.log('🔍 User search input:', e.target.value);
 
+                    console.log('🚀 Triggering user search for:', e.target.value);
 
+                    this.loadUsers(1);
 
-        } else 
+                });
 
+                console.log('✅ userSearch event listener bound');
 
+            } else {
 
-        {
-
-            console.warn('⚠️ userSearch element not found!');
-
-        }
-
-
-
-        
-
-
-
-        const roleFilter = document.getElementById('roleFilter');
-
-        console.log('🔍 roleFilter element found:', !!roleFilter);
+                console.warn('⚠️ userSearch element not found!');
 
 
 
