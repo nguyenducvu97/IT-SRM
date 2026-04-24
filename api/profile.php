@@ -120,13 +120,17 @@ try {
             $stmt->execute();
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            jsonResponse(true, "Users retrieved successfully", [
-                'users' => $users,
-                'pagination' => [
-                    'page' => $page,
-                    'limit' => $limit,
-                    'total' => $total,
-                    'total_pages' => ceil($total / $limit)
+            echo json_encode([
+                'success' => true,
+                'message' => 'Users retrieved successfully',
+                'data' => [
+                    'users' => $users,
+                    'pagination' => [
+                        'page' => $page,
+                        'limit' => $limit,
+                        'total' => $total,
+                        'total_pages' => ceil($total / $limit)
+                    ]
                 ]
             ]);
         }
