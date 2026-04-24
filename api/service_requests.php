@@ -2567,29 +2567,70 @@ elseif ($method == 'POST') {
 
                         $notificationHelper = new ServiceRequestNotificationHelper($db);
 
-                        
+
 
                         // Get request details for notification
 
                         $requestDetails = $notificationHelper->getRequestDetails($request_id);
 
-                        
+
 
                         // Notify admin about rejection request
 
                         $notificationHelper->notifyAdminRejectionRequest(
 
-                            $request_id, 
+                            $request_id,
 
-                            $reject_reason . ($reject_details ? " - " . $reject_details : ""), 
+                            $reject_reason . ($reject_details ? " - " . $reject_details : ""),
 
-                            $_SESSION['full_name'] ?? 'Staff', 
+                            $_SESSION['full_name'] ?? 'Staff',
 
                             $requestDetails['title']
 
                         );
 
-                        
+                        // Send email to admin with standard template
+                        $emailHelper = new EmailHelper();
+                        $adminUsers = $notificationHelper->getUsersByRole(['admin']);
+
+                        foreach ($adminUsers as $admin) {
+                            $emailContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu từ chối cần xác nhận</h2>
+
+                            <div style="background: #f8f9fa; border-left: 4px solid #dc3545; padding: 20px; margin: 20px 0;">
+                                <div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Mã yêu cầu:</span>
+                                    <span style="color: #212529;"><strong>#' . $request_id . '</strong></span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Tiêu đề yêu cầu:</span>
+                                    <span style="color: #212529;">' . htmlspecialchars($requestDetails['title']) . '</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Nhân viên IT:</span>
+                                    <span style="color: #212529;">' . htmlspecialchars($_SESSION['full_name'] ?? 'Staff') . '</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Lý do từ chối:</span>
+                                    <span style="color: #212529;">' . htmlspecialchars($reject_reason) . '</span>
+                                </div>
+                                ' . ($reject_details ? '<div style="margin-bottom: 12px;">
+                                    <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Chi tiết:</span>
+                                    <span style="color: #212529;">' . htmlspecialchars($reject_details) . '</span>
+                                </div>' : '') . '
+                            </div>
+
+                            <p style="color: #666; line-height: 1.6;">Nhân viên IT nhận thấy yêu cầu này vi phạm chính sách hoặc không khả thi và cần Admin xác nhận trước khi hủy. Vui lòng truy cập hệ thống để xem và xử lý yêu cầu từ chối này.</p>';
+
+                            $emailHelper->sendStandardEmail(
+                                $admin['email'],
+                                $admin['full_name'],
+                                "Yêu cầu từ chối cần xác nhận #" . $request_id,
+                                $emailContent,
+                                $request_id
+                            );
+                        }
+
+
 
                     } catch (Exception $e) {
 

@@ -453,18 +453,58 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         // Send notification to admin about new support request
         try {
             $notificationHelper = new ServiceRequestNotificationHelper($pdo);
-            
+
             // Get request details for notification
             $requestDetails = $notificationHelper->getRequestDetails($service_request_id);
-            
+
             // Notify admin about support request (escalation)
             $notificationHelper->notifyAdminSupportRequest(
-                $service_request_id, 
-                $support_details . ($support_reason ? " - Lý do: " . $support_reason : ""), 
-                $_SESSION['full_name'] ?? 'Staff', 
+                $service_request_id,
+                $support_details . ($support_reason ? " - Lý do: " . $support_reason : ""),
+                $_SESSION['full_name'] ?? 'Staff',
                 $requestDetails['title']
             );
-            
+
+            // Send email to admin with standard template
+            $emailHelper = new EmailHelper();
+            $adminUsers = $notificationHelper->getUsersByRole(['admin']);
+
+            foreach ($adminUsers as $admin) {
+                $emailContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu hỗ trợ kỹ thuật</h2>
+
+                <div style="background: #f8f9fa; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0;">
+                    <div style="margin-bottom: 12px;">
+                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Mã yêu cầu:</span>
+                        <span style="color: #212529;"><strong>#' . $service_request_id . '</strong></span>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Tiêu đề yêu cầu:</span>
+                        <span style="color: #212529;">' . htmlspecialchars($requestDetails['title']) . '</span>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Nhân viên IT:</span>
+                        <span style="color: #212529;">' . htmlspecialchars($_SESSION['full_name'] ?? 'Staff') . '</span>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Chi tiết hỗ trợ:</span>
+                        <span style="color: #212529;">' . htmlspecialchars($support_details) . '</span>
+                    </div>
+                    ' . ($support_reason ? '<div style="margin-bottom: 12px;">
+                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Lý do:</span>
+                        <span style="color: #212529;">' . htmlspecialchars($support_reason) . '</span>
+                    </div>' : '') . '
+                </div>
+
+                <p style="color: #666; line-height: 1.6;">Nhân viên IT gặp vấn đề kỹ thuật khó và cần Admin can thiệp. Vui lòng truy cập hệ thống để xem và xử lý yêu cầu hỗ trợ này.</p>';
+
+                $emailHelper->sendStandardEmail(
+                    $admin['email'],
+                    $admin['full_name'],
+                    "Yêu cầu hỗ trợ kỹ thuật #" . $service_request_id,
+                    $emailContent,
+                    $service_request_id
+                );
+            }
         } catch (Exception $e) {
             error_log("Failed to send support request notification: " . $e->getMessage());
             // Continue even if notification fails
@@ -558,87 +598,12 @@ function handlePost($pdo, $action, $current_user, $user_role) {
         
         // Keep service request status as 'in_progress' (staff continues working)
         $update_stmt = $pdo->prepare("
-            UPDATE service_requests 
-            SET status = 'in_progress' 
+            UPDATE service_requests
+            SET status = 'in_progress'
             WHERE id = ?
         ");
         $update_result = $update_stmt->execute([$service_request_id]);
-        
-        // Enable email sending with fixed template (non-blocking)
-        try {
-            // Get staff name and request details
-            $staff_stmt = $pdo->prepare("SELECT full_name FROM users WHERE id = ?");
-            $staff_stmt->execute([$current_user]);
-            $staff_data = $staff_stmt->fetch(PDO::FETCH_ASSOC);
-            
-            $request_stmt = $pdo->prepare("SELECT title FROM service_requests WHERE id = ?");
-            $request_stmt->execute([$service_request_id]);
-            $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-            
-            $staff_name = $staff_data['full_name'] ?? 'Staff';
-            $request_title = $request_data['title'] ?? 'Unknown';
-            
-            $title = "Yêu cầu hỗ trợ mới cho yêu cầu #" . $service_request_id;
-            $message = $staff_name . " yêu cầu hỗ trợ cho: " . $request_title;
-            
-            // Notify all admin users
-            $admin_stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin'");
-            $admin_stmt->execute();
-            $admins = $admin_stmt->fetchAll(PDO::FETCH_COLUMN);
-            
-            if (!empty($admins)) {
-                foreach ($admins as $admin_id) {
-                    createNotification($pdo, $admin_id, $title, $message, 'warning', $service_request_id, 'request');
-                    
-                    // Send email notification to admin (non-blocking)
-                    try {
-                        $emailHelper = new EmailHelper();
-                        
-                        // Get admin email
-                        $admin_stmt = $pdo->prepare("SELECT email, full_name FROM users WHERE id = ?");
-                        $admin_stmt->execute([$admin_id]);
-                        $admin_data = $admin_stmt->fetch(PDO::FETCH_ASSOC);
-                        
-                        if ($admin_data) {
-                            $subject = $title;
-                            
-                            // Use standard HTML template
-                            $emailContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu hỗ trợ mới</h2>
-                        
-                        <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0;">
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 120px;">Mã yêu cầu:</span>
-                                <span style="color: #212529;"><strong>#' . $service_request_id . '</strong></span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 120px;">Tiêu đề:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($title) . '</span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 120px;">Nhân viên IT:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($staff_name) . '</span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 120px;">Yêu cầu gốc:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($request_title) . '</span>
-                            </div>
-                        </div>
-                        
-                        <p style="color: #666; line-height: 1.6;">Vui lòng truy cập hệ thống để xem và xử lý yêu cầu hỗ trợ này.</p>';
-                            
-                            $emailHelper->sendStandardEmail($admin_data['email'], $admin_data['full_name'], $subject, $emailContent, $service_request_id);
-                        }
-                    } catch (Exception $e) {
-                        error_log("Failed to send support request email to admin {$admin_id}: " . $e->getMessage());
-                        // Continue even if email fails
-                    }
-                }
-            }
-        } catch (Exception $e) {
-            error_log("Failed to create support request notifications: " . $e->getMessage());
-            // Continue even if notification creation fails - don't fail the whole request
-        }
-        
+
         echo json_encode([
             'success' => true,
             'message' => 'Support request created successfully',
