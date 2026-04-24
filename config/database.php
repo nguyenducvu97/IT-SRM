@@ -8,20 +8,28 @@ class Database {
     private $username = "root";
     private $password = "";
     private $conn;
+    private static $instance = null;
 
     public function getConnection() {
-        $this->conn = null;
-        
-        try {
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4", 
-                                 $this->username, $this->password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->conn->exec("set names utf8mb4");
-        } catch(PDOException $exception) {
-            error_log("Connection error: " . $exception->getMessage());
+        if (self::$instance === null || self::$instance === null) {
+            try {
+                $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4", 
+                                     $this->username, $this->password, [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_EMULATE_PREPARES => false,
+                        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
+                        PDO::ATTR_PERSISTENT => true
+                    ]);
+                $this->conn->exec("set names utf8mb4");
+                self::$instance = $this->conn;
+            } catch(PDOException $exception) {
+                error_log("Connection error: " . $exception->getMessage());
+                return null;
+            }
         }
         
-        return $this->conn;
+        return self::$instance;
     }
 }
 

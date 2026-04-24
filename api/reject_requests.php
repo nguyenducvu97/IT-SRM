@@ -42,6 +42,8 @@ try {
 
     require_once '../config/database.php';
 
+    require_once '../lib/EmailHelper.php';
+
     require_once '../lib/ServiceRequestNotificationHelper.php';
 
     error_log("✅ Config files loaded successfully");
@@ -675,7 +677,7 @@ if ($method == 'GET') {
 
             try {
 
-                $notificationHelper = new ServiceRequestNotificationHelper();
+                $notificationHelper = new ServiceRequestNotificationHelper($db);
 
                 
 
@@ -689,7 +691,7 @@ if ($method == 'GET') {
 
                     // Update service request to reflect that rejection was approved
 
-                    $service_update_query = "UPDATE service_requests 
+                    $service_update_query = "UPDATE service_requests
 
                                            SET status = 'rejected',
 
@@ -703,37 +705,72 @@ if ($method == 'GET') {
 
                     $service_update_stmt->execute();
 
-                    
+
 
                     // Notify user that their request was rejected
 
                     $notificationHelper->notifyUserRequestRejected(
 
-                        $reject_request['service_request_id'], 
+                        $reject_request['service_request_id'],
 
-                        $requestDetails['user_id'], 
+                        $requestDetails['user_id'],
 
                         $admin_reason . " (Yêu cầu từ chối đã được Admin duyệt)"
 
                     );
 
-                    
+                    // Send email to user with standard template
+                    $emailHelper = new EmailHelper();
+                    $user_stmt = $db->prepare("SELECT email, full_name FROM users WHERE id = ?");
+                    $user_stmt->execute([$requestDetails['user_id']]);
+                    $userData = $user_stmt->fetch(PDO::FETCH_ASSOC);
+
+                    if ($userData) {
+                        $emailContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu đã bị từ chối</h2>
+
+                        <div style="background: #f8f9fa; border-left: 4px solid #dc3545; padding: 20px; margin: 20px 0;">
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Mã yêu cầu:</span>
+                                <span style="color: #212529;"><strong>#' . $reject_request['service_request_id'] . '</strong></span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Tiêu đề yêu cầu:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($requestDetails['title']) . '</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Lý do từ chối:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($admin_reason) . '</span>
+                            </div>
+                        </div>
+
+                        <p style="color: #666; line-height: 1.6;">Yêu cầu từ chối đã được Admin duyệt. Yêu cầu gốc đã được chuyển sang trạng thái đã từ chối.</p>';
+
+                        $emailHelper->sendStandardEmail(
+                            $userData['email'],
+                            $userData['full_name'],
+                            "Yêu cầu đã bị từ chối #" . $reject_request['service_request_id'],
+                            $emailContent,
+                            $reject_request['service_request_id']
+                        );
+                    }
+
+
 
                     // Notify staff about admin approval
 
                     $notificationHelper->notifyStaffAdminRejected(
 
-                        $reject_request['service_request_id'], 
+                        $reject_request['service_request_id'],
 
-                        $requestDetails['title'], 
+                        $requestDetails['title'],
 
-                        $_SESSION['full_name'] ?? 'Admin', 
+                        $_SESSION['full_name'] ?? 'Admin',
 
                         $admin_reason
 
                     );
 
-                    
+
 
                     rejectJsonResponse(true, 'Yêu cầu từ chối đã được duyệt. Yêu cầu gốc đã được chuyển sang trạng thái đã từ chối.');
 
@@ -745,17 +782,50 @@ if ($method == 'GET') {
 
                     $notificationHelper->notifyStaffAdminRejected(
 
-                        $reject_request['service_request_id'], 
+                        $reject_request['service_request_id'],
 
-                        $requestDetails['title'], 
+                        $requestDetails['title'],
 
-                        $_SESSION['full_name'] ?? 'Admin', 
+                        $_SESSION['full_name'] ?? 'Admin',
 
                         $admin_reason
 
                     );
 
-                    
+                    // Send email to staff with standard template
+                    $emailHelper = new EmailHelper();
+                    $staffUsers = $notificationHelper->getUsersByRole(['staff']);
+
+                    foreach ($staffUsers as $staff) {
+                        $emailContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu từ chối đã bị từ chối</h2>
+
+                        <div style="background: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0;">
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Mã yêu cầu:</span>
+                                <span style="color: #212529;"><strong>#' . $reject_request['service_request_id'] . '</strong></span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Tiêu đề yêu cầu:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($requestDetails['title']) . '</span>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Lý do:</span>
+                                <span style="color: #212529;">' . htmlspecialchars($admin_reason) . '</span>
+                            </div>
+                        </div>
+
+                        <p style="color: #666; line-height: 1.6;">Yêu cầu từ chối đã bị từ chối. Yêu cầu gốc sẽ tiếp tục xử lý bình thường.</p>';
+
+                        $emailHelper->sendStandardEmail(
+                            $staff['email'],
+                            $staff['full_name'],
+                            "Yêu cầu từ chối đã bị từ chối #" . $reject_request['service_request_id'],
+                            $emailContent,
+                            $reject_request['service_request_id']
+                        );
+                    }
+
+
 
                     rejectJsonResponse(true, 'Yêu cầu từ chối đã bị từ chối. Yêu cầu gốc sẽ tiếp tục xử lý bình thường.');
 

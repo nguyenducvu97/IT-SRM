@@ -21,8 +21,9 @@ class DatabaseSessionHandler {
             id VARCHAR(128) PRIMARY KEY,
             data TEXT NOT NULL,
             timestamp INT NOT NULL,
-            INDEX (timestamp)
-        )";
+            INDEX idx_timestamp (timestamp),
+            INDEX idx_id (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
         $this->db->exec($sql);
     }
     
@@ -34,18 +35,24 @@ class DatabaseSessionHandler {
         return true;
     }
     
+    private static $readStmt = null;
+    
     public function read($sessionId) {
         $start_time = microtime(true);
         
         // Create table if not exists (first access)
         $this->createSessionTable();
         
-        $stmt = $this->db->prepare("SELECT data FROM sessions WHERE id = ?");
-        $stmt->execute([$sessionId]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Use cached prepared statement
+        if (self::$readStmt === null) {
+            self::$readStmt = $this->db->prepare("SELECT data FROM sessions WHERE id = ?");
+        }
+        
+        self::$readStmt->execute([$sessionId]);
+        $result = self::$readStmt->fetch(PDO::FETCH_ASSOC);
         
         $read_time = round((microtime(true) - $start_time) * 1000, 2);
-        if ($read_time > 10) { // Only log if slow
+        if ($read_time > 5) { // Lower threshold to 5ms
             error_log("PERF: Session read took {$read_time}ms for ID: {$sessionId}");
         }
         

@@ -12,10 +12,14 @@ require_once __DIR__ . '/NotificationHelper.php';
 class ServiceRequestNotificationHelper {
     private $db;
     private $notificationHelper;
-    
-    public function __construct() {
-        $database = new Database();
-        $this->db = $database->getConnection();
+
+    public function __construct($database = null) {
+        if ($database) {
+            $this->db = $database;
+        } else {
+            $database = new Database();
+            $this->db = $database->getConnection();
+        }
         $this->notificationHelper = new NotificationHelper($this->db);
     }
     
@@ -483,21 +487,22 @@ class ServiceRequestNotificationHelper {
         $adminUsers = $this->getUsersByRole(['admin']);
         $title = "Yêu cầu hỗ trợ kỹ thuật (Escalation)";
         $message = "Nhân viên {$staffName} gặp vấn đề kỹ thuật khó và cần Admin can thiệp" .
-                   ($requestTitle ? " cho yêu cầu #{$requestId} - {$requestTitle}" : "") . 
+                   ($requestTitle ? " cho yêu cầu #{$requestId} - {$requestTitle}" : "") .
                    ". Chi tiết: {$supportDetails}";
-        
+
         $results = [];
         foreach ($adminUsers as $admin) {
             $results[] = $this->notificationHelper->createNotification(
-                $admin['id'], 
-                $title, 
-                $message, 
-                'warning', 
-                $requestId, 
-                'service_request'
+                $admin['id'],
+                $title,
+                $message,
+                'warning',
+                $requestId,
+                'service_request',
+                false  // Disable automatic email sending
             );
         }
-        
+
         return !in_array(false, $results);
     }
     
@@ -508,22 +513,23 @@ class ServiceRequestNotificationHelper {
         $adminUsers = $this->getUsersByRole(['admin']);
         $title = "Yêu cầu từ chối cần xác nhận";
         $message = "Nhân viên {$staffName} nhận thấy yêu cầu #{$requestId}" .
-                   ($requestTitle ? " - {$requestTitle}" : "") . 
+                   ($requestTitle ? " - {$requestTitle}" : "") .
                    " vi phạm chính sách hoặc không khả thi và cần Admin xác nhận trước khi hủy." .
                    " Lý do: {$rejectReason}";
-        
+
         $results = [];
         foreach ($adminUsers as $admin) {
             $results[] = $this->notificationHelper->createNotification(
-                $admin['id'], 
-                $title, 
-                $message, 
-                'warning', 
-                $requestId, 
-                'service_request'
+                $admin['id'],
+                $title,
+                $message,
+                'warning',
+                $requestId,
+                'service_request',
+                false  // Disable automatic email sending
             );
         }
-        
+
         return !in_array(false, $results);
     }
     
