@@ -79,6 +79,9 @@ try {
         $action = $input['action'] ?? '';
         
         if ($action == 'update_profile') {
+            error_log("PROFILE UPDATE: User ID {$current_user_id} attempting to update profile");
+            error_log("PROFILE UPDATE: Input data: " . json_encode($input));
+            
             // Update user profile
             $allowed_fields = ['full_name', 'email', 'phone', 'department'];
             $updates = [];
@@ -86,13 +89,29 @@ try {
             
             foreach ($allowed_fields as $field) {
                 if (isset($input[$field]) && !empty($input[$field])) {
+                    // Email validation
+                    if ($field === 'email') {
+                        if (!filter_var($input[$field], FILTER_VALIDATE_EMAIL)) {
+                            echo json_encode(['success' => false, 'message' => 'Email không hợp lệ']);
+                            exit;
+                        }
+                        
+                        // Check if email already exists for another user
+                        $email_check = $pdo->prepare("SELECT id FROM users WHERE email = ? AND id != ?");
+                        $email_check->execute([$input[$field], $current_user_id]);
+                        if ($email_check->fetch()) {
+                            echo json_encode(['success' => false, 'message' => 'Email này đã được sử dụng bởi người khác']);
+                            exit;
+                        }
+                    }
+                    
                     $updates[] = "$field = ?";
                     $params[] = $input[$field];
                 }
             }
             
             if (empty($updates)) {
-                echo json_encode(['success' => false, 'message' => 'No fields to update']);
+                echo json_encode(['success' => false, 'message' => 'Không có trường nào để cập nhật']);
                 exit;
             }
             
@@ -102,9 +121,9 @@ try {
             $stmt = $pdo->prepare($sql);
             
             if ($stmt->execute($params)) {
-                echo json_encode(['success' => true, 'message' => 'Profile updated successfully']);
+                echo json_encode(['success' => true, 'message' => 'Cập nhật thông tin thành công']);
             } else {
-                echo json_encode(['success' => false, 'message' => 'Failed to update profile']);
+                echo json_encode(['success' => false, 'message' => 'Cập nhật thông tin thất bại']);
             }
         }
         
