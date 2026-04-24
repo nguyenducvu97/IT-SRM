@@ -691,44 +691,41 @@ class ITServiceApp {
 
         // User search and filter events
 
+        const userSearch = document.getElementById('userSearch');
 
-            // User search and filter events
+        console.log('🔍 userSearch element found:', !!userSearch);
 
+        if (userSearch) {
 
+            userSearch.addEventListener('input', (e) => {
 
-            const userSearch = document.getElementById('userSearch');
+                console.log('🔍 User search input:', e.target.value);
 
-            console.log('🔍 userSearch element found:', !!userSearch);
+                console.log('🚀 Triggering user search for:', e.target.value);
 
-            if (userSearch) {
+                this.loadUsers(1);
 
-                userSearch.addEventListener('input', (e) => {
+            });
 
-                    console.log('🔍 User search input:', e.target.value);
+            console.log('✅ userSearch event listener bound');
 
-                    console.log('🚀 Triggering user search for:', e.target.value);
+        } else {
 
-                    this.loadUsers(1);
+            console.warn('⚠️ userSearch element not found!');
 
-                });
+        }
 
-                console.log('✅ userSearch event listener bound');
+        
 
-            } else {
+        const roleFilter = document.getElementById('roleFilter');
 
-                console.warn('⚠️ userSearch element not found!');
-
-
+        console.log('🔍 roleFilter element found:', !!roleFilter);
 
         if (roleFilter) {
-
-
 
             roleFilter.addEventListener('change', () => this.loadUsers(1));
 
             console.log('✅ roleFilter event listener bound');
-
-
 
         } else {
 
