@@ -49,6 +49,8 @@ try {
     $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
     $offset = ($page - 1) * $limit;
     
+    error_log("SEARCH API: search='$search', status='$status', page=$page, limit=$limit");
+    
     // Get user info
     $user_id = $_SESSION['user_id'];
     $user_role = $_SESSION['role'] ?? 'user';

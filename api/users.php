@@ -65,6 +65,7 @@ switch ($method) {
 }
 
 function getUsers($db) {
+    error_log("USERS API: getUsers called");
     $search = isset($_GET['search']) ? sanitizeInput($_GET['search']) : '';
     $role = isset($_GET['role']) ? sanitizeInput($_GET['role']) : '';
     // Check if this is a paginated request or get all users
@@ -75,6 +76,8 @@ function getUsers($db) {
         $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
         $offset = ($page - 1) * $limit;
     }
+    
+    error_log("USERS API: search='$search', role='$role', page=$page, limit=$limit");
     
     // Build WHERE clause
     $where_clause = "WHERE 1=1";
@@ -92,6 +95,7 @@ function getUsers($db) {
         $params[':role'] = $role;
     }
     
+<<<<<<< HEAD
     if (!empty($_GET['department'])) {
         $where_clause .= " AND department = :department";
         $params[':department'] = $_GET['department'];
@@ -154,6 +158,40 @@ function getUsers($db) {
         jsonResponse(true, "Users retrieved successfully", [
             'users' => $users
         ]);
+=======
+    error_log("USERS API: where_clause='$where_clause', params=" . json_encode($params));
+    
+    // Get total count
+    $count_query = "SELECT COUNT(*) as total FROM users $where_clause";
+    error_log("USERS API: count_query='$count_query'");
+    $count_stmt = $db->prepare($count_query);
+    
+    foreach ($params as $key => $value) {
+        error_log("USERS API: binding $key = '$value'");
+        $count_stmt->bindValue($key, $value);
+    }
+    
+    try {
+        $count_stmt->execute();
+        $total = $count_stmt->fetch(PDO::FETCH_ASSOC)['total'];
+        error_log("USERS API: total count = $total");
+    } catch (PDOException $e) {
+        error_log("USERS API: Count query error: " . $e->getMessage());
+        jsonResponse(false, "Database error in count query: " . $e->getMessage());
+        return;
+    }
+    
+    // Get users with pagination
+    $query = "SELECT id, username, email, full_name, department, phone, role, created_at 
+              FROM users $where_clause
+              ORDER BY created_at DESC
+              LIMIT :limit OFFSET :offset";
+    
+    $stmt = $db->prepare($query);
+    
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+>>>>>>> 9326e2597828a81295136a2d98fdf51a10a4f085
     }
 }
 

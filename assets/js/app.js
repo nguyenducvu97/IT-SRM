@@ -8875,7 +8875,7 @@ class ITServiceApp {
 
 
 
-            const apiUrl = `api/users.php?${params.toString()}`;
+            const apiUrl = `api/profile.php?action=all_users&${params.toString()}`;
 
             console.log('🚀 Making API call to:', apiUrl);
 
