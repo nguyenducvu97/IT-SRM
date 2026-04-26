@@ -78,8 +78,11 @@ try {
     
     // Add search condition
     if (!empty($search)) {
-        $where_clause .= " AND (sr.title LIKE :search OR sr.description LIKE :search OR u.username LIKE :search OR sr.id LIKE :search)";
-        $params[':search'] = '%' . $search . '%';
+        $where_clause .= " AND (sr.title LIKE :search_title OR sr.description LIKE :search_desc OR u.username LIKE :search_user OR sr.id LIKE :search_id)";
+        $params[':search_title'] = '%' . $search . '%';
+        $params[':search_desc'] = '%' . $search . '%';
+        $params[':search_user'] = '%' . $search . '%';
+        $params[':search_id'] = '%' . $search . '%';
     }
     
     // Add status filter

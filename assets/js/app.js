@@ -95,15 +95,11 @@ class ITServiceApp {
 
 
         this.autoReloadInterval = null;
-
-
-
         this.autoReloadEnabled = true;
-
-
-
+        this.isSearching = false;
+        this.isSearchingUsers = false;
+        this.isDepartmentFilterActive = false; // Track department filter state
         this.selectedFiles = []; // Store selected files
-
 
 
         this.currentRequestsPage = 1;
@@ -434,59 +430,9 @@ class ITServiceApp {
 
 
 
-        // Search functionality
+        // Search functionality - moved to loadRequests() to ensure element exists
 
 
-
-        const requestSearch = document.getElementById('requestSearch');
-
-
-
-        if (requestSearch) {
-
-
-
-            let searchTimeout;
-
-
-
-            
-
-
-
-            // Search on input with debounce
-
-
-
-            requestSearch.addEventListener('input', (e) => {
-
-
-
-                clearTimeout(searchTimeout);
-
-
-
-                searchTimeout = setTimeout(() => {
-
-
-
-                    this.loadRequests(1); // Search luôn về trang 1
-
-
-
-                }, 500); // Wait 500ms after user stops typing
-
-
-
-            });
-
-
-
-        }
-
-
-
-        
 
 
 
@@ -696,39 +642,37 @@ class ITServiceApp {
 
         // User search and filter events
 
-
-
         const userSearch = document.getElementById('userSearch');
-
         console.log('🔍 userSearch element found:', !!userSearch);
 
-
-
         if (userSearch) {
+            let userSearchTimeout;
+            userSearch.addEventListener('input', (e) => {
+                clearTimeout(userSearchTimeout);
+                userSearchTimeout = setTimeout(() => {
+                    const searchValue = userSearch.value.trim();
+                    this.isSearchingUsers = searchValue.length > 0;
+                    console.log('User search state changed - isSearchingUsers:', this.isSearchingUsers, 'searchValue:', searchValue);
+                    
+                    // Check if department filter is active and preserve it
+                    if (this.isDepartmentFilterActive) {
+                        const indicator = document.getElementById('departmentFilterIndicator');
+                        if (indicator) {
+                            const deptName = indicator.querySelector('strong').textContent;
+                            console.log('🔍 Preserving department filter during search:', deptName);
+                            this.loadUsersWithDepartment(1, deptName);
+                            return;
+                        }
+                    }
+                    
+                    this.loadUsers(1);
+                }, 500); // Wait 500ms after user stops typing
+            });
 
-
-
-            userSearch.addEventListener('input', () => this.loadUsers(1));
-
-            console.log('✅ userSearch event listener bound');
-
-
-
-        } else 
-
-
-
-        {
-
+            console.log('✅ userSearch event listener bound with debounce');
+        } else {
             console.warn('⚠️ userSearch element not found!');
-
         }
-
-
-
-        
-
-
 
         const roleFilter = document.getElementById('roleFilter');
 
@@ -740,7 +684,19 @@ class ITServiceApp {
 
 
 
-            roleFilter.addEventListener('change', () => this.loadUsers(1));
+            roleFilter.addEventListener('change', () => {
+                // Check if department filter is active and preserve it
+                if (this.isDepartmentFilterActive) {
+                    const indicator = document.getElementById('departmentFilterIndicator');
+                    if (indicator) {
+                        const deptName = indicator.querySelector('strong').textContent;
+                        console.log('🔍 Preserving department filter during role change:', deptName);
+                        this.loadUsersWithDepartment(1, deptName);
+                        return;
+                    }
+                }
+                this.loadUsers(1);
+            });
 
             console.log('✅ roleFilter event listener bound');
 
@@ -2011,167 +1967,52 @@ class ITServiceApp {
 
 
     showPage(page) {
-
-
-
         console.log('=== showPage called with:', page, '===');
-
-
-
         console.log('Current user:', this.currentUser);
-
-
-
         console.log('Current page before:', this.currentPage);
 
-
-
-        
-
-
+        // Clear department filter when leaving users page
+        if (this.currentPage === 'users' && page !== 'users') {
+            console.log('🔄 Leaving users page, clearing department filter');
+            this.clearDepartmentFilter();
+        }
 
         // Check if loading overlay is already shown
-
-
-
         const loadingOverlay = document.getElementById('loadingOverlay');
-
-
-
         const hasLoading = loadingOverlay && loadingOverlay.style.display === 'flex';
-
-
-
         
-
-
-
         if (!hasLoading) {
-
-
-
             // Show loading state for better UX
-
-
-
             this.showLoadingState('Đang tải trang...');
-
-
-
         }
-
-
-
         
-
-
-
         // Update navigation
-
-
-
         document.querySelectorAll('.nav-link').forEach(link => {
-
-
-
             link.classList.remove('active');
-
-
-
         });
-
-
-
         
-
-
-
         // Only update active state for internal pages
-
-
-
         const navPageElement = document.querySelector(`[data-page="${page}"]`);
-
-
-
         if (navPageElement) {
-
-
-
             navPageElement.classList.add('active');
-
-
-
             console.log('Updated navigation active state for:', page);
-
-
-
         } else {
-
-
-
             console.log('No navigation element found for:', page);
-
-
-
         }
-
-
-
-
-
-
 
         // Update pages
-
-
-
         document.querySelectorAll('.page').forEach(p => {
-
-
-
             p.classList.remove('active');
-
-
-
         });
-
-
-
         
-
-
-
         const pageId = page === 'new-request' ? 'newRequestPage' : `${page}Page`;
-
-
-
         const pageElement = document.getElementById(pageId);
-
-
-
         
-
-
-
         console.log('Looking for page element:', pageId);
-
-
-
         console.log('Page element found:', !!pageElement);
-
-
-
         
-
         if (pageElement) {
-
-
-
             pageElement.classList.add('active');
-
-
-
             console.log('Successfully activated page:', page);
 
             // Set current page
@@ -2189,45 +2030,15 @@ class ITServiceApp {
             }
 
         } else {
-
-
-
             console.error(`Page element not found: ${pageId}`);
-
-
-
             this.hideLoadingState();
-
-
-
             this.showNotification(`Trang ${page} không tồn tại`, 'error');
-
-
-
             // Don't return here - continue with loadPageData which will handle the error
-
-
-
         }
 
-
-
-
-
-
-
         // Load page-specific data
-
-
-
         console.log('Loading page-specific data for:', page);
-
-
-
         this.loadPageData(page);
-
-
-
     }
 
 
@@ -3354,21 +3165,39 @@ class ITServiceApp {
 
             const category = categoryFilter ? categoryFilter.value : '';
 
+            
+
+            // Initialize search event listener (only once)
+            const requestSearch = document.getElementById('requestSearch');
+            if (requestSearch && !requestSearch.hasAttribute('data-search-initialized')) {
+                let searchTimeout;
+                requestSearch.addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        const searchValue = requestSearch.value.trim();
+                        this.isSearching = searchValue.length > 0;
+                        console.log('Search state changed - isSearching:', this.isSearching, 'searchValue:', searchValue);
+                        this.loadRequests(1); // Search luôn về trang 1
+                    }, 500); // Wait 500ms after user stops typing
+                });
+                requestSearch.setAttribute('data-search-initialized', 'true');
+                console.log('Search event listener initialized');
+            }
+
 
 
             
 
 
 
-            // Add search functionality
-
-
-
-            const requestSearch = document.getElementById('requestSearch');
+            // Add search functionality - get search value from already declared requestSearch
 
 
 
             const search = requestSearch ? requestSearch.value.trim() : '';
+            
+            // Update isSearching flag based on current search value
+            this.isSearching = search.length > 0;
 
 
 
@@ -9017,9 +8846,12 @@ class ITServiceApp {
 
             const role = document.getElementById('roleFilter')?.value || '';
 
+            
 
+            // Update isSearchingUsers flag based on current search value
+            this.isSearchingUsers = search.length > 0;
 
-            console.log('🔍 Filter values - search:', search, 'role:', role);
+            console.log('🔍 Filter values - search:', search, 'role:', role, 'isSearchingUsers:', this.isSearchingUsers);
 
 
 
@@ -9161,212 +8993,58 @@ class ITServiceApp {
 
     }
 
-
-
-
-
-
-
-    displayUsers(users) {
-
-
-
-        console.log('🎨 displayUsers() called with:', users.length, 'users');
-
-
-
+        displayUsers(users) {
+        console.log(' displayUsers() called with:', users.length, 'users');
+        console.log(' Current page:', this.currentPage, 'Department filter active:', this.isDepartmentFilterActive);
+        console.log(' Users being displayed:', users.map(u => `${u.full_name} (${u.department})`));
         
-
-
-
         // Check which page is active to use the correct element
-
-
-
         const usersPage = document.getElementById('usersPage');
-
-
-
         const usersList = usersPage && usersPage.classList.contains('active') 
-
-
-
             ? document.getElementById('usersList')  // Users page
-
-
-
             : document.getElementById('profileUsersList');  // Profile page
-
-
-
             
-
-
-
-        console.log('🔍 usersList element:', !!usersList);
-
-
-
+        console.log(' usersList element:', !!usersList);
         
-
-
-
         if (!usersList) {
-
-
-
-            console.error('❌ usersList element not found!');
-
-
-
+            console.error(' usersList element not found!');
             return;
-
-
-
         }
-
-
-
         
-
-
-
         if (users.length === 0) {
-
-
-
-            console.log('📭 No users to display');
-
-
-
+            console.log(' No users to display');
             usersList.innerHTML = '<p class="no-data">Không có người dùng nào</p>';
-
-
-
             return;
-
-
-
         }
-
-
-
-
-
-
-
-        console.log('🏗️ Creating HTML for', users.length, 'users');
-
-
-
+        
+        console.log(' Creating HTML for', users.length, 'users');
         const usersHTML = users.map((user, index) => {
-
-
-
-            console.log(`👤 User ${index}:`, user.full_name, user.role);
-
-
-
+            console.log(` User ${index}:`, user.full_name, user.role);
             return `
-
-
-
-            <div class="user-card">
-
-
-
+            <div class="user-card" data-user-id="${user.id}">
                 <div class="user-info">
-
-
-
                     <h4>${user.full_name}</h4>
-
-
-
                     <p><i class="fas fa-user"></i> ${user.username}</p>
-
-
-
                     <p><i class="fas fa-envelope"></i> ${user.email}</p>
-
-
-
                     <p><i class="fas fa-building"></i> ${user.department || 'Chưa có'}</p>
-
-
-
                     <p><i class="fas fa-phone"></i> ${user.phone || 'Chưa có'}</p>
-
-
-
                     <span class="role-badge ${user.role}">${this.getRoleText(user.role)}</span>
-
-
-
                 </div>
-
-
-
                 <div class="user-actions">
-
-
-
                     <button class="btn btn-secondary" onclick="event.stopPropagation(); app.editUser(${user.id})">
-
-
-
                         <i class="fas fa-edit"></i> Sửa
-
-
-
                     </button>
-
-
-
                     <button class="btn btn-danger" onclick="event.stopPropagation(); app.deleteUser(${user.id})">
-
-
-
                         <i class="fas fa-trash"></i> Xóa
-
-
-
                     </button>
-
-
-
                 </div>
-
-
-
             </div>
-
-
-
         `;
-
-
-
         }).join('');
-
-
-
-
-
-
-
-        console.log('📝 Setting HTML to usersList');
-
-
-
+        
+        console.log(' Setting HTML to usersList');
         usersList.innerHTML = usersHTML;
-
-
-
-        console.log('✅ displayUsers() completed successfully');
-
-
-
+        console.log(' displayUsers() completed successfully');
     }
 
 
@@ -9375,34 +9053,150 @@ class ITServiceApp {
 
 
 
-    getRoleText(role) {
+getRoleText(role) {
+    const roleMap = {
+        'admin': 'Quản trị viên',
+        'staff': 'Nhân viên',
+        'user': 'Người dùng'
+    };
+    return roleMap[role] || role;
+}
 
+viewUserDetail(userId) {
+    console.log('👤 Viewing user detail for ID:', userId);
+    // Navigate to users page and highlight the user
+    this.showPage('users');
+    
+    // Wait a bit for the page to load, then scroll to and highlight the user
+    setTimeout(() => {
+        const userElements = document.querySelectorAll('[data-user-id]');
+        userElements.forEach(el => {
+            if (el.dataset.userId == userId) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('highlighted');
+                setTimeout(() => el.classList.remove('highlighted'), 3000);
+            }
+        });
+    }, 500);
+}
 
+    async loadUsersWithDepartment(page = 1, departmentName) {
+        console.log(`👥 Loading users for department: ${departmentName}, page: ${page}`);
+        
+        // Set department filter flag to prevent auto-reload
+        this.isDepartmentFilterActive = true;
+        console.log('🚩 Set isDepartmentFilterActive = true for department:', departmentName);
+        
+        // Save current page
+        this.currentUsersPage = page;
+        
+        // Prevent multiple simultaneous calls
+        if (this._loadingUsers) {
+            console.log('?? Already loading users, skipping');
+            return;
+        }
+        
+        this._loadingUsers = true;
+        
+        try {
+            const usersList = document.getElementById('usersList');
+            if (!usersList) {
+                console.error('?? usersList element not found!');
+                return;
+            }
+            
+            // Show loading message
+            usersList.innerHTML = '<p>??ang t?i danh sách ng??i dùng...</p>';
+            
+            // Build API URL with department filter + search + role
+            const params = new URLSearchParams();
+            params.append('page', page);
+            params.append('limit', '9');
+            params.append('department', departmentName);
+            
+            // Add search and role filters if present
+            const search = document.getElementById('userSearch')?.value || '';
+            const role = document.getElementById('roleFilter')?.value || '';
+            
+            if (search) params.append('search', search);
+            if (role) params.append('role', role);
+            
+            const apiUrl = `api/users.php?${params.toString()}`;
+            console.log('🚀 Making API call to:', apiUrl);
+            
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            
+            console.log('?? API response:', data);
+            
+            if (data.success) {
+                console.log(`✅ Successfully loaded ${data.data.users.length} users for department: ${departmentName}`);
+                console.log('🔍 Users loaded:', data.data.users.map(u => `${u.full_name} (${u.department})`));
+                this.displayUsers(data.data.users);
+                this.displayPagination(data.data.pagination);
+                
+                // Show department filter indicator
+                this.showDepartmentFilterIndicator(departmentName);
+                console.log('📊 Department filter indicator shown for:', departmentName);
+            } else {
+                console.error('?? API error:', data.message);
+                usersList.innerHTML = `<div class="error">L?i: ${data.message}</div>`;
+                this.showNotification('Không th? t?i danh sách ng??i dùng', 'error');
+            }
+        } catch (error) {
+            console.error('?? Error in loadUsersWithDepartment:', error);
+            const usersList = document.getElementById('usersList');
+            if (usersList) {
+                usersList.innerHTML = '<div class="error">L?i k?t n?i. Vui lòng th? l?i.</div>';
+            }
+            this.showNotification('L?i k?t n?i', 'error');
+        } finally {
+            this._loadingUsers = false;
+        }
+    }
 
-        const roleMap = {
+    showDepartmentFilterIndicator(departmentName) {
+        // Create or update department filter indicator
+        let indicator = document.getElementById('departmentFilterIndicator');
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = 'departmentFilterIndicator';
+            indicator.className = 'department-filter-indicator';
+            
+            // Insert after the page header
+            const usersPage = document.getElementById('usersPage');
+            const pageHeader = usersPage.querySelector('.page-header');
+            if (pageHeader) {
+                pageHeader.insertAdjacentElement('afterend', indicator);
+            }
+        }
+        
+        indicator.innerHTML = `
+            <div class="filter-info">
+                <i class="fas fa-building"></i>
+                <span>Đang lọc theo phòng ban: <strong>${departmentName}</strong></span>
+                <button class="btn btn-sm btn-secondary" onclick="app.clearDepartmentFilter()">
+                    <i class="fas fa-times"></i> Xóa lọc
+                </button>
+            </div>
+        `;
+    }
 
-
-
-            'admin': 'Admin',
-
-
-
-            'staff': 'Staff',
-
-
-
-            'user': 'User'
-
-
-
-        };
-
-
-
-        return roleMap[role] || role;
-
-
-
+    clearDepartmentFilter() {
+        console.log('🔄 Clearing department filter');
+        
+        // Reset department filter flag to allow auto-reload
+        this.isDepartmentFilterActive = false;
+        console.log('🔄 Reset isDepartmentFilterActive = false');
+        
+        // Remove indicator
+        const indicator = document.getElementById('departmentFilterIndicator');
+        if (indicator) {
+            indicator.remove();
+        }
+        
+        // Load all users
+        this.loadUsers(1);
     }
 
 
@@ -15693,6 +15487,21 @@ ITServiceApp.prototype.performAutoReload = async function() {
 
 
 
+    }
+
+    
+
+    // Skip auto-reload when searching to prevent overriding search results
+    if (this.isSearching || this.isSearchingUsers) {
+        console.log('Skipping auto-reload - search is active (requests:', this.isSearching, 'users:', this.isSearchingUsers, ')');
+        return;
+    }
+    
+    // Skip auto-reload when department filter is active to prevent overriding filtered results
+    console.log('🔍 Auto-reload check - isDepartmentFilterActive:', this.isDepartmentFilterActive);
+    if (this.isDepartmentFilterActive) {
+        console.log('⏸️ Skipping auto-reload - department filter is active');
+        return;
     }
 
 

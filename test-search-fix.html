@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Search Fix</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #d1ecf1; border-color: #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test Search Functionality Fix</h1>
+    
+    <div class="test-section info">
+        <h2>📋 Problem Fixed</h2>
+        <p><strong>Root Cause:</strong> Search event listener was added in constructor, but the search input element didn't exist at that time because it's inside the requestsPage which wasn't active yet.</p>
+        <p><strong>Solution:</strong> Moved search event listener initialization to loadRequests() function where the element definitely exists.</p>
+    </div>
+
+    <div class="test-section success">
+        <h2>✅ Changes Made</h2>
+        <ol>
+            <li><strong>Removed from constructor:</strong> Search event listener (line 437-485)</li>
+            <li><strong>Added to loadRequests():</strong> Search event listener with duplicate check</li>
+            <li><strong>Duplicate prevention:</strong> Added data-search-initialized attribute</li>
+            <li><strong>Version update:</strong> app.js v=20260421-13 → v=20260421-14</li>
+        </ol>
+    </div>
+
+    <div class="test-section info">
+        <h2>🎯 How It Works Now</h2>
+        <ol>
+            <li>User navigates to "Yêu cầu dịch vụ" page</li>
+            <li>showPage('requests') is called</li>
+            <li>loadRequests() is called</li>
+            <li>Search input element is found (requestsPage is now active)</li>
+            <li>Event listener is attached with duplicate check</li>
+            <li>User types in search box → Debounce 500ms → loadRequests(1) called</li>
+        </ol>
+    </div>
+
+    <div class="test-section info">
+        <h2>🧪 Testing Steps</h2>
+        <ol>
+            <li>Open <a href="http://localhost:8000" target="_blank">http://localhost:8000</a></li>
+            <li>Log in with any account</li>
+            <li>Click "Yêu cầu dịch vụ" in navigation</li>
+            <li>Check browser console for "Search event listener initialized"</li>
+            <li>Type in the search box (e.g., "test", "laptop")</li>
+            <li>Wait 500ms and check if results update</li>
+            <li>Clear search and check if all requests load</li>
+        </ol>
+    </div>
+
+    <div class="test-section info">
+        <h2>🔍 Debug Console Logs</h2>
+        <p>Expected console logs:</p>
+        <ul>
+            <li>✅ "Search event listener initialized" (when requests page loads)</li>
+            <li>✅ "=== LOAD PAGE DATA FOR: requests ===" (when navigating)</li>
+            <li>✅ Network requests to api/search_requests.php (when searching)</li>
+        </ul>
+    </div>
+
+    <div class="test-section success">
+        <h2>✅ Expected Behavior</h2>
+        <ul>
+            <li><strong>Search input:</strong> Works when typing</li>
+            <li><strong>Debounce:</strong> Waits 500ms after typing stops</li>
+            <li><strong>API call:</strong> Calls api/search_requests.php with search parameter</li>
+            <li><strong>Results:</strong> Updates request list with filtered results</li>
+            <li><strong>Clear search:</strong> Shows all requests when search is empty</li>
+            <li><strong>Combine filters:</strong> Search + status/priority/category filters work together</li>
+        </ul>
+    </div>
+
+</body>
+</html>

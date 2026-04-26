@@ -193,6 +193,186 @@ class DepartmentsManager {
                 this.deleteDepartment(parseInt(deptId));
             });
         });
+
+        // Add click event to department cards (but not on buttons)
+        container.querySelectorAll('.department-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Don't trigger if clicking on buttons
+                if (e.target.closest('.department-actions')) {
+                    return;
+                }
+                
+                const deptId = card.dataset.departmentId;
+                const deptName = card.querySelector('.department-name').textContent;
+                console.log('🏢 Department card clicked, ID:', deptId, 'Name:', deptName);
+                this.navigateToUsersWithDepartment(deptName);
+            });
+            
+            // Add cursor pointer to indicate clickable
+            card.style.cursor = 'pointer';
+        });
+    }
+
+    navigateToUsersWithDepartment(deptName) {
+        console.log('🔄 Navigating to users page with department filter:', deptName);
+        
+        // Navigate to users page
+        this.app.showPage('users');
+        
+        // Wait for page to load, then set department filter
+        setTimeout(() => {
+            const roleFilter = document.getElementById('roleFilter');
+            const userSearch = document.getElementById('userSearch');
+            
+            // Clear search and set department filter via search parameter
+            if (userSearch) {
+                userSearch.value = '';
+                // Trigger search with department filter
+                const event = new Event('input', { bubbles: true });
+                userSearch.dispatchEvent(event);
+            }
+            
+            // Set department filter by adding it to URL parameters
+            setTimeout(() => {
+                // We'll modify the loadUsers function to handle department parameter
+                this.app.loadUsersWithDepartment(1, deptName);
+            }, 100);
+        }, 500);
+    }
+
+    async showDepartmentUsers(deptId, deptName) {
+        console.log(`👥 Loading users for department: ${deptName} (ID: ${deptId})`);
+        
+        try {
+            // Show loading modal
+            this.showDepartmentUsersModal(deptName, '<div class="loading">Đang tải danh sách người dùng...</div>');
+            
+            // Load users by department
+            const response = await this.app.apiCall(`api/users.php?department=${encodeURIComponent(deptName)}`);
+            
+            if (response.success) {
+                const users = response.data.users || response.data || [];
+                console.log(`👥 Found ${users.length} users in department: ${deptName}`);
+                
+                if (users.length === 0) {
+                    this.showDepartmentUsersModal(deptName, `
+                        <div class="empty-users">
+                            <i class="fas fa-users"></i>
+                            <h3>Không có người dùng nào</h3>
+                            <p>Phòng ban "${deptName}" hiện chưa có người dùng nào</p>
+                        </div>
+                    `);
+                } else {
+                    const usersHtml = users.map(user => `
+                        <div class="user-item">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-info">
+                                <h4 class="user-name">${user.full_name || 'N/A'}</h4>
+                                <p class="user-username">@${user.username}</p>
+                                <p class="user-email">${user.email}</p>
+                                <p class="user-role">
+                                    <span class="badge badge-${user.role}">${this.getRoleText(user.role)}</span>
+                                </p>
+                            </div>
+                            <div class="user-actions">
+                                <button class="btn btn-sm btn-secondary" onclick="app.viewUserDetail(${user.id})">
+                                    <i class="fas fa-eye"></i> Xem chi tiết
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    this.showDepartmentUsersModal(deptName, `
+                        <div class="users-list">
+                            <div class="users-header">
+                                <h3><i class="fas fa-users"></i> ${users.length} người dùng</h3>
+                                <p class="department-name">${deptName}</p>
+                            </div>
+                            <div class="users-container">
+                                ${usersHtml}
+                            </div>
+                        </div>
+                    `);
+                }
+            } else {
+                console.error('❌ Failed to load department users:', response.message);
+                this.showDepartmentUsersModal(deptName, `
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Lỗi</h3>
+                        <p>${response.message || 'Không thể tải danh sách người dùng'}</p>
+                    </div>
+                `);
+            }
+        } catch (error) {
+            console.error('❌ Error loading department users:', error);
+            this.showDepartmentUsersModal(deptName, `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Lỗi kết nối</h3>
+                    <p>Không thể tải danh sách người dùng. Vui lòng thử lại.</p>
+                </div>
+            `);
+        }
+    }
+
+    showDepartmentUsersModal(deptName, content) {
+        // Create modal if it doesn't exist
+        let modal = document.getElementById('departmentUsersModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'departmentUsersModal';
+            modal.className = 'modal';
+            modal.innerHTML = `
+                <div class="modal-content modal-large">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Người dùng phòng ban</h3>
+                        <span class="close">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        ${content}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary close-modal">Đóng</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Add close event listeners
+            modal.querySelector('.close').addEventListener('click', () => this.closeDepartmentUsersModal());
+            modal.querySelector('.close-modal').addEventListener('click', () => this.closeDepartmentUsersModal());
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeDepartmentUsersModal();
+                }
+            });
+        }
+        
+        // Update modal title and content
+        modal.querySelector('.modal-title').innerHTML = `<i class="fas fa-building"></i> ${deptName}`;
+        modal.querySelector('.modal-body').innerHTML = content;
+        
+        // Show modal
+        modal.style.display = 'block';
+    }
+
+    closeDepartmentUsersModal() {
+        const modal = document.getElementById('departmentUsersModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    getRoleText(role) {
+        const roleMap = {
+            'admin': 'Quản trị viên',
+            'staff': 'Nhân viên',
+            'user': 'Người dùng'
+        };
+        return roleMap[role] || role;
     }
 
     showAddDepartmentModal() {
