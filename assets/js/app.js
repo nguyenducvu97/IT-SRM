@@ -8901,42 +8901,19 @@ class ITServiceApp {
 
             console.log('?? API response:', data);
 
-
-
-            
-
-
-
             if (data.success) {
+                // Handle different API response structures
+                const users = data.data.users || data.data || [];
+                const pagination = data.data.pagination || data.pagination || {};
 
+                console.log(`?? Successfully loaded ${users.length} users`);
 
-
-                console.log(`?? Successfully loaded ${data.data.users.length} users`);
-
-
-
-                this.displayUsers(data.data.users);
-
-
-
-                this.displayPagination(data.data.pagination);
-
+                this.displayUsers(users);
+                this.displayPagination(pagination);
             } else {
-
-
-
                 console.error('?? API error:', data.message);
-
-
-
-                usersList.innerHTML = `<div class="error">L?i: ${data.message}</div}`;
-
-
-
-                this.showNotification('Không th? t?i danh sách ng??i dùng', 'error');
-
-
-
+                usersList.innerHTML = `<div class="error">Lỗi: ${data.message}</div>`;
+                this.showNotification('Không thể tải danh sách người dùng', 'error');
             }
 
 
