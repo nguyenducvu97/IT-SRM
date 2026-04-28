@@ -3461,10 +3461,6 @@ class ITServiceApp {
 
 
 
-                    ${request.accepted_at ? `<span><i class="fas fa-hand-paper"></i> Đã nhận: ${this.formatDate(request.accepted_at)}</span>` : ''}
-
-
-
                 </div>
 
 

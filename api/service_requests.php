@@ -5721,159 +5721,64 @@ elseif ($method == 'POST') {
 
 
             if ($update_stmt->execute()) {
-
-
-
-                // Get request details for email notification AFTER the update
-
-
-
-                $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
-
-
-
-                                         staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
-
-
-
-                                  FROM service_requests sr
-
-
-
-                                  LEFT JOIN users u ON sr.user_id = u.id
-
-
-
-                                  LEFT JOIN users staff ON sr.assigned_to = staff.id
-
-
-
-                                  LEFT JOIN categories c ON sr.category_id = c.id
-
-
-
-                                  WHERE sr.id = :request_id";
-
-
-
-                $request_stmt = $db->prepare($request_query);
-
-
-
-                $request_stmt->bindParam(":request_id", $request_id);
-
-
-
-                $request_stmt->execute();
-
-
-
-                $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-
-
-
+                // Background processing for notifications (non-blocking)
+                ignore_user_abort(true);
                 
-
-
-
-                // Send email notification to requester about assignment (ASYNC - non-blocking)
-                if ($request_data['user_id'] != $user_id) {
+                register_shutdown_function(function() use ($request_id, $user_id) {
                     try {
-                        require_once __DIR__ . '/async_email_queue.php';
+                        // Create new database connection for background processing
+                        require_once __DIR__ . '/../config/database.php';
+                        $database = new Database();
+                        $bg_db = $database->getConnection();
                         
-                        $subject = "Yêu cầu #{$request_id} đã được nhận xử lý";
-                        $body = "
-                            <h2>Yêu cầu đã được nhận</h2>
-                            <p><strong>Mã yêu cầu:</strong> #{$request_id}</p>
-                            <p><strong>Tiêu đề:</strong> {$request_data['title']}</p>
-                            <p><strong>Người nhận:</strong> {$request_data['assigned_name']}</p>
-                            <p><strong>Thời gian nhận:</strong> " . date('d/m/Y H:i') . "</p>
-                            <p>Vui lòng truy cập hệ thống để theo dõi tiến độ.</p>
-                        ";
+                        if (!$bg_db) {
+                            error_log("Background notification: Failed to get database connection");
+                            return;
+                        }
                         
-                        // Queue email for async processing (non-blocking, < 100ms)
-                        queueEmailAsync(
-                            $request_data['requester_email'],
-                            $request_data['requester_name'],
-                            $subject,
-                            $body,
-                            'high' // High priority for assignment notifications
-                        );
+                        // Get request details for notification
+                        $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
+                                                 staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
+                                          FROM service_requests sr
+                                          LEFT JOIN users u ON sr.user_id = u.id
+                                          LEFT JOIN users staff ON sr.assigned_to = staff.id
+                                          LEFT JOIN categories c ON sr.category_id = c.id
+                                          WHERE sr.id = :request_id";
                         
-                        error_log("Email queued for assignment notification: request_id={$request_id}");
+                        $request_stmt = $bg_db->prepare($request_query);
+                        $request_stmt->bindParam(":request_id", $request_id);
+                        $request_stmt->execute();
+                        $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
                         
+                        if ($request_data) {
+                            // Send notifications
+                            require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                            $notificationHelper = new ServiceRequestNotificationHelper($bg_db);
+                            
+                            // Notify user that their request is now in progress
+                            $notificationHelper->notifyUserRequestInProgress(
+                                $request_id, 
+                                $request_data['user_id'], 
+                                $request_data['assigned_name']
+                            );
+                            
+                            // Notify admins about assignment
+                            $notificationHelper->notifyAdminStatusChange(
+                                $request_id, 
+                                'open', 
+                                'in_progress', 
+                                $request_data['assigned_name'], 
+                                $request_data['title']
+                            );
+                        }
                     } catch (Exception $e) {
-                        error_log("Email queue failed: " . $e->getMessage());
-                        // Continue even if email queue fails
+                        error_log("Background notification failed: " . $e->getMessage());
                     }
+                });
                 
-                // Send role-based notifications and emails
-                try {
-                    $notificationHelper = new ServiceRequestNotificationHelper($db);
-                    
-                    // Notify user that their request is now in progress
-                    $notificationHelper->notifyUserRequestInProgress(
-                        $request_id, 
-                        $request_data['user_id'], 
-                        $request_data['assigned_name']
-                    );
-                    
-                    // Queue email to user about assignment
-                    $user_subject = "Yêu câu #{$request_id} - Da duoc nhân xly";
-                    $user_body = "
-                        <h2>Yêu câu da duoc nhân</h2>
-                        <p>Yêu câu #{$request_id} cua ban da duoc nhân viên {$request_data['assigned_name']} nhân xly.</p>
-                        <p>Tiêu de: {$request_data['title']}</p>
-                        <p>Thoi gian nhân: " . date('d/m/Y H:i') . "</p>
-                        <p>Ban có the theo doi tiên do trong hê thong.</p>
-                    ";
-                    
-                    queueEmailAsync(
-                        $request_data['requester_email'],
-                        $request_data['requester_name'],
-                        $user_subject,
-                        $user_body,
-                        'high'
-                    );
-                    
-                    // Notify admin about staff acceptance
-                    $notificationHelper->notifyAdminStatusChange(
-                        $request_id, 
-                        'open', 
-                        'in_progress', 
-                        $request_data['assigned_name'], 
-                        $request_data['title']
-                    );
-                    
-                    // Queue email notifications to admin about status change
-                    $admin_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'admin' AND status = 'active'");
-                    $admin_stmt->execute();
-                    $admin_users = $admin_stmt->fetchAll(PDO::FETCH_ASSOC);
-                    
-                    foreach ($admin_users as $admin) {
-                        $admin_subject = "Trang thái yêu câu #{$request_id} da thay doi";
-                        $admin_body = "
-                            <h2>Trang thái yêu câu thay doi</h2>
-                            <p>Nhân viên {$request_data['assigned_name']} da nhân yêu câu #{$request_id}.</p>
-                            <p>Tiêu de: {$request_data['title']}</p>
-                            <p>Trang thái: Open -> In Progress</p>
-                            <p>Thoi gian: " . date('d/m/Y H:i') . "</p>
-                        ";
-                        
-                        queueEmailAsync(
-                            $admin['email'],
-                            $admin['full_name'],
-                            $admin_subject,
-                            $admin_body,
-                            'normal'
-                        );
-                    }
-                    
-                } catch (Exception $e) {
-                    error_log("Failed to send role-based notifications for staff acceptance: " . $e->getMessage());
-                }
-                
+                // Response immediately
                 serviceJsonResponse(true, "Request accepted successfully");
+                return;
 
 
 
@@ -5882,23 +5787,10 @@ elseif ($method == 'POST') {
 
 
                 serviceJsonResponse(false, "Failed to accept request");
-
-
-
             }
-        }
-            
         } catch (Exception $e) {
-
-
-
             serviceJsonResponse(false, "Database error: " . $e->getMessage());
-
-
-
         }
-
-
 
     }
 
@@ -7093,6 +6985,7 @@ elseif ($method == 'PUT') {
             // Update request
             if ($status === 'open') {
                 $assigned_to = null; // Force reset assignment when status is set to open
+                $assigned_at = null; // Also reset assigned_at when status is set to open
             }
 
             // Get current assigned_to and assigned_at
@@ -7102,12 +6995,17 @@ elseif ($method == 'PUT') {
             $current_stmt->execute();
             $current_data = $current_stmt->fetch(PDO::FETCH_ASSOC);
 
-            $assigned_at = $current_data['assigned_at'];
-
-            // Update assigned_at if needed
-            if ($assigned_to !== null) {
-                if ($current_data['assigned_to'] === null || $current_data['assigned_to'] != $assigned_to) {
-                    $assigned_at = date('Y-m-d H:i:s');
+            // Only set assigned_at from current data if not already reset to null
+            if ($assigned_at === null) {
+                // Keep as null (status was set to open)
+            } else {
+                $assigned_at = $current_data['assigned_at'];
+                
+                // Update assigned_at if needed
+                if ($assigned_to !== null) {
+                    if ($current_data['assigned_to'] === null || $current_data['assigned_to'] != $assigned_to) {
+                        $assigned_at = date('Y-m-d H:i:s');
+                    }
                 }
             }
 
@@ -7130,10 +7028,61 @@ elseif ($method == 'PUT') {
                 $update_stmt->bindParam(":assigned_to", $assigned_to);
             }
             
-            $update_stmt->bindParam(":assigned_at", $assigned_at);
+            if ($assigned_at === null) {
+                $update_stmt->bindParam(":assigned_at", $assigned_at, PDO::PARAM_NULL);
+            } else {
+                $update_stmt->bindParam(":assigned_at", $assigned_at);
+            }
+            
             $update_stmt->bindParam(":request_id", $request_id);
 
             if ($update_stmt->execute()) {
+                // Notify staff about the update
+                require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
+                $notificationHelper = new ServiceRequestNotificationHelper($db);
+                
+                // Build changes description
+                $changes = [];
+                if ($assigned_to !== null && $current_data['assigned_to'] != $assigned_to) {
+                    $changes[] = "đã giao cho staff mới";
+                    
+                    // Notify old staff if they were reassigned
+                    if ($current_data['assigned_to'] !== null && $current_data['assigned_to'] != $assigned_to) {
+                        require_once __DIR__ . '/../lib/NotificationHelper.php';
+                        $baseNotificationHelper = new NotificationHelper($db);
+                        $baseNotificationHelper->createNotification(
+                            $current_data['assigned_to'],
+                            "Yêu cầu đã được giao lại",
+                            "Yêu cầu #{$request_id} - {$title} đã được Admin giao cho staff khác.",
+                            'warning',
+                            $request_id,
+                            'service_request',
+                            false
+                        );
+                    }
+                }
+                if (!empty($status)) {
+                    $changes[] = "trạng thái: {$status}";
+                }
+                if (!empty($priority)) {
+                    $changes[] = "độ ưu tiên: {$priority}";
+                }
+                if (!empty($category_id) && $category_id > 0) {
+                    $changes[] = "danh mục đã thay đổi";
+                }
+                
+                $changesText = !empty($changes) ? implode(", ", $changes) : null;
+                
+                // Notify assigned staff if exists
+                if ($assigned_to !== null) {
+                    $notificationHelper->notifyStaffRequestUpdated(
+                        $request_id,
+                        $title,
+                        $_SESSION['full_name'] ?? 'Admin',
+                        $changesText
+                    );
+                }
+                
                 serviceJsonResponse(true, "Request updated successfully");
             } else {
                 serviceJsonResponse(false, "Failed to update request");
@@ -7251,168 +7200,65 @@ elseif ($method == 'PUT') {
             $update_stmt->bindParam(":request_id", $request_id);
             $update_stmt->bindParam(":user_id", $user_id);
 
-            
-
             if ($update_stmt->execute()) {
+                // Background processing for notifications (non-blocking)
+                ignore_user_abort(true);
                 
-                // Get request details for notifications BEFORE sending response
-                $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
-                                         staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
-                                  FROM service_requests sr
-                                  LEFT JOIN users u ON sr.user_id = u.id
-                                  LEFT JOIN users staff ON sr.assigned_to = staff.id
-                                  LEFT JOIN categories c ON sr.category_id = c.id
-                                  WHERE sr.id = :request_id";
-                $request_stmt = $db->prepare($request_query);
-                $request_stmt->bindParam(":request_id", $request_id);
-                $request_stmt->execute();
-                $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
-                
-                // Process notifications and emails BEFORE sending response to ensure execution
-                try {
-                    error_log("NOTIFICATIONS: Starting processing for request #$request_id");
-                    
-                    if ($request_data) {
-                        // Send notifications using ServiceRequestNotificationHelper
-                        try {
+                register_shutdown_function(function() use ($request_id, $user_id) {
+                    try {
+                        // Create new database connection for background processing
+                        require_once __DIR__ . '/../config/database.php';
+                        $database = new Database();
+                        $bg_db = $database->getConnection();
+                        
+                        if (!$bg_db) {
+                            error_log("Background notification: Failed to get database connection");
+                            return;
+                        }
+                        
+                        // Get request details for notification
+                        $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email, 
+                                                 staff.full_name as assigned_name, staff.email as assigned_email, c.name as category_name
+                                          FROM service_requests sr
+                                          LEFT JOIN users u ON sr.user_id = u.id
+                                          LEFT JOIN users staff ON sr.assigned_to = staff.id
+                                          LEFT JOIN categories c ON sr.category_id = c.id
+                                          WHERE sr.id = :request_id";
+                        
+                        $request_stmt = $bg_db->prepare($request_query);
+                        $request_stmt->bindParam(":request_id", $request_id);
+                        $request_stmt->execute();
+                        $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                        
+                        if ($request_data) {
+                            // Send notifications
                             require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                            $notificationHelper = new ServiceRequestNotificationHelper($db);
+                            $notificationHelper = new ServiceRequestNotificationHelper($bg_db);
                             
-                            // 1. Notify user that request is in progress
-                            error_log("NOTIFICATIONS: Notifying user for request #$request_id");
-                            $userNotificationResult = $notificationHelper->notifyUserRequestInProgress(
+                            // Notify user that their request is now in progress
+                            $notificationHelper->notifyUserRequestInProgress(
                                 $request_id, 
                                 $request_data['user_id'], 
                                 $request_data['assigned_name']
                             );
-                            error_log("NOTIFICATIONS: User notification result: " . ($userNotificationResult ? "SUCCESS" : "FAILED"));
                             
-                            // 2. Notify admins about assignment
-                            error_log("NOTIFICATIONS: Notifying admins for request #$request_id");
-                            $adminNotificationResult = $notificationHelper->notifyAdminStatusChange(
+                            // Notify admins about assignment
+                            $notificationHelper->notifyAdminStatusChange(
                                 $request_id, 
                                 'open', 
                                 'in_progress', 
                                 $request_data['assigned_name'], 
                                 $request_data['title']
                             );
-                            error_log("NOTIFICATIONS: Admin notification result: " . ($adminNotificationResult ? "SUCCESS" : "FAILED"));
-                            
-                            error_log("NOTIFICATIONS: Notifications completed for request #$request_id");
-                            
-                        } catch (Exception $e) {
-                            error_log("NOTIFICATIONS: Notification failed for request #$request_id: " . $e->getMessage());
                         }
-                        
-                        // Send email notification to requester
-                        try {
-                            error_log("EMAIL: Sending email for request #$request_id");
-                            $emailHelper = new EmailHelper();
-                            
-                            // Create status update email using standard template
-                            $subject = "Yêu câu #{$request_id} - Tràng thái thay thành 'in_progress'";
-                            
-                            // Custom content for standard template
-                            $customContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu được nhân viên IT nhận</h2>
-                        
-                        <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0;">
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Mã yêu cầu:</span>
-                                <span style="color: #212529;"><strong>#' . $request_id . '</strong></span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Tiêu đề:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($request_data['title']) . '</span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Người tạo:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($request_data['requester_name']) . '</span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Nhân viên IT:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($request_data['assigned_name']) . '</span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Trạng thái:</span>
-                                <span style="color: #212529;"><span style="padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; text-transform: uppercase; background: #e8f5e8; color: #28a745;">in_progress</span></span>
-                            </div>
-                        </div>
-                        
-                        <p style="color: #666; line-height: 1.6;">Yêu cầu của bạn được nhân viên IT nhận và đang trong quá trình xử lý. Chúng tôi sẽ liên hệ với bạn nếu có thông tin thêm.</p>';
-                            
-                            // Use standard template
-                            $emailResult = $emailHelper->sendStandardEmail(
-                                $request_data['requester_email'],
-                                $request_data['requester_name'],
-                                $subject,
-                                $customContent,
-                                $request_id
-                            );
-                            error_log("EMAIL: Email to requester result for request #$request_id: " . ($emailResult ? "SUCCESS" : "FAILED"));
-                            
-                            // ALSO send email to all admins
-                            try {
-                                $admin_query = "SELECT email, full_name FROM users WHERE role = 'admin' AND status = 'active'";
-                                $admin_stmt = $db->prepare($admin_query);
-                                $admin_stmt->execute();
-                                $admins = $admin_stmt->fetchAll(PDO::FETCH_ASSOC);
-                                
-                                if (!empty($admins)) {
-                                    $admin_subject = "Staff Accepted Request #{$request_id}";
-                                    
-                                    // Admin email content using standard template
-                                    $adminCustomContent = '<h2 style="color: #333; margin-bottom: 20px;">Nhân viên IT nhận yêu cầu</h2>
-                        
-                        <div style="background: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0;">
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Mã yêu cầu:</span>
-                                <span style="color: #212529;"><strong>#' . $request_id . '</strong></span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Tiêu đề:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($request_data['title']) . '</span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Người tạo:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($request_data['requester_name']) . '</span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Nhân viên IT:</span>
-                                <span style="color: #212529;">' . htmlspecialchars($request_data['assigned_name']) . '</span>
-                            </div>
-                            <div style="margin-bottom: 12px;">
-                                <span style="font-weight: bold; color: #495057; display: inline-block; width: 100px;">Trạng thái:</span>
-                                <span style="color: #212529;"><span style="padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; text-transform: uppercase; background: #e8f5e8; color: #28a745;">in_progress</span></span>
-                            </div>
-                        </div>
-                        
-                        <p style="color: #666; line-height: 1.6;">Nhân viên IT được phân công và bắt đầu xử lý yêu cầu này.</p>';
-                                    
-                                    foreach ($admins as $admin) {
-                                        $admin_email_result = $emailHelper->sendStandardEmail(
-                                            $admin['email'],
-                                            $admin['full_name'],
-                                            $admin_subject,
-                                            $adminCustomContent,
-                                            $request_id
-                                        );
-                                        error_log("EMAIL: Email to admin {$admin['email']} result: " . ($admin_email_result ? "SUCCESS" : "FAILED"));
-                                    }
-                                }
-                            } catch (Exception $e) {
-                                error_log("EMAIL: Failed to send admin emails: " . $e->getMessage());
-                            }
-                        } catch (Exception $e) {
-                            error_log("EMAIL: Email failed for request #$request_id: " . $e->getMessage());
-                        }
+                    } catch (Exception $e) {
+                        error_log("Background notification failed: " . $e->getMessage());
                     }
-                    
-                } catch (Exception $e) {
-                    error_log("NOTIFICATIONS: Critical error in processing: " . $e->getMessage());
-                }
+                });
                 
-                // Send response after processing is complete
+                // Response immediately
                 serviceJsonResponse(true, "Request accepted successfully");
+                return;
 
             } else {
                 serviceJsonResponse(false, "Failed to accept request");

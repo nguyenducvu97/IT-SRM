@@ -8584,22 +8584,6 @@ class RequestDetailApp {
 
                     ` : ''}
 
-                    ${request.assigned_to && request.accepted_at ? `
-
-
-
-                        <div class="meta-item">
-
-                            <strong>Thời gian staff nhận:</strong> ${formatDate(request.accepted_at)}
-
-
-
-                        </div>
-
-
-
-                    ` : ''}
-
 
 
 

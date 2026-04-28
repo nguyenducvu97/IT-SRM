@@ -414,6 +414,40 @@ class ServiceRequestNotificationHelper {
     }
     
     /**
+     * Notify staff when admin updates a request
+     */
+    public function notifyStaffRequestUpdated($requestId, $requestTitle, $adminName = null, $changes = null) {
+        $assignedStaff = $this->getAssignedStaff($requestId);
+        
+        // If no assigned staff, return false (no notifications created)
+        if (empty($assignedStaff)) {
+            error_log("notifyStaffRequestUpdated: No assigned staff found for request #{$requestId}, cannot send notification");
+            return false;
+        }
+        
+        $title = "Admin đã cập nhật yêu cầu";
+        $message = "Admin đã cập nhật yêu cầu #{$requestId} - {$requestTitle}" .
+                   ($adminName ? " bởi {$adminName}" : "") .
+                   ($changes ? ". Thay đổi: {$changes}" : "") . 
+                   ". Vui lòng kiểm tra và tiếp tục xử lý.";
+        
+        $results = [];
+        foreach ($assignedStaff as $staff) {
+            $results[] = $this->notificationHelper->createNotification(
+                $staff['id'], 
+                $title, 
+                $message, 
+                'info', 
+                $requestId, 
+                'service_request',
+                false  // Disable automatic email sending
+            );
+        }
+        
+        return !in_array(false, $results) && !empty($results);
+    }
+    
+    /**
      * ========================================
      * ADMIN NOTIFICATIONS (Quản trị viên)
      * ========================================
