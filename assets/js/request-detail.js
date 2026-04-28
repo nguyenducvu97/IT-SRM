@@ -17354,6 +17354,23 @@ class RequestDetailApp {
 
 
 
+        // Load categories for error type dropdown
+        this.loadCategoriesForResolve();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         document.getElementById('resolveModal').style.display = 'block';
 
 
@@ -17370,6 +17387,28 @@ class RequestDetailApp {
 
 
 
+    }
+
+    async loadCategoriesForResolve() {
+        try {
+            const response = await this.apiCall('api/categories.php?action=list');
+            
+            if (response.success && response.data) {
+                const errorTypeSelect = document.getElementById('errorType');
+                errorTypeSelect.innerHTML = '<option value="">Chọn loại lỗi</option>';
+                
+                response.data.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    errorTypeSelect.appendChild(option);
+                });
+            } else {
+                console.error('Failed to load categories:', response.message);
+            }
+        } catch (error) {
+            console.error('Error loading categories for resolve:', error);
+        }
     }
 
 

@@ -8296,22 +8296,15 @@ function handleResolveRequest($request_id, $error_description, $error_type, $rep
 
         
 
-        // Update request status to resolved
-
-        $update_query = "UPDATE service_requests 
-
-                        SET status = 'resolved', 
-
+        // Update request status to resolved and update category_id based on error_type
+        $update_query = "UPDATE service_requests
+                        SET status = 'resolved',
                             resolved_at = NOW(),
-
                             error_description = :error_description,
-
                             error_type = :error_type,
-
+                            category_id = :category_id,
                             replacement_materials = :replacement_materials,
-
                             solution_method = :solution_method
-
                         WHERE id = :request_id";
 
         $update_stmt = $db->prepare($update_query);
@@ -8321,6 +8314,8 @@ function handleResolveRequest($request_id, $error_description, $error_type, $rep
         $update_stmt->bindParam(":error_description", $error_description);
 
         $update_stmt->bindParam(":error_type", $error_type);
+
+        $update_stmt->bindParam(":category_id", $error_type);
 
         $update_stmt->bindParam(":replacement_materials", $replacement_materials);
 
