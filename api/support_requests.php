@@ -450,64 +450,30 @@ function handlePost($pdo, $action, $current_user, $user_role) {
     if ($result) {
         $support_id = $pdo->lastInsertId();
         
-        // Send notification to admin about new support request
+        // Trigger background email and notification sending
         try {
-            $notificationHelper = new ServiceRequestNotificationHelper($pdo);
-
-            // Get request details for notification
-            $requestDetails = $notificationHelper->getRequestDetails($service_request_id);
-
-            // Notify admin about support request (escalation)
-            $notificationHelper->notifyAdminSupportRequest(
-                $service_request_id,
-                $support_details . ($support_reason ? " - Lý do: " . $support_reason : ""),
-                $_SESSION['full_name'] ?? 'Staff',
-                $requestDetails['title']
-            );
-
-            // Send email to admin with standard template
-            $emailHelper = new EmailHelper();
-            $adminUsers = $notificationHelper->getUsersByRole(['admin']);
-
-            foreach ($adminUsers as $admin) {
-                $emailContent = '<h2 style="color: #333; margin-bottom: 20px;">Yêu cầu hỗ trợ kỹ thuật</h2>
-
-                <div style="background: #f8f9fa; border-left: 4px solid #ffc107; padding: 20px; margin: 20px 0;">
-                    <div style="margin-bottom: 12px;">
-                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Mã yêu cầu:</span>
-                        <span style="color: #212529;"><strong>#' . $service_request_id . '</strong></span>
-                    </div>
-                    <div style="margin-bottom: 12px;">
-                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Tiêu đề yêu cầu:</span>
-                        <span style="color: #212529;">' . htmlspecialchars($requestDetails['title']) . '</span>
-                    </div>
-                    <div style="margin-bottom: 12px;">
-                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Nhân viên IT:</span>
-                        <span style="color: #212529;">' . htmlspecialchars($_SESSION['full_name'] ?? 'Staff') . '</span>
-                    </div>
-                    <div style="margin-bottom: 12px;">
-                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Chi tiết hỗ trợ:</span>
-                        <span style="color: #212529;">' . htmlspecialchars($support_details) . '</span>
-                    </div>
-                    ' . ($support_reason ? '<div style="margin-bottom: 12px;">
-                        <span style="font-weight: bold; color: #495057; display: inline-block; width: 150px;">Lý do:</span>
-                        <span style="color: #212529;">' . htmlspecialchars($support_reason) . '</span>
-                    </div>' : '') . '
-                </div>
-
-                <p style="color: #666; line-height: 1.6;">Nhân viên IT gặp vấn đề kỹ thuật khó và cần Admin can thiệp. Vui lòng truy cập hệ thống để xem và xử lý yêu cầu hỗ trợ này.</p>';
-
-                $emailHelper->sendStandardEmail(
-                    $admin['email'],
-                    $admin['full_name'],
-                    "Yêu cầu hỗ trợ kỹ thuật #" . $service_request_id,
-                    $emailContent,
-                    $service_request_id
-                );
-            }
+            $email_api_url = 'http://localhost/it-service-request/api/send_support_request_email.php';
+            $post_data = json_encode([
+                'service_request_id' => $service_request_id,
+                'support_details' => $support_details,
+                'support_reason' => $support_reason,
+                'staff_name' => $_SESSION['full_name'] ?? 'Staff'
+            ]);
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $email_api_url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100); // Very short timeout - fire and forget
+            curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+            curl_exec($ch);
+            curl_close($ch);
+            
+            error_log("EMAIL: Background email trigger sent for support request #$support_id");
         } catch (Exception $e) {
-            error_log("Failed to send support request notification: " . $e->getMessage());
-            // Continue even if notification fails
+            error_log("EMAIL: Failed to trigger background email for support request #$support_id: " . $e->getMessage());
         }
         
         // Handle file uploads if any

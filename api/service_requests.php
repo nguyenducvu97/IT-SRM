@@ -1959,129 +1959,29 @@ elseif ($method == 'POST') {
                 
                 
                 // Background email and notifications (non-blocking)
-                register_shutdown_function(function() use ($request_id, $title, $description, $priority, $user_id, $category_id, $db) {
+                register_shutdown_function(function() use ($request_id) {
                     ignore_user_abort(true);
                     set_time_limit(300); // 5 minutes for background processing
 
                     try {
-                        // Send confirmation email to user
-                        require_once __DIR__ . '/../lib/EmailHelper.php';
-                        $emailHelper = new EmailHelper();
+                        // Trigger email and notification sending via background API call
+                        $email_api_url = 'http://localhost/it-service-request/api/send_create_request_email.php';
+                        $post_data = json_encode(['request_id' => $request_id]);
                         
-                        // Get request details for email
-                        $request_query = "SELECT sr.*, u.full_name as requester_name, u.email as requester_email
-                                          FROM service_requests sr
-                                          LEFT JOIN users u ON sr.user_id = u.id
-                                          WHERE sr.id = :request_id";
-                        $request_stmt = $db->prepare($request_query);
-                        $request_stmt->bindParam(":request_id", $request_id);
-                        $request_stmt->execute();
-                        $request_data = $request_stmt->fetch(PDO::FETCH_ASSOC);
+                        $ch = curl_init();
+                        curl_setopt($ch, CURLOPT_URL, $email_api_url);
+                        curl_setopt($ch, CURLOPT_POST, 1);
+                        curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                        curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100); // Very short timeout - fire and forget
+                        curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+                        curl_exec($ch);
+                        curl_close($ch);
                         
-                        // Get category name
-                        $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
-                        $cat_stmt->execute([$category_id]);
-                        $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
-                        $category_name = $cat_data['name'] ?? 'Unknown';
-                        
-                        // Prepare email data
-                        $email_data = array(
-                            'id' => $request_id,
-                            'title' => $title,
-                            'requester_name' => $request_data['requester_name'],
-                            'category' => $category_name,
-                            'priority' => $priority,
-                            'description' => $description
-                        );
-                        
-                        // Send confirmation email
-                        $email_result = $emailHelper->sendNewRequestNotification($email_data);
-                        error_log("EMAIL: Background confirmation email for request #$request_id: " . ($email_result ? "SUCCESS" : "FAILED"));
-                        
-                        // Create notifications
-                        require_once __DIR__ . '/../lib/ServiceRequestNotificationHelper.php';
-                        $notificationHelper = new ServiceRequestNotificationHelper($db);
-
-                        // Get user details for notifications
-                        $user_stmt = $db->prepare("SELECT full_name FROM users WHERE id = ?");
-                        $user_stmt->execute([$user_id]);
-                        $user_data = $user_stmt->fetch(PDO::FETCH_ASSOC);
-                        $requester_name = $user_data['full_name'] ?? 'Unknown User';
-
-                        // Get category name
-                        $cat_stmt = $db->prepare("SELECT name FROM categories WHERE id = ?");
-                        $cat_stmt->execute([$category_id]);
-                        $cat_data = $cat_stmt->fetch(PDO::FETCH_ASSOC);
-                        $category_name = $cat_data['name'] ?? 'Unknown';
-
-                        // Notify admin immediately
-                        error_log("NOTIFICATION: Creating admin notification for request #{$request_id}");
-                        $adminNotifyResult = $notificationHelper->notifyAdminNewRequest(
-                            $request_id,
-                            $title,
-                            $requester_name,
-                            $category_name
-                        );
-                        error_log("NOTIFICATION: Admin notification result: " . ($adminNotifyResult ? "SUCCESS" : "FAILED"));
-
-                        // Notify staff with email
-                        $notificationHelper->notifyStaffNewRequest(
-                            $request_id,
-                            $title,
-                            $requester_name,
-                            $category_name
-                        );
-
-                        // Queue email notifications to staff
-                        $staff_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'staff' AND status = 'active'");
-                        $staff_stmt->execute();
-                        $staff_users = $staff_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        foreach ($staff_users as $staff) {
-                            $staff_subject = "Yêu câu moi can xly #{$request_id}";
-                            $staff_body = "
-                                <h2>Yêu câu moi</h2>
-                                <p>Nguyên dung {$requester_name} da tao yêu câu moi #{$request_id} - {$title}</p>
-                                <p>Danh muc: {$category_name}</p>
-                                <p>Thoi gian tao: " . date('d/m/Y H:i') . "</p>
-                                <p>Vui lòng truy cap hê thong de xly yêu câu.</p>
-                            ";
-
-                            queueEmailAsync(
-                                $staff['email'],
-                                $staff['full_name'],
-                                $staff_subject,
-                                $staff_body,
-                                'high'
-                            );
-                        }
-
-                        // Queue email notifications to admin
-                        $admin_stmt = $db->prepare("SELECT id, full_name, email FROM users WHERE role = 'admin' AND status = 'active'");
-                        $admin_stmt->execute();
-                        $admin_users = $admin_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        foreach ($admin_users as $admin) {
-                            $admin_subject = "Yêu câu moi trong hê thong #{$request_id}";
-                            $admin_body = "
-                                <h2>Yêu câu moi trong hê thong</h2>
-                                <p>Nguyên dung {$requester_name} da tao yêu câu moi #{$request_id} - {$title}</p>
-                                <p>Danh muc: {$category_name}</p>
-                                <p>Thoi gian tao: " . date('d/m/Y H:i') . "</p>
-                                <p>Chi tiêt yêu câu có trong hê thong.</p>
-                            ";
-
-                            queueEmailAsync(
-                                $admin['email'],
-                                $admin['full_name'],
-                                $admin_subject,
-                                $admin_body,
-                                'high'
-                            );
-                        }
-
+                        error_log("EMAIL: Background email trigger sent for new request #$request_id");
                     } catch (Exception $e) {
-                        error_log("Background notification failed: " . $e->getMessage());
+                        error_log("EMAIL: Failed to trigger background email for new request #$request_id: " . $e->getMessage());
                     }
                 });
 
@@ -5770,6 +5670,27 @@ elseif ($method == 'POST') {
                                 $request_data['assigned_name'], 
                                 $request_data['title']
                             );
+                            
+                            // Trigger email sending via background API call
+                            try {
+                                $email_api_url = 'http://localhost/it-service-request/api/send_acceptance_email.php';
+                                $post_data = json_encode(['request_id' => $request_id]);
+                                
+                                $ch = curl_init();
+                                curl_setopt($ch, CURLOPT_URL, $email_api_url);
+                                curl_setopt($ch, CURLOPT_POST, 1);
+                                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+                                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100); // Very short timeout - fire and forget
+                                curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+                                curl_exec($ch);
+                                curl_close($ch);
+                                
+                                error_log("EMAIL: Background email trigger sent for request #$request_id");
+                            } catch (Exception $e) {
+                                error_log("EMAIL: Failed to trigger background email for request #$request_id: " . $e->getMessage());
+                            }
                         }
                     } catch (Exception $e) {
                         error_log("Background notification failed: " . $e->getMessage());
@@ -7250,6 +7171,27 @@ elseif ($method == 'PUT') {
                                 $request_data['assigned_name'], 
                                 $request_data['title']
                             );
+                            
+                            // Trigger email sending via background API call
+                            try {
+                                $email_api_url = 'http://localhost/it-service-request/api/send_acceptance_email.php';
+                                $post_data = json_encode(['request_id' => $request_id]);
+                                
+                                $ch = curl_init();
+                                curl_setopt($ch, CURLOPT_URL, $email_api_url);
+                                curl_setopt($ch, CURLOPT_POST, 1);
+                                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+                                curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+                                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100); // Very short timeout - fire and forget
+                                curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+                                curl_exec($ch);
+                                curl_close($ch);
+                                
+                                error_log("EMAIL: Background email trigger sent for request #$request_id");
+                            } catch (Exception $e) {
+                                error_log("EMAIL: Failed to trigger background email for request #$request_id: " . $e->getMessage());
+                            }
                         }
                     } catch (Exception $e) {
                         error_log("Background notification failed: " . $e->getMessage());
