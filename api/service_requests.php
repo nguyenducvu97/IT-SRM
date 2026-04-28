@@ -1,6 +1,7 @@
 <?php
 
-
+// Set timezone to Vietnam (UTC+7)
+date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 // Enable error logging but disable display for JSON responses
 
@@ -7043,12 +7044,17 @@ elseif ($method == 'PUT') {
         
         // Handle request update (similar to POST handler)
         error_log("=== PUT UPDATE ACTION DEBUG ===");
+        error_log("Full input: " . print_r($input, true));
         
         $request_id = isset($input['id']) ? (int)$input['id'] : 0;
         $title = isset($input['title']) ? trim($input['title']) : '';
         $description = isset($input['description']) ? trim($input['description']) : '';
         $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
         $priority = isset($input['priority']) ? $input['priority'] : 'medium';
+        $status = isset($input['status']) ? $input['status'] : null;
+        $assigned_to = isset($input['assigned_to']) ? $input['assigned_to'] : null;
+        
+        error_log("PUT update - assigned_to: " . ($assigned_to === null ? 'NULL' : $assigned_to));
         
         if ($request_id <= 0) {
             serviceJsonResponse(false, "Request ID is required");
@@ -7057,9 +7063,9 @@ elseif ($method == 'PUT') {
         
         // Copy the update logic from POST handler
         
-        // Only admin and staff can update requests
-        if ($user_role != 'admin' && $user_role != 'staff') {
-            serviceJsonResponse(false, "Access denied");
+        // Only admin can update requests
+        if ($user_role != 'admin') {
+            serviceJsonResponse(false, "Access denied - Only admin can update requests");
             return;
         }
         
@@ -7077,7 +7083,7 @@ elseif ($method == 'PUT') {
         }
         
         // Validate priority
-        $valid_priorities = ['low', 'medium', 'high'];
+        $valid_priorities = ['low', 'medium', 'high', 'critical'];
         if (!in_array($priority, $valid_priorities)) {
             serviceJsonResponse(false, "Invalid priority");
             return;
@@ -7088,26 +7094,45 @@ elseif ($method == 'PUT') {
             if ($status === 'open') {
                 $assigned_to = null; // Force reset assignment when status is set to open
             }
-            
-            $update_query = "UPDATE service_requests 
-                           SET title = :title, description = :description, category_id = :category_id, 
+
+            // Get current assigned_to and assigned_at
+            $current_query = "SELECT assigned_to, assigned_at FROM service_requests WHERE id = :request_id";
+            $current_stmt = $db->prepare($current_query);
+            $current_stmt->bindParam(":request_id", $request_id);
+            $current_stmt->execute();
+            $current_data = $current_stmt->fetch(PDO::FETCH_ASSOC);
+
+            $assigned_at = $current_data['assigned_at'];
+
+            // Update assigned_at if needed
+            if ($assigned_to !== null) {
+                if ($current_data['assigned_to'] === null || $current_data['assigned_to'] != $assigned_to) {
+                    $assigned_at = date('Y-m-d H:i:s');
+                }
+            }
+
+            $update_query = "UPDATE service_requests
+                           SET title = :title, description = :description, category_id = :category_id,
                                priority = :priority, status = :status, assigned_to = :assigned_to,
-                               assigned_at = CASE 
-                                   WHEN assigned_to IS NOT NULL AND (SELECT assigned_to FROM service_requests WHERE id = :request_id) IS NULL THEN NOW()
-                                   WHEN assigned_to IS NOT NULL AND (SELECT assigned_to FROM service_requests WHERE id = :request_id) != :assigned_to THEN NOW()
-                                   ELSE assigned_at
-                               END
+                               assigned_at = :assigned_at
                            WHERE id = :request_id";
-            
+
             $update_stmt = $db->prepare($update_query);
             $update_stmt->bindParam(":title", $title);
             $update_stmt->bindParam(":description", $description);
             $update_stmt->bindParam(":category_id", $category_id);
             $update_stmt->bindParam(":priority", $priority);
             $update_stmt->bindParam(":status", $status);
-            $update_stmt->bindParam(":assigned_to", $assigned_to, PDO::PARAM_NULL);
-            $update_stmt->bindParam(":request_id", $request_id);
             
+            if ($assigned_to === null) {
+                $update_stmt->bindParam(":assigned_to", $assigned_to, PDO::PARAM_NULL);
+            } else {
+                $update_stmt->bindParam(":assigned_to", $assigned_to);
+            }
+            
+            $update_stmt->bindParam(":assigned_at", $assigned_at);
+            $update_stmt->bindParam(":request_id", $request_id);
+
             if ($update_stmt->execute()) {
                 serviceJsonResponse(true, "Request updated successfully");
             } else {

@@ -8568,6 +8568,12 @@ class RequestDetailApp {
 
                     </div>
 
+                    ${request.assigned_at ? `
+                    <div class="meta-item">
+                        <strong>Thời gian nhận yêu cầu:</strong> ${formatDate(request.assigned_at)}
+                    </div>
+                    ` : ''}
+
                     ${request.estimated_completion ? `
 
                     <div class="meta-item">

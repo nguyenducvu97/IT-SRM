@@ -1,4 +1,7 @@
 <?php
+// Set timezone to Vietnam (UTC+7)
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+
 // Database configuration for IT Service Request Management
 // XAMPP MySQL settings
 
@@ -13,7 +16,7 @@ class Database {
     public function getConnection() {
         if (self::$instance === null) {
             try {
-                $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4", 
+                $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4",
                                      $this->username, $this->password, [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -22,6 +25,7 @@ class Database {
                         PDO::ATTR_PERSISTENT => true
                     ]);
                 $this->conn->exec("set names utf8mb4");
+                $this->conn->exec("SET time_zone = '+07:00'");
                 self::$instance = $this->conn;
             } catch(PDOException $exception) {
                 error_log("Connection error: " . $exception->getMessage());

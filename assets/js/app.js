@@ -4824,7 +4824,7 @@ class ITServiceApp {
 
 
 
-                    ${request.assigned_at ? `<span><strong>Ngày nhận:</strong> ${this.formatDate(request.assigned_at)}</span>` : ''}
+                    ${request.assigned_at ? `<span><strong>Thời gian nhận yêu cầu:</strong> ${this.formatDate(request.assigned_at)}</span>` : ''}
 
 
 
