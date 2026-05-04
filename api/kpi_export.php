@@ -118,8 +118,8 @@ function exportKPIExcel($db) {
         ob_start();
         
         // Get date range from parameters
-        $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01');
-        $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-t');
+        $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-01-01'); // Default to start of year
+        $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d'); // Default to today
         
         // Convert date format from d/m/Y to Y-m-d if needed
         if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $start_date)) {
@@ -273,8 +273,8 @@ function exportKPIExcel($db) {
 
 function getKPIData($db) {
     try {
-        $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-m-01');
-        $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-t');
+        $start_date = isset($_GET['start_date']) ? $_GET['start_date'] : date('Y-01-01'); // Default to start of year
+        $end_date = isset($_GET['end_date']) ? $_GET['end_date'] : date('Y-m-d'); // Default to today
         
         // Convert date format from d/m/Y to Y-m-d if needed
         if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $start_date)) {
@@ -347,6 +347,11 @@ function getKPIDataArray($db, $start_date, $end_date) {
     $stats_stmt->bindParam(':end_date', $end_date);
     $stats_stmt->execute();
     $stats = $stats_stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Debug logging
+        error_log("KPI Debug - Staff ID: $staff_id, Start: $start_date, End: $end_date");
+        error_log("KPI Debug - Stats Query: $stats_query");
+        error_log("KPI Debug - Stats Result: " . json_encode($stats));
         
         // Get user feedback ratings with proper AWR calculation
         // CHI TINH REQUEST CO DAY DU 6 THONG TIN CHO K1-K4:
@@ -461,13 +466,13 @@ function getKPIDataArray($db, $start_date, $end_date) {
         // K2: On-time Completion Score (Tien do hoan thanh) - Use configured formula
         $k2_score = 1;
         if ($completed_requests > 0) {
-            $delta_t_query = "SELECT AVG(
+            $delta_ratio_query = "SELECT AVG(
                 CASE 
                     WHEN sr.estimated_completion IS NOT NULL AND sr.resolved_at IS NOT NULL
-                    THEN TIMESTAMPDIFF(HOUR, sr.estimated_completion, sr.resolved_at)
+                    THEN TIMESTAMPDIFF(HOUR, sr.created_at, sr.resolved_at) / TIMESTAMPDIFF(HOUR, sr.created_at, sr.estimated_completion)
                     ELSE NULL
                 END
-            ) as avg_delta_t
+            ) as avg_delta_ratio
             FROM service_requests sr
             WHERE sr.assigned_to = :staff_id
             AND sr.status IN ('resolved', 'closed')
@@ -477,26 +482,33 @@ function getKPIDataArray($db, $start_date, $end_date) {
             AND sr.estimated_completion IS NOT NULL
             AND sr.resolved_at IS NOT NULL";
             
-            $delta_t_stmt = $db->prepare($delta_t_query);
-            $delta_t_stmt->bindParam(':staff_id', $staff_id);
-            $delta_t_stmt->bindParam(':start_date', $start_date);
-            $delta_t_stmt->bindParam(':end_date', $end_date);
-            $delta_t_stmt->execute();
-            $delta_t_result = $delta_t_stmt->fetch(PDO::FETCH_ASSOC);
-            $avg_delta_t = (float)($delta_t_result['avg_delta_t'] ?? 0);
+            $delta_ratio_stmt = $db->prepare($delta_ratio_query);
+            $delta_ratio_stmt->bindParam(':staff_id', $staff_id);
+            $delta_ratio_stmt->bindParam(':start_date', $start_date);
+            $delta_ratio_stmt->bindParam(':end_date', $end_date);
+            $delta_ratio_stmt->execute();
+            $delta_ratio_result = $delta_ratio_stmt->fetch(PDO::FETCH_ASSOC);
+            $avg_delta_ratio = (float)($delta_ratio_result['avg_delta_ratio'] ?? 1);
+            
+            // Debug K2 calculation
+            error_log("KPI Debug - K2 Calculation - Staff ID: $staff_id, Completed: $completed_requests, Delta Ratio: $avg_delta_ratio");
             
             // Use K2 config
             $k2_config = $kpi_formulas['K2'] ?? ['formula' => 'default', 'weight' => 35];
             
-            // 5 points: Delta T <= 0 (hoan thanh dung hoac truoc han)
-            // 3 points: Delta T > 0 but tre khong qua 2 gio lam viec
-            // 1 point: Tre hon 1 ngay
-            if ($avg_delta_t <= 0) {
+            // 5 points: Delta ratio <= 0.8 (hoan thanh truoc hoac dung han)
+            // 4 points: Delta ratio <= 0.9 (hoan thanh gan dung han)
+            // 3 points: Delta ratio <= 1.0 (hoan thanh sau han khong qua 1 ngay)
+            // 2 points: Delta ratio <= 1.1 (hoan thanh sau han 1 ngay)
+            // 1 point: Delta ratio > 1.2 (hoan thanh sau han qua 1 ngay)
+            if ($avg_delta_ratio <= 0.8) {
                 $k2_score = 5;
-            } elseif ($avg_delta_t <= 2) {
+            } elseif ($avg_delta_ratio <= 0.9) {
+                $k2_score = 4;
+            } elseif ($avg_delta_ratio <= 1.0) {
                 $k2_score = 3;
-            } elseif ($avg_delta_t <= 24) {
-                $k2_score = 1;
+            } elseif ($avg_delta_ratio <= 1.1) {
+                $k2_score = 2;
             } else {
                 $k2_score = 1; // Tre hon 1 ngay
             }
@@ -978,6 +990,7 @@ function parseKPIFormula($formula, $value, $kpi_type) {
         $formula = str_replace('M2', $value, $formula);
         $formula = str_replace('N2', $value, $formula);
         $formula = str_replace('O2', $value, $formula);
+        $formula = str_replace('R2', $value, $formula);
         
         // Replace Excel functions with PHP equivalents
         $formula = str_replace('MAX', 'max', $formula);
@@ -1020,7 +1033,7 @@ function getKPIFormulas($db) {
             // Return default formulas if table doesn't exist
             return [
                 'K1' => ['formula' => '=MAX(1; MIN(5; 5 - (L2/30)))', 'description' => 'L2 = Thoi gian phan hoi (phut)', 'weight' => 15],
-                'K2' => ['formula' => '=MAX(1; MIN(5; 5 - (M2/24)))', 'description' => 'M2 = Thoi gian hoan thanh (gio)', 'weight' => 35],
+                'K2' => ['formula' => '=MAX(1; MIN(5; 5 - (R2/1.2)))', 'description' => 'R2 = Tỷ lệ hoàn thành (thực tế/dự kiến)', 'weight' => 35],
                 'K3' => ['formula' => '=MAX(1; MIN(5; N2))', 'description' => 'N2 = Danh gia chung (1-5)', 'weight' => 40],
                 'K4' => ['formula' => '=MAX(1; MIN(5; O2/20))', 'description' => 'O2 = Danh gia staff xu ly yeu cau', 'weight' => 10],
                 'TOTAL' => ['formula' => '=(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)', 'description' => 'P2=K1(15%), Q2=K2(35%), R2=K3(40%), S2=K4(10%)', 'weight' => 100]
@@ -1126,18 +1139,35 @@ function getDetailedKPIData($db, $start_date, $end_date) {
             
             // Calculate K2 score for this request
             $k2_score = 1;
-            if ($request['estimated_completion'] && $request['resolved_at']) {
+            if ($request['estimated_completion'] && $request['resolved_at'] && $request['created_at']) {
+                $created = new DateTime($request['created_at']);
                 $estimated = new DateTime($request['estimated_completion']);
                 $resolved = new DateTime($request['resolved_at']);
-                $delta_t = $estimated->diff($resolved)->h + $estimated->diff($resolved)->d * 24;
-                $delta_t = $resolved > $estimated ? $delta_t : -$delta_t;
                 
-                if ($delta_t <= 0) {
-                    $k2_score = 5;
-                } elseif ($delta_t <= 2) {
-                    $k2_score = 3;
+                $actual_duration = $created->diff($resolved)->h + $created->diff($resolved)->d * 24;
+                $estimated_duration = $created->diff($estimated)->h + $created->diff($estimated)->d * 24;
+                
+                if ($estimated_duration > 0) {
+                    $delta_ratio = $actual_duration / $estimated_duration;
+                    
+                    // 5 points: Delta ratio <= 0.8 (hoan thanh truoc hoac dung han)
+                    // 4 points: Delta ratio <= 0.9 (hoan thanh gan dung han)
+                    // 3 points: Delta ratio <= 1.0 (hoan thanh sau han khong qua 1 ngay)
+                    // 2 points: Delta ratio <= 1.1 (hoan thanh sau han 1 ngay)
+                    // 1 point: Delta ratio > 1.2 (hoan thanh sau han qua 1 ngay)
+                    if ($delta_ratio <= 0.8) {
+                        $k2_score = 5;
+                    } elseif ($delta_ratio <= 0.9) {
+                        $k2_score = 4;
+                    } elseif ($delta_ratio <= 1.0) {
+                        $k2_score = 3;
+                    } elseif ($delta_ratio <= 1.1) {
+                        $k2_score = 2;
+                    } else {
+                        $k2_score = 1;
+                    }
                 } else {
-                    $k2_score = 1;
+                    $k2_score = 1; // Invalid estimated duration
                 }
             }
             
@@ -1274,18 +1304,35 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
         
         // Calculate K2 score
         $k2_score = 1;
-        if ($request['estimated_completion'] && $request['resolved_at']) {
+        if ($request['estimated_completion'] && $request['resolved_at'] && $request['created_at']) {
+            $created = new DateTime($request['created_at']);
             $estimated = new DateTime($request['estimated_completion']);
             $resolved = new DateTime($request['resolved_at']);
-            $delta_t = $estimated->diff($resolved)->h + $estimated->diff($resolved)->d * 24;
-            $delta_t = $resolved > $estimated ? $delta_t : -$delta_t;
             
-            if ($delta_t <= 0) {
-                $k2_score = 5;
-            } elseif ($delta_t <= 2) {
-                $k2_score = 3;
+            $actual_duration = $created->diff($resolved)->h + $created->diff($resolved)->d * 24;
+            $estimated_duration = $created->diff($estimated)->h + $created->diff($estimated)->d * 24;
+            
+            if ($estimated_duration > 0) {
+                $delta_ratio = $actual_duration / $estimated_duration;
+                
+                // 5 points: Delta ratio <= 0.8 (hoan thanh truoc hoac dung han)
+                // 4 points: Delta ratio <= 0.9 (hoan thanh gan dung han)
+                // 3 points: Delta ratio <= 1.0 (hoan thanh sau han khong qua 1 ngay)
+                // 2 points: Delta ratio <= 1.1 (hoan thanh sau han 1 ngay)
+                // 1 point: Delta ratio > 1.2 (hoan thanh sau han qua 1 ngay)
+                if ($delta_ratio <= 0.8) {
+                    $k2_score = 5;
+                } elseif ($delta_ratio <= 0.9) {
+                    $k2_score = 4;
+                } elseif ($delta_ratio <= 1.0) {
+                    $k2_score = 3;
+                } elseif ($delta_ratio <= 1.1) {
+                    $k2_score = 2;
+                } else {
+                    $k2_score = 1;
+                }
             } else {
-                $k2_score = 1;
+                $k2_score = 1; // Invalid estimated duration
             }
         }
         

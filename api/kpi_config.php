@@ -159,8 +159,8 @@ function insertDefaultKPIConfig($db) {
         ],
         [
             'kpi_type' => 'K2',
-            'formula' => '=MAX(1; MIN(5; 5 - (M2/24)))',
-            'description' => 'M2 = Thoi gian hoan thanh (gio)',
+            'formula' => '=MAX(1; MIN(5; 5 - (R2/1.2)))',
+            'description' => 'R2 = Tỷ lệ hoàn thành (thực tế/dự kiến)',
             'weight_percentage' => 35.00
         ],
         [

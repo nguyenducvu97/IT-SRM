@@ -5968,6 +5968,8 @@ class RequestDetailApp {
 
         document.getElementById('adminRejectMenu').style.display = 'none';
 
+        document.getElementById('adminKPIMenu').style.display = 'none';
+
 
 
 
@@ -6061,30 +6063,13 @@ class RequestDetailApp {
 
 
 
-
             document.getElementById('adminSupportMenu').style.display = 'block';
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             document.getElementById('adminRejectMenu').style.display = 'block';
 
 
-
-
-
-
+            document.getElementById('adminKPIMenu').style.display = 'block';
 
 
 
@@ -6192,6 +6177,8 @@ class RequestDetailApp {
 
             document.getElementById('adminRejectMenu').style.display = 'block'; // Staff can handle reject requests
 
+            document.getElementById('adminKPIMenu').style.display = 'none'; // Staff can't see KPI menu
+
 
 
 
@@ -6255,6 +6242,8 @@ class RequestDetailApp {
 
 
             // Regular user - only new request menu
+
+            document.getElementById('adminKPIMenu').style.display = 'none'; // Regular users can't see KPI menu
 
 
 

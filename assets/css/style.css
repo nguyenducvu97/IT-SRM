@@ -3658,20 +3658,19 @@ body {
 
 
 
-    .company-logo {
+}
 
 
 
-        max-height: 30px;
 
 
 
-        max-width: 130px;
+
+.upload-progress-bar {
 
 
 
-    }
-
+    height: 100%;
 
 
     
@@ -5032,11 +5031,13 @@ body {
 
 .header-left {
 
-
-
     flex: 1;
 
+    display: flex;
 
+    align-items: center;
+
+    gap: 15px;
 
 }
 
@@ -5110,11 +5111,7 @@ body {
 
 
 
-    max-height: 35px;
-
-
-
-    max-width: 150px;
+    max-height: 40px;
 
 
 
@@ -13909,17 +13906,13 @@ margin: 0 0 1rem 0;
 
 
 
-    font-size: 12px;
+font-size: 12px;
 
 
 
-    color: #6c757d?
+color: #6c757d;
 
-
-
-    margin-top: 5px?
-
-
+    margin-top: 5px;
 
 }
 
