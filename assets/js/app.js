@@ -1536,8 +1536,6 @@ class ITServiceApp {
 
         const adminKPIMenu = document.getElementById('adminKPIMenu');
 
-
-
         if (adminKPIMenu) adminKPIMenu.style.display = 'none';
 
 
@@ -2806,10 +2804,9 @@ class ITServiceApp {
 
 
                 // Update notification count when dashboard loads
-
-
-
-                await this.updateNotificationCount();
+                if (window.notificationManager) {
+                    await window.notificationManager.loadNotifications();
+                }
 
 
 
@@ -15966,10 +15963,9 @@ ITServiceApp.prototype.loadNotifications = async function() {
 
 
             // Update notification count when notifications page loads
-
-
-
-            await this.updateNotificationCount();
+            if (window.notificationManager) {
+                await window.notificationManager.loadNotifications();
+            }
 
 
 
@@ -16101,11 +16097,10 @@ ITServiceApp.prototype.loadNotificationsForDropdown = async function() {
 
 
 
-            // Update notification count
-
-
-
-            await this.updateNotificationCount();
+            // Update notification count after marking as read
+            if (window.notificationManager) {
+                await window.notificationManager.loadNotifications();
+            }
 
 
 
@@ -16395,7 +16390,11 @@ ITServiceApp.prototype.handleNotificationClick = async function(notificationId, 
 
                 await this.loadNotificationsForDropdown();
 
-                await this.updateNotificationCount();
+                if (window.notificationManager) {
+
+                    await window.notificationManager.loadNotifications();
+
+                }
 
             }
 
@@ -16515,7 +16514,9 @@ ITServiceApp.prototype.markNotificationAsRead = async function(notificationId) {
 
 
 
-            await this.updateNotificationCount();
+            if (window.notificationManager) {
+                await window.notificationManager.loadNotifications();
+            }
 
 
 
@@ -16599,7 +16600,9 @@ ITServiceApp.prototype.markAllNotificationsAsRead = async function() {
 
 
 
-            await this.updateNotificationCount();
+            if (window.notificationManager) {
+                await window.notificationManager.loadNotifications();
+            }
 
 
 

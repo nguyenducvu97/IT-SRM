@@ -7,6 +7,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 class Database {
     private $host = "localhost";
+    private $port = 3307;
     private $db_name = "it_service_request";
     private $username = "root";
     private $password = "";
@@ -16,7 +17,7 @@ class Database {
     public function getConnection() {
         if (self::$instance === null) {
             try {
-                $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4",
+                $this->conn = new PDO("mysql:host=" . $this->host . ";port=" . $this->port . ";dbname=" . $this->db_name . ";charset=utf8mb4",
                                      $this->username, $this->password, [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

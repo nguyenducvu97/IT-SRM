@@ -386,4 +386,60 @@ class NotificationHelper {
             return date('d/m/Y', $time);
         }
     }
+    
+    /**
+     * Clean up old read notifications (older than 7 days)
+     */
+    public function cleanupOldNotifications() {
+        try {
+            $stmt = $this->db->prepare("
+                DELETE FROM notifications 
+                WHERE is_read = TRUE 
+                AND read_at IS NOT NULL 
+                AND read_at < DATE_SUB(NOW(), INTERVAL 7 DAY)
+            ");
+            
+            $result = $stmt->execute();
+            $deletedCount = $stmt->rowCount();
+            
+            error_log("Cleanup old notifications: Deleted $deletedCount notifications");
+            
+            return [
+                'success' => $result,
+                'deleted_count' => $deletedCount
+            ];
+            
+        } catch (Exception $e) {
+            error_log("Failed to cleanup old notifications: " . $e->getMessage());
+            return [
+                'success' => false,
+                'deleted_count' => 0,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+    
+    /**
+     * Get count of old notifications that will be deleted
+     */
+    public function getOldNotificationsCount() {
+        try {
+            $stmt = $this->db->prepare("
+                SELECT COUNT(*) as count 
+                FROM notifications 
+                WHERE is_read = TRUE 
+                AND read_at IS NOT NULL 
+                AND read_at < DATE_SUB(NOW(), INTERVAL 7 DAY)
+            ");
+            
+            $stmt->execute();
+            $count = $stmt->fetch(PDO::FETCH_ASSOC)['count'];
+            
+            return $count;
+            
+        } catch (Exception $e) {
+            error_log("Failed to get old notifications count: " . $e->getMessage());
+            return 0;
+        }
+    }
 }

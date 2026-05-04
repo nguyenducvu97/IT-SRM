@@ -39,6 +39,14 @@ try {
     require_once __DIR__ . '/../lib/NotificationHelper.php';
     $notificationHelper = new NotificationHelper($pdo);
     
+    // Auto cleanup old notifications (1% chance to run on each request)
+    if (rand(1, 100) <= 1) {
+        $cleanupResult = $notificationHelper->cleanupOldNotifications();
+        if ($cleanupResult['success'] && $cleanupResult['deleted_count'] > 0) {
+            error_log("Auto cleanup: Deleted " . $cleanupResult['deleted_count'] . " old notifications");
+        }
+    }
+    
     if ($method == 'GET') {
         $action = $_GET['action'] ?? 'list';
         
