@@ -7243,7 +7243,7 @@ class RequestDetailApp {
 
 
 
-                        const message = '📢 Yêu cầu của bạn đã được xử lý!';
+                        const message = '📢 Yêu cầu của bạn đã bị từ chối !';
 
 
 
@@ -7316,16 +7316,7 @@ class RequestDetailApp {
 
 
 
-
-
-
-
-
-
-
                 console.log('Request detail failed:', response.message);
-
-
 
 
 
@@ -17360,6 +17351,7 @@ class RequestDetailApp {
                     option.textContent = category.name;
                     errorTypeSelect.appendChild(option);
                 });
+
             } else {
                 console.error('Failed to load categories:', response.message);
             }
@@ -29400,7 +29392,43 @@ class RequestDetailApp {
 
 
 
-                    } else {
+                    } 
+
+
+
+                    else 
+
+
+
+                    // Show notification for resolved requests for users
+
+
+
+                    if (this.rejectRequestStatus.status === 'resolved' && this.currentUser && this.currentUser.role === 'user') 
+
+
+
+                    { 
+
+
+
+                        const message = '📢 Yêu cầu của bạn đã được xử lý!';
+
+
+
+                        this.showNotification(message, 'success');
+
+
+
+                    } 
+
+
+
+                    else 
+
+
+
+                    { 
 
 
 
