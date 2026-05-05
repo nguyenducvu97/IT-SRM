@@ -3050,7 +3050,7 @@ class ITServiceApp {
 
 
 
-                        ${request.reject_status && request.status !== 'rejected' ? `<span class="badge badge-reject">Có yêu cầu từ chối</span>` : ''}
+                        ${request.reject_status && request.status !== 'rejected' && this.currentUser && ['admin', 'staff'].includes(this.currentUser.role) ? `<span class="badge badge-reject">Có yêu cầu từ chối</span>` : ''}
 
 
 
@@ -3418,7 +3418,7 @@ class ITServiceApp {
 
 
 
-                        ${request.reject_status && request.status !== 'rejected' ? `<span class="badge badge-reject">Có yêu cầu từ chối</span>` : ''}
+                        ${request.reject_status && request.status !== 'rejected' && this.currentUser && ['admin', 'staff'].includes(this.currentUser.role) ? `<span class="badge badge-reject">Có yêu cầu từ chối</span>` : ''}
 
 
 
