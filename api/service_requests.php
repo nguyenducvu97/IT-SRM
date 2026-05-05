@@ -485,7 +485,9 @@ if ($method == 'GET') {
 
         $query = "SELECT sr.*, u.username as requester_name, c.name as category_name,
 
-                  req.id as reject_request_id, req.status as reject_status,
+                  req.id as reject_request_id, req.status as reject_status, req.reject_reason, req.reject_details,
+                  req.created_at as reject_created_at, req.processed_at as reject_processed_at, req.admin_reason,
+                  req_admin.full_name as reject_admin_name,
 
                   sreq.id as support_request_id, sreq.status as support_status,
 
@@ -498,6 +500,7 @@ if ($method == 'GET') {
                   LEFT JOIN categories c ON sr.category_id = c.id 
 
                   LEFT JOIN reject_requests req ON sr.id = req.service_request_id
+                  LEFT JOIN users req_admin ON req.processed_by = req_admin.id
 
                   LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id
 
@@ -1004,7 +1007,7 @@ if ($method == 'GET') {
 
                         rf.requirement_meeting, rf.processing_results, rf.created_at as feedback_created_at,
 
-                        sr.error_description as resolution_error_description,
+                                                sr.error_description as resolution_error_description,
 
                         sr.error_type as resolution_error_type, sr.replacement_materials as resolution_replacement_materials,
 
@@ -1018,7 +1021,11 @@ if ($method == 'GET') {
 
                         res.solution_method as res_solution_method, res.resolved_at as res_resolved_at,
 
-                        resolver.full_name as resolution_resolver_name
+                        resolver.full_name as resolution_resolver_name,
+
+                        req.id as reject_request_id, req.status as reject_status, req.reject_reason, req.reject_details,
+                        req.created_at as reject_created_at, req.processed_at as reject_processed_at, req.admin_reason,
+                        req_admin.full_name as reject_admin_name
 
                  FROM service_requests sr
 
@@ -1031,6 +1038,9 @@ if ($method == 'GET') {
                  LEFT JOIN support_requests sreq ON sr.id = sreq.service_request_id
 
                  LEFT JOIN users sreq_admin ON sreq.processed_by = sreq_admin.id
+
+                 LEFT JOIN reject_requests req ON sr.id = req.service_request_id
+                 LEFT JOIN users req_admin ON req.processed_by = req_admin.id
 
                  LEFT JOIN request_feedback rf ON sr.id = rf.service_request_id
 
@@ -1286,196 +1296,28 @@ if ($method == 'GET') {
 
             }
 
-
-
             
 
-
-
-            // Get reject request data for this request
-
-
-
-            try {
-
-
-
-                $reject_query = "SELECT rr.*, 
-
-
-
-                                       u.full_name as requester_name,
-
-
-
-                                       admin.full_name as admin_name
-
-
-
-                                FROM reject_requests rr
-
-
-
-                                LEFT JOIN users u ON rr.rejected_by = u.id
-
-
-
-                                LEFT JOIN users admin ON rr.processed_by = admin.id
-
-
-
-                                WHERE rr.service_request_id = :id
-
-
-
-                                ORDER BY rr.created_at DESC
-
-
-
-                                LIMIT 1";
-
-
-
-                
-
-
-
-                $reject_stmt = $db->prepare($reject_query);
-
-
-
-                $reject_stmt->bindParam(":id", $id);
-
-
-
-                $reject_stmt->execute();
-
-
-
-                
-
-
-
-                $reject_request = $reject_stmt->fetch(PDO::FETCH_ASSOC);
-
-
-
-                $request['reject_request'] = $reject_request ?: null;
-
-
-
-                
-
-
-
-                // Get attachments for this reject request
-
-
-
-                if ($request['reject_request']) {
-
-
-
-                    try {
-
-
-
-                        $reject_attachments_query = "SELECT id, filename, original_name, file_size, mime_type, created_at 
-
-                                                     FROM reject_request_attachments 
-
-                                                     WHERE reject_request_id = :id 
-
-                                                     ORDER BY created_at ASC";
-
-
-
-                        $reject_attachments_stmt = $db->prepare($reject_attachments_query);
-
-
-
-                        $reject_attachments_stmt->bindParam(":id", $request['reject_request']['id']);
-
-
-
-                        $reject_attachments_stmt->execute();
-
-
-
-                        
-
-
-
-                        $all_reject_attachments = $reject_attachments_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                        
-
-                        // Filter duplicates by original name (same logic as reject_requests.php)
-
-                        $reject_attachments = [];
-
-                        $seen_original_names = [];
-
-                        foreach ($all_reject_attachments as $attachment) {
-
-                            $original_name = $attachment['original_name'];
-                            if (!in_array($original_name, $seen_original_names)) {
-
-                                $reject_attachments[] = $attachment;
-
-                                $seen_original_names[] = $original_name;
-
-                            }
-
-                        }
-
-                        
-
-                        $request['reject_request']['attachments'] = $reject_attachments;
-
-
-
-                    } catch (Exception $e) {
-
-
-
-                        $request['reject_request']['attachments'] = [];
-
-
-
-                    }
-
-
-
-                }
-
-
-
-                
-
-
-
-                // Filter sensitive information based on user role
-
-                // Note: Allow all users to see resolution data when request is resolved
-
-
-
-            } catch (Exception $e) {
-
-
-
-                $request['reject_request'] = null;
-
-
-
+            // Build reject_request data from main query if exists
+            if ($request['reject_request_id']) {
+                $request['reject_request'] = [
+                    'id' => $request['reject_request_id'],
+                    'status' => $request['reject_status'],
+                    'reject_reason' => $request['reject_reason'],
+                    'reject_details' => $request['reject_details'],
+                    'created_at' => $request['reject_created_at'],
+                    'processed_at' => $request['reject_processed_at'],
+                    'admin_reason' => $request['admin_reason'],
+                    'admin_name' => $request['reject_admin_name'],
+                    'requester_name' => $request['requester_name']
+                ];
             }
 
-
-
-            
-
-
+            // Clean up the original reject request fields
+            unset($request['reject_request_id'], $request['reject_status'], 
+                  $request['reject_reason'], $request['reject_details'],
+                  $request['reject_created_at'], $request['reject_processed_at'], 
+                  $request['admin_reason'], $request['reject_admin_name']);
 
             // Format support request data if exists
 

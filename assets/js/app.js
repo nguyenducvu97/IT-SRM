@@ -10773,7 +10773,7 @@ viewUserDetail(userId) {
 
 
 
-        const maxSize = 5 * 1024 * 1024; // 5MB
+        const maxSize = 10 * 1024 * 1024; // 10MB
 
 
 
@@ -10809,7 +10809,7 @@ viewUserDetail(userId) {
 
 
 
-                this.showNotification(`Tệp ${file.name} quá lớn (tối đa 5MB)`, 'error');
+                this.showNotification(`Tệp ${file.name} quá lớn (tối đa 10MB)`, 'error');
 
 
 
