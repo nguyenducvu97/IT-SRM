@@ -654,7 +654,7 @@ function exportStaffDetails($db) {
         // Add KPI calculation formulas section
         fputcsv($output, ['CÔNG THỨC TÍNH KPI']);
         fputcsv($output, ['K1 - Tốc độ phản hồi (1-5):', '=MAX(1; MIN(5; 5 - (L2/30)))', 'L2 = Thời gian phản hồi (phút)']);
-        fputcsv($output, ['K2 - Tiến độ hoàn thành (1-5):', '=MAX(1; MIN(5; 5 - (M2/24)))', 'M2 = Thời gian hoàn thành (giờ)']);
+        fputcsv($output, ['K2 - Tiến độ hoàn thành (1-5):', '=MAX(1; MIN(5; 5 - (R2/1.2)))', 'R2 = Tỷ lệ hoàn thành (thực tế/dự kiến)']);
         fputcsv($output, ['K3 - Đánh giá chung (1-5):', '=MAX(1; MIN(5; N2))', 'N2 = Đánh giá (1-5)']);
         fputcsv($output, ['K4 - Chất lượng xử lý (1-5):', '=MAX(1; MIN(5; O2/20))', 'O2 = Sẵn sàng giới thiệu']);
         fputcsv($output, ['KPI yêu cầu (1-5):', '=(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)', 'P2=K1(15%), Q2=K2(35%), R2=K3(40%), S2=K4(10%)']);

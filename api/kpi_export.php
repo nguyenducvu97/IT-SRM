@@ -1061,7 +1061,7 @@ function getKPIFormulas($db) {
         // Return default formulas on error
         return [
             'K1' => ['formula' => '=MAX(1; MIN(5; 5 - (L2/30)))', 'description' => 'L2 = Thoi gian phan hoi (phut)', 'weight' => 15],
-            'K2' => ['formula' => '=MAX(1; MIN(5; 5 - (M2/24)))', 'description' => 'M2 = Thoi gian hoan thanh (gio)', 'weight' => 35],
+            'K2' => ['formula' => '=MAX(1; MIN(5; 5 - (R2/1.2)))', 'description' => 'R2 = Tỷ lệ hoàn thành (thực tế/dự kiến)', 'weight' => 35],
             'K3' => ['formula' => '=MAX(1; MIN(5; N2))', 'description' => 'N2 = Danh gia chung (1-5)', 'weight' => 40],
             'K4' => ['formula' => '=MAX(1; MIN(5; O2/20))', 'description' => 'O2 = Danh gia staff xu ly yeu cau', 'weight' => 10],
             'TOTAL' => ['formula' => '=(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)', 'description' => 'P2=K1(15%), Q2=K2(35%), R2=K3(40%), S2=K4(10%)', 'weight' => 100]

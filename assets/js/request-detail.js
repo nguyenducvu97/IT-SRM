@@ -6235,37 +6235,15 @@ class RequestDetailApp {
 
 
 
-
-
-
-
-
-
             // Regular user - only new request menu
-
             document.getElementById('adminKPIMenu').style.display = 'none'; // Regular users can't see KPI menu
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             document.getElementById('newRequestMenu').style.display = 'block';
-
-
-
-
-
-
+            
+            // Show back button for regular users
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.style.display = 'block';
+            }
 
 
 
