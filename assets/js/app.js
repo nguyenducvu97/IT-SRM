@@ -8631,7 +8631,7 @@ class ITServiceApp {
 
 
 
-            'rejected': this.currentUser && ['admin', 'staff'].includes(this.currentUser.role) ? 'Đã từ chối' : 'Đã xử lý',
+            'rejected': 'Đã từ chối',
 
 
 
