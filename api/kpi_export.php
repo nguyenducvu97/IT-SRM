@@ -1,6 +1,6 @@
 <?php
 // KPI Export API for Staff Performance Evaluation
-error_reporting(0); // Disable all error reporting
+error_reporting(0);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 ini_set('error_log', __DIR__ . '/../logs/api_errors.log');
@@ -107,6 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'Invalid action']);
     }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Handle POST requests for KPI data
+    getKPIData($db);
 }   
 
 function exportKPIExcel($db) {
@@ -443,24 +446,25 @@ function getKPIDataArray($db, $start_date, $end_date) {
         // Feedback response rate (how many completed requests have feedback)
         $feedback_response_rate = $completed_requests > 0 ? ($feedback['rated_requests'] / $completed_requests) * 100 : 0;
         
-        // Debug logging for KPI data
-        error_log("KPI Debug - Staff ID: $staff_id, Total Requests: $total_requests, Completed: $completed_requests, Avg Response: $avg_response_time_minutes, Avg Rating: $avg_rating, Processing Results Count: $processing_results_count, Total Feedback: $total_feedback");
-        error_log("KPI Debug - KPI Scores: K1=$k1_score, K2=$k2_score, K3=$k3_score, K4=$k4_score, Final=$total_kpi_score");
-        error_log("KPI Debug - Processing Results Values: " . ($feedback['processing_results_values'] ?? 'none'));
+        // Debug logging for KPI data will be added after KPI scores are calculated
         
         // Get KPI formulas from database config
         $kpi_formulas = getKPIFormulas($db);
         
         // Calculate KPI scores using configured formulas (scale 1-5)
         
-        // K1: Response Time Score (Toc do phan hoi) - Parse and execute configured formula
+        // K1: Response Time Score (Toc do phan hoi) - Theo công thức mới
         $k1_score = 1;
         if ($avg_response_time_minutes > 0) {
-            $k1_config = $kpi_formulas['K1'] ?? ['formula' => 'default', 'weight' => 15];
-            $k1_formula = $k1_config['formula'];
-            
-            // Parse and execute formula
-            $k1_score = parseKPIFormula($k1_formula, $avg_response_time_minutes, 'K1');
+            // Công thức: =MAX(1; MIN(5; 5 - (L2/30)))
+            // Quy tắc điểm: 5 điểm ≤ 15 phút, 3 điểm ≤ 60 phút, 1 điểm > 60 phút
+            if ($avg_response_time_minutes <= 15) {
+                $k1_score = 5;
+            } elseif ($avg_response_time_minutes <= 60) {
+                $k1_score = 3;
+            } else {
+                $k1_score = 1;
+            }
         }
         
         // K2: On-time Completion Score (Tien do hoan thanh) - Use configured formula
@@ -490,8 +494,12 @@ function getKPIDataArray($db, $start_date, $end_date) {
             $delta_ratio_result = $delta_ratio_stmt->fetch(PDO::FETCH_ASSOC);
             $avg_delta_ratio = (float)($delta_ratio_result['avg_delta_ratio'] ?? 1);
             
-            // Debug K2 calculation
-            error_log("KPI Debug - K2 Calculation - Staff ID: $staff_id, Completed: $completed_requests, Delta Ratio: $avg_delta_ratio");
+            $avg_delta_t = $avg_delta_ratio; // For compatibility
+            
+            // Debug logging for KPI data
+            error_log("KPI Debug - Staff ID: $staff_id, Total Requests: $total_requests, Completed: $completed_requests, Avg Response: $avg_response_time_minutes, Avg Rating: $avg_rating, Processing Results Count: $processing_results_count, Total Feedback: $total_feedback");
+            error_log("KPI Debug - KPI Scores: K1=$k1_score, K2=$k2_score, K3=$k3_score, K4=$k4_score, Final=$total_kpi_score");
+            error_log("KPI Debug - Processing Results Values: " . ($feedback['processing_results_values'] ?? 'none'));
             
             // Use K2 config
             $k2_config = $kpi_formulas['K2'] ?? ['formula' => 'default', 'weight' => 35];
@@ -512,33 +520,39 @@ function getKPIDataArray($db, $start_date, $end_date) {
             } else {
                 $k2_score = 1; // Tre hon 1 ngay
             }
+        } else {
+            $avg_delta_t = null; // No completed requests
         }
         
         // K3: Quality Score (Chat luong xu ly) - Use configured formula
         $k3_config = $kpi_formulas['K3'] ?? ['formula' => 'default', 'weight' => 40];
         $k3_score = $avg_rating_score > 0 ? round($avg_rating_score, 1) : 1;
         
-        // K4: Recommendation Score (Su tin tuong) - Use configured formula
+        // K4: Processing Results Score (Chat luong xu ly) - Theo công thức mới
         $k4_config = $kpi_formulas['K4'] ?? ['formula' => 'default', 'weight' => 10];
         $k4_score = 1;
         if ($total_feedback > 0) {
+            // Công thức: =MAX(1; MIN(5; O2/20))
+            // O2 = Đánh giá kết quả xử lý (percentage 0-100)
+            // Quy tắc điểm: 5 điểm ≥ 80%, 4 điểm ≥ 60%, 3 điểm ≥ 40%, 2 điểm ≥ 20%, 1 điểm < 20%
             if ($recommendation_rate >= 80) {
-                $k4_score = 5;
+                $k4_score = 5;  // Rất hài lòng
             } elseif ($recommendation_rate >= 60) {
-                $k4_score = 4;
+                $k4_score = 4;  // Hài lòng
             } elseif ($recommendation_rate >= 40) {
-                $k4_score = 3;
+                $k4_score = 3;  // Bình thường
             } elseif ($recommendation_rate >= 20) {
-                $k4_score = 2;
+                $k4_score = 2;  // Không hài lòng
             } else {
-                $k4_score = 1;
+                $k4_score = 1;  // Rất không hài lòng
             }
         }
         
         // Final KPI Score with configured weights
-        // Use weights from database config instead of hardcoded values
+        // Công thức: =(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)
+        // P2=K1(15%), Q2=K2(35%), R2=K3(40%), S2=K4(10%)
         if ($total_requests == 0) {
-            $total_kpi_score = 1.0;
+            $total_kpi_score = 1.0; // Staff không có yêu cầu: điểm thấp nhất
         } else {
             $k1_weight = ($kpi_formulas['K1']['weight'] ?? 15) / 100;
             $k2_weight = ($kpi_formulas['K2']['weight'] ?? 35) / 100;
@@ -547,6 +561,11 @@ function getKPIDataArray($db, $start_date, $end_date) {
             
             $total_kpi_score = ($k1_score * $k1_weight) + ($k2_score * $k2_weight) + ($k3_score * $k3_weight) + ($k4_score * $k4_weight);
         }
+        
+        // Debug logging for KPI data
+        error_log("KPI Debug - Staff ID: $staff_id, Total Requests: $total_requests, Completed: $completed_requests, Avg Response: $avg_response_time_minutes, Avg Rating: $avg_rating, Processing Results Count: $processing_results_count, Total Feedback: $total_feedback");
+        error_log("KPI Debug - KPI Scores: K1=$k1_score, K2=$k2_score, K3=$k3_score, K4=$k4_score, Final=$total_kpi_score");
+        error_log("KPI Debug - Processing Results Values: " . ($feedback['processing_results_values'] ?? 'none'));
         
         // Also provide normalized scores (0-100 scale) for compatibility
         $art_score = ($k1_score / 5) * 100;

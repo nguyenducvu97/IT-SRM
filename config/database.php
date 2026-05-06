@@ -7,7 +7,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 class Database {
     private $host = "localhost";
-    private $port = 3307;
+    private $port = 3308;
     private $db_name = "it_service_request";
     private $username = "root";
     private $password = "";
