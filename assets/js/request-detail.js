@@ -6015,220 +6015,37 @@ class RequestDetailApp {
 
 
 
-
         if (this.currentUser.role === 'admin') {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            // Admin - can see all menus
             document.getElementById('adminMenu').style.display = 'block';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             document.getElementById('adminDepartmentMenu').style.display = 'block';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             document.getElementById('adminSupportMenu').style.display = 'block';
-
-
             document.getElementById('adminRejectMenu').style.display = 'block';
-
-
             document.getElementById('adminKPIMenu').style.display = 'block';
-
-
-
-
-
-
-
-
-
             document.getElementById('newRequestMenu').style.display = 'none';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            
+            // Show back button for admin
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.style.display = 'block';
+            }
 
         } else if (this.currentUser.role === 'staff') {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // Staff should see limited menus - NOT adminMenu
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            document.getElementById('adminMenu').style.display = 'none'; // Staff can't see full admin menu
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            document.getElementById('adminDepartmentMenu').style.display = 'none'; // Staff can't manage departments
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            document.getElementById('adminSupportMenu').style.display = 'block'; // Staff can see support requests
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            document.getElementById('adminRejectMenu').style.display = 'block'; // Staff can handle reject requests
-
-            document.getElementById('adminKPIMenu').style.display = 'none'; // Staff can't see KPI menu
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // Show new request menu for staff
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            document.getElementById('newRequestMenu').style.display = 'none'; // Staff typically handles requests, not creates new ones
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            // Staff - limited menus
+            document.getElementById('adminMenu').style.display = 'none';
+            document.getElementById('adminDepartmentMenu').style.display = 'none';
+            document.getElementById('adminSupportMenu').style.display = 'block';
+            document.getElementById('adminRejectMenu').style.display = 'block';
+            document.getElementById('adminKPIMenu').style.display = 'none';
+            document.getElementById('newRequestMenu').style.display = 'none';
+            
+            // Show back button for staff
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.style.display = 'block';
+            }
 
         } else {
-
-
-
 
 
 

@@ -48,6 +48,8 @@ try {
     $page = max(1, isset($_GET['page']) ? (int)$_GET['page'] : 1);
     $limit = max(1, isset($_GET['limit']) ? (int)$_GET['limit'] : 9);
     $offset = ($page - 1) * $limit;
+    $start_date = isset($_GET['start_date']) ? trim($_GET['start_date']) : '';
+    $end_date = isset($_GET['end_date']) ? trim($_GET['end_date']) : '';
     
     error_log("SEARCH API: search='$search', status='$status', page=$page, limit=$limit");
     
@@ -96,6 +98,17 @@ try {
             $where_clause .= " AND sr.status = :status";
             $params[':status'] = $status;
         }
+    }
+    
+    // Add date filter conditions if provided
+    if (!empty($start_date)) {
+        $where_clause .= " AND DATE(sr.created_at) >= :start_date";
+        $params[':start_date'] = $start_date;
+    }
+    
+    if (!empty($end_date)) {
+        $where_clause .= " AND DATE(sr.created_at) <= :end_date";
+        $params[':end_date'] = $end_date;
     }
     
     // Main query

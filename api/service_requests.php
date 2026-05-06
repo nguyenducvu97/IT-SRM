@@ -354,9 +354,9 @@ if ($method == 'GET') {
 
 
         $category_id_filter = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
-
         $search_filter = isset($_GET['search']) ? trim($_GET['search']) : '';
-
+        $start_date_filter = isset($_GET['start_date']) ? trim($_GET['start_date']) : '';
+        $end_date_filter = isset($_GET['end_date']) ? trim($_GET['end_date']) : '';
         
         $where_clause = "WHERE 1=1";
 
@@ -476,6 +476,23 @@ if ($method == 'GET') {
             $where_clause .= " AND (sr.title LIKE :search OR sr.description LIKE :search OR u.username LIKE :search)";
 
             $params[':search'] = '%' . $search_filter . '%';
+
+        }
+        
+        // Add date filter conditions if provided
+        if (!empty($start_date_filter)) {
+
+            $where_clause .= " AND DATE(sr.created_at) >= :start_date";
+
+            $params[':start_date'] = $start_date_filter;
+
+        }
+        
+        if (!empty($end_date_filter)) {
+
+            $where_clause .= " AND DATE(sr.created_at) <= :end_date";
+
+            $params[':end_date'] = $end_date_filter;
 
         }
 

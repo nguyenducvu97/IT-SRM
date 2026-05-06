@@ -1519,35 +1519,31 @@
 
 
 
-                                <option value="open">Mở <span id="openCount">(0)</span></option>
+                                <option value="open">Mở <span id="openCount">(20)</span></option>
 
 
 
-                                <option value="in_progress">Đang xử lý <span id="inProgressCount">(0)</span></option>
+                                <option value="in_progress">Đang xử lý <span id="inProgressCount">(84)</span></option>
 
 
 
-                                <option value="resolved">Đã giải quyết <span id="resolvedCount">(0)</span></option>
+                                <option value="resolved">Đã giải quyết <span id="resolvedCount">(9)</span></option>
 
 
 
-                                <option value="rejected">Đã từ chối <span id="rejectedCount">(0)</span></option>
+                                <option value="rejected">Đã từ chối <span id="rejectedCount">(1)</span></option>
 
 
 
-                                <option value="request_support">Cần hỗ trợ <span id="requestSupportCount">(0)</span></option>
+                                <option value="request_support">Cần hỗ trợ <span id="requestSupportCount">(3)</span></option>
 
 
 
-                                <option value="closed">Đã đóng <span id="closedCount">(0)</span></option>
+                                <option value="closed">Đã đóng <span id="closedCount">(1)</span></option>
 
 
 
                             </select>
-
-
-
-                            
 
 
 
@@ -1555,7 +1551,31 @@
 
 
 
-                                <option value="" data-translate="all_categories">Tất cả danh mục</option>
+                                <option value="">Tất cả danh mục</option>
+
+
+
+                                <option value="5">Account</option>
+
+
+
+                                <option value="1">Hardware</option>
+
+
+
+                                <option value="3">Network</option>
+
+
+
+                                <option value="6">Other</option>
+
+
+
+                                <option value="4">Security</option>
+
+
+
+                                <option value="2">Software</option>
 
 
 
@@ -1563,7 +1583,39 @@
 
 
 
-                            <input type="text" id="requestSearch" placeholder="Tìm kiếm yêu cầu..." class="form-control">
+                            <div class="date-filter-container">
+
+
+
+                                <input type="date" id="startDate" class="form-control" placeholder="Từ ngày">
+
+
+
+                                <span class="date-separator">-</span>
+
+
+
+                                <input type="date" id="endDate" class="form-control" placeholder="Đến ngày">
+
+
+
+                                <button type="button" id="clearDateFilter" class="btn btn-secondary btn-sm" title="Xóa bộ lọc ngày">
+
+
+
+                                    <i class="fas fa-times"></i>
+
+
+
+                                </button>
+
+
+
+                            </div>
+
+
+
+                            <input type="text" id="requestSearch" placeholder="Tìm kiếm yêu cầu..." class="form-control" data-search-initialized="true">
 
 
 
@@ -4158,16 +4210,15 @@
 
 
 
-    <script src="assets/js/toast-notifications.js?v=20260317-2"></script>
 
 
 
-    <script src="assets/js/app.js?v=20260505-2"></script>
+
+        <!-- User Role Modal -->
 
 
 
-    <script src="assets/js/support-reject-manager.js?v=20260317-2"></script>
-
+        <div id="userRoleModal" class="modal">
 
 
     <script src="assets/js/support-reject-patch.js?v=20260317-2"></script>
@@ -4175,6 +4226,11 @@
 
 
     <script src="assets/js/department-helper.js?v=20260317-2"></script>
+
+
+
+    <script src="assets/js/app.js?v=1.0.2"></script>
+    <script src="assets/js/date-filter-handler.js?v=1.0.0"></script>
 
 
 

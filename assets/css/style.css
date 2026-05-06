@@ -5516,76 +5516,49 @@ body {
 
 
 .page-actions {
-
-
-
     display: flex;
-
-
-
     gap: 1rem;
-
-
-
     align-items: center;
-
-
-
     flex-wrap: wrap;
-
-
-
 }
 
-
-
-
-
-
-
-.page-actions .form-control {
-
-
-
-    min-width: 150px;
-
-
-
+.date-filter-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
 }
 
-/* KPI Formula Input Styling */
-.formula-input {
-    min-width: 400px;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
+.date-filter-container input[type="date"] {
+    width: 140px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
 }
 
-.formula-input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+.date-filter-container .date-separator {
+    color: #666;
+    font-weight: bold;
+    margin: 0 0.25rem;
 }
 
-
-
-
-
-
-
-.page-actions #requestSearch {
-
-
-
-    min-width: 250px;
-
-
-
-    flex: 2;
-
-
-
+.date-filter-container .btn-sm {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    min-width: auto;
 }
 
+#clearDateFilter {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
 
+#clearDateFilter:hover {
+    background-color: #545b62;
+    border-color: #545b62;
+}
 
 
 
