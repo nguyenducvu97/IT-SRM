@@ -80,6 +80,11 @@ if ($method == 'GET') {
         error_log("Cookie data: " . json_encode($_COOKIE));
         error_log("Session data: " . json_encode($_SESSION));
         
+        // Add cache-busting headers
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+        
         if (isset($_SESSION['user_id'])) {
             // User is logged in, return user data
             $user_data = [
@@ -194,8 +199,48 @@ echo json_encode([
 exit();
         }
     } else if ($action == 'logout') {
-        startSession(); // Start session for logout
+        error_log("=== LOGOUT START ===");
+        
+        // Start session to access it
+        startSession();
+        $session_id = session_id();
+        error_log("Session ID: " . $session_id);
+        
+        // Force delete session from database (if using database handler)
+        try {
+            $stmt = $db->prepare("DELETE FROM sessions WHERE id = ?");
+            $stmt->execute([$session_id]);
+            error_log("Deleted session from database: " . $session_id);
+        } catch (Exception $e) {
+            error_log("Error deleting session from DB: " . $e->getMessage());
+        }
+        
+        // Force delete session file (if using file handler)
+        $session_file = ini_get('session.save_path') . '/sess_' . $session_id;
+        if (file_exists($session_file)) {
+            unlink($session_file);
+            error_log("Deleted session file: " . $session_file);
+        }
+        
+        // Unset all session variables
+        $_SESSION = array();
+        
+        // Delete session cookie
+        if (isset($_COOKIE[session_name()])) {
+            $cookie_params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $cookie_params['path'],
+                $cookie_params['domain'],
+                $cookie_params['secure'],
+                $cookie_params['httponly']
+            );
+            unset($_COOKIE[session_name()]);
+            error_log("Deleted session cookie");
+        }
+        
+        // Destroy session
         session_destroy();
+        error_log("Session destroyed");
         
 header('Content-Type: application/json');
 echo json_encode([

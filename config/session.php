@@ -10,6 +10,14 @@ class DatabaseSessionHandler {
             require_once 'database.php';
             $database = new Database();
             $this->db = $database->getConnection();
+            
+            // Check if database connection failed
+            if ($this->db === null) {
+                error_log("DatabaseSessionHandler: Database connection failed");
+                // Fall back to file-based sessions
+                return;
+            }
+            
             self::$instance = $this->db;
         } else {
             $this->db = self::$instance;
@@ -17,6 +25,10 @@ class DatabaseSessionHandler {
     }
     
     private function createSessionTable() {
+        if ($this->db === null) {
+            return false;
+        }
+        
         $sql = "CREATE TABLE IF NOT EXISTS sessions (
             id VARCHAR(128) PRIMARY KEY,
             data TEXT NOT NULL,
@@ -24,7 +36,14 @@ class DatabaseSessionHandler {
             INDEX idx_timestamp (timestamp),
             INDEX idx_id (id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
-        $this->db->exec($sql);
+        
+        try {
+            $this->db->exec($sql);
+            return true;
+        } catch (PDOException $e) {
+            error_log("Session table creation error: " . $e->getMessage());
+            return false;
+        }
     }
     
     public function open($savePath, $sessionName) {
@@ -38,6 +57,11 @@ class DatabaseSessionHandler {
     private static $readStmt = null;
     
     public function read($sessionId) {
+        if ($this->db === null) {
+            // Fall back to empty string when database is not available
+            return '';
+        }
+        
         $start_time = microtime(true);
         
         // Create table if not exists (first access)
@@ -45,11 +69,21 @@ class DatabaseSessionHandler {
         
         // Use cached prepared statement
         if (self::$readStmt === null) {
-            self::$readStmt = $this->db->prepare("SELECT data FROM sessions WHERE id = ?");
+            try {
+                self::$readStmt = $this->db->prepare("SELECT data FROM sessions WHERE id = ?");
+            } catch (PDOException $e) {
+                error_log("Session read prepare error: " . $e->getMessage());
+                return '';
+            }
         }
         
-        self::$readStmt->execute([$sessionId]);
-        $result = self::$readStmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            self::$readStmt->execute([$sessionId]);
+            $result = self::$readStmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Session read execute error: " . $e->getMessage());
+            return '';
+        }
         
         $read_time = round((microtime(true) - $start_time) * 1000, 2);
         if ($read_time > 5) { // Lower threshold to 5ms
@@ -60,21 +94,48 @@ class DatabaseSessionHandler {
     }
     
     public function write($sessionId, $data) {
-        $timestamp = time();
-        $stmt = $this->db->prepare("INSERT INTO sessions (id, data, timestamp) VALUES (?, ?, ?) 
-                                     ON DUPLICATE KEY UPDATE data = ?, timestamp = ?");
-        return $stmt->execute([$sessionId, $data, $timestamp, $data, $timestamp]);
+        if ($this->db === null) {
+            return false;
+        }
+        
+        try {
+            $timestamp = time();
+            $stmt = $this->db->prepare("INSERT INTO sessions (id, data, timestamp) VALUES (?, ?, ?) 
+                                         ON DUPLICATE KEY UPDATE data = ?, timestamp = ?");
+            return $stmt->execute([$sessionId, $data, $timestamp, $data, $timestamp]);
+        } catch (PDOException $e) {
+            error_log("Session write error: " . $e->getMessage());
+            return false;
+        }
     }
     
     public function destroy($sessionId) {
-        $stmt = $this->db->prepare("DELETE FROM sessions WHERE id = ?");
-        return $stmt->execute([$sessionId]);
+        if ($this->db === null) {
+            return false;
+        }
+        
+        try {
+            $stmt = $this->db->prepare("DELETE FROM sessions WHERE id = ?");
+            return $stmt->execute([$sessionId]);
+        } catch (PDOException $e) {
+            error_log("Session destroy error: " . $e->getMessage());
+            return false;
+        }
     }
     
     public function gc($maxLifetime) {
-        $old = time() - $maxLifetime;
-        $stmt = $this->db->prepare("DELETE FROM sessions WHERE timestamp < ?");
-        return $stmt->execute([$old]);
+        if ($this->db === null) {
+            return false;
+        }
+        
+        try {
+            $old = time() - $maxLifetime;
+            $stmt = $this->db->prepare("DELETE FROM sessions WHERE timestamp < ?");
+            return $stmt->execute([$old]);
+        } catch (PDOException $e) {
+            error_log("Session gc error: " . $e->getMessage());
+            return false;
+        }
     }
 }
 
@@ -91,13 +152,15 @@ function startSession() {
             array($handler, 'destroy'),
             array($handler, 'gc')
         );
-    }
-    
-    // Start session
-    session_start();
-    
-    if (session_status() == PHP_SESSION_ACTIVE) {
-        error_log("Database session started - ID: " . session_id());
+        
+        // Start session only if not already active
+        session_start();
+        
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            error_log("Database session started - ID: " . session_id());
+        }
+    } else {
+        error_log("Session already active - ID: " . session_id());
     }
 }
 

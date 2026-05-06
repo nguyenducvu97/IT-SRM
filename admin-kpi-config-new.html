@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cấu hình Hệ thống KPI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .kpi-card {
+            border-left: 4px solid #007bff;
+            margin-bottom: 20px;
+        }
+        .kpi-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .formula-input {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+        }
+        .weight-badge {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="kpi-header">
+            <h1><i class="fas fa-chart-line me-3"></i>📊 Hệ thống tính điểm K và KPI chi tiết</h1>
+            <p class="mb-0">Quản lý công thức và trọng số tính KPI cho nhân viên</p>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-info-circle me-2"></i>Tổng quan hệ thống KPI:</h5>
+                    <p class="mb-2">Hệ thống KPI này sử dụng 4 chỉ số K (K1-K4) với thang điểm 1-5 và trọng số linh hoạt có thể cấu hình được:</p>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Chỉ số</th>
+                                    <th>Tên gọi</th>
+                                    <th>Trọng số mặc định</th>
+                                    <th>Mô tả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>K1</strong></td>
+                                    <td>Tốc độ phản hồi</td>
+                                    <td><span class="badge bg-primary weight-badge">15%</span></td>
+                                    <td>Thời gian từ khi tạo yêu cầu đến khi staff tiếp nhận</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>K2</strong></td>
+                                    <td>Tiến độ hoàn thành</td>
+                                    <td><span class="badge bg-primary weight-badge">35%</span></td>
+                                    <td>Tỷ lệ hoàn thành so với thời gian dự kiến</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>K3</strong></td>
+                                    <td>Đánh giá chung</td>
+                                    <td><span class="badge bg-primary weight-badge">40%</span></td>
+                                    <td>Điểm đánh giá chất lượng từ user (1-5)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>K4</strong></td>
+                                    <td>Chất lượng xử lý</td>
+                                    <td><span class="badge bg-primary weight-badge">10%</span></td>
+                                    <td>Mức độ hài lòng với kết quả xử lý</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card kpi-card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-clock me-2"></i>K1 - Tốc độ phản hồi</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Công thức:</strong> =MAX(1; MIN(5; 5 - (L2/30)))</p>
+                        <p><strong>L2</strong> = Thời gian phản hồi (phút)</p>
+                        <p><strong>Quy tắc điểm:</strong></p>
+                        <ul>
+                            <li>5 điểm: ≤ 15 phút</li>
+                            <li>3 điểm: ≤ 60 phút</li>
+                            <li>1 điểm: > 60 phút</li>
+                        </ul>
+                        <div class="mb-3">
+                            <label class="form-label">Công thức tùy chỉnh:</label>
+                            <input type="text" class="form-control formula-input" id="k1-formula" value="=MAX(1; MIN(5; 5 - (L2/30)))">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Trọng số (%):</label>
+                            <input type="number" class="form-control" id="k1-weight" value="15" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card kpi-card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>K2 - Tiến độ hoàn thành</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Công thức:</strong> =MAX(1; MIN(5; 5 - (R2/1.2)))</p>
+                        <p><strong>R2</strong> = Tỷ lệ hoàn thành (thực tế/dự kiến)</p>
+                        <p><strong>Quy tắc điểm:</strong></p>
+                        <ul>
+                            <li>5 điểm: Hoàn thành ≤ 80% thời gian dự kiến</li>
+                            <li>4 điểm: Hoàn thành ≤ 90% thời gian dự kiến</li>
+                            <li>3 điểm: Hoàn thành ≤ 100% thời gian dự kiến</li>
+                            <li>2 điểm: Hoàn thành ≤ 110% thời gian dự kiến</li>
+                            <li>1 điểm: Hoàn thành > 120% thời gian dự kiến</li>
+                        </ul>
+                        <div class="mb-3">
+                            <label class="form-label">Công thức tùy chỉnh:</label>
+                            <input type="text" class="form-control formula-input" id="k2-formula" value="=MAX(1; MIN(5; 5 - (R2/1.2)))">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Trọng số (%):</label>
+                            <input type="number" class="form-control" id="k2-weight" value="35" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card kpi-card">
+                    <div class="card-header bg-warning text-white">
+                        <h5 class="mb-0"><i class="fas fa-star me-2"></i>K3 - Đánh giá chung</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Công thức:</strong> =MAX(1; MIN(5; N2))</p>
+                        <p><strong>N2</strong> = Điểm đánh giá chung từ user (1-5)</p>
+                        <p><strong>Quy tắc điểm:</strong></p>
+                        <ul>
+                            <li>5 điểm: Rất hài lòng</li>
+                            <li>4 điểm: Hài lòng</li>
+                            <li>3 điểm: Bình thường</li>
+                            <li>2 điểm: Không hài lòng</li>
+                            <li>1 điểm: Rất không hài lòng</li>
+                        </ul>
+                        <div class="mb-3">
+                            <label class="form-label">Công thức tùy chỉnh:</label>
+                            <input type="text" class="form-control formula-input" id="k3-formula" value="=MAX(1; MIN(5; N2))">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Trọng số (%):</label>
+                            <input type="number" class="form-control" id="k3-weight" value="40" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card kpi-card">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-thumbs-up me-2"></i>K4 - Chất lượng xử lý</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Công thức:</strong> =MAX(1; MIN(5; O2/20))</p>
+                        <p><strong>O2</strong> = Đánh giá kết quả xử lý (percentage)</p>
+                        <p><strong>Quy tắc điểm:</strong></p>
+                        <ul>
+                            <li>5 điểm: Rất hài lòng</li>
+                            <li>4 điểm: Hài lòng</li>
+                            <li>3 điểm: Bình thường</li>
+                            <li>2 điểm: Không hài lòng</li>
+                            <li>1 điểm: Rất không hài lòng</li>
+                        </ul>
+                        <div class="mb-3">
+                            <label class="form-label">Công thức tùy chỉnh:</label>
+                            <input type="text" class="form-control formula-input" id="k4-formula" value="=MAX(1; MIN(5; O2/20))">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Trọng số (%):</label>
+                            <input type="number" class="form-control" id="k4-weight" value="10" min="0" max="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="fas fa-calculator me-2"></i>Công thức tính KPI tổng hợp</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Công thức:</strong> =(P2*0.15)+(Q2*0.35)+(R2*0.40)+(S2*0.10)</p>
+                        <p><strong>Trong đó:</strong></p>
+                        <ul>
+                            <li>P2 = Điểm K1 (15% trọng số)</li>
+                            <li>Q2 = Điểm K2 (35% trọng số)</li>
+                            <li>R2 = Điểm K3 (40% trọng số)</li>
+                            <li>S2 = Điểm K4 (10% trọng số)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-exclamation-triangle me-2"></i>Điều kiện tính KPI:</h5>
+                    <p class="mb-2"><strong>Yêu cầu đủ 6 thông tin:</strong> KPI chỉ tính cho các yêu cầu có ĐẦY ĐỦ thông tin:</p>
+                    <ol>
+                        <li>created_at - Thời gian tạo yêu cầu</li>
+                        <li>assigned_at - Thời gian staff tiếp nhận</li>
+                        <li>estimated_completion - Thời gian dự kiến hoàn thành</li>
+                        <li>resolved_at - Thời gian hoàn thành thực tế</li>
+                        <li>rating - Đánh giá chung (1-5)</li>
+                        <li>processing_results - Đánh giá kết quả xử lý</li>
+                    </ol>
+                    <p class="mb-0"><strong>Lưu ý quan trọng:</strong></p>
+                    <ul>
+                        <li>Staff không có yêu cầu: KPI = 1.0 (điểm thấp nhất)</li>
+                        <li>Yêu cầu thiếu thông tin: Không tính vào KPI</li>
+                        <li>Admin không được tính KPI: Chỉ tính cho staff role</li>
+                        <li>Summary statistics: Tính trên TẤT CẢ yêu cầu (không filter 6 thông tin)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-secondary" onclick="resetToDefault()">
+                        <i class="fas fa-undo me-2"></i>Reset về mặc định
+                    </button>
+                    <button class="btn btn-primary" onclick="saveKPIConfig()">
+                        <i class="fas fa-save me-2"></i>Lưu cấu hình
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function resetToDefault() {
+            if (confirm('Bạn có chắc muốn reset về cấu hình mặc định?')) {
+                document.getElementById('k1-formula').value = '=MAX(1; MIN(5; 5 - (L2/30)))';
+                document.getElementById('k1-weight').value = '15';
+                document.getElementById('k2-formula').value = '=MAX(1; MIN(5; 5 - (R2/1.2)))';
+                document.getElementById('k2-weight').value = '35';
+                document.getElementById('k3-formula').value = '=MAX(1; MIN(5; N2))';
+                document.getElementById('k3-weight').value = '40';
+                document.getElementById('k4-formula').value = '=MAX(1; MIN(5; O2/20))';
+                document.getElementById('k4-weight').value = '10';
+            }
+        }
+
+        function saveKPIConfig() {
+            const k1Weight = parseFloat(document.getElementById('k1-weight').value);
+            const k2Weight = parseFloat(document.getElementById('k2-weight').value);
+            const k3Weight = parseFloat(document.getElementById('k3-weight').value);
+            const k4Weight = parseFloat(document.getElementById('k4-weight').value);
+            const totalWeight = k1Weight + k2Weight + k3Weight + k4Weight;
+
+            if (Math.abs(totalWeight - 100) > 0.01) {
+                alert('Tổng trọng số phải bằng 100%. Hiện tại: ' + totalWeight + '%');
+                return;
+            }
+
+            const config = {
+                K1: {
+                    formula: document.getElementById('k1-formula').value,
+                    weight: k1Weight
+                },
+                K2: {
+                    formula: document.getElementById('k2-formula').value,
+                    weight: k2Weight
+                },
+                K3: {
+                    formula: document.getElementById('k3-formula').value,
+                    weight: k3Weight
+                },
+                K4: {
+                    formula: document.getElementById('k4-formula').value,
+                    weight: k4Weight
+                }
+            };
+
+            // Gửi API để lưu cấu hình
+            fetch('api/kpi_config.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Lưu cấu hình KPI thành công!');
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Lỗi khi lưu cấu hình KPI');
+            });
+        }
+
+        // Load current config khi trang được mở
+        window.onload = function() {
+            fetch('api/kpi_config.php?action=get')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.data) {
+                    if (data.data.K1) {
+                        document.getElementById('k1-formula').value = data.data.K1.formula;
+                        document.getElementById('k1-weight').value = data.data.K1.weight;
+                    }
+                    if (data.data.K2) {
+                        document.getElementById('k2-formula').value = data.data.K2.formula;
+                        document.getElementById('k2-weight').value = data.data.K2.weight;
+                    }
+                    if (data.data.K3) {
+                        document.getElementById('k3-formula').value = data.data.K3.formula;
+                        document.getElementById('k3-weight').value = data.data.K3.weight;
+                    }
+                    if (data.data.K4) {
+                        document.getElementById('k4-formula').value = data.data.K4.formula;
+                        document.getElementById('k4-weight').value = data.data.K4.weight;
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error loading config:', error);
+            });
+        };
+    </script>
+</body>
+</html>

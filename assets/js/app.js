@@ -16682,59 +16682,7 @@ ITServiceApp.prototype.loadDashboardData = async function() {
 
 
 
-// Override logout to stop auto-reload
-
-
-
-ITServiceApp.prototype.logout = function() {
-
-
-
-    this.stopAutoReload();
-
-
-
-    
-
-
-
-    // Original logout logic
-
-
-
-    const response = fetch('api/auth.php?action=logout', {
-
-
-
-        method: 'POST',
-
-
-
-        credentials: 'include'
-
-
-
-    });
-
-
-
-    
-
-
-
-    this.currentUser = null;
-
-
-
-    this.showLoginScreen();
-
-
-
-    this.showNotification('Logged out successfully', 'success');
-
-
-
-};
+// Override logout removed - using class method instead
 
 
 
