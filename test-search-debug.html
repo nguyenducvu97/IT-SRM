@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Debug Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        .result { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .debug { background: #fff3cd; padding: 10px; margin: 10px 0; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; padding: 10px; margin: 5px; }
+        button:hover { background: #0056b3; }
+        input { padding: 10px; margin: 5px; width: 300px; }
+    </style>
+</head>
+<body>
+    <h1>Search Functionality Debug</h1>
+    
+    <div class="test-section">
+        <h3>Step 1: Test Search Input</h3>
+        <p>Open main system in new tab, then test search functionality here:</p>
+        
+        <div>
+            <input type="text" id="testSearchInput" placeholder="Enter search term...">
+            <button onclick="testSearchInput()">Test Search Input</button>
+        </div>
+        <div id="searchInputResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Step 2: Check Console Logs</h3>
+        <p>Open browser console (F12) and look for these logs:</p>
+        <ul>
+            <li><code>Search state changed - isSearching: ...</code></li>
+            <li><code>Start date changed: ...</code></li>
+            <li><code>End date changed: ...</code></li>
+            <li><code>Clear date filter clicked: ...</code></li>
+            <li><code>=== PAGINATION DEBUG ===</code></li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>Step 3: Manual Test</h3>
+        <p>Test these scenarios in the main system:</p>
+        <ol>
+            <li>Type something in search box → should show results after 500ms</li>
+            <li>Clear search box → should show all requests</li>
+            <li>Select start date → should filter by date</li>
+            <li>Clear date filter → should show all requests</li>
+            <li>Combine search + date filter → should work together</li>
+        </ol>
+    </div>
+    
+    <div class="test-section debug">
+        <h3>Debug Information</h3>
+        <div id="debugInfo"></div>
+    </div>
+    
+    <script>
+        function testSearchInput() {
+            const searchValue = document.getElementById('testSearchInput').value.trim();
+            
+            if (!searchValue) {
+                document.getElementById('searchInputResult').innerHTML = 
+                    '<div class="error">Please enter a search term</div>';
+                return;
+            }
+            
+            // Check if main system is accessible
+            try {
+                if (window.opener && window.opener.app) {
+                    const mainApp = window.opener.app;
+                    
+                    // Check if loadRequests function exists
+                    if (typeof mainApp.loadRequests === 'function') {
+                        document.getElementById('searchInputResult').innerHTML = 
+                            '<div class="success">✓ Main app.loadRequests function found</div>';
+                        
+                        // Test calling the function
+                        mainApp.loadRequests(1);
+                        
+                        // Show debug info
+                        showDebugInfo(mainApp);
+                    } else {
+                        document.getElementById('searchInputResult').innerHTML = 
+                            '<div class="error">✗ loadRequests function not found</div>';
+                    }
+                } else {
+                    document.getElementById('searchInputResult').innerHTML = 
+                        '<div class="error">✗ Main system not accessible. Please open main system first.</div>';
+                }
+            } catch (error) {
+                document.getElementById('searchInputResult').innerHTML = 
+                    '<div class="error">✗ Error: ' + error.message + '</div>';
+            }
+        }
+        
+        function showDebugInfo(app) {
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.innerHTML = `
+                <h4>Current App State:</h4>
+                <ul>
+                    <li><strong>isSearching:</strong> ${app.isSearching}</li>
+                    <li><strong>currentRequestsPage:</strong> ${app.currentRequestsPage}</li>
+                    <li><strong>currentPage:</strong> ${app.currentPage}</li>
+                    <li><strong>autoReloadEnabled:</strong> ${app.autoReloadEnabled}</li>
+                </ul>
+                
+                <h4>Current Filter Values:</h4>
+                <ul>
+                    <li><strong>Search value:</strong> ${document.getElementById('requestSearch')?.value || 'N/A'}</li>
+                    <li><strong>Start date:</strong> ${document.getElementById('startDate')?.value || 'N/A'}</li>
+                    <li><strong>End date:</strong> ${document.getElementById('endDate')?.value || 'N/A'}</li>
+                </ul>
+            `;
+        }
+        
+        // Auto-check every 2 seconds
+        setInterval(() => {
+            if (window.opener && window.opener.app) {
+                showDebugInfo(window.opener.app);
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

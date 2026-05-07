@@ -3188,73 +3188,38 @@ class ITServiceApp {
 
 
             // Add search functionality - get search value from already declared requestSearch
-
-
-
             const search = requestSearch ? requestSearch.value.trim() : '';
             
             // Update isSearching flag based on current search value
             this.isSearching = search.length > 0;
-
-
-
             
-
-
-
+            // Get date filter values
+            const startDate = document.getElementById('startDate');
+            const endDate = document.getElementById('endDate');
+            const startDateValue = startDate ? startDate.value : '';
+            const endDateValue = endDate ? endDate.value : '';
+            
             // Use search API if search parameter exists, otherwise use normal API
-
-
-
             let url;
-
-
-
             if (search) {
-
-
-
                 url = `api/search_requests.php?page=${page}&search=${encodeURIComponent(search)}&limit=9`;
-
-
-
                 if (status) url += `&status=${status}`;
-
-
-
                 if (priority) url += `&priority=${priority}`;
-
-
-
                 if (category) url += `&category=${category}`;
-
-
-
+                if (startDateValue) url += `&start_date=${startDateValue}`;
+                if (endDateValue) url += `&end_date=${endDateValue}`;
             } else {
-
-
-
                 url = `api/service_requests.php?action=list&page=${page}&limit=9`;
-
-
-
                 if (status) url += `&status=${status}`;
-
-
-
                 if (priority) url += `&priority=${priority}`;
-
-
-
                 if (category) url += `&category=${category}`;
-
-
-
+                if (startDateValue) url += `&start_date=${startDateValue}`;
+                if (endDateValue) url += `&end_date=${endDateValue}`;
             }
 
 
 
-
+            
 
 
 
@@ -3947,7 +3912,7 @@ class ITServiceApp {
 
 
 
-                    this.loadRequests(this.currentRequestsPage);
+                    this.loadRequests();
 
 
 
@@ -3979,7 +3944,7 @@ class ITServiceApp {
 
 
 
-                this.loadRequests(this.currentRequestsPage);
+                this.loadRequests();
 
 
 
@@ -15461,9 +15426,13 @@ ITServiceApp.prototype.performAutoReload = async function() {
 
     
 
-    // Skip auto-reload when searching to prevent overriding search results
-    if (this.isSearching || this.isSearchingUsers) {
-        console.log('Skipping auto-reload - search is active (requests:', this.isSearching, 'users:', this.isSearchingUsers, ')');
+    // Skip auto-reload when actively searching to prevent overriding search results
+    // Only skip if user is currently typing in search box
+    const requestSearch = document.getElementById('requestSearch');
+    const isActivelySearching = requestSearch && requestSearch === document.activeElement;
+    
+    if (this.isSearching && isActivelySearching) {
+        console.log('Skipping auto-reload - user is actively searching (requests:', this.isSearching, ')');
         return;
     }
     
@@ -15516,7 +15485,7 @@ ITServiceApp.prototype.performAutoReload = async function() {
 
 
 
-                await this.loadRequests(this.currentRequestsPage);
+                await this.loadRequests();
 
 
 

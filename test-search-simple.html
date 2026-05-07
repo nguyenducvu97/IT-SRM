@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Search Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; }
+        .result { margin: 10px 0; padding: 10px; background: #f0f0f0; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; padding: 10px; margin: 5px; }
+        button:hover { background: #0056b3; }
+        input { padding: 10px; margin: 5px; width: 300px; }
+        .debug { background: #fff3cd; padding: 10px; margin: 10px 0; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>Simple Search Test</h1>
+    
+    <div class="test-section">
+        <h3>Current Search State</h3>
+        <div id="currentState" class="debug">Loading...</div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Test Search</h3>
+        <div>
+            <input type="text" id="testSearch" placeholder="Type to search...">
+            <button onclick="testSearch()">Test Search</button>
+            <button onclick="clearSearch()">Clear Search</button>
+            <button onclick="checkState()">Check State</button>
+        </div>
+        <div id="testResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h3>Manual Test Instructions</h3>
+        <ol>
+            <li><strong>Test 1:</strong> Type "test" in search box above → Click "Test Search"</li>
+            <li><strong>Test 2:</strong> Click "Clear Search" → Should show all requests</li>
+            <li><strong>Test 3:</strong> Go to main system and test search functionality</li>
+            <li><strong>Test 4:</strong> Check browser console for errors</li>
+        </ol>
+    </div>
+    
+    <script>
+        // Test if we can access the main app
+        function checkState() {
+            const stateDiv = document.getElementById('currentState');
+            
+            if (typeof window.app !== 'undefined') {
+                stateDiv.innerHTML = `
+                    <div class="success">✓ Main app accessible</div>
+                    <div>isSearching: ${window.app.isSearching}</div>
+                    <div>currentRequestsPage: ${window.app.currentRequestsPage}</div>
+                    <div>currentPage: ${window.app.currentPage}</div>
+                `;
+            } else {
+                stateDiv.innerHTML = '<div class="error">✗ Main app not accessible</div>';
+            }
+        }
+        
+        function testSearch() {
+            const searchValue = document.getElementById('testSearch').value.trim();
+            
+            if (!searchValue) {
+                document.getElementById('testResult').innerHTML = 
+                    '<div class="error">Please enter a search term</div>';
+                return;
+            }
+            
+            if (typeof window.app !== 'undefined' && window.app.loadRequests) {
+                // Set search value in main app
+                const mainSearchInput = document.getElementById('requestSearch');
+                if (mainSearchInput) {
+                    mainSearchInput.value = searchValue;
+                    // Trigger change event
+                    mainSearchInput.dispatchEvent(new Event('input'));
+                }
+                
+                document.getElementById('testResult').innerHTML = 
+                    '<div class="success">✓ Search triggered: "' + searchValue + '"</div>';
+            } else {
+                document.getElementById('testResult').innerHTML = 
+                    '<div class="error">✗ Main app not accessible</div>';
+            }
+        }
+        
+        function clearSearch() {
+            if (typeof window.app !== 'undefined' && window.app.loadRequests) {
+                // Clear search value in main app
+                const mainSearchInput = document.getElementById('requestSearch');
+                if (mainSearchInput) {
+                    mainSearchInput.value = '';
+                    // Trigger change event
+                    mainSearchInput.dispatchEvent(new Event('input'));
+                }
+                
+                document.getElementById('testResult').innerHTML = 
+                    '<div class="success">✓ Search cleared</div>';
+            } else {
+                document.getElementById('testResult').innerHTML = 
+                    '<div class="error">✗ Main app not accessible</div>';
+            }
+        }
+        
+        // Check state every 2 seconds
+        setInterval(checkState, 2000);
+        
+        // Initial check
+        checkState();
+    </script>
+</body>
+</html>

@@ -40,18 +40,31 @@
     function triggerRequestsReload() {
         // Try to call the main app's loadRequests function
         if (window.app && typeof window.app.loadRequests === 'function') {
+            console.log('Calling window.app.loadRequests(1)');
             window.app.loadRequests(1);
         } else {
-            // Fallback: reload the page
-            console.log('App not available, reloading page');
-            window.location.reload();
+            // Fallback: try to trigger search input change event
+            const requestSearch = document.getElementById('requestSearch');
+            if (requestSearch) {
+                console.log('Triggering search input change event');
+                requestSearch.dispatchEvent(new Event('input'));
+            } else {
+                // Last resort: reload the page
+                console.log('App and search input not available, reloading page');
+                window.location.reload();
+            }
         }
     }
     
     // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initDateFilter);
-    } else {
-        initDateFilter();
+    function initializeDateFilter() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initDateFilter);
+        } else {
+            initDateFilter();
+        }
     }
+    
+    // Wait a bit for the main app to be fully initialized
+    setTimeout(initializeDateFilter, 100);
 })();
