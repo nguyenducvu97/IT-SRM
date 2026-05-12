@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Unavailable - IT Service Request</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        .error-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-icon {
+            font-size: 80px;
+            color: #dc3545;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .error-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .error-description {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .checklist {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .checklist h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .checklist ul {
+            list-style: none;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            color: #6c757d;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .checklist li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .server-info {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .server-info h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .server-info p {
+            color: #424242;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: blink 1s infinite;
+        }
+
+        .status-offline {
+            background: #dc3545;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .support-info {
+            background: #fff3cd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .support-info h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .support-info p {
+            color: #856404;
+            margin: 5px 0;
+        }
+
+        @media (max-width: 600px) {
+            .error-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+
+            .error-title {
+                font-size: 24px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">🔴</div>
+        <h1 class="error-title">Server Unavailable</h1>
+        
+        <p class="error-description">
+            The IT Service Request server is currently not accessible. 
+            This could be due to network issues or server maintenance.
+        </p>
+
+        <div class="server-info">
+            <h4>Server Information</h4>
+            <p><strong>Server IP:</strong> <span id="serverIP">192.168.1.100</span></p>
+            <p><strong>Application:</strong> IT Service Request System</p>
+            <p><strong>Status:</strong> <span class="status-indicator status-offline"></span>Offline</p>
+        </div>
+
+        <div class="checklist">
+            <h4>Please check the following:</h4>
+            <ul>
+                <li>Server computer is turned on</li>
+                <li>Network connection is active</li>
+                <li>Server IP address is correct: <strong>192.168.1.100</strong></li>
+                <li>XAMPP services are running on server</li>
+                <li>No firewall blocking the connection</li>
+                <li>Server is accessible from your computer</li>
+            </ul>
+        </div>
+
+        <div class="support-info">
+            <h4>Need Help?</h4>
+            <p><strong>IT Support:</strong> ext. 1234</p>
+            <p><strong>Email:</strong> it-support@company.com</p>
+            <p><strong>Emergency:</strong> ext. 9999</p>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="retryConnection()">
+                🔄 Retry Connection
+            </button>
+            <button class="btn btn-secondary" onclick="openBrowser()">
+                🌐 Open in Browser
+            </button>
+        </div>
+
+        <div class="footer">
+            <p>IT Service Request System v1.0</p>
+            <p>If the problem persists, please contact IT support</p>
+        </div>
+    </div>
+
+    <script>
+        // Get server IP from URL parameters or use default
+        const urlParams = new URLSearchParams(window.location.search);
+        const serverIP = urlParams.get('server') || '192.168.1.100';
+        document.getElementById('serverIP').textContent = serverIP;
+
+        // Retry connection function
+        function retryConnection() {
+            const button = event.target;
+            button.innerHTML = '🔄 Connecting...';
+            button.disabled = true;
+
+            // Try to connect to server
+            fetch(`http://${serverIP}/it-service-request`)
+                .then(response => {
+                    if (response.ok) {
+                        // Connection successful, redirect to app
+                        window.location.href = `http://${serverIP}/it-service-request`;
+                    } else {
+                        throw new Error('Server responded with error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Connection failed:', error);
+                    button.innerHTML = '❌ Connection Failed';
+                    setTimeout(() => {
+                        button.innerHTML = '🔄 Retry Connection';
+                        button.disabled = false;
+                    }, 2000);
+                });
+        }
+
+        // Open in browser function
+        function openBrowser() {
+            window.open(`http://${serverIP}/it-service-request`, '_blank');
+        }
+
+        // Auto-retry every 30 seconds
+        let autoRetryInterval;
+        function startAutoRetry() {
+            autoRetryInterval = setInterval(() => {
+                console.log('Auto-retrying connection...');
+                fetch(`http://${serverIP}/it-service-request`)
+                    .then(response => {
+                        if (response.ok) {
+                            clearInterval(autoRetryInterval);
+                            window.location.href = `http://${serverIP}/it-service-request`;
+                        }
+                    })
+                    .catch(() => {
+                        // Silent fail, will retry again
+                    });
+            }, 30000);
+        }
+
+        // Start auto-retry
+        startAutoRetry();
+
+        // Check connection status periodically
+        function checkConnectionStatus() {
+            fetch(`http://${serverIP}/it-service-request`)
+                .then(response => {
+                    if (response.ok) {
+                        document.querySelector('.status-indicator').classList.remove('status-offline');
+                        document.querySelector('.status-indicator').style.background = '#28a745';
+                    }
+                })
+                .catch(() => {
+                    document.querySelector('.status-indicator').classList.add('status-offline');
+                    document.querySelector('.status-indicator').style.background = '#dc3545';
+                });
+        }
+
+        // Check status every 5 seconds
+        setInterval(checkConnectionStatus, 5000);
+
+        // Initial check
+        checkConnectionStatus();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+                e.preventDefault();
+                retryConnection();
+            }
+        });
+
+        // Log connection attempts for debugging
+        console.log('Server Error Page loaded');
+        console.log('Target server:', serverIP);
+        console.log('Auto-retry enabled: every 30 seconds');
+    </script>
+</body>
+</html>

@@ -14690,6 +14690,7 @@ ITServiceApp.prototype.loadKPIExport = function() {
     // Bind date change events to refresh data
     const startInput = document.getElementById('startDate');
     const endInput = document.getElementById('endDate');
+    const clearDateFilter = document.getElementById('clearDateFilter');
     
     
     if (startInput) {
@@ -14707,6 +14708,12 @@ ITServiceApp.prototype.loadKPIExport = function() {
 
         endInput.addEventListener('change', this.loadKPIData.bind(this));
 
+    }
+    
+    // Bind clear date filter button
+    if (clearDateFilter) {
+        clearDateFilter.removeEventListener('click', this.clearKPIDateFilter.bind(this));
+        clearDateFilter.addEventListener('click', this.clearKPIDateFilter.bind(this));
     }
 
     
@@ -14749,21 +14756,33 @@ ITServiceApp.prototype.loadKPIData = async function() {
 
 
 
-        if (!startDate || !endDate) {
-
-
-
-            this.showNotification('Vui lòng chọn khoảng thời gian', 'error');
-
-
-
-            return;
-
-
-
+        // Allow single date selection - if missing, use default range
+        if (!startDate && !endDate) {
+            // If both dates are missing, use default month range
+            const today = new Date();
+            startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+            endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+            
+            // Update input fields
+            document.getElementById('startDate').value = startDate;
+            document.getElementById('endDate').value = endDate;
+            
+            console.log('Using default date range:', startDate, 'to', endDate);
+        } else if (!startDate) {
+            // If only end date is selected, use start of month
+            const end = new Date(endDate);
+            startDate = new Date(end.getFullYear(), end.getMonth(), 1).toISOString().split('T')[0];
+            document.getElementById('startDate').value = startDate;
+            
+            console.log('Using start of month for start date:', startDate);
+        } else if (!endDate) {
+            // If only start date is selected, use end of month
+            const start = new Date(startDate);
+            endDate = new Date(start.getFullYear(), start.getMonth() + 1, 0).toISOString().split('T')[0];
+            document.getElementById('endDate').value = endDate;
+            
+            console.log('Using end of month for end date:', endDate);
         }
-
-
 
         
 
@@ -14833,6 +14852,31 @@ ITServiceApp.prototype.loadKPIData = async function() {
 
 
 
+};
+
+
+
+
+
+
+
+ITServiceApp.prototype.clearKPIDateFilter = function() {
+    console.log('Clear KPI date filter clicked');
+    
+    // Clear date inputs
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    
+    if (startDateInput) {
+        startDateInput.value = '';
+    }
+    
+    if (endDateInput) {
+        endDateInput.value = '';
+    }
+    
+    // Reload KPI data (will use default date range)
+    this.loadKPIData();
 };
 
 
@@ -15191,12 +15235,32 @@ ITServiceApp.prototype.exportKPI = async function() {
 
         
         
-        if (!startDate || !endDate) {
-
-            this.showNotification('Vui lòng chọn khoảng thời gian', 'error');
-
-            return;
-
+        // Allow single date selection - if missing, use default range
+        if (!startDate && !endDate) {
+            // If both dates are missing, use default month range
+            const today = new Date();
+            startDate = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+            endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0];
+            
+            // Update input fields
+            document.getElementById('startDate').value = startDate;
+            document.getElementById('endDate').value = endDate;
+            
+            console.log('Using default date range:', startDate, 'to', endDate);
+        } else if (!startDate) {
+            // If only end date is selected, use start of month
+            const end = new Date(endDate);
+            startDate = new Date(end.getFullYear(), end.getMonth(), 1).toISOString().split('T')[0];
+            document.getElementById('startDate').value = startDate;
+            
+            console.log('Using start of month for start date:', startDate);
+        } else if (!endDate) {
+            // If only start date is selected, use end of month
+            const start = new Date(startDate);
+            endDate = new Date(start.getFullYear(), start.getMonth() + 1, 0).toISOString().split('T')[0];
+            document.getElementById('endDate').value = endDate;
+            
+            console.log('Using end of month for end date:', endDate);
         }
 
         
