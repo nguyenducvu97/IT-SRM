@@ -2526,7 +2526,7 @@
 
 
 
-                                <button id="configKPIBtn" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#kpiConfigModal">
+                                <button id="configKPIBtn" class="btn btn-secondary" onclick="showKPIConfigModal()" data-bs-toggle="modal" data-bs-target="#kpiConfigModal">
 
 
 
@@ -4259,7 +4259,7 @@
                     <h5 class="modal-title mb-0">
                         <i class="fas fa-cogs me-2"></i> Cấu hình công thức tính KPI
                     </h5>
-                    <button type="button" class="btn btn-link text-white p-0" data-bs-dismiss="modal" 
+                    <button type="button" class="btn btn-link text-white p-0" onclick="closeKPIConfigModal()" 
                             style="font-size: 2.5rem; opacity: 1; filter: brightness(2); width: 40px; height: 40px; text-decoration: none; line-height: 1;">×</button>
                 </div>
                 <div class="modal-body p-4">
@@ -4477,6 +4477,37 @@
         #kpiConfigModal input[type="number"] {
             max-width: 200px;
         }
+        
+        /* ULTIMATE FORCE MODAL CSS */
+        .force-show {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 999999 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background-color: rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .force-content {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            z-index: 1000000 !important;
+            position: relative !important;
+            background: white !important;
+            margin: 50px auto !important;
+            padding: 20px !important;
+            border-radius: 8px !important;
+            max-width: 800px !important;
+            width: 90% !important;
+            max-height: 90vh !important;
+            overflow-y: auto !important;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+        }
     </style>
     
     <!-- Bootstrap JS for Modal -->
@@ -4484,6 +4515,257 @@
     
     <script>
         let kpiConfigs = [];
+        
+        // ULTIMATE FORCE MODAL FUNCTION
+        function showKPIConfigModal() {
+            console.log('🚀 showKPIConfigModal called - ULTIMATE FORCE VERSION');
+            
+            try {
+                const modalElement = document.getElementById('kpiConfigModal');
+                if (!modalElement) {
+                    console.error('❌ Modal element not found in DOM');
+                    return;
+                }
+                
+                console.log('✅ Modal element found, applying ULTIMATE force...');
+                
+                // STEP 1: Move modal to body if nested
+                if (modalElement.parentElement !== document.body) {
+                    console.log('🔄 Moving modal from', modalElement.parentElement.tagName, 'to document.body');
+                    document.body.appendChild(modalElement);
+                }
+                
+                // STEP 2: Remove all conflicting classes
+                modalElement.className = 'modal fade show force-show';
+                
+                // STEP 3: Apply ultimate CSS override with cssText
+                modalElement.style.cssText = `
+                    display: block !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    z-index: 999999 !important;
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    background-color: rgba(0, 0, 0, 0.3) !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    border: none !important;
+                    outline: none !important;
+                `;
+                
+                // STEP 4: Force modal content visibility
+                const modalContent = modalElement.querySelector('.modal-content');
+                if (modalContent) {
+                    modalContent.classList.add('force-content');
+                    modalContent.style.cssText = `
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        z-index: 1000000 !important;
+                        position: relative !important;
+                        background: white !important;
+                        margin: 50px auto !important;
+                        padding: 20px !important;
+                        border-radius: 8px !important;
+                        max-width: 800px !important;
+                        width: 90% !important;
+                        max-height: 90vh !important;
+                        overflow-y: auto !important;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+                    `;
+                    console.log('✅ Modal content forced visible');
+                }
+                
+                // STEP 5: Create/force backdrop
+                let backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+                
+                backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                backdrop.style.cssText = `
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                    z-index: 999998 !important;
+                    background-color: rgba(0, 0, 0, 0.3) !important;
+                `;
+                document.body.appendChild(backdrop);
+                console.log('✅ Backdrop created');
+                
+                // STEP 6: Force body styles
+                document.body.classList.add('modal-open');
+                document.body.style.overflow = 'hidden';
+                document.body.style.paddingRight = '0px';
+                
+                // STEP 7: Try Bootstrap as backup
+                try {
+                    const bootstrapModal = new bootstrap.Modal(modalElement);
+                    bootstrapModal.show();
+                    console.log('✅ Bootstrap modal also called');
+                } catch (bsError) {
+                    console.warn('⚠️ Bootstrap modal failed, but forcing continues:', bsError.message);
+                }
+                
+                console.log('🎉 ULTIMATE force applied successfully!');
+                
+                // STEP 8: Verify visibility
+                setTimeout(() => {
+                    const computed = window.getComputedStyle(modalElement);
+                    const rect = modalElement.getBoundingClientRect();
+                    
+                    console.log('🔍 FINAL VISIBILITY CHECK:');
+                    console.log('   Display:', computed.display);
+                    console.log('   Visibility:', computed.visibility);
+                    console.log('   Opacity:', computed.opacity);
+                    console.log('   Z-index:', computed.zIndex);
+                    console.log('   Dimensions:', rect.width + 'x' + rect.height + 'px');
+                    
+                    const isVisible = computed.display !== 'none' && 
+                                    computed.visibility !== 'hidden' && 
+                                    parseFloat(computed.opacity) > 0 && 
+                                    rect.width > 0 && rect.height > 0;
+                    
+                    console.log('   RESULT:', isVisible ? '✅ VISIBLE' : '❌ STILL HIDDEN');
+                    
+                    if (!isVisible) {
+                        console.error('🚨 ULTIMATE FORCE FAILED - Modal still not visible!');
+                        console.log('🔧 Trying emergency visibility...');
+                        emergencyVisibility();
+                    }
+                }, 200);
+                
+            } catch (error) {
+                console.error('❌ ULTIMATE FORCE failed:', error);
+                emergencyVisibility();
+            }
+        }
+        
+        // Emergency visibility function
+        function emergencyVisibility() {
+            console.log('🆘 EMERGENCY VISIBILITY ACTIVATED');
+            try {
+                const modalElement = document.getElementById('kpiConfigModal');
+                if (modalElement) {
+                    // Create a completely new modal overlay
+                    const emergencyOverlay = document.createElement('div');
+                    emergencyOverlay.id = 'emergency-modal-overlay';
+                    emergencyOverlay.style.cssText = `
+                        position: fixed !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                        z-index: 9999999 !important;
+                        background-color: rgba(0, 0, 0, 0.3) !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    `;
+                    
+                    // Copy modal content
+                    const originalContent = modalElement.querySelector('.modal-content');
+                    if (originalContent) {
+                        const clonedContent = originalContent.cloneNode(true);
+                        clonedContent.style.cssText = `
+                            background: white !important;
+                            padding: 20px !important;
+                            border-radius: 8px !important;
+                            max-width: 800px !important;
+                            width: 90% !important;
+                            max-height: 90vh !important;
+                            overflow-y: auto !important;
+                        `;
+                        emergencyOverlay.appendChild(clonedContent);
+                        
+                        // Add close handler
+                        const closeBtn = clonedContent.querySelector('button[onclick*="closeKPIConfigModal"]');
+                        if (closeBtn) {
+                            closeBtn.setAttribute('onclick', 'emergencyClose()');
+                        }
+                    }
+                    
+                    document.body.appendChild(emergencyOverlay);
+                    console.log('🆘 Emergency modal overlay created');
+                }
+            } catch (emergencyError) {
+                console.error('❌ Emergency visibility failed:', emergencyError);
+                alert('Modal display failed. Please check browser console for details.');
+            }
+        }
+        
+        // Emergency close function
+        function emergencyClose() {
+            console.log('🔒 Emergency close called');
+            const emergencyOverlay = document.getElementById('emergency-modal-overlay');
+            if (emergencyOverlay) {
+                emergencyOverlay.remove();
+            }
+            closeKPIConfigModal();
+        }
+        
+        // Enhanced close modal function
+        function closeKPIConfigModal() {
+            console.log('🔒 closeKPIConfigModal called - ENHANCED VERSION');
+            try {
+                // Remove emergency overlay first
+                const emergencyOverlay = document.getElementById('emergency-modal-overlay');
+                if (emergencyOverlay) {
+                    emergencyOverlay.remove();
+                    console.log('✅ Emergency overlay removed');
+                }
+                
+                const modalElement = document.getElementById('kpiConfigModal');
+                if (modalElement) {
+                    // Remove all force classes
+                    modalElement.classList.remove('show', 'force-show');
+                    
+                    const modalContent = modalElement.querySelector('.modal-content');
+                    if (modalContent) {
+                        modalContent.classList.remove('force-content');
+                    }
+                    
+                    // Hide modal completely
+                    modalElement.style.display = 'none';
+                    modalElement.style.visibility = 'hidden';
+                    modalElement.style.opacity = '0';
+                    
+                    // Remove backdrop
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                        console.log('✅ Backdrop removed');
+                    }
+                    
+                    // Restore body styles
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                    
+                    // Try Bootstrap hide
+                    try {
+                        const modal = bootstrap.Modal.getInstance(modalElement);
+                        if (modal) {
+                            modal.hide();
+                        }
+                    } catch (bsError) {
+                        console.warn('⚠️ Bootstrap hide failed:', bsError.message);
+                    }
+                    
+                    console.log('✅ Modal closed successfully');
+                }
+            } catch (error) {
+                console.error('❌ Error closing modal:', error);
+            }
+        }
         
         // Load KPI configurations when modal opens
         document.getElementById('kpiConfigModal').addEventListener('show.bs.modal', function () {
