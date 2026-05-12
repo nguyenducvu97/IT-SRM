@@ -1,0 +1,140 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+out/
+
+# Electron specific
+dist/win-unpacked/
+dist/win-ia32-unpacked/
+dist/win-x64-unpacked/
+*.exe
+*.dmg
+*.deb
+*.rpm
+*.snap
+*.appimage
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+.env.production
+.env.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# XAMPP specific
+xampp/
+htdocs/it-service-request/uploads/
+htdocs/it-service-request/logs/
+htdocs/it-service-request/background_jobs/
+
+# Database
+*.sql.backup
+*.sql.bak
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+*.temp
+
+# Large files and binaries
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Electron specific large files
+node_modules/electron/dist/electron.exe
+node_modules/electron/dist/chrome_100_percent.pak
+node_modules/electron/dist/resources.pak
+
+# Build artifacts
+release/
+app-release/
+
+# Test files
+test-results/
+coverage/
+
+# Local configuration
+config/local.php
+config/local.ini
+config/local.json
+
+# Backup files
+backup/
+backups/
+*.backup
+*.bak
+
+# Cache
+.cache/
+.sass-cache/
+
+# User uploads (keep structure but ignore content)
+uploads/requests/*/
+uploads/completed/*/
+uploads/attachments/*/
+uploads/reject_requests/*/
+!uploads/requests/.gitkeep
+!uploads/completed/.gitkeep
+!uploads/attachments/.gitkeep
+!uploads/reject_requests/.gitkeep
+
+# Email logs
+logs/email_*.eml
+logs/email_*.log
+logs/api_errors.log
+logs/email_queue_*.json
