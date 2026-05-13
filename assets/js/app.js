@@ -14654,22 +14654,22 @@ ITServiceApp.prototype.loadKPIExport = function() {
 
 
 
+    if (!this._kpiExportHandlers) {
+        this._kpiExportHandlers = {
+            exportKPI: this.exportKPI.bind(this),
+            handleExportTypeChange: this.handleExportTypeChange.bind(this),
+            loadKPIData: this.loadKPIData.bind(this),
+            clearKPIDateFilter: this.clearKPIDateFilter.bind(this)
+        };
+    }
+
     const exportBtn = document.getElementById('exportKPIBtn');
 
 
 
     if (exportBtn) {
-
-
-
-        exportBtn.removeEventListener('click', this.exportKPI.bind(this));
-
-
-
-        exportBtn.addEventListener('click', this.exportKPI.bind(this));
-
-
-
+        exportBtn.removeEventListener('click', this._kpiExportHandlers.exportKPI);
+        exportBtn.addEventListener('click', this._kpiExportHandlers.exportKPI);
     }
 
 
@@ -14683,8 +14683,8 @@ ITServiceApp.prototype.loadKPIExport = function() {
     const staffSelect = document.getElementById('staffSelect');
     
     if (exportTypeSelect) {
-        exportTypeSelect.removeEventListener('change', this.handleExportTypeChange.bind(this));
-        exportTypeSelect.addEventListener('change', this.handleExportTypeChange.bind(this));
+        exportTypeSelect.removeEventListener('change', this._kpiExportHandlers.handleExportTypeChange);
+        exportTypeSelect.addEventListener('change', this._kpiExportHandlers.handleExportTypeChange);
     }
     
     // Bind date change events to refresh data
@@ -14694,26 +14694,20 @@ ITServiceApp.prototype.loadKPIExport = function() {
     
     
     if (startInput) {
-
-        startInput.removeEventListener('change', this.loadKPIData.bind(this));
-
-        startInput.addEventListener('change', this.loadKPIData.bind(this));
-
+        startInput.removeEventListener('change', this._kpiExportHandlers.loadKPIData);
+        startInput.addEventListener('change', this._kpiExportHandlers.loadKPIData);
     }
 
     
     if (endInput) {
-
-        endInput.removeEventListener('change', this.loadKPIData.bind(this));
-
-        endInput.addEventListener('change', this.loadKPIData.bind(this));
-
+        endInput.removeEventListener('change', this._kpiExportHandlers.loadKPIData);
+        endInput.addEventListener('change', this._kpiExportHandlers.loadKPIData);
     }
     
     // Bind clear date filter button
     if (clearDateFilter) {
-        clearDateFilter.removeEventListener('click', this.clearKPIDateFilter.bind(this));
-        clearDateFilter.addEventListener('click', this.clearKPIDateFilter.bind(this));
+        clearDateFilter.removeEventListener('click', this._kpiExportHandlers.clearKPIDateFilter);
+        clearDateFilter.addEventListener('click', this._kpiExportHandlers.clearKPIDateFilter);
     }
 
     
@@ -14744,11 +14738,11 @@ ITServiceApp.prototype.loadKPIData = async function() {
 
 
 
-        const startDate = document.getElementById('startDate').value;
+        let startDate = document.getElementById('startDate').value;
 
 
 
-        const endDate = document.getElementById('endDate').value;
+        let endDate = document.getElementById('endDate').value;
 
 
 
@@ -15200,13 +15194,14 @@ ITServiceApp.prototype.handleExportTypeChange = async function() {
 
 ITServiceApp.prototype.loadStaffList = async function() {
     try {
-        const response = await this.apiCall('api/kpi_export_fixed.php?action=get_staff_list');
+        const response = await this.apiCall('api/kpi_export.php?action=get_staff_list');
         
         if (response.success) {
             const staffSelect = document.getElementById('staffSelect');
             staffSelect.innerHTML = '<option value="">Select staff...</option>';
             
-            response.staff.forEach(staff => {
+            const staffList = response.data || response.staff || [];
+            staffList.forEach(staff => {
                 const option = document.createElement('option');
                 option.value = staff.id;
                 option.textContent = `${staff.full_name} - ${staff.department || 'N/A'}`;
@@ -15225,9 +15220,9 @@ ITServiceApp.prototype.exportKPI = async function() {
 
     try {
 
-        const startDate = document.getElementById('startDate').value;
+        let startDate = document.getElementById('startDate').value;
 
-        const endDate = document.getElementById('endDate').value;
+        let endDate = document.getElementById('endDate').value;
 
         const exportType = document.getElementById('exportType').value;
 

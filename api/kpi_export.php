@@ -37,7 +37,15 @@ function ensureUTF8($text) {
 }
 
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: http://localhost");
+$_origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+$_serverOrigin = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://') . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
+$_originHost = $_origin ? parse_url($_origin, PHP_URL_HOST) : '';
+$_serverHost = $_serverOrigin ? parse_url($_serverOrigin, PHP_URL_HOST) : '';
+if ($_origin && $_originHost && $_serverHost && $_originHost === $_serverHost) {
+    header("Access-Control-Allow-Origin: " . $_origin);
+} else {
+    header("Access-Control-Allow-Origin: " . $_serverOrigin);
+}
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
@@ -53,13 +61,6 @@ require_once __DIR__ . '/../config/database.php';
 
 // Start session for authentication
 startSession();
-
-// Debug session information
-error_log("=== KPI EXPORT SESSION DEBUG ===");
-error_log("Session ID: " . session_id());
-error_log("Cookie data: " . json_encode($_COOKIE));
-error_log("Session data: " . json_encode($_SESSION));
-error_log("===============================");
 
 if (!isLoggedIn()) {
     error_log("KPI Export: User not logged in");
@@ -149,7 +150,8 @@ function exportKPIExcel($db) {
         
         // Set headers for CSV download
         header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        $safe_filename = preg_replace('/[^A-Za-z0-9_\.\-]/', '_', $filename);
+        header('Content-Disposition: attachment; filename="' . $safe_filename . '"; filename*=UTF-8\'\'' . rawurlencode($filename));
         header('Cache-Control: max-age=0');
         header('Expires: 0');
         header('Pragma: public');
@@ -675,16 +677,14 @@ function exportKPIDetailed($db) {
         $filename = 'KPI_Detailed_Report_' . date('Y-m-d_H-i-s') . '.csv';
         
         header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        $safe_filename = preg_replace('/[^A-Za-z0-9_\.\-]/', '_', $filename);
+        header('Content-Disposition: attachment; filename="' . $safe_filename . '"; filename*=UTF-8\'\'' . rawurlencode($filename));
         header('Cache-Control: max-age=0');
         header('Expires: 0');
         header('Pragma: public');
         
         $output = fopen('php://output', 'w');
         fwrite($output, "\xEF\xBB\xBF");
-        
-        // Set UTF-8 encoding for stream
-        stream_filter_append($output, 'convert.iconv.UTF-8/UTF-8//TRANSLIT', STREAM_FILTER_WRITE);
         
         // Detailed headers
         $headers = [
@@ -864,9 +864,7 @@ function exportStaffDetails($db) {
         }
         
         // Get staff's detailed KPI data
-        error_log("Getting detailed KPI for staff_id: $staff_id, start: $start_date, end: $end_date");
         $detailed_data = getStaffDetailedKPI($db, $staff_id, $start_date, $end_date);
-        error_log("Detailed KPI data result: " . print_r($detailed_data, true));
         
         if (!$detailed_data || !isset($detailed_data['requests'])) {
             error_log("Invalid detailed data structure");
@@ -878,7 +876,8 @@ function exportStaffDetails($db) {
         $filename = 'KPI_Staff_' . $staff['full_name'] . '_' . date('Y-m-d_H-i-s') . '.csv';
         
         header('Content-Type: text/csv; charset=UTF-8');
-        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        $safe_filename = preg_replace('/[^A-Za-z0-9_\.\-]/', '_', $filename);
+        header('Content-Disposition: attachment; filename="' . $safe_filename . '"; filename*=UTF-8\'\'' . rawurlencode($filename));
         header('Cache-Control: max-age=0');
         header('Expires: 0');
         header('Pragma: public');
@@ -937,6 +936,7 @@ function exportStaffDetails($db) {
         
         foreach ($detailed_data['requests'] as $request) {
             $row = [
+                $staff['department'] ?? 'N/A',
                 $request['id'],
                 $request['title'],
                 $request['category_name'] ?? 'N/A',
@@ -1133,7 +1133,8 @@ function getDetailedKPIData($db, $start_date, $end_date) {
             if ($request['assigned_at']) {
                 $created = new DateTime($request['created_at']);
                 $assigned = new DateTime($request['assigned_at']);
-                $response_time_minutes = $created->diff($assigned)->i + $created->diff($assigned)->h * 60;
+                $interval = $created->diff($assigned);
+                $response_time_minutes = ($interval->i) + ($interval->h * 60) + ($interval->d * 24 * 60);
             }
             
             // Calculate completion time
@@ -1246,8 +1247,6 @@ function getDetailedKPIData($db, $start_date, $end_date) {
 }
 
 function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
-    error_log("getStaffDetailedKPI called with staff_id: $staff_id, start: $start_date, end: $end_date");
-    
     // Get staff details
     $staff_query = "SELECT id, username, email, full_name, department 
                    FROM users WHERE id = :staff_id";
@@ -1256,10 +1255,7 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
     $staff_stmt->execute();
     $staff = $staff_stmt->fetch(PDO::FETCH_ASSOC);
     
-    error_log("Staff query result: " . print_r($staff, true));
-    
     if (!$staff) {
-        error_log("Staff not found for ID: $staff_id");
         return null;
     }
     
@@ -1298,7 +1294,8 @@ function getStaffDetailedKPI($db, $staff_id, $start_date, $end_date) {
         if ($request['assigned_at']) {
             $created = new DateTime($request['created_at']);
             $assigned = new DateTime($request['assigned_at']);
-            $response_time_minutes = $created->diff($assigned)->i + $created->diff($assigned)->h * 60;
+            $interval = $created->diff($assigned);
+            $response_time_minutes = ($interval->i) + ($interval->h * 60) + ($interval->d * 24 * 60);
         }
         
         // Calculate completion time
